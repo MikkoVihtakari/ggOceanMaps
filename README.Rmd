@@ -6,7 +6,7 @@ output:
   github_document
 ---
 
-The ggOceanMaps package for [R](https://www.r-project.org/) allows plotting data on bathymetric maps using the [ggplot2](https://ggplot2.tidyverse.org/reference). The package is designed for marine research and greatly simplifies bathymetric map plotting anywhere around the globe. ggOceanMaps uses openly available geographic data. Citing the particular data sources is advised by the CC-BY licenses whenever maps from the package are published (see the [Citations and data sources](#datasources) section). 
+The ggOceanMaps package for [R](https://www.r-project.org/) allows plotting data on bathymetric maps using [ggplot2](https://ggplot2.tidyverse.org/reference). The package is designed for marine research and greatly simplifies bathymetric map plotting anywhere around the globe. ggOceanMaps uses openly available geographic data. Citing the particular data sources is advised by the CC-BY licenses whenever maps from the package are published (see the [Citations and data sources](#datasources) section). 
 
 ggOceanMaps has been developed by the [Institute of Marine Research](https://www.hi.no/en). The package is a continuation of the work by the lead author with the [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package, which could not be uploaded to [CRAN](https://cran.r-project.org/) due to package size limitations and was designed for a limited region. The sole purpose of ggOceanMaps is to allow the installation from CRAN and to expand the mapping capabilities for the entire world. Due to the package size limitations, ggOceanMaps requires the [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData) package for high-resolution maps when implemented.
 
@@ -272,7 +272,7 @@ Note that the north arrow in the example above points towards North where it is 
 
 ## Modifying basemap objects
 
-Thee objects produced by the `basemap` function are standard ggplot objects with the difference that relevant information used in mapping is added to `attributes` of the object:
+The objects produced by the `basemap` function are standard ggplot objects with the difference that relevant information used in mapping is added to `attributes` of the object:
 
 ```{r}
 p <- basemap(-60)
@@ -616,7 +616,7 @@ basemap(limits = raster::extent(fishingAreasNor)[1:4], bathymetry = TRUE,
   coord_sf(expand = FALSE)
 ```
 
-If you really need the polygon bathymetries, you can use the [ggnewscale](https://github.com/eliocamp/ggnewscale) package to make the data `fill` mappings disconnected from that in `basemap`.
+If you really need the polygon bathymetries, you can use the [ggnewscale](https://github.com/eliocamp/ggnewscale) package to make the data `fill` mapping disconnected from that in `basemap`.
 
 <!-- ### Other issues -->
 
@@ -626,8 +626,8 @@ If you really need the polygon bathymetries, you can use the [ggnewscale](https:
 
 The data used by the package are not the property of the Institute of Marine Research nor the author of the package. It is, therefore, important that you cite the data sources used in a map you generate with the package. The spatial data used by this package have been acquired from the following sources:
 
-- **Land polygons.** [Natural Earth Data](http://www.naturalearthdata.com/downloads/10m-physical-vectors/) 1:10m Physical Vectors with the Land and Minor Island datasets combined. Distributed under the [CC Public Domain license](https://creativecommons.org/publicdomain/) ([terms of use](http://www.naturalearthdata.com/about/terms-of-use/)).
-- **Glacier polygons.** [Natural Earth Data](http://www.naturalearthdata.com/downloads/10m-physical-vectors/) 1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice Shelves datasets combined. Distributed under the [CC Public Domain license](https://creativecommons.org/publicdomain/) ([terms of use](http://www.naturalearthdata.com/about/terms-of-use/)).
+- **Land polygons.** [Natural Earth Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/) 1:10m Physical Vectors with the Land and Minor Island datasets combined. Distributed under the [CC Public Domain license](https://creativecommons.org/publicdomain/) ([terms of use](https://www.naturalearthdata.com/about/terms-of-use/)).
+- **Glacier polygons.** [Natural Earth Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/) 1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice Shelves datasets combined. Distributed under the [CC Public Domain license](https://creativecommons.org/publicdomain/) ([terms of use](https://www.naturalearthdata.com/about/terms-of-use/)).
 - **Bathymetry.** [Amante, C. and B.W. Eakins, 2009. ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National Geophysical Data Center, NOAA](https://doi.org/10.7289/V5C8276M). Distributed under the [U.S. Government Work license](https://www.usa.gov/government-works).
 
 Further, a citation to ggOceanMaps is required by the GPL-3 license used by the package whenever maps generated by the package are published. For up-to-date citation information, please use:

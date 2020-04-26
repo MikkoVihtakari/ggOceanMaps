@@ -47,3 +47,6 @@ README.html
 
 .DS_Store
 
+# Rstudio project
+
+*.Rproj
