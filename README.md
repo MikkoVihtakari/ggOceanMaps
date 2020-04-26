@@ -3,7 +3,7 @@ ggOceanMaps
 Mikko Vihtakari (Institute of Marine Research)
 
 The ggOceanMaps package for [R](https://www.r-project.org/) allows
-plotting data on bathymetric maps using
+plotting data on bathymetric maps using the
 [ggplot2](https://ggplot2.tidyverse.org/reference). The package is
 designed for marine research and greatly simplifies bathymetric map
 plotting anywhere around the globe. ggOceanMaps uses openly available
@@ -21,7 +21,7 @@ sole purpose of ggOceanMaps is to allow the installation from CRAN and
 to expand the mapping capabilities for the entire world. Due to the
 package size limitations, ggOceanMaps requires the
 [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData)
-package for high-resolution maps.
+package for high-resolution maps when implemented.
 
 This is the developmental site for ggOceanMaps, which is in the process
 of being uploaded to CRAN. The developmental version may be ahead of the
@@ -126,23 +126,25 @@ Projected maps with decimal degree `limits` will lead to expanded limits
 towards the poles when using Arctic and Atlantic Polar Stereographic
 projections because decimal degrees represent a sphere:
 
-![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- --> The figure
-above: Limiting rectangular basemaps is done by placing four coordinates
-to the limit argument. A) If the limits are in decimal degrees, the
-longitude limits (`[1:2]`) specify the start and end segments of
-corresponding angular lines that should reside inside the map area. The
-longitude limits are defined **counter-clockwise**. The latitude limits
-`[3:4]` define the parallels that should reside inside the limited
-region given the longitude segments. Note that the resulting limited
-region (polygon with thick red borders) becomes wider than the polygon
-defined by the coordinates (thin red borders). The example limits are
-`c(120, -120, 60, 80)`. B) If the limits are given as projected
-coordinates or as decimal degrees for maps with |latitude| \< 60, limits
-elements represent lines encompassing the map area in cartesian space.
-The example limits are the limits from A) projected to the Arctic
-stereographic (crs = 3995). When limiting basemaps using data, the
-limits are calculated for the maximum reach of projected coordinates as
-in B but with an added buffer to place all points inside the map area.
+![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+The figure above: Limiting rectangular basemaps is done by placing four
+coordinates to the limit argument. A) If the limits are in decimal
+degrees, the longitude limits (`[1:2]`) specify the start and end
+segments of corresponding angular lines that should reside inside the
+map area. The longitude limits are defined **counter-clockwise**. The
+latitude limits `[3:4]` define the parallels that should reside inside
+the limited region given the longitude segments. Note that the resulting
+limited region (polygon with thick red borders) becomes wider than the
+polygon defined by the coordinates (thin red borders). The example
+limits are `c(120, -120, 60, 80)`. B) If the limits are given as
+projected coordinates or as decimal degrees for maps with |latitude| \<
+60, limits elements represent lines encompassing the map area in
+cartesian space. The example limits are the limits from A) projected to
+the Arctic stereographic (crs = 3995). When limiting basemaps using
+data, the limits are calculated for the maximum reach of projected
+coordinates as in B but with an added buffer to place all points inside
+the map area.
 
 As an example:
 
