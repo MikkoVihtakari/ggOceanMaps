@@ -1,0 +1,19 @@
+Package: ggOceanMaps
+Type: Package
+Title: plot data on oceanographic maps using ggplot2
+Version: 0.1.0
+Date: 2020-04-26
+Authors@R: c(person("Mikko", "Vihtakari", email = "mikko.vihtakari@hi.no",
+                  role = c("aut", "cre"), 
+                  comment = "Institute of Marine Research"))
+URL: https://github.com/MikkoVihtakari/ggOceanMaps
+BugReports: https://github.com/MikkoVihtakari/ggOceanMaps/issues
+Description: ...
+Depends: R (>= 3.5.0), ggplot2, ggspatial
+Imports: sp, raster, rgdal, rgeos, methods, utils, sf, stars, smoothr, units, dplyr
+Suggests: knitr, rmarkdown, bookdown
+License: GPL-3 | file LICENSE
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+RoxygenNote: 7.1.0
