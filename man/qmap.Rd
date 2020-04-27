@@ -31,6 +31,22 @@ qmap(
 \description{
 \code{qmap} is a shortcut similar to ggplot2's \code{\link[ggplot2]{qplot}} designed to quickly plot data with a limited range of options.
 }
+\examples{
+
+dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40))
+qmap(dt, color = "red")
+
+}
+\seealso{
+Other basemap functions: 
+\code{\link{auto_limits}()},
+\code{\link{basemap}()},
+\code{\link{reorder_layers}()},
+\code{\link{shapefile_list}()},
+\code{\link{theme_map}()},
+\code{\link{transform_coord}()}
+}
 \author{
 Mikko Vihtakari
 }
+\concept{basemap functions}

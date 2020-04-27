@@ -3,23 +3,10 @@
 #' @param p ggplot object from the \code{\link{basemap}} function.
 #' @details This function has not been tested properly yet and is likely to contain bugs. 
 #' @return Returns a ggplot object with land, glacier and grid layers on top.
-#' @seealso \code{\link{basemap}}
+#' @family basemap functions
 #' @import ggplot2
 #' @author Mikko Vihtakari
 #' @export
-# Test data
-# dt <- data.frame(lon = c(seq(-180, 0, 30), seq(30, 180, 30)), lat = -70)
-# p <- basemap(limits = -60, glaciers = TRUE, bathymetry = TRUE) #+ geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
-# p <- basemap(limits = -60, glaciers = TRUE, bathymetry = TRUE)
-# p <- basemap(limits = -60, glaciers = FALSE, bathymetry = TRUE)
-# p <- basemap(limits = -60, glaciers = TRUE, bathymetry = FALSE)
-# p <- basemap(limits = -60, glaciers = FALSE, bathymetry = FALSE)
-#
-# p <- basemap(limits = c(0, 60, 68, 82), glaciers = TRUE, bathymetry = TRUE)
-# p <- basemap(limits = c(0, 60, 68, 82), glaciers = FALSE, bathymetry = TRUE)
-# p <- basemap(limits = c(0, 60, 68, 82), glaciers = TRUE, bathymetry = FALSE)
-# p <- basemap(limits = c(0, 60, 68, 82), glaciers = FALSE, bathymetry = FALSE)
-# length(p$layers)
 
 reorder_layers <- function(p) {
 
@@ -57,9 +44,7 @@ reorder_layers <- function(p) {
   } 
 
 
-  # Add coord_sf (which gets lost for some reason)
-  
-  # Return
+  # Return, (add coord_sf, which gets lost for some reason)
 
   p + coord_sf(expand = FALSE, crs = attributes(p)$crs)
 }

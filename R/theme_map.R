@@ -4,6 +4,7 @@
 #' @param grid.size Numeric value specifying the width of grid lines.
 #' @param ... additional arguments passed to \code{\link[ggplot2]{theme}} function
 #' @import ggplot2
+#' @family basemap functions
 #' @export
 
 theme_map <- function(..., grid.col, grid.size) {

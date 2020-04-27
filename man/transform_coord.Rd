@@ -37,11 +37,31 @@ transform_coord(
 Returns a data frame with transformed spatial coordinates.
 }
 \description{
-The function transforms spatial coordinates from original projection (decimal degrees assumed) to another projection.
+Transforms spatial coordinates from original projection (decimal degrees assumed) to another projection.
 }
 \details{
 If \code{x} is specified, the function guesses longitude and latitude columns from \code{x} by default.
 }
+\examples{
+# Coordinates are automatically transformed to the pre-made shapefile 
+# projections:
+dt <- data.frame(lon = c(-150, 150), lat = c(60, 90))
+transform_coord(dt)
+transform_coord(dt, bind = TRUE)
+
+dt <- data.frame(lon = c(-150, 150), lat = c(20, 50))
+transform_coord(dt, bind = TRUE) # no transformation required.
+}
+\seealso{
+Other basemap functions: 
+\code{\link{auto_limits}()},
+\code{\link{basemap}()},
+\code{\link{qmap}()},
+\code{\link{reorder_layers}()},
+\code{\link{shapefile_list}()},
+\code{\link{theme_map}()}
+}
 \author{
 Mikko Vihtakari
 }
+\concept{basemap functions}

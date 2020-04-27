@@ -7,7 +7,7 @@
 shapefile_list(name, get.data = FALSE)
 }
 \arguments{
-\item{name}{A character argument giving the name of a pre-made shapefile. Use "all" to list all available ones.}
+\item{name}{A character argument giving the name of a pre-made shapefile. Will be partially matched. Use "all" to list all available ones.}
 
 \item{get.data}{Logical indicating whether spatial data should be returned instead of names of spatial data objects.}
 }
@@ -18,20 +18,30 @@ Returns a data frame of provided pre-made shapefiles, if \code{name = "all"}. Re
 Lists available pre-made shapefiles for plotting in the \code{\link{basemap}} function. Gives also instructions how to make custom ones.
 }
 \details{
-Shapefiles for \code{\link{basemap}} should be defined as lists with (at least) following names (everything should be provided as characters):
+Custom shapefiles for \code{\link{basemap}} should be defined as lists with (at least) following names (everything should be provided as characters):
 \itemize{
-\item \strong{name} Name of the shapefile list. Used in internal referencing and cannot be omitted. Use the same name than the object name of the shapefile list.
 \item \strong{land} Object name of the \code{\link[sp]{SpatialPolygonsDataFrame}} containing land. Required.
 \item \strong{glacier} Object name of the \code{\link[sp]{SpatialPolygonsDataFrame}} containing glaciers. Use \code{NULL} if glaciers are not needed.
 \item \strong{bathy} Object name of the \code{\link[sp]{SpatialPolygonsDataFrame}} containing bathymetry contours. Use \code{NULL} if bathymetry is not needed.
 }
 
-All spatial data objects linked to must be in same projection. Pre-made shapefiles contain additional elements that are used in the \code{\link{basemap}} function, but not required for custom shapefile datasets.
+All linked spatial data objects must be in same projection. Pre-made shapefiles contain additional elements that are used in the \code{\link{basemap}} function, but not required for custom shapefile datasets.
+}
+\examples{
+shapefile_list("all")
+shapefile_list("Arctic") # partial matching
 }
 \seealso{
-\code{\link{basemap}}
+Other basemap functions: 
+\code{\link{auto_limits}()},
+\code{\link{basemap}()},
+\code{\link{qmap}()},
+\code{\link{reorder_layers}()},
+\code{\link{theme_map}()},
+\code{\link{transform_coord}()}
 }
 \author{
 Mikko Vihtakari
 }
+\concept{basemap functions}
 \keyword{shapefiles}

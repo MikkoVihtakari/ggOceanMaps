@@ -18,7 +18,7 @@ raster_bathymetry(
 
 \item{depths}{Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}.}
 
-\item{proj.out}{A character string specifying the PROJ.4 projection arguments for the output. See \code{\link[sp]{CRS}} and \href{https://proj.org/}{proj.org}. SIMPLIFY THIS!}
+\item{proj.out}{A character string specifying the PROJ.4 projection arguments for the output. See \code{\link[sp]{CRS}} and \href{https://proj.org/}{proj.org}.}
 
 \item{boundary}{A \link[sp]{SpatialPolygons}(DataFrame) object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.}
 
@@ -42,8 +42,10 @@ GEBCO Compilation Group (2019) GEBCO 2019 15-arcsecond grid (doi:10.5285/836f016
 ETOPO1 1 Arc-Minute Global Relief Model. URL: \url{https://doi.org/10.7289/V5C8276M}.
 }
 \seealso{
-\code{\link{vector_bathymetry}}
+Other bathymetry functions: 
+\code{\link{vector_bathymetry}()}
 }
 \author{
 Mikko Vihtakari
 }
+\concept{bathymetry functions}

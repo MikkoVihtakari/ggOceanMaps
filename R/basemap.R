@@ -20,30 +20,47 @@
 #' \item \code{"contour_grey"} plots gray contour lines.
 #' }
 #' @param legends Logical indicating whether the legend for bathymetry should be shown.
-#' @param legend.position Position for ggplot2 legend. See the argument with the same name in \link[ggplot2]{theme}.
+#' @param legend.position The position for ggplot2 legend. See the argument with the same name in \link[ggplot2]{theme}.
 #' @param lon.interval,lat.interval Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.
 #' @param land.col,gla.col,grid.col Character code specifying the color of land, glaciers and grid lines, respectively. Use \code{NA} to remove the grid lines.
 #' @param land.border.col,gla.border.col,bathy.border.col Character code specifying the color of the border line for land, glacier, and bathymetry shapes.
-#' @param land.size,gla.size,bathy.size,grid.size Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the \code{\link{LS}} function for a specific width in pt. See Details for explanation.
+#' @param land.size,gla.size,bathy.size,grid.size Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the \code{\link{LS}} function for a specific width in pt. See Details.
 #' @param base_size Base size parameter for ggplot. See \link[ggplot2]{theme_bw}.
 #' @param projection.grid Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.
 #' @return Returns a \link[ggplot2]{ggplot2} map, which can be assigned to an object and modified as any ggplot object.
-#' @details The function uses \link[ggplot2]{ggplot2}, ggspatial, GIS packages of R and shapefiles to plot maps of the world's oceans. If the \code{shapefiles} are not specified, the function uses either the \code{limits} or \code{data} arguments to decide which projection to use. Up-to-date conditions are defined in \code{\link{define_shapefiles}} and \code{\link{shapefile_list}} functions. At the time of writing, the function uses three different projections (given as \href{https://epsg.io/}{EPSG codes})
+#' @details The function uses \link[ggplot2]{ggplot2}, ggspatial, GIS packages of R, and shapefiles to plot maps of the world's oceans. 
+#' 
+#' \strong{Projections}
+#' 
+#' If the \code{shapefiles} are not specified, the function uses either the \code{limits} or \code{data} arguments to decide which projection to use. Up-to-date conditions are defined in \code{\link{define_shapefiles}} and \code{\link{shapefile_list}} functions. At the time of writing, the function uses three different projections (given as \href{https://epsg.io/}{EPSG codes})
 #' \itemize{
 #' \item \strong{3995} WGS 84 / Arctic Polar Stereographic. Called "ArcticStereographic". For max latitude (\code{limits[4]}) >= 60 (if min latitude (\code{limits[3]}) >= 30), and single integer latitudes >= 30 and <= 89.
 #' \item \strong{3031} WGS 84 / Antarctic Polar Stereographic. Called "AntarcticStereographic". For max latitude (\code{limits[4]}) <= -60 (if min latitude (\code{limits[3]}) <= -30), and single integer latitudes <= -30 and >= -89.
 #' \item \strong{4326} WGS 84 / World Geodetic System 1984, used in GPS. Called "DecimalDegree". For min latitude (\code{limits[3]}) < 30 or > -30, max latitude (\code{limits[4]}) < 60 or > -60, and single integer latitudes < 30 and > -30.
 #' }
 #'
-#' If the limits are in decimal degrees, the longitude limits (\code{[1:2]}) specify the start and end segments of corresponding angular lines that should reside inside the map area. The longitude limits are defined \strong{counter-clockwise}. The latitude limits \code{[3:4]} define the parallels that should reside inside the limited region given the longitude segments. Note that the actual limited region becomes wider than the polygon defined by the coordinates (shown in Examples). Using \code{data} to limit the map expands the map all around the data points to make them fit into the map. If the limits are given as projected coordinates or as decimal degrees for maps with -60 < latitude < 60, limits elements represent lines encompassing the map area in cartesian space. If the limits are not defined as decimal degrees (any longitude outside range [-180, 180] or latitude [-90, 90]), the function will ask to specify \code{shapefiles}. The \code{shapefiles} can be defined by partially matching the names of the pre-made shapefiles in \code{\link{shapefile_list}} (e.g. "Ar" would be enough for "ArcticStereographic") or by specifying custom shapefiles. Custom shapefiles have to be a named list containing at least following elements:
+#' \strong{Limits}
+#'
+#' If the limits are in decimal degrees, the longitude limits (\code{[1:2]}) specify the start and end segments of corresponding angular lines that should reside inside the map area. The longitude limits are defined \strong{counter-clockwise}. The latitude limits \code{[3:4]} define the parallels that should reside inside the limited region given the longitude segments. Note that the actual limited region becomes wider than the polygon defined by the coordinates (shown in Examples). Using \code{data} to limit the map expands the map all around the data points to make them fit into the map. If the limits are given as projected coordinates or as decimal degrees for maps with -60 < latitude < 60, limits elements represent lines encompassing the map area in cartesian space. 
+#'
+#' \strong{Pre-made shapefiles}
+#' 
+#' If the limits are not defined as decimal degrees (any longitude outside range [-180, 180] or latitude [-90, 90]), the function will ask to specify \code{shapefiles}. The \code{shapefiles} can be defined by partially matching the names of the pre-made shapefiles in \code{\link{shapefile_list}} (e.g. "Ar" would be enough for "ArcticStereographic") or by specifying custom shapefiles.
+#' 
+#' \strong{Custom shapefiles}
+#' 
+#' Custom shapefiles have to be a named list containing at least following elements:
 #' \itemize{
-#' \item \strong{name} Name of the shapefile list. Used in internal referencing and cannot be omitted. Use the same name than the object name of the shapefile list.
 #' \item \strong{land} Object name of the \code{\link[sp]{SpatialPolygonsDataFrame}} containing land. Required.
 #' \item \strong{glacier} Object name of the \code{\link[sp]{SpatialPolygonsDataFrame}} containing glaciers. Use \code{NULL} if glaciers are not needed.
 #' \item \strong{bathy} Object name of the \code{\link[sp]{SpatialPolygonsDataFrame}} containing bathymetry contours. Use \code{NULL} if bathymetry is not needed.
 #' }
 #'
-#' \strong{Line width} (size) aesthetics in \link[ggplot2]{ggplot2} generates approximately 2.13 wider lines measured in pt than the given values. If you want a specific line width in pt, use the internal function \code{\link{LS}} to convert the desired line width to ggplot2 equivalent. A similar function is also available for font sizes (\code{\link{FS}}).
+#' See Examples.
+#'
+#' \strong{Line width and font size}
+#'  
+#' The line size aesthetics in \link[ggplot2]{ggplot2} generates approximately 2.13 wider lines measured in pt than the given values. If you want a specific line width in pt, use the internal function \code{\link{LS}} to convert the desired line width to ggplot2 equivalent. A similar function is also available for font sizes (\code{\link{FS}}).
 #'
 #' @references Note that if you use this function to generate maps for a publication, it is advised to cite the underlying data. The spatial data used by this function have been acquired from following sources:
 #' \itemize{
@@ -51,14 +68,17 @@
 #' \item \strong{Glacier polygons.} \href{http://www.naturalearthdata.com/downloads/10m-physical-vectors/}{Natural Earth Data} 1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice Shelves datasets combined. Distributed under the \href{https://creativecommons.org/publicdomain/}{CC Public Domain license} (\href{http://www.naturalearthdata.com/about/terms-of-use/}{terms of use})
 #' \item \strong{Bathymetry.} \href{https://doi.org/10.7289/V5C8276M}{Amante, C. and B.W. Eakins, 2009. ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National Geophysical Data Center, NOAA}. Distributed under the \href{https://www.usa.gov/government-works}{U.S. Government Work license}.
 #' }
-#'
+#' 
+#' @family basemap functions
+#' @seealso \code{\link[ggplot2]{ggplot2}}
+#' @author Mikko Vihtakari
+#' 
 #' @examples
-#'
 #' # The easiest way to produce a map is to use the limits
 #' # argument and decimal degrees:
-#'
+#' \donttest{
 #' basemap(limits = 60)
-#'
+#' }
 #' # Bathymetry and glaciers can be added using the respective arguments:
 #'
 #' basemap(limits = -60, bathymetry = TRUE, glaciers = TRUE)
@@ -72,12 +92,11 @@
 #'
 #' # Note that writing out data = dt is required because there are multiple
 #' # underlying ggplot layers plotted already:
-#'
+#' 
 #' \dontrun{
-#'
 #' basemap(data = dt) +
-#' geom_spatial_point(data = dt, aes(x = lon, y = lat))
-#' > Error: `mapping` must be created by `aes()`
+#' geom_spatial_point(dt, aes(x = lon, y = lat), color = "red")
+#' #> Error: `mapping` must be created by `aes()`
 #' }
 #'
 #' # If you want to use native ggplot commands, you need to transform your data
@@ -86,32 +105,44 @@
 #' dt <- transform_coord(dt, bind = TRUE)
 #'
 #' basemap(data = dt) + geom_point(data = dt, aes(x = lon.proj, y = lat.proj))
-#'
+#' \donttest{
 #' # The limits argument of length 4 plots a map anywhere in the world:
-#'
+#' 
 #' basemap(limits = c(100, 160, -20, 30), bathymetry = TRUE)
 #'
 #' # The argument leads to expanded maps towards poles:
-#'
+#' 
 #' dt <- data.frame(lon = c(-160, 160, 160, -160), lat = c(80, 80, 60, 60))
 #'
 #' basemap(limits = c(-160, 160, 60, 80)) +
 #' geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
 #' fill = NA, color = "red")
-#'
+#' 
 #' # The limits are further expanded when using the data argument:
 #'
 #' basemap(data = dt) +
 #' geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
 #' fill = NA, color = "red")
-#'
+#' 
+#' ## To find UTM coordinates to limit a polar map:
+#' basemap(limits = 60, projection.grid = TRUE)
+#' basemap(limits = c(2.5e4, -2.5e6, 2e6, -2.5e5), shapefiles = "Arctic")
+#' 
+#' # Using custom shapefiles
+#' data(bs_shapes)
+#' basemap(shapefiles = list(land = bs_land, glacier = NULL, bathy = bs_bathy),
+#' bathymetry = TRUE)
+#' 
 #' # grid.col = NA removes grid lines
+#' 
 #' basemap(limits = c(-180, -140, 50, 70), grid.col = NA)
 #'
 #' # Rename axis labels
+#' 
 #' basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) + xlab("Lat")
-#'
+#' 
 #' # Remove axis labels
+#' 
 #' basemap(limits = c(0, 60, 68, 80)) + labs(x = NULL, y = NULL)
 #'
 #' basemap(limits = c(0, 60, 68, 80)) +
@@ -120,15 +151,9 @@
 #'       axis.ticks.x = element_blank(),
 #'       axis.ticks.y = element_blank()
 #'       )
-#'
-#' ## To find UTM coordinates to limit a polar map:
-#' # basemap(limits = 60) + coord_sf(crs = sf::st_crs(3995)) + theme_bw()
-#' # basemap("panarctic", limits = c(2.5e4, -2.5e6, 2e6, -2.5e5))
-#'
-#' @seealso \code{\link[ggplot2]{ggplot2}}, \code{\link{transform_coord}}
-#'
-#' @author Mikko Vihtakari
-#' @import ggplot2 ggspatial sp sf
+#' }
+#' 
+#' @import ggplot2 ggspatial sp sf ggOceanMapsData
 #' @export
 
 ## Test parameters

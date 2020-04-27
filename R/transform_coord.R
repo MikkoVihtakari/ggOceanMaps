@@ -1,5 +1,5 @@
 #' @title Transform spatial coordinates to another projection
-#' @description The function transforms spatial coordinates from original projection (decimal degrees assumed) to another projection.
+#' @description Transforms spatial coordinates from original projection (decimal degrees assumed) to another projection.
 #' @param x Data frame to be transformed. Can be omitted if numeric vectors are assigned to \code{lon} and \code{lat}.
 #' @param lon,lat Either a name of the longitude and latitude columns in \code{x} or a numeric vector containing longitude and latitude coordinates. Use \code{NULL} to \link[=guess_coordinate_columns]{guess the longitude and/or latitude columns} in \code{x}.
 #' @param new.names Character vector of length 2 specifying the names of transformed longitude and latitude columns, respectively. Alternatively \code{NULL}, which returns column names from \code{x} or "auto", which uses \code{NULL} if \code{bind = FALSE} and \code{c("lon.proj", "lat.proj")} if \code{bind = TRUE}.
@@ -10,8 +10,18 @@
 #' @param na character specifying the NA action for missing coordinates. The "ignore" option ignores the coordinates and returns NAs to transformed coordinates. The "remove" option removes missing values from \code{x} returning a message while doing it. Any other character argument will trigger \code{na.fail} stopping the function in case of missing coordinates.
 #' @return Returns a data frame with transformed spatial coordinates.
 #' @details If \code{x} is specified, the function guesses longitude and latitude columns from \code{x} by default.
+#' @family basemap functions
 #' @author Mikko Vihtakari
 #' @import sp
+#' @examples
+#' # Coordinates are automatically transformed to the pre-made shapefile 
+#' # projections:
+#' dt <- data.frame(lon = c(-150, 150), lat = c(60, 90))
+#' transform_coord(dt)
+#' transform_coord(dt, bind = TRUE)
+#' 
+#' dt <- data.frame(lon = c(-150, 150), lat = c(20, 50))
+#' transform_coord(dt, bind = TRUE) # no transformation required.
 #' @export
 
 ## Debug data

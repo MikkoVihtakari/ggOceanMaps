@@ -16,3 +16,13 @@ theme_map(..., grid.col, grid.size)
 \description{
 A ggplot2 theme for maps.
 }
+\seealso{
+Other basemap functions: 
+\code{\link{auto_limits}()},
+\code{\link{basemap}()},
+\code{\link{qmap}()},
+\code{\link{reorder_layers}()},
+\code{\link{shapefile_list}()},
+\code{\link{transform_coord}()}
+}
+\concept{basemap functions}

@@ -7,7 +7,13 @@
 #' @param bathymetry Logical indicating whether bathymetry should be added to the map.
 #' @param bathy.style Character defining the style for bathymetry contours. See the \code{bathy.style} argument in \code{\link{basemap}}.
 #' @import ggplot2
+#' @family basemap functions
 #' @author Mikko Vihtakari
+#' @examples 
+#' 
+#' dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40))
+#' qmap(dt, color = "red")
+#' 
 #' @export
 
 # data = dt; x = NULL; y = NULL; geom = "point"; limits = NULL; bathymetry = FALSE; bathy.style = "poly_blues"

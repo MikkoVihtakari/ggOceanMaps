@@ -1,5 +1,5 @@
 #' @title Automatic limits for basemap
-#' @description An internal function to make \code{\link{basemap}} code more readable
+#' @description Find limits for a \code{\link{basemap}} from a data frame.
 #' @param data Data frame containing data for which the limits should be calculated.
 #' @param proj.in Original \code{\link[sp]{proj4string}} projection. Must be defined as character argument.
 #' @param proj.out Resulting map projection. See \code{\link{transform_coord}}.
@@ -7,13 +7,13 @@
 #' @param expand.factor Expansion factor for map limits. Set to \code{NULL} to ignore.
 #' @param rotate Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.
 #' @param verbose if \code{TRUE}, the function prints information about the changed projection. Switch to \code{FALSE} to make the function silent.
-#' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function. The function does some funky illogical action (seeing the argument names) when feeding in projected coordinates. This is to make the automatic limits to work for projected coordinates too.
+#' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function. The function does some funky illogical action (seeing the argument names) when feeding in projected coordinates. This is to make the automatic limits to work for projected coordinates too. Despite the funkiness, the function may be useful when customising \code{\link{basemap}}s. 
 #' @keywords internal
-#' @export
 #' @author Mikko Vihtakari
 #' @import sp
 #' @importFrom grDevices chull
-#' @seealso \code{\link{basemap}}
+#' @family basemap functions
+#' @export
 
 # lon = NULL; lat = NULL; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; expand.factor = NULL; rotate = TRUE
 auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326", proj.out = NULL, expand.factor = NULL, verbose = FALSE) {

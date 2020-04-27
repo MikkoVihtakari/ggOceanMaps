@@ -30,15 +30,22 @@ auto_limits(
 \item{rotate}{Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.}
 }
 \description{
-An internal function to make \code{\link{basemap}} code more readable
+Find limits for a \code{\link{basemap}} from a data frame.
 }
 \details{
-This is an internal function, which is automatically run by the \code{\link{basemap}} function. The function does some funky illogical action (seeing the argument names) when feeding in projected coordinates. This is to make the automatic limits to work for projected coordinates too.
+This is an internal function, which is automatically run by the \code{\link{basemap}} function. The function does some funky illogical action (seeing the argument names) when feeding in projected coordinates. This is to make the automatic limits to work for projected coordinates too. Despite the funkiness, the function may be useful when customising \code{\link{basemap}}s.
 }
 \seealso{
-\code{\link{basemap}}
+Other basemap functions: 
+\code{\link{basemap}()},
+\code{\link{qmap}()},
+\code{\link{reorder_layers}()},
+\code{\link{shapefile_list}()},
+\code{\link{theme_map}()},
+\code{\link{transform_coord}()}
 }
 \author{
 Mikko Vihtakari
 }
+\concept{basemap functions}
 \keyword{internal}

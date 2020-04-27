@@ -2,8 +2,11 @@ ggOceanMaps
 ================
 Mikko Vihtakari (Institute of Marine Research)
 
+**Plot data on oceanographic maps using ggplot2. R package version
+0.2.0**
+
 The ggOceanMaps package for [R](https://www.r-project.org/) allows
-plotting data on bathymetric maps using the
+plotting data on bathymetric maps using
 [ggplot2](https://ggplot2.tidyverse.org/reference). The package is
 designed for marine research and greatly simplifies bathymetric map
 plotting anywhere around the globe. ggOceanMaps uses openly available
@@ -19,9 +22,9 @@ which could not be uploaded to [CRAN](https://cran.r-project.org/) due
 to package size limitations and was designed for a limited region. The
 sole purpose of ggOceanMaps is to allow the installation from CRAN and
 to expand the mapping capabilities for the entire world. Due to the
-package size limitations, ggOceanMaps requires the
+package size limitations, ggOceanMaps depends on the
 [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData)
-package for high-resolution maps when implemented.
+package which stores the shapefiles.
 
 This is the developmental site for ggOceanMaps, which is in the process
 of being uploaded to CRAN. The developmental version may be ahead of the
@@ -42,6 +45,7 @@ can be installed using the
 package.
 
 ``` r
+devtools::install_github("MikkoVihtakari/ggOceanMapsData") # required by ggOceanMaps
 devtools::install_github("MikkoVihtakari/ggOceanMaps")
 ```
 
@@ -457,7 +461,7 @@ specified by the projection (crs = 3995) for Arctic stereographic maps.
 
 ## Modifying basemap objects
 
-Thee objects produced by the `basemap` function are standard ggplot
+The objects produced by the `basemap` function are standard ggplot
 objects with the difference that relevant information used in mapping is
 added to `attributes` of the object:
 
@@ -950,7 +954,7 @@ basemap(limits = raster::extent(fishingAreasNor)[1:4], bathymetry = TRUE,
 
 If you really need the polygon bathymetries, you can use the
 [ggnewscale](https://github.com/eliocamp/ggnewscale) package to make the
-data `fill` mappings disconnected from that in `basemap`.
+data `fill` mapping disconnected from that in `basemap`.
 
 <!-- ### Other issues -->
 
@@ -965,17 +969,17 @@ the package. The spatial data used by this package have been acquired
 from the following sources:
 
   - **Land polygons.** [Natural Earth
-    Data](http://www.naturalearthdata.com/downloads/10m-physical-vectors/)
+    Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
     1:10m Physical Vectors with the Land and Minor Island datasets
     combined. Distributed under the [CC Public Domain
     license](https://creativecommons.org/publicdomain/) ([terms of
-    use](http://www.naturalearthdata.com/about/terms-of-use/)).
+    use](https://www.naturalearthdata.com/about/terms-of-use/)).
   - **Glacier polygons.** [Natural Earth
-    Data](http://www.naturalearthdata.com/downloads/10m-physical-vectors/)
+    Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
     1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice
     Shelves datasets combined. Distributed under the [CC Public Domain
     license](https://creativecommons.org/publicdomain/) ([terms of
-    use](http://www.naturalearthdata.com/about/terms-of-use/)).
+    use](https://www.naturalearthdata.com/about/terms-of-use/)).
   - **Bathymetry.** [Amante, C. and B.W. Eakins, 2009. ETOPO1 1
     Arc-Minute Global Relief Model: Procedures, Data Sources and
     Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National
@@ -994,17 +998,17 @@ citation("ggOceanMaps")
     #> 
     #> To cite package 'ggOceanMaps' in publications use:
     #> 
-    #>   Mikko Vihtakari (2020). ggOceanMaps: plot data on oceanographic maps
-    #>   using ggplot2. R package version 0.1.0.
+    #>   Mikko Vihtakari (2020). ggOceanMaps: Plot Data on Oceanographic Maps
+    #>   using ggplot2. R package version 0.2.0.
     #>   https://github.com/MikkoVihtakari/ggOceanMaps
     #> 
     #> A BibTeX entry for LaTeX users is
     #> 
     #>   @Manual{,
-    #>     title = {ggOceanMaps: plot data on oceanographic maps using ggplot2},
+    #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using ggplot2},
     #>     author = {Mikko Vihtakari},
     #>     year = {2020},
-    #>     note = {R package version 0.1.0},
+    #>     note = {R package version 0.2.0},
     #>     url = {https://github.com/MikkoVihtakari/ggOceanMaps},
     #>   }
 
