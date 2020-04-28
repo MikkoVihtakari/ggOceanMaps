@@ -12,7 +12,7 @@
 #' All linked spatial data objects must be in same projection. Pre-made shapefiles contain additional elements that are used in the \code{\link{basemap}} function, but not required for custom shapefile datasets.
 #'
 #' @return Returns a data frame of provided pre-made shapefiles, if \code{name = "all"}. Returns a shapefile list containing the information for a particular map otherwise.
-#' @family basemap functions
+#' @family Basemap functions
 #' @keywords shapefiles
 #' @author Mikko Vihtakari
 #' @examples

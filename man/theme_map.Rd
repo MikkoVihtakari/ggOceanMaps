@@ -7,7 +7,7 @@
 theme_map(..., grid.col, grid.size)
 }
 \arguments{
-\item{...}{additional arguments passed to \code{\link[ggplot2]{theme}} function}
+\item{...}{additional arguments passed to \code{\link[ggplot2]{theme_bw}}.}
 
 \item{grid.col}{Character code specifying the color of grid lines. Use \code{NA} to remove the grid lines.}
 
@@ -17,12 +17,8 @@ theme_map(..., grid.col, grid.size)
 A ggplot2 theme for maps.
 }
 \seealso{
-Other basemap functions: 
+Other Customize shapefiles: 
 \code{\link{auto_limits}()},
-\code{\link{basemap}()},
-\code{\link{qmap}()},
-\code{\link{reorder_layers}()},
-\code{\link{shapefile_list}()},
-\code{\link{transform_coord}()}
+\code{\link{reorder_layers}()}
 }
-\concept{basemap functions}
+\concept{Customize shapefiles}

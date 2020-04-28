@@ -7,7 +7,7 @@
 #' @param bathymetry Logical indicating whether bathymetry should be added to the map.
 #' @param bathy.style Character defining the style for bathymetry contours. See the \code{bathy.style} argument in \code{\link{basemap}}.
 #' @import ggplot2
-#' @family basemap functions
+#' @family Basemap functions
 #' @author Mikko Vihtakari
 #' @examples 
 #' 

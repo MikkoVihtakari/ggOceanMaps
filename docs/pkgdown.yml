@@ -1,0 +1,8 @@
+pandoc: 2.9.2
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  ggOceanMaps: ggOceanMaps.html
+  premade-shapefiles: premade-shapefiles.html
+last_built: 2020-04-28T09:00Z
+

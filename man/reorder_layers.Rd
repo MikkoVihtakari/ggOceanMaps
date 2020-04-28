@@ -19,15 +19,11 @@ Moves existing land, glacier and grid layers on top of other layers. Useful for 
 This function has not been tested properly yet and is likely to contain bugs.
 }
 \seealso{
-Other basemap functions: 
+Other Customize shapefiles: 
 \code{\link{auto_limits}()},
-\code{\link{basemap}()},
-\code{\link{qmap}()},
-\code{\link{shapefile_list}()},
-\code{\link{theme_map}()},
-\code{\link{transform_coord}()}
+\code{\link{theme_map}()}
 }
 \author{
 Mikko Vihtakari
 }
-\concept{basemap functions}
+\concept{Customize shapefiles}

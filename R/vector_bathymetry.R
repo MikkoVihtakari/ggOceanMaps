@@ -15,7 +15,7 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @importFrom stats na.omit
 #' @author Mikko Vihtakari
-#' @family bathymetry functions
+#' @family Create shapefiles
 #' @export
 
 # bathy = "/Users/a22357/Dropbox/Workstuff/R/R packages/PlotSvalbard development/bathy.grd"; drop.crumbs = NULL; remove.holes = NULL

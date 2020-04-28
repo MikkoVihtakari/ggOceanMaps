@@ -69,7 +69,7 @@
 #' \item \strong{Bathymetry.} \href{https://doi.org/10.7289/V5C8276M}{Amante, C. and B.W. Eakins, 2009. ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National Geophysical Data Center, NOAA}. Distributed under the \href{https://www.usa.gov/government-works}{U.S. Government Work license}.
 #' }
 #' 
-#' @family basemap functions
+#' @family Basemap functions
 #' @seealso \code{\link[ggplot2]{ggplot2}}
 #' @author Mikko Vihtakari
 #' 
@@ -114,7 +114,7 @@
 #' 
 #' dt <- data.frame(lon = c(-160, 160, 160, -160), lat = c(80, 80, 60, 60))
 #'
-#' basemap(limits = c(-160, 160, 60, 80)) +
+#' basemap(limits = c(160, -160, 60, 80)) +
 #' geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
 #' fill = NA, color = "red")
 #' 
@@ -133,9 +133,9 @@
 #' basemap(shapefiles = list(land = bs_land, glacier = NULL, bathy = bs_bathy),
 #' bathymetry = TRUE)
 #' 
-#' # grid.col = NA removes grid lines
+#' # grid.col = NA removes grid lines, rotate = TRUE rotates northwards
 #' 
-#' basemap(limits = c(-180, -140, 50, 70), grid.col = NA)
+#' basemap(limits = c(-180, -140, 50, 70), grid.col = NA, rotate = TRUE)
 #'
 #' # Rename axis labels
 #' 

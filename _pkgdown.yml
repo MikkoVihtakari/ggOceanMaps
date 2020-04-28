@@ -1,0 +1,83 @@
+template:
+  params:
+    bootswatch: cerulean
+
+reference:
+- title: Basemap functions
+  desc: >
+    Maps are plotted using the `basemap()` or `qmap()` functions that work
+    almost similarly to 
+    [`ggplot()` as a base](https://ggplot2.tidyverse.org/reference/index.html)
+    for adding further layers to the plot using the `+` operator. The maps 
+    generated this way already contain multiple ggplot layers. 
+    Consequently, the [`data` argument](https://ggplot2.tidyverse.org/reference/ggplot.html)
+    needs to be explicitly specified inside `geom_*` functions when 
+    adding `ggplot2` layers. Depending on the location of the map, the underlying
+    coordinates may be projected. Decimal degree coordinates need to be transformed 
+    to the projected coordinates using the `transform_coord`, 
+    [ggspatial](https://paleolimbot.github.io/ggspatial/), or 
+    [`geom_sf` functions.](https://ggplot2.tidyverse.org/reference/ggsf.html). The 
+    `shapefile_list` function can be used to acquire `shapefiles` argument names 
+    when limiting basemaps using projected coordinates.
+  contents:
+  - basemap
+  - qmap
+  - transform_coord
+  - shapefile_list 
+
+- title: Functions to help customizing basemaps
+  desc: >
+    These functions help in customizing basemaps. The `auto_limits` function can be used to 
+    retrieve projected coordinates from decimal degree position data and the
+    `reorder_layers` can be used to move land and glaciers on top of added 
+    ggplot2 data layers.
+  contents:
+  - auto_limits
+  - reorder_layers
+  - theme_map
+  
+- title: Create bathymetries and shapefiles
+  desc: >
+    Custom bathymetry shapes can be added using the `raster_bathymetry` and 
+    `vector_bathymetry` functions in this order. The underlying data can be 
+    retrieved from the [ETOPO1](https://doi.org/10.7289/V5C8276M) 
+    or [GEBCO](https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html)
+    repositories. The `clip_shapefile` function can be used to crop already
+    existing SpatialPolygons.
+  contents:
+  - raster_bathymetry
+  - vector_bathymetry
+  - clip_shapefile
+  
+- title: Size adjustment functions
+  desc: >
+    These functions convert line widths and font sizes measured in points (pt) 
+    to ggplot2 equivalents. They can be used to follow line width and font size
+    requirements set by journals. 
+  contents: 
+  - LS
+  - FS
+  
+- title: Internal basemap functions
+  desc: >
+    Internal functions dealing with data and graphics for basemap. These 
+    functions are run on the background and only needed if you modify your maps
+    beyond the options offered by ggOceanMaps.
+  contents:
+  - basemap_data
+  - define_shapefiles
+  - guess_coordinate_columns
+  - is_decimal_limit
+  - map_cmd
+  - round_any
+  - quiet
+  - dd_to_deg
+  - deg_to_dd
+  - select_element
+  
+- title: Shapefiles
+  desc: >
+    Shapefiles used by the package are stored in the 
+    [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData) package. 
+    These shapefiles are automatically used by the basemap function. The 
+    `basemap` function supports custom shapefiles. 

@@ -1,4 +1,4 @@
-#' @title Clip a shape file (SpatialPolygon) using a bounding area
+#' @title Clip a shapefile (SpatialPolygon) using a bounding area
 #' @description Clips an area from a larger shape file (\link[sp]{SpatialPolygons}).
 #' @param x Original shape file to be clipped. Required. Must contain \code{\link[sp]{proj4string}} information.
 #' @param limits The constraining area used to clip \code{x}. Required. Either a numeric vector of length 4 or a \link[sp]{SpatialPolygons} object. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. The \link[sp]{SpatialPolygons} object must contain \code{\link[sp]{proj4string}} information. See details.
@@ -8,6 +8,7 @@
 #' @param return.boundary logical. If \code{TRUE} returns the clip boundary together with the shapefile
 #' @details The function uses the \code{\link[rgeos]{gIntersection}} function to clip smaller \link[sp]{SpatialPolygons} from larger ones. The clip area is constrained by either a numeric vector or \link[sp]{SpatialPolygons} object in the \code{limits} argument. One of these arguments must be given. Defining \code{limits} by a \link[sp]{SpatialPolygons} object gives greater freedom for the clip area as the area does not have to be rectangular.
 #' @keywords internal
+#' @family Create shapefiles
 #' @import sp rgdal
 #' @importFrom rgeos gIntersection gIntersects gSimplify
 #' @importFrom methods slot slot<-

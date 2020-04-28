@@ -42,10 +42,11 @@ GEBCO Compilation Group (2019) GEBCO 2019 15-arcsecond grid (doi:10.5285/836f016
 ETOPO1 1 Arc-Minute Global Relief Model. URL: \url{https://doi.org/10.7289/V5C8276M}.
 }
 \seealso{
-Other bathymetry functions: 
+Other Create shapefiles: 
+\code{\link{clip_shapefile}()},
 \code{\link{vector_bathymetry}()}
 }
 \author{
 Mikko Vihtakari
 }
-\concept{bathymetry functions}
+\concept{Create shapefiles}

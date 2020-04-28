@@ -53,15 +53,12 @@ dt <- data.frame(lon = c(-150, 150), lat = c(20, 50))
 transform_coord(dt, bind = TRUE) # no transformation required.
 }
 \seealso{
-Other basemap functions: 
-\code{\link{auto_limits}()},
+Other Basemap functions: 
 \code{\link{basemap}()},
 \code{\link{qmap}()},
-\code{\link{reorder_layers}()},
-\code{\link{shapefile_list}()},
-\code{\link{theme_map}()}
+\code{\link{shapefile_list}()}
 }
 \author{
 Mikko Vihtakari
 }
-\concept{basemap functions}
+\concept{Basemap functions}

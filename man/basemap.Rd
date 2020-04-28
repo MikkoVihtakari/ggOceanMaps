@@ -157,7 +157,7 @@ basemap(limits = c(100, 160, -20, 30), bathymetry = TRUE)
 
 dt <- data.frame(lon = c(-160, 160, 160, -160), lat = c(80, 80, 60, 60))
 
-basemap(limits = c(-160, 160, 60, 80)) +
+basemap(limits = c(160, -160, 60, 80)) +
 geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
 fill = NA, color = "red")
 
@@ -176,9 +176,9 @@ data(bs_shapes)
 basemap(shapefiles = list(land = bs_land, glacier = NULL, bathy = bs_bathy),
 bathymetry = TRUE)
 
-# grid.col = NA removes grid lines
+# grid.col = NA removes grid lines, rotate = TRUE rotates northwards
 
-basemap(limits = c(-180, -140, 50, 70), grid.col = NA)
+basemap(limits = c(-180, -140, 50, 70), grid.col = NA, rotate = TRUE)
 
 # Rename axis labels
 
@@ -208,15 +208,12 @@ Note that if you use this function to generate maps for a publication, it is adv
 \seealso{
 \code{\link[ggplot2]{ggplot2}}
 
-Other basemap functions: 
-\code{\link{auto_limits}()},
+Other Basemap functions: 
 \code{\link{qmap}()},
-\code{\link{reorder_layers}()},
 \code{\link{shapefile_list}()},
-\code{\link{theme_map}()},
 \code{\link{transform_coord}()}
 }
 \author{
 Mikko Vihtakari
 }
-\concept{basemap functions}
+\concept{Basemap functions}

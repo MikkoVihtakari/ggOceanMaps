@@ -17,7 +17,7 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @rawNamespace import(raster, except = shift)
 #' @author Mikko Vihtakari
-#' @family bathymetry functions
+#' @family Create shapefiles
 #' @export
 
 # bathy = "../../../GIS/ETOPO bathymetry/ETOPO1_Bed_g_gmt4.grd"; boundary = c(-180.0083, 180.0083, -80, -55)

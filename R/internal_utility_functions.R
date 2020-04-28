@@ -3,6 +3,7 @@
 #' @param x numeric vector giving the font sizes in points
 #' @return Returns a numeric vector of lenght \code{x} of ggplot font sizes
 #' @keywords internal
+#' @family Size adjustors
 #' @export
 #'
 FS <- function(x) x/2.845276 # x is the desired font / line size in pt
@@ -12,6 +13,7 @@ FS <- function(x) x/2.845276 # x is the desired font / line size in pt
 #' @param x numeric vector giving the lines sizes in points
 #' @return Returns a numeric vector of lenght \code{x} of ggplot line sizes
 #' @keywords internal
+#' @family Size adjustors
 #' @export
 #'
 LS <- function(x) x/2.13
@@ -38,39 +40,6 @@ round_any <- function(x, accuracy, f = round) {
   f(x / accuracy) * accuracy
 }
 
-#' @title Round to pretty log breaks
-#' @param x numeric vector to round
-#' @param f rounding function: \code{\link{floor}}, \code{\link{ceiling}} or
-#'  \code{\link{round}}
-#' @keywords internal
-#' @author Mikko Vihtakari
-#' @seealso \code{\link{round_any}}
-#' @export
-#'
-pretty_log <- function(x, f = round) {
-  x <- round(x, 0)
-
-  ifelse(nchar(x) == 1, round_any(x, 5),
-    ifelse(nchar(x) == 2 & x < 20, round_any(x, 5),
-      ifelse(nchar(x) == 2 & x < 90, round_any(x, 10),
-        ifelse(nchar(x) == 2, round_any(x, 100),
-          ifelse(nchar(x) == 3 & x < 500, round_any(x, 50),
-            ifelse(nchar(x) == 3, round_any(x, 100),
-              ifelse(nchar(x) == 4, round_any(x, 1000),
-                ifelse(nchar(x) == 5, round_any(x, 10000), round_any(x, 1e5)))))))))
-}
-
-
-#' @title Convert direct UTM distances to kilometers
-#' @description Divides \code{x} by 1000 (i.e from meters to kilometers, since polar stereographic are meters from the pole). Used for ggplot2 labels.
-#' @param x numeric to be converted
-#' @keywords internal
-#' @export
-#'
-formatterUTMkm <- function(x){
-    x/1000
-}
-
 #' @title Return function output quietly
 #' @description Returns function output without printed \code{\link{cat}} messages
 #' @param x function
@@ -88,6 +57,8 @@ quiet <- function(x) {
 #' @description Converts decimal degree values to angular degrees. Used in decimal degree limit calculations.
 #' @param x numeric to be converted
 #' @keywords internal
+#' @author Mikko Vihtakari
+#' @family Degree converters
 #' @export
 
 dd_to_deg <- function(x) {
@@ -98,6 +69,8 @@ dd_to_deg <- function(x) {
 #' @description Converts angular degree values to decimal degrees. Used in decimal degree limit calculations.
 #' @param x numeric to be converted
 #' @keywords internal
+#' @author Mikko Vihtakari
+#' @family Degree converters
 #' @export
 
 deg_to_dd <- function(x) {
@@ -107,6 +80,6 @@ deg_to_dd <- function(x) {
 
 
 # Define global variables
-utils::globalVariables(c("rdiff.lon", "rdiff.lat", ""))
+utils::globalVariables(c("rdiff.lon", "rdiff.lat"))
 
 # "long", "lat", "group", "round.lat", "round.lon", "n.lat.grid", "n.lon.grid", "lat.interval", "lon.interval", "keep.glaciers", "MapType", "proj4.utm", "n.points", "..level..", "abb", "x", "y", "sal", "temp", "xmin", "xmax", "ymin", "ymax", ".", "variable", "ymin", "ymax", "X", "arctic_bathy", "barents_bathy", "barents_currents", "kongsfjord_watermasses", "svalbard_bathy"

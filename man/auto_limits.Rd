@@ -29,23 +29,25 @@ auto_limits(
 
 \item{rotate}{Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.}
 }
+\value{
+A list of limits and projections in \code{proj.in} and \code{proj.out} formats.
+}
 \description{
 Find limits for a \code{\link{basemap}} from a data frame.
 }
 \details{
 This is an internal function, which is automatically run by the \code{\link{basemap}} function. The function does some funky illogical action (seeing the argument names) when feeding in projected coordinates. This is to make the automatic limits to work for projected coordinates too. Despite the funkiness, the function may be useful when customising \code{\link{basemap}}s.
 }
+\examples{
+auto_limits(data = expand.grid(lon = c(-120, 180, 120), lat = c(60, 60, 80)))
+}
 \seealso{
-Other basemap functions: 
-\code{\link{basemap}()},
-\code{\link{qmap}()},
+Other Customize shapefiles: 
 \code{\link{reorder_layers}()},
-\code{\link{shapefile_list}()},
-\code{\link{theme_map}()},
-\code{\link{transform_coord}()}
+\code{\link{theme_map}()}
 }
 \author{
 Mikko Vihtakari
 }
-\concept{basemap functions}
+\concept{Customize shapefiles}
 \keyword{internal}

@@ -32,16 +32,13 @@ shapefile_list("all")
 shapefile_list("Arctic") # partial matching
 }
 \seealso{
-Other basemap functions: 
-\code{\link{auto_limits}()},
+Other Basemap functions: 
 \code{\link{basemap}()},
 \code{\link{qmap}()},
-\code{\link{reorder_layers}()},
-\code{\link{theme_map}()},
 \code{\link{transform_coord}()}
 }
 \author{
 Mikko Vihtakari
 }
-\concept{basemap functions}
+\concept{Basemap functions}
 \keyword{shapefiles}

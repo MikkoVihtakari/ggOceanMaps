@@ -3,7 +3,7 @@
 #' @param p ggplot object from the \code{\link{basemap}} function.
 #' @details This function has not been tested properly yet and is likely to contain bugs. 
 #' @return Returns a ggplot object with land, glacier and grid layers on top.
-#' @family basemap functions
+#' @family Customize shapefiles
 #' @import ggplot2
 #' @author Mikko Vihtakari
 #' @export

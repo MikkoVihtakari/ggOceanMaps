@@ -38,15 +38,12 @@ qmap(dt, color = "red")
 
 }
 \seealso{
-Other basemap functions: 
-\code{\link{auto_limits}()},
+Other Basemap functions: 
 \code{\link{basemap}()},
-\code{\link{reorder_layers}()},
 \code{\link{shapefile_list}()},
-\code{\link{theme_map}()},
 \code{\link{transform_coord}()}
 }
 \author{
 Mikko Vihtakari
 }
-\concept{basemap functions}
+\concept{Basemap functions}
