@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -175,7 +175,7 @@
     <p>A list with <a href='https://rdrr.io/pkg/raster/man/raster.html'>raster</a> object containing projected bathymetry defined by the <code>proj.out</code> argument and a data frame of depth intervals.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>You can use <a href='https://www.gebco.net/data_and_products/gridded_bathymetry_data/'>GEBCO</a> or <a href='https://www.ngdc.noaa.gov/mgg/global/'>ETOPO1</a> bathymetry grids downloaded from respective sources as the <code>bathy</code> argument. The bathymetry grids read from files must be in NetCDF/grd format and defined using decimal degrees. Alternatively use the <code>marmap::getNOAA.bathy</code> function to download ETOPO1 bathymetry and convert it to a raster object using the <code>marmap::as.raster</code> function.</p>
+    <p>You can use <a href='https://www.gebco.net/data_and_products/gridded_bathymetry_data/'>GEBCO</a> or <a href='https://www.ngdc.noaa.gov/mgg/global/'>ETOPO1</a> bathymetry grids downloaded from respective sources as the <code>bathy</code> argument. The bathymetry grids read from files must be in NetCDF/grd format and defined using decimal degrees. Alternatively use the <code><a href='https://rdrr.io/pkg/marmap/man/getNOAA.bathy.html'>marmap::getNOAA.bathy</a></code> function to download ETOPO1 bathymetry and convert it to a raster object using the <code><a href='https://rdrr.io/pkg/marmap/man/as.raster.html'>marmap::as.raster</a></code> function.</p>
 <p>Note that the size of the output is heavily influenced by the number of depth contours (<code>depths</code>) as well as the resolution of <code>bathy</code> and choise of <code>aggregation.factor</code>. To make the <code><a href='vector_bathymetry.html'>vector_bathymetry</a></code> function and consequent plotting faster, limiting the details of the bathymetry raster may be desireable.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -183,7 +183,7 @@
 ETOPO1 1 Arc-Minute Global Relief Model. URL: <a href='https://doi.org/10.7289/V5C8276M'>https://doi.org/10.7289/V5C8276M</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other Create shapefiles: 
+    <div class='dont-index'><p>Other create shapefiles: 
 <code><a href='clip_shapefile.html'>clip_shapefile</a>()</code>,
 <code><a href='vector_bathymetry.html'>vector_bathymetry</a>()</code></p></div>
 

@@ -42,12 +42,12 @@ This is an internal function, which is automatically run by the \code{\link{base
 auto_limits(data = expand.grid(lon = c(-120, 180, 120), lat = c(60, 60, 80)))
 }
 \seealso{
-Other Customize shapefiles: 
+Other customize shapefiles: 
 \code{\link{reorder_layers}()},
 \code{\link{theme_map}()}
 }
 \author{
 Mikko Vihtakari
 }
-\concept{Customize shapefiles}
+\concept{customize shapefiles}
 \keyword{internal}

@@ -25,7 +25,12 @@ define_shapefiles <- function(limits) {
     if(is_decimal_limit(limits)) {
       decLimits <- TRUE
 
-      if(min(abs(limits[3:4])) < 30) {
+      
+      if(limits[4] > 70) {
+        shapefiles <- "ArcticStereographic"
+      } else if(limits[4] < -70) {
+        shapefiles <- "AntarcticStereographic"
+      } else if(min(abs(limits[3:4])) < 30) {
         shapefiles <- "DecimalDegree"
       } else if(max(abs(limits[3:4])) < 60) {
         shapefiles <- "DecimalDegree"

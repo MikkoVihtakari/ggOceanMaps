@@ -13,103 +13,72 @@
 #' @author Mikko Vihtakari
 #' @import sp
 #' @importFrom grDevices chull
-#' @family Customize shapefiles
+#' @family customize shapefiles
 #' @examples 
 #' auto_limits(data = expand.grid(lon = c(-120, 180, 120), lat = c(60, 60, 80)))
 #' @export
 
 # lon = NULL; lat = NULL; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; expand.factor = NULL; rotate = TRUE
 auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326", proj.out = NULL, expand.factor = NULL, verbose = FALSE) {
-
+  
   # Convert the coordinates
-
+  tmp <- guess_coordinate_columns(data)
+  lon <- unname(tmp[names(tmp) == "lon"])
+  lat <- unname(tmp[names(tmp) == "lat"])
+  
   x <- transform_coord(x = data, lon = lon, lat = lat, proj.in = proj.in, proj.out = proj.out, verbose = verbose, bind = TRUE)
-
+  
   # Coordinate ranges
-
+  
   if(proj.in == "+init=epsg:4326") {
-    decLims <- c(deg_to_dd(range(dd_to_deg(x[[1]]), na.rm = TRUE)), range(x[[2]], na.rm = TRUE))
-    projLims <- c(range(x[[3]], na.rm = TRUE), range(x[[4]], na.rm = TRUE))
+    decLims <- c(deg_to_dd(range(dd_to_deg(x$lon), na.rm = TRUE)), range(x$lat, na.rm = TRUE))
+    projLims <- c(range(x[["lon.proj"]], na.rm = TRUE), range(x[["lat.proj"]], na.rm = TRUE))
     proj.in <- attributes(x)$proj.in
     proj.out <- attributes(x)$proj.out
   } else  {
-    decLims <- c(deg_to_dd(range(dd_to_deg(x[[3]]), na.rm = TRUE)), range(x[[4]], na.rm = TRUE))
-    projLims <- c(range(x[[1]], na.rm = TRUE), range(x[[2]], na.rm = TRUE))
+    decLims <- c(deg_to_dd(range(dd_to_deg(x[["lon.proj"]]), na.rm = TRUE)), range(x[["lat.proj"]], na.rm = TRUE))
+    projLims <- c(range(x[["lon"]], na.rm = TRUE), range(x[["lat"]], na.rm = TRUE))
     proj.in <- attributes(x)$proj.out
     proj.out <- attributes(x)$proj.in
   }
-
+  
   # Expansion factor
-
+  
   if(!is.null(expand.factor)) {
     lon.rdiff <- diff(projLims[1:2])
     lon.shift <- ((lon.rdiff*expand.factor) - lon.rdiff)/2
     projLims[1] <- projLims[1] - lon.shift
     projLims[2] <- projLims[2] + lon.shift
-
+    
     lat.rdiff <- diff(projLims[3:4])
     lat.shift <- ((lat.rdiff*expand.factor) - lat.rdiff)/2
     projLims[3] <- projLims[3] - lat.shift
     projLims[4] <- projLims[4] + lat.shift
   }
-
+  
   # Projected boundaries
-
+  
   projBound <- sp::Polygon(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4], projLims[2], projLims[4], projLims[2], projLims[3], projLims[1], projLims[3]), ncol = 2, byrow = TRUE))
   projBound <- sp::SpatialPolygons(list(sp::Polygons(list(projBound), ID = "clip_boundary")), proj4string = sp::CRS(proj.out))
-
-  # if(rotate) {
-  #
-  #   # Add the mid-longitude
-  #
-  #   if(grepl("proj=longlat", sp::CRS(proj.in))) {
-  #     tmp <- dd_to_deg(decLims[1:2])
-  #
-  #     if(tmp[1] > tmp[2]) {
-  #       lonDiff <- 360 - tmp[1] + tmp[2]
-  #     } else {
-  #       lonDiff <- tmp[2] - tmp[1]
-  #     }
-  #
-  #     midLon <- tmp[1] + lonDiff/2
-  #     midLon <- deg_to_dd(midLon)
-  #
-  #   }
-  #
-  #
-  #   proj.out <- sp::CRS(attributes(x)$proj.out)
-  #   proj.out <- gsub("lon_0=0", paste0("lon_0=", midLon), proj.out)
-  #
-  #   projBoundRot <- sp::spTransform(projBound, CRSobj = sp::CRS(proj.out))
-  #
-  #   projLims <- raster::extent(projBoundRot)[1:4]
-  #   projxRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[2], projLims[3]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
-  #   projyRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
-  #
-  # } else {
-
-    projxRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[2], projLims[3]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
-    projyRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
-
-  #   projBoundRot <- NULL
-  #
-  # }
-
+  
+  projxRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[2], projLims[3]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
+  projyRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
+  
   # Decimal degree limits
-
+  
   # decBound <- sp::spTransform(projBound, sp::CRS(attributes(x)$proj.in))
-
+  
   decxRange <- sp::spTransform(projxRange, sp::CRS(proj.in))
   decyRange <- sp::spTransform(projyRange, sp::CRS(proj.in))
-
+  
   if(!identical(sign(projLims[3]), sign(projLims[4]))) { # Spans across the pole
     decLims <- c(raster::extent(decxRange)[1:2], raster::extent(decyRange)[3], 90)
   } else {
     decLims <- c(raster::extent(decxRange)[1:2], raster::extent(decyRange)[3:4])
   }
-
+  
   # Return
-
+  
   list(ddLimits = decLims, projLimits = projLims, projBound = projBound, proj.in = attributes(x)$proj.in, proj.out = proj.out)
-
+  
 }

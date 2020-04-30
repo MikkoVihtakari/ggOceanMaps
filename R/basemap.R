@@ -28,7 +28,7 @@
 #' @param base_size Base size parameter for ggplot. See \link[ggplot2]{theme_bw}.
 #' @param projection.grid Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.
 #' @return Returns a \link[ggplot2]{ggplot2} map, which can be assigned to an object and modified as any ggplot object.
-#' @details The function uses \link[ggplot2]{ggplot2}, ggspatial, GIS packages of R, and shapefiles to plot maps of the world's oceans. 
+#' @details The function uses \link[ggplot2]{ggplot2}, \link[ggspatial]{ggspatial}, GIS packages of R, and shapefiles to plot maps of the world's oceans. 
 #' 
 #' \strong{Projections}
 #' 
@@ -69,7 +69,7 @@
 #' \item \strong{Bathymetry.} \href{https://doi.org/10.7289/V5C8276M}{Amante, C. and B.W. Eakins, 2009. ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National Geophysical Data Center, NOAA}. Distributed under the \href{https://www.usa.gov/government-works}{U.S. Government Work license}.
 #' }
 #' 
-#' @family Basemap functions
+#' @family basemap functions
 #' @seealso \code{\link[ggplot2]{ggplot2}}
 #' @author Mikko Vihtakari
 #' 
@@ -78,7 +78,7 @@
 #' # argument and decimal degrees:
 #' \donttest{
 #' basemap(limits = 60)
-#' }
+#' 
 #' # Bathymetry and glaciers can be added using the respective arguments:
 #'
 #' basemap(limits = -60, bathymetry = TRUE, glaciers = TRUE)
@@ -89,7 +89,7 @@
 #'
 #' basemap(data = dt, bathymetry = TRUE) +
 #' geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
-#'
+#' }
 #' # Note that writing out data = dt is required because there are multiple
 #' # underlying ggplot layers plotted already:
 #' 
@@ -101,11 +101,11 @@
 #'
 #' # If you want to use native ggplot commands, you need to transform your data
 #' # to the projection used by the map:
-#'
+#' \donttest{
 #' dt <- transform_coord(dt, bind = TRUE)
 #'
 #' basemap(data = dt) + geom_point(data = dt, aes(x = lon.proj, y = lat.proj))
-#' \donttest{
+#' 
 #' # The limits argument of length 4 plots a map anywhere in the world:
 #' 
 #' basemap(limits = c(100, 160, -20, 30), bathymetry = TRUE)

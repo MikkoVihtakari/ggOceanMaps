@@ -33,12 +33,12 @@ Clips an area from a larger shape file (\link[sp]{SpatialPolygons}).
 The function uses the \code{\link[rgeos]{gIntersection}} function to clip smaller \link[sp]{SpatialPolygons} from larger ones. The clip area is constrained by either a numeric vector or \link[sp]{SpatialPolygons} object in the \code{limits} argument. One of these arguments must be given. Defining \code{limits} by a \link[sp]{SpatialPolygons} object gives greater freedom for the clip area as the area does not have to be rectangular.
 }
 \seealso{
-Other Create shapefiles: 
+Other create shapefiles: 
 \code{\link{raster_bathymetry}()},
 \code{\link{vector_bathymetry}()}
 }
 \author{
 Mikko Vihtakari with a solution from \href{https://stackoverflow.com/questions/15881455/how-to-clip-worldmap-with-polygon-in-r}{Simon O'Hanlon, Roger Bivand/SO community}
 }
-\concept{Create shapefiles}
+\concept{create shapefiles}
 \keyword{internal}

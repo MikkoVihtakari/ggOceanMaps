@@ -3,7 +3,7 @@
 #' @param x numeric vector giving the font sizes in points
 #' @return Returns a numeric vector of lenght \code{x} of ggplot font sizes
 #' @keywords internal
-#' @family Size adjustors
+#' @family size adjustors
 #' @export
 #'
 FS <- function(x) x/2.845276 # x is the desired font / line size in pt
@@ -13,7 +13,7 @@ FS <- function(x) x/2.845276 # x is the desired font / line size in pt
 #' @param x numeric vector giving the lines sizes in points
 #' @return Returns a numeric vector of lenght \code{x} of ggplot line sizes
 #' @keywords internal
-#' @family Size adjustors
+#' @family size adjustors
 #' @export
 #'
 LS <- function(x) x/2.13
@@ -58,7 +58,7 @@ quiet <- function(x) {
 #' @param x numeric to be converted
 #' @keywords internal
 #' @author Mikko Vihtakari
-#' @family Degree converters
+#' @family degree converters
 #' @export
 
 dd_to_deg <- function(x) {
@@ -70,7 +70,7 @@ dd_to_deg <- function(x) {
 #' @param x numeric to be converted
 #' @keywords internal
 #' @author Mikko Vihtakari
-#' @family Degree converters
+#' @family degree converters
 #' @export
 
 deg_to_dd <- function(x) {

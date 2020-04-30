@@ -16,7 +16,7 @@
 #' @seealso \code{\link{basemap}}
 
 # Test paramters
-# limits = c(0, 55, 69, 80); data = NULL; shapefiles = list(land = bs_land, glacier = bs_glacier, bathy = bs_bathy); bathymetry = TRUE; glaciers = TRUE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE
+# limits = NULL; data = no_fits_general; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE
 basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE) {
   
   # 1. shapefiles argument dictates the used shapefile. If NULL, shapefiles are obtained from limits ####
@@ -167,7 +167,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     }
   }
   
-  # 4. Define the shapefiles to be used in the map ###
+  # 4. Define the shapefiles to be used in the map ####
   
   if(!exists("customShapefiles")) {
     

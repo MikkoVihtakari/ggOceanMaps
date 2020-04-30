@@ -10,7 +10,7 @@
 #' @param na character specifying the NA action for missing coordinates. The "ignore" option ignores the coordinates and returns NAs to transformed coordinates. The "remove" option removes missing values from \code{x} returning a message while doing it. Any other character argument will trigger \code{na.fail} stopping the function in case of missing coordinates.
 #' @return Returns a data frame with transformed spatial coordinates.
 #' @details If \code{x} is specified, the function guesses longitude and latitude columns from \code{x} by default.
-#' @family Basemap functions
+#' @family basemap functions
 #' @author Mikko Vihtakari
 #' @import sp
 #' @examples

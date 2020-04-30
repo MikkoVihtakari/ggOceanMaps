@@ -13,11 +13,11 @@ dd_to_deg(x)
 Converts decimal degree values to angular degrees. Used in decimal degree limit calculations.
 }
 \seealso{
-Other Degree converters: 
+Other degree converters: 
 \code{\link{deg_to_dd}()}
 }
 \author{
 Mikko Vihtakari
 }
-\concept{Degree converters}
+\concept{degree converters}
 \keyword{internal}

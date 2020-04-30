@@ -10,7 +10,7 @@
 
 guess_coordinate_columns <- function(data, lon = NULL, lat = NULL) {
 
-    if(any(class(data) != "data.frame")) stop("data argument has to be a data.frame")
+    if(!any(class(data) %in% "data.frame")) stop("data argument has to be a data.frame")
 
     if(is.null(lon)) {
       lon <- colnames(data)[grep("^lon$|longitude|^long$", gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", gsub("[[:punct:]]", " ", colnames(data)), perl = TRUE), ignore.case = TRUE, perl = TRUE)][1]

@@ -17,8 +17,8 @@ theme_map(..., grid.col, grid.size)
 A ggplot2 theme for maps.
 }
 \seealso{
-Other Customize shapefiles: 
+Other customize shapefiles: 
 \code{\link{auto_limits}()},
 \code{\link{reorder_layers}()}
 }
-\concept{Customize shapefiles}
+\concept{customize shapefiles}

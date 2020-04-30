@@ -19,11 +19,11 @@ Moves existing land, glacier and grid layers on top of other layers. Useful for 
 This function has not been tested properly yet and is likely to contain bugs.
 }
 \seealso{
-Other Customize shapefiles: 
+Other customize shapefiles: 
 \code{\link{auto_limits}()},
 \code{\link{theme_map}()}
 }
 \author{
 Mikko Vihtakari
 }
-\concept{Customize shapefiles}
+\concept{customize shapefiles}

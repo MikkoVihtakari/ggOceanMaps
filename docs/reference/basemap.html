@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -241,7 +241,7 @@
     <p>Returns a <a href='https://ggplot2.tidyverse.org/reference/ggplot2-package.html'>ggplot2</a> map, which can be assigned to an object and modified as any ggplot object.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function uses <a href='https://ggplot2.tidyverse.org/reference/ggplot2-package.html'>ggplot2</a>, ggspatial, GIS packages of R, and shapefiles to plot maps of the world's oceans.</p>
+    <p>The function uses <a href='https://ggplot2.tidyverse.org/reference/ggplot2-package.html'>ggplot2</a>, <a href='https://rdrr.io/pkg/ggspatial/man/ggspatial-package.html'>ggspatial</a>, GIS packages of R, and shapefiles to plot maps of the world's oceans.</p>
 <p><strong>Projections</strong></p>
 <p>If the <code>shapefiles</code> are not specified, the function uses either the <code>limits</code> or <code>data</code> arguments to decide which projection to use. Up-to-date conditions are defined in <code><a href='define_shapefiles.html'>define_shapefiles</a></code> and <code><a href='shapefile_list.html'>shapefile_list</a></code> functions. At the time of writing, the function uses three different projections (given as <a href='https://epsg.io/'>EPSG codes</a>)</p><ul>
 <li><p><strong>3995</strong> WGS 84 / Arctic Polar Stereographic. Called "ArcticStereographic". For max latitude (<code>limits[4]</code>) &gt;= 60 (if min latitude (<code>limits[3]</code>) &gt;= 30), and single integer latitudes &gt;= 30 and &lt;= 89.</p></li>
@@ -274,7 +274,7 @@
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='https://ggplot2.tidyverse.org/reference/ggplot2-package.html'>ggplot2</a></code></p>
-<p>Other Basemap functions: 
+<p>Other basemap functions: 
 <code><a href='qmap.html'>qmap</a>()</code>,
 <code><a href='shapefile_list.html'>shapefile_list</a>()</code>,
 <code><a href='transform_coord.html'>transform_coord</a>()</code></p></div>
@@ -283,7 +283,7 @@
     <pre class="examples"><div class='input'><span class='co'># The easiest way to produce a map is to use the limits</span>
 <span class='co'># argument and decimal degrees:</span>
 <span class='co'># \donttest{</span>
-<span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fl'>60</span>)</div><div class='img'><img src='basemap-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+<span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fl'>60</span>)</div><div class='img'><img src='basemap-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Bathymetry and glaciers can be added using the respective arguments:</span>
 
 <span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> -<span class='fl'>60</span>, <span class='kw'>bathymetry</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>glaciers</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='basemap-2.png' alt='' width='700' height='433' /></div><div class='input'>
@@ -292,7 +292,7 @@
 <span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>lon</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>150</span>, <span class='fl'>150</span>), <span class='kw'>lat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>60</span>, <span class='fl'>90</span>))
 
 <span class='fu'>basemap</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='kw'>bathymetry</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-<span class='fu'>geom_spatial_point</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>lon</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>lat</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"red"</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `crs = 4326` in stat_spatial_identity()</span></div><div class='img'><img src='basemap-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>geom_spatial_point</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>lon</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>lat</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"red"</span>)</div><div class='output co'>#&gt; <span class='message'>Assuming `crs = 4326` in stat_spatial_identity()</span></div><div class='img'><img src='basemap-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 <span class='co'># Note that writing out data = dt is required because there are multiple</span>
 <span class='co'># underlying ggplot layers plotted already:</span>
 
@@ -304,10 +304,10 @@
 
 <span class='co'># If you want to use native ggplot commands, you need to transform your data</span>
 <span class='co'># to the projection used by the map:</span>
-
+<span class='co'># \donttest{</span>
 <span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='transform_coord.html'>transform_coord</a></span>(<span class='no'>dt</span>, <span class='kw'>bind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>basemap</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>) + <span class='fu'>geom_point</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>lon.proj</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>lat.proj</span>))</div><div class='img'><img src='basemap-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># \donttest{</span>
+<span class='fu'>basemap</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>) + <span class='fu'>geom_point</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>lon.proj</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>lat.proj</span>))</div><div class='img'><img src='basemap-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># The limits argument of length 4 plots a map anywhere in the world:</span>
 
 <span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>160</span>, -<span class='fl'>20</span>, <span class='fl'>30</span>), <span class='kw'>bathymetry</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='basemap-5.png' alt='' width='700' height='433' /></div><div class='input'>

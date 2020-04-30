@@ -82,7 +82,7 @@ Returns a \link[ggplot2]{ggplot2} map, which can be assigned to an object and mo
 Creates a ggplot2 basemap for further plotting of variables.
 }
 \details{
-The function uses \link[ggplot2]{ggplot2}, ggspatial, GIS packages of R, and shapefiles to plot maps of the world's oceans. 
+The function uses \link[ggplot2]{ggplot2}, \link[ggspatial]{ggspatial}, GIS packages of R, and shapefiles to plot maps of the world's oceans. 
 
 \strong{Projections}
 
@@ -121,7 +121,7 @@ The line size aesthetics in \link[ggplot2]{ggplot2} generates approximately 2.13
 # argument and decimal degrees:
 \donttest{
 basemap(limits = 60)
-}
+
 # Bathymetry and glaciers can be added using the respective arguments:
 
 basemap(limits = -60, bathymetry = TRUE, glaciers = TRUE)
@@ -132,7 +132,7 @@ dt <- data.frame(lon = c(-150, 150), lat = c(60, 90))
 
 basemap(data = dt, bathymetry = TRUE) +
 geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
-
+}
 # Note that writing out data = dt is required because there are multiple
 # underlying ggplot layers plotted already:
 
@@ -144,11 +144,11 @@ geom_spatial_point(dt, aes(x = lon, y = lat), color = "red")
 
 # If you want to use native ggplot commands, you need to transform your data
 # to the projection used by the map:
-
+\donttest{
 dt <- transform_coord(dt, bind = TRUE)
 
 basemap(data = dt) + geom_point(data = dt, aes(x = lon.proj, y = lat.proj))
-\donttest{
+
 # The limits argument of length 4 plots a map anywhere in the world:
 
 basemap(limits = c(100, 160, -20, 30), bathymetry = TRUE)
@@ -208,7 +208,7 @@ Note that if you use this function to generate maps for a publication, it is adv
 \seealso{
 \code{\link[ggplot2]{ggplot2}}
 
-Other Basemap functions: 
+Other basemap functions: 
 \code{\link{qmap}()},
 \code{\link{shapefile_list}()},
 \code{\link{transform_coord}()}
@@ -216,4 +216,4 @@ Other Basemap functions:
 \author{
 Mikko Vihtakari
 }
-\concept{Basemap functions}
+\concept{basemap functions}

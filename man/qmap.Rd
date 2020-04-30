@@ -38,7 +38,7 @@ qmap(dt, color = "red")
 
 }
 \seealso{
-Other Basemap functions: 
+Other basemap functions: 
 \code{\link{basemap}()},
 \code{\link{shapefile_list}()},
 \code{\link{transform_coord}()}
@@ -46,4 +46,4 @@ Other Basemap functions:
 \author{
 Mikko Vihtakari
 }
-\concept{Basemap functions}
+\concept{basemap functions}
