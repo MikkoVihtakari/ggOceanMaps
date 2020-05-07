@@ -5,7 +5,7 @@
 #' @param new.names Character vector of length 2 specifying the names of transformed longitude and latitude columns, respectively. Alternatively \code{NULL}, which returns column names from \code{x} or "auto", which uses \code{NULL} if \code{bind = FALSE} and \code{c("lon.proj", "lat.proj")} if \code{bind = TRUE}.
 #' @param proj.in Original \code{\link[sp]{proj4string}} projection. If \code{NULL}, the projection is taken from \code{x}. \code{x} must be a \link[sp]{Spatial} object in that case.
 #' @param proj.out Character. Either \code{NULL}, \code{\link[sp]{proj4string}} projection the coordinates should be transformed to or a name of shapefiles in \code{\link{shapefile_list}}. If \code{NULL}, the output projection will be automatically determined from data. This option requires decimal degrees as input option.
-#' @param verbose if \code{TRUE}, the function prints information about the changed projection. Switch to \code{FALSE} to make the function silent.
+#' @param verbose  Logical indicating whether information about the projection should be returned as message. Set to \code{FALSE} to make the function silent.
 #' @param bind logical. Should only transformed coordinates be returned (\code{FALSE}, default) or should x be returned with transformed coordinates (\code{TRUE})?
 #' @param na character specifying the NA action for missing coordinates. The "ignore" option ignores the coordinates and returns NAs to transformed coordinates. The "remove" option removes missing values from \code{x} returning a message while doing it. Any other character argument will trigger \code{na.fail} stopping the function in case of missing coordinates.
 #' @return Returns a data frame with transformed spatial coordinates.

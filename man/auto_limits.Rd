@@ -11,7 +11,7 @@ auto_limits(
   proj.in = "+init=epsg:4326",
   proj.out = NULL,
   expand.factor = NULL,
-  verbose = FALSE
+  verbose = TRUE
 )
 }
 \arguments{
@@ -25,7 +25,7 @@ auto_limits(
 
 \item{expand.factor}{Expansion factor for map limits. Set to \code{NULL} to ignore.}
 
-\item{verbose}{if \code{TRUE}, the function prints information about the changed projection. Switch to \code{FALSE} to make the function silent.}
+\item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.}
 
 \item{rotate}{Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.}
 }

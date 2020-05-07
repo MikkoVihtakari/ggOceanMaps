@@ -14,7 +14,8 @@ basemap_data(
   lon.interval = NULL,
   lat.interval = NULL,
   expand.factor = 1.1,
-  rotate = FALSE
+  rotate = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -33,6 +34,8 @@ basemap_data(
 \item{lon.interval, lat.interval}{See \code{\link{basemap}}}
 
 \item{expand.factor}{See \code{\link{auto_limits}}}
+
+\item{verbose}{See \code{\link{basemap}}}
 }
 \description{
 Internal function to create a \code{basemapData} object for \code{\link{basemap}}

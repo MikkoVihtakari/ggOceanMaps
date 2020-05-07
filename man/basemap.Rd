@@ -28,7 +28,8 @@ basemap(
   grid.col = "grey70",
   grid.size = 0.1,
   base_size = 11,
-  projection.grid = FALSE
+  projection.grid = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -74,6 +75,8 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 \item{base_size}{Base size parameter for ggplot. See \link[ggplot2]{theme_bw}.}
 
 \item{projection.grid}{Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.}
+
+\item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.}
 }
 \value{
 Returns a \link[ggplot2]{ggplot2} map, which can be assigned to an object and modified as any ggplot object.

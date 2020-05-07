@@ -8,6 +8,7 @@
 #' @param resolution See \code{\link{basemap}}
 #' @param lon.interval,lat.interval See \code{\link{basemap}}
 #' @param expand.factor See \code{\link{auto_limits}}
+#' @param verbose See \code{\link{basemap}}
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function. Common users do not need to worry about these details.
 #' @keywords internal
 #' @export
@@ -16,8 +17,8 @@
 #' @seealso \code{\link{basemap}}
 
 # Test paramters
-# limits = NULL; data = no_fits_general; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE
-basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE) {
+# limits = NULL; data = stn; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE
+basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = TRUE) {
   
   # 1. shapefiles argument dictates the used shapefile. If NULL, shapefiles are obtained from limits ####
   
@@ -144,7 +145,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     polarMap <- FALSE
   }
   
-  # 3. data argument defines the limits and shapefiles if not specified. Also helps the limits argument to find shapefile if it was given as projected coordinates ###
+  # 3. data argument defines the limits and shapefiles if not specified. Also helps the limits argument to find shapefile if it was given as projected coordinates ####
   
   if(!is.null(data) & is.null(limits)) {
     

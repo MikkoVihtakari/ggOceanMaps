@@ -27,6 +27,7 @@
 #' @param land.size,gla.size,bathy.size,grid.size Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the \code{\link{LS}} function for a specific width in pt. See Details.
 #' @param base_size Base size parameter for ggplot. See \link[ggplot2]{theme_bw}.
 #' @param projection.grid Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.
+#' @param verbose Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.
 #' @return Returns a \link[ggplot2]{ggplot2} map, which can be assigned to an object and modified as any ggplot object.
 #' @details The function uses \link[ggplot2]{ggplot2}, \link[ggspatial]{ggspatial}, GIS packages of R, and shapefiles to plot maps of the world's oceans. 
 #' 
@@ -159,7 +160,7 @@
 ## Test parameters
 # limits = NULL; data = NULL; shapefiles = list(land = bs_land, glacier = bs_glacier, bathy = bs_bathy); bathymetry = TRUE; glaciers = TRUE; legends = TRUE; resolution = "low"; rotate = TRUE; legend.position = "right"; limits.lon = NULL; limits.lat = NULL; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.detailed = FALSE; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE
 
-basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE) {
+basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, verbose = TRUE) {
   # From PlotSvalbard, add or remove: round.lon = FALSE, n.lon.grid = 3, lon.interval = NULL, round.lat = FALSE, n.lat.grid = 3, lat.interval = NULL, plot = TRUE, currents = FALSE, arc.col = "blue", atl.col = "#BB1512", current.size = 0.5, current.alpha = 1, label.print = TRUE, label.offset = 1.05, label.font = 8; limits.lon = NULL; limits.lat = NULL
 
   # Checks ####
@@ -170,7 +171,7 @@ basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = 
   ###########
   # Data ####
 
-  X <- basemap_data(limits = limits, data = data, shapefiles = shapefiles, bathymetry = bathymetry, glaciers = glaciers, resolution = resolution, lon.interval = lon.interval, lat.interval = lat.interval, rotate = rotate)
+  X <- basemap_data(limits = limits, data = data, shapefiles = shapefiles, bathymetry = bathymetry, glaciers = glaciers, resolution = resolution, lon.interval = lon.interval, lat.interval = lat.interval, rotate = rotate, verbose = verbose)
 
   ###########
   # Plot ####

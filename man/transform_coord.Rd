@@ -27,7 +27,7 @@ transform_coord(
 
 \item{proj.out}{Character. Either \code{NULL}, \code{\link[sp]{proj4string}} projection the coordinates should be transformed to or a name of shapefiles in \code{\link{shapefile_list}}. If \code{NULL}, the output projection will be automatically determined from data. This option requires decimal degrees as input option.}
 
-\item{verbose}{if \code{TRUE}, the function prints information about the changed projection. Switch to \code{FALSE} to make the function silent.}
+\item{verbose}{Logical indicating whether information about the projection should be returned as message. Set to \code{FALSE} to make the function silent.}
 
 \item{bind}{logical. Should only transformed coordinates be returned (\code{FALSE}, default) or should x be returned with transformed coordinates (\code{TRUE})?}
 

@@ -6,7 +6,7 @@
 #' @param lon,lat Names of longitude and latitude columns in \code{data} as character or integer index. If \code{NULL}, the column names are \link[=guess_coordinate_columns]{guessed}.
 #' @param expand.factor Expansion factor for map limits. Set to \code{NULL} to ignore.
 #' @param rotate Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.
-#' @param verbose if \code{TRUE}, the function prints information about the changed projection. Switch to \code{FALSE} to make the function silent.
+#' @param verbose Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function. The function does some funky illogical action (seeing the argument names) when feeding in projected coordinates. This is to make the automatic limits to work for projected coordinates too. Despite the funkiness, the function may be useful when customising \code{\link{basemap}}s. 
 #' @return A list of limits and projections in \code{proj.in} and \code{proj.out} formats.
 #' @keywords internal
@@ -18,26 +18,36 @@
 #' auto_limits(data = expand.grid(lon = c(-120, 180, 120), lat = c(60, 60, 80)))
 #' @export
 
-# lon = NULL; lat = NULL; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; expand.factor = NULL; rotate = TRUE
-auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326", proj.out = NULL, expand.factor = NULL, verbose = FALSE) {
+# lon = NULL; lat = NULL; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; expand.factor = NULL; verbose = TRUE
+auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326", proj.out = NULL, expand.factor = NULL, verbose = TRUE) {
   
   # Convert the coordinates
   tmp <- guess_coordinate_columns(data)
   lon <- unname(tmp[names(tmp) == "lon"])
   lat <- unname(tmp[names(tmp) == "lat"])
   
+  if(verbose) {
+    message(paste("Using", lon, "and", lat, "as longitude and latitude columns, respectively."))
+  }
+  
   x <- transform_coord(x = data, lon = lon, lat = lat, proj.in = proj.in, proj.out = proj.out, verbose = verbose, bind = TRUE)
   
+  # if("data.table" %in% class(x)) {
+  #   x <- na.omit(x[,c(lon, lat, "lon.proj", "lat.proj"), with = FALSE])
+  # } else {
+  #   x <- na.omit(x[,c(lon, lat, "lon.proj", "lat.proj")])
+  # }
+  # 
   # Coordinate ranges
   
   if(proj.in == "+init=epsg:4326") {
-    decLims <- c(deg_to_dd(range(dd_to_deg(x$lon), na.rm = TRUE)), range(x$lat, na.rm = TRUE))
+    decLims <- c(deg_to_dd(range(dd_to_deg(x[[lon]]), na.rm = TRUE)), range(x[[lat]], na.rm = TRUE))
     projLims <- c(range(x[["lon.proj"]], na.rm = TRUE), range(x[["lat.proj"]], na.rm = TRUE))
     proj.in <- attributes(x)$proj.in
     proj.out <- attributes(x)$proj.out
   } else  {
     decLims <- c(deg_to_dd(range(dd_to_deg(x[["lon.proj"]]), na.rm = TRUE)), range(x[["lat.proj"]], na.rm = TRUE))
-    projLims <- c(range(x[["lon"]], na.rm = TRUE), range(x[["lat"]], na.rm = TRUE))
+    projLims <- c(range(x[[lon]], na.rm = TRUE), range(x[[lat]], na.rm = TRUE))
     proj.in <- attributes(x)$proj.out
     proj.out <- attributes(x)$proj.in
   }
@@ -61,20 +71,25 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   projBound <- sp::Polygon(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4], projLims[2], projLims[4], projLims[2], projLims[3], projLims[1], projLims[3]), ncol = 2, byrow = TRUE))
   projBound <- sp::SpatialPolygons(list(sp::Polygons(list(projBound), ID = "clip_boundary")), proj4string = sp::CRS(proj.out))
   
-  projxRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[2], projLims[3]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
-  projyRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
+  tmp <- as.data.frame(t(sp::bbox(projBound)))
+  projBoundNodes <- sp::SpatialPoints(expand.grid(lon = tmp$x, lat = tmp$y), proj4string = sp::CRS(proj.out))
   
+  # projxRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[2], projLims[3]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
+  # projyRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
+  # 
   # Decimal degree limits
   
   # decBound <- sp::spTransform(projBound, sp::CRS(attributes(x)$proj.in))
   
-  decxRange <- sp::spTransform(projxRange, sp::CRS(proj.in))
-  decyRange <- sp::spTransform(projyRange, sp::CRS(proj.in))
+  # decxRange <- sp::spTransform(projxRange, sp::CRS(proj.in))
+  # decyRange <- sp::spTransform(projyRange, sp::CRS(proj.in))
+  
+  decBoundNodes <- sp::spTransform(projBoundNodes, sp::CRS(proj.in))
   
   if(!identical(sign(projLims[3]), sign(projLims[4]))) { # Spans across the pole
-    decLims <- c(raster::extent(decxRange)[1:2], raster::extent(decyRange)[3], 90)
+    decLims <- c(raster::extent(decBoundNodes)[1:3], 90)
   } else {
-    decLims <- c(raster::extent(decxRange)[1:2], raster::extent(decyRange)[3:4])
+    decLims <- c(raster::extent(decBoundNodes)[1:4])
   }
   
   # Return
