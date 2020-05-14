@@ -46,5 +46,5 @@ reorder_layers <- function(p) {
 
   # Return, (add coord_sf, which gets lost for some reason)
 
-  p + coord_sf(expand = FALSE, crs = attributes(p)$crs)
+  p + coord_sf(expand = FALSE, crs = attributes(p)$crs, xlim = attributes(p)$limits[1:2], ylim = attributes(p)$limits[3:4])
 }

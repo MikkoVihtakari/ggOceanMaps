@@ -11,7 +11,27 @@ qmap(
   geom = "point",
   limits = NULL,
   bathymetry = FALSE,
+  glaciers = FALSE,
+  resolution = "low",
+  rotate = FALSE,
+  legends = TRUE,
+  legend.position = "right",
+  lon.interval = NULL,
+  lat.interval = NULL,
   bathy.style = "poly_blues",
+  bathy.border.col = NA,
+  bathy.size = 0.1,
+  land.col = "grey60",
+  land.border.col = "black",
+  land.size = 0.1,
+  gla.col = "grey95",
+  gla.border.col = "black",
+  gla.size = 0.1,
+  grid.col = "grey70",
+  grid.size = 0.1,
+  base_size = 11,
+  projection.grid = FALSE,
+  verbose = TRUE,
   ...
 )
 }
@@ -26,7 +46,37 @@ qmap(
 
 \item{bathymetry}{Logical indicating whether bathymetry should be added to the map.}
 
-\item{bathy.style}{Character defining the style for bathymetry contours. See the \code{bathy.style} argument in \code{\link{basemap}}.}
+\item{glaciers}{Logical indicating whether glaciers and ice-sheets should be added to the map.}
+
+\item{resolution}{Not implemented yet.}
+
+\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. Experimental.}
+
+\item{legends}{Logical indicating whether the legend for bathymetry should be shown.}
+
+\item{legend.position}{The position for ggplot2 legend. See the argument with the same name in \link[ggplot2]{theme}.}
+
+\item{lon.interval, lat.interval}{Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.}
+
+\item{bathy.style}{Character defining the style for bathymetry contours. Alternatives:
+\itemize{
+\item \code{"poly_blues"} plots polygons filled with different shades of blue.
+\item \code{"poly_greys"} plots polygons filled with different shades of gray.
+\item \code{"contour_blues"} contour lines with different shades of blue.
+\item \code{"contour_grey"} plots gray contour lines.
+}}
+
+\item{land.col, gla.col, grid.col}{Character code specifying the color of land, glaciers and grid lines, respectively. Use \code{NA} to remove the grid lines.}
+
+\item{land.border.col, gla.border.col, bathy.border.col}{Character code specifying the color of the border line for land, glacier, and bathymetry shapes.}
+
+\item{land.size, gla.size, bathy.size, grid.size}{Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the \code{\link{LS}} function for a specific width in pt. See Details.}
+
+\item{base_size}{Base size parameter for ggplot. See \link[ggplot2]{theme_bw}.}
+
+\item{projection.grid}{Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.}
+
+\item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.}
 }
 \description{
 \code{qmap} is a shortcut similar to ggplot2's \code{\link[ggplot2]{qplot}} designed to quickly plot data with a limited range of options.
