@@ -2,7 +2,7 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-0.3.1**
+0.3.4**
 
 ## Overview
 

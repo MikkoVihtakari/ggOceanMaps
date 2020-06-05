@@ -40,7 +40,7 @@ qmap(
 
 \item{x, y, ...}{Aesthetics passed into each layer. Longitude and latitude columns are automatically recognized using the \code{\link{guess_coordinate_columns}} function.}
 
-\item{geom}{Character vector specifying geom(s) to draw. Defaults to "point". Other \code{geom}s have not been implemented yet.}
+\item{geom}{Character argument specifying geom(s) to draw. Defaults to "point". Other \code{geom}s have not been implemented yet.}
 
 \item{limits}{Map limits. See the \code{limits} argument in \code{\link{basemap}}. If \code{NULL} the limits are automatically taken from \code{data}}
 
@@ -83,9 +83,12 @@ qmap(
 }
 \examples{
 
-dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40))
-qmap(dt, color = "red")
+dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
+qmap(dt, color = I("red")) # Set color
+qmap(dt, color = var) # Map color
 
+dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
+qmap(dt, rotate = TRUE)
 }
 \seealso{
 Other basemap functions: 

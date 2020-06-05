@@ -2,7 +2,7 @@
 #' @description \code{qmap} is a shortcut similar to ggplot2's \code{\link[ggplot2]{qplot}} designed to quickly plot data with a limited range of options.
 #' @param data Data frame to use.
 #' @param x,y,... Aesthetics passed into each layer. Longitude and latitude columns are automatically recognized using the \code{\link{guess_coordinate_columns}} function.
-#' @param geom Character vector specifying geom(s) to draw. Defaults to "point". Other \code{geom}s have not been implemented yet.
+#' @param geom Character argument specifying geom(s) to draw. Defaults to "point". Other \code{geom}s have not been implemented yet.
 #' @param limits Map limits. See the \code{limits} argument in \code{\link{basemap}}. If \code{NULL} the limits are automatically taken from \code{data}
 #' @param resolution Not implemented yet.
 #' @param bathymetry Logical indicating whether bathymetry should be added to the map.
@@ -24,17 +24,20 @@
 #' @param base_size Base size parameter for ggplot. See \link[ggplot2]{theme_bw}.
 #' @param projection.grid Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.
 #' @param verbose Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.
-#' @import ggplot2
+#' @import ggplot2 ggspatial
 #' @family basemap functions
 #' @author Mikko Vihtakari
 #' @examples 
 #' 
-#' dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40))
-#' qmap(dt, color = "red")
+#' dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
+#' qmap(dt, color = I("red")) # Set color
+#' qmap(dt, color = var) # Map color
 #' 
+#' dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
+#' qmap(dt, rotate = TRUE)
 #' @export
 
-# data = dt; x = NULL; y = NULL; geom = "point"; limits = NULL; bathymetry = FALSE; bathy.style = "poly_blues"
+# data = dt; x = NULL; y = NULL; geom = "point"; limits = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; rotate = TRUE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = TRUE
 qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, verbose = TRUE, ...) {
 
   ## Coordinate columns
@@ -53,7 +56,7 @@ qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, bathym
 
   ## Base map
 
-  pb <- basemap(limits = limits, data = data, bathymetry = bathymetry, bathy.style = bathy.style, land.col = land.col)
+  pb <- basemap(limits = limits, data = data, bathymetry = bathymetry, glaciers = glaciers, resolution = resolution, rotate = rotate, legends = legends, legend.position = legend.position, lon.interval = lon.interval, lat.interval = lat.interval, bathy.style = bathy.style, bathy.border.col = bathy.border.col, bathy.size = bathy.size, land.col = land.col, land.border.col = land.border.col, land.size = land.size, gla.col = gla.col, gla.border.col = gla.border.col, gla.size = gla.size, grid.col = grid.col, grid.size = grid.size, base_size = base_size, projection.grid = projection.grid, verbose = verbose)
 
   ## Geoms
 
@@ -67,7 +70,7 @@ qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, bathym
 
 
   if(geom == "point") {
-    pb + geom_point(data = transform_coord(data), aes(x = get(x), y = get(y)), ...)
+    pb + ggspatial::geom_spatial_point(data = data, aes(x = get(x), y = get(y), ...), crs = 4326)
   } else {
     stop("Other geom than point have not been implemented yet.")
   }

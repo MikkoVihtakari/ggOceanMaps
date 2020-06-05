@@ -160,7 +160,7 @@ basemap(limits = -60, glaciers = TRUE) +
 Note that the maps plotted in temperate and tropical regions are not projected. Consequently, decimal degrees work for such maps directly:
 
 ```{r}
-dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40))
+dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
 basemap(data = dt) + geom_point(data = dt, aes(x = lon, y = lat), color = "red")
 ```
 
@@ -178,14 +178,15 @@ The stereographic maps can be rotated to point towards north using the `rotate` 
 basemap(limits = c(-160, -80, 60, 85), rotate = TRUE)
 ```
 
-A word of warning, however: the rotation involves reprojecting all shapefiles in their entirety and is memory consuming especially for large bathymetry shapes. Make sure to limit your map correctly before you add bathymetry. The rotation is still experimental and does not work for `limit`s defined using projected coordinates or `data`. This functionality is likely to contain a whole lot of bugs. 
+A word of warning, however: the rotation involves reprojecting all shapefiles in their entirety and is memory consuming especially for large bathymetry shapes. Make sure to limit your map correctly before you add bathymetry. The rotation is still experimental and does not work for `limit`s defined using projected coordinates or `data`. This functionality is likely to contain a whole lot of bugs. Rotation does not currently work within the `transform_coord()` function. Use the `ggspatial::geom_spatial_*` functions when adding data to rotated maps.
 
 ## Quick map
 
 The `qmap` function is designed as a shortcut to quickly take a look at a spatial dataset similar to the ggplot's [`qplot`](https://ggplot2.tidyverse.org/reference/qplot.html) function. This function is supposed to automatically detect the type of data fed into the function and plot a map using appropriate geometries, limits, and projection. The function has not been developed properly yet and requires user feedback and testing. 
 
 ```{r}
-qmap(dt, color = "red")
+qmap(dt, color = I("red")) # set color
+qmap(dt, color = var) # map color
 ```
 
 # Advanced use

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -139,7 +139,27 @@
   <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"point"</span>,
   <span class='kw'>limits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>bathymetry</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>glaciers</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>resolution</span> <span class='kw'>=</span> <span class='st'>"low"</span>,
+  <span class='kw'>rotate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>legends</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>legend.position</span> <span class='kw'>=</span> <span class='st'>"right"</span>,
+  <span class='kw'>lon.interval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>lat.interval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>bathy.style</span> <span class='kw'>=</span> <span class='st'>"poly_blues"</span>,
+  <span class='kw'>bathy.border.col</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>bathy.size</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>land.col</span> <span class='kw'>=</span> <span class='st'>"grey60"</span>,
+  <span class='kw'>land.border.col</span> <span class='kw'>=</span> <span class='st'>"black"</span>,
+  <span class='kw'>land.size</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>gla.col</span> <span class='kw'>=</span> <span class='st'>"grey95"</span>,
+  <span class='kw'>gla.border.col</span> <span class='kw'>=</span> <span class='st'>"black"</span>,
+  <span class='kw'>gla.size</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>grid.col</span> <span class='kw'>=</span> <span class='st'>"grey70"</span>,
+  <span class='kw'>grid.size</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>base_size</span> <span class='kw'>=</span> <span class='fl'>11</span>,
+  <span class='kw'>projection.grid</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='no'>...</span>
 )</pre>
 
@@ -156,7 +176,7 @@
     </tr>
     <tr>
       <th>geom</th>
-      <td><p>Character vector specifying geom(s) to draw. Defaults to "point". Other <code>geom</code>s have not been implemented yet.</p></td>
+      <td><p>Character argument specifying geom(s) to draw. Defaults to "point". Other <code>geom</code>s have not been implemented yet.</p></td>
     </tr>
     <tr>
       <th>limits</th>
@@ -167,8 +187,61 @@
       <td><p>Logical indicating whether bathymetry should be added to the map.</p></td>
     </tr>
     <tr>
+      <th>glaciers</th>
+      <td><p>Logical indicating whether glaciers and ice-sheets should be added to the map.</p></td>
+    </tr>
+    <tr>
+      <th>resolution</th>
+      <td><p>Not implemented yet.</p></td>
+    </tr>
+    <tr>
+      <th>rotate</th>
+      <td><p>Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. Experimental.</p></td>
+    </tr>
+    <tr>
+      <th>legends</th>
+      <td><p>Logical indicating whether the legend for bathymetry should be shown.</p></td>
+    </tr>
+    <tr>
+      <th>legend.position</th>
+      <td><p>The position for ggplot2 legend. See the argument with the same name in <a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a>.</p></td>
+    </tr>
+    <tr>
+      <th>lon.interval, lat.interval</th>
+      <td><p>Numeric value specifying the interval of longitude and latitude grids. <code>NULL</code> finds reasonable defaults depending on <code>limits</code>.</p></td>
+    </tr>
+    <tr>
       <th>bathy.style</th>
-      <td><p>Character defining the style for bathymetry contours. See the <code>bathy.style</code> argument in <code><a href='basemap.html'>basemap</a></code>.</p></td>
+      <td><p>Character defining the style for bathymetry contours. Alternatives:</p><ul>
+<li><p><code>"poly_blues"</code> plots polygons filled with different shades of blue.</p></li>
+<li><p><code>"poly_greys"</code> plots polygons filled with different shades of gray.</p></li>
+<li><p><code>"contour_blues"</code> contour lines with different shades of blue.</p></li>
+<li><p><code>"contour_grey"</code> plots gray contour lines.</p></li>
+</ul></td>
+    </tr>
+    <tr>
+      <th>land.col, gla.col, grid.col</th>
+      <td><p>Character code specifying the color of land, glaciers and grid lines, respectively. Use <code>NA</code> to remove the grid lines.</p></td>
+    </tr>
+    <tr>
+      <th>land.border.col, gla.border.col, bathy.border.col</th>
+      <td><p>Character code specifying the color of the border line for land, glacier, and bathymetry shapes.</p></td>
+    </tr>
+    <tr>
+      <th>land.size, gla.size, bathy.size, grid.size</th>
+      <td><p>Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the <code><a href='LS.html'>LS</a></code> function for a specific width in pt. See Details.</p></td>
+    </tr>
+    <tr>
+      <th>base_size</th>
+      <td><p>Base size parameter for ggplot. See <a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a>.</p></td>
+    </tr>
+    <tr>
+      <th>projection.grid</th>
+      <td><p>Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Logical indicating whether information about the projection and guessed column names should be returned as message. Set to <code>FALSE</code> to make the function silent.</p></td>
     </tr>
     </table>
 
@@ -181,9 +254,10 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>lon</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>100</span>, -<span class='fl'>80</span>, -<span class='fl'>60</span>), <span class='kw'>lat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>25</span>, <span class='fl'>40</span>))
-<span class='fu'>qmap</span>(<span class='no'>dt</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"red"</span>)</div><div class='img'><img src='qmap-1.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>lon</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>100</span>, -<span class='fl'>80</span>, -<span class='fl'>60</span>), <span class='kw'>lat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>25</span>, <span class='fl'>40</span>), <span class='kw'>var</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"a"</span>, <span class='st'>"b"</span>))
+<span class='fu'>qmap</span>(<span class='no'>dt</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/AsIs.html'>I</a></span>(<span class='st'>"red"</span>)) <span class='co'># Set color</span></div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:4326</span></div><div class='img'><img src='qmap-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>qmap</span>(<span class='no'>dt</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>var</span>) <span class='co'># Map color</span></div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:4326</span></div><div class='img'><img src='qmap-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>lon</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>80</span>, -<span class='fl'>80</span>, -<span class='fl'>50</span>, -<span class='fl'>50</span>), <span class='kw'>lat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>65</span>, <span class='fl'>80</span>, <span class='fl'>80</span>, <span class='fl'>65</span>))
+<span class='fu'>qmap</span>(<span class='no'>dt</span>, <span class='kw'>rotate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +proj=stere +lat_0=90 +lat_ts=71 +lon_0=-55.6085359253855 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0</span></div><div class='img'><img src='qmap-3.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

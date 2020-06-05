@@ -17,7 +17,7 @@
 #' @seealso \code{\link{basemap}}
 
 # Test paramters
-# limits = NULL; data = stn; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE
+# limits = NULL; data = dt; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = TRUE
 basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = TRUE) {
   
   # 1. shapefiles argument dictates the used shapefile. If NULL, shapefiles are obtained from limits ####
@@ -150,13 +150,29 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   if(!is.null(data) & is.null(limits)) {
     
     if(rotate) {
-      message("The map rotation does not work for the data argument. Changed rotate to FALSE. Use the auto_limits function to find the limits for your map.")
-      rotate <- FALSE
+      
+      clipLimits <- auto_limits(data, verbose = !rotate)
+      limits <- clipLimits$ddLimits
+      decLimits <- is_decimal_limit(limits)
+      
+      tmp <- dd_to_deg(limits[1:2])
+      
+      if(tmp[1] > tmp[2]) {
+        lonDiff <- 360 - tmp[1] + tmp[2]
+      } else {
+        lonDiff <- tmp[2] - tmp[1]
+      }
+      
+      midLon <- tmp[1] + lonDiff/2
+      midLon <- deg_to_dd(midLon)
+      
+    } else {
+      
+      clipLimits <- auto_limits(data, expand.factor = 1.1, verbose = !rotate)
+      limits <- clipLimits$ddLimits
+      decLimits <- is_decimal_limit(limits)  
+      
     }
-    
-    clipLimits <- auto_limits(data, expand.factor = 1.1)
-    limits <- clipLimits$ddLimits
-    decLimits <- is_decimal_limit(limits)
     
     if(is.null(shapefiles)) {
       if(!exists("shapefile.name")) {
@@ -189,7 +205,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     }
     
   } else {
-    # stop("custom shapefile code has not been finished yet. Add limits definition.")
+    
     if(!glaciers) shapefiles$glacier <- NULL
     if(!bathymetry) shapefiles$bathy <- NULL
     
