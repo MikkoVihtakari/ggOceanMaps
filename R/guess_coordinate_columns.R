@@ -14,10 +14,16 @@ guess_coordinate_columns <- function(data, lon = NULL, lat = NULL) {
 
     if(is.null(lon)) {
       lon <- colnames(data)[grep("^lon$|longitude|^long$", gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", gsub("[[:punct:]]", " ", colnames(data)), perl = TRUE), ignore.case = TRUE, perl = TRUE)][1]
+      if(is.na(lon)) {
+        lon <- colnames(data)[grep("lon", gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", gsub("[[:punct:]]", " ", colnames(data)), perl = TRUE), ignore.case = TRUE, perl = TRUE)][1]
+      }
     }
 
     if(is.null(lat)) {
       lat <- colnames(data)[grep("^lat$|latitude", gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", gsub("[[:punct:]]", " ", colnames(data)), perl = TRUE), ignore.case = TRUE, perl = TRUE)][1]
+      if(is.na(lat)) {
+        lat <- colnames(data)[grep("lat", gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", gsub("[[:punct:]]", " ", colnames(data)), perl = TRUE), ignore.case = TRUE, perl = TRUE)][1]
+      }
     }
 
   c(lon = lon, lat = lat)

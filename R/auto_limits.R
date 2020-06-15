@@ -22,9 +22,17 @@
 auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326", proj.out = NULL, expand.factor = NULL, verbose = TRUE) {
   
   # Convert the coordinates
-  tmp <- guess_coordinate_columns(data)
-  lon <- unname(tmp[names(tmp) == "lon"])
-  lat <- unname(tmp[names(tmp) == "lat"])
+  if(is.null(lon) | is.null(lat)) {
+    tmp <- guess_coordinate_columns(data)
+    
+    if(is.null(lon)) {
+      lon <- unname(tmp[names(tmp) == "lon"])
+    }
+    
+    if(is.null(lat)) {
+      lat <- unname(tmp[names(tmp) == "lat"])
+    }
+  }
   
   if(verbose) {
     message(paste("Using", lon, "and", lat, "as longitude and latitude columns, respectively."))

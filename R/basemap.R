@@ -125,6 +125,12 @@
 #' geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
 #' fill = NA, color = "red")
 #' 
+#' # Rotate:
+#' 
+#' basemap(data = dt, rotate = TRUE) +
+#' geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
+#'                     fill = NA, color = "red")
+#' 
 #' ## To find UTM coordinates to limit a polar map:
 #' basemap(limits = 60, projection.grid = TRUE)
 #' basemap(limits = c(2.5e4, -2.5e6, 2e6, -2.5e5), shapefiles = "Arctic")

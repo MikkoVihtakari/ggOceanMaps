@@ -31,7 +31,7 @@ qmap(
   grid.size = 0.1,
   base_size = 11,
   projection.grid = FALSE,
-  verbose = TRUE,
+  verbose = FALSE,
   ...
 )
 }

@@ -37,8 +37,8 @@
 #' qmap(dt, rotate = TRUE)
 #' @export
 
-# data = dt; x = NULL; y = NULL; geom = "point"; limits = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; rotate = TRUE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = TRUE
-qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, verbose = TRUE, ...) {
+# data = dt; x = NULL; y = NULL; geom = "point"; limits = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; rotate = TRUE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = FALSE
+qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, verbose = FALSE, ...) {
 
   ## Coordinate columns
 
@@ -56,7 +56,11 @@ qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, bathym
 
   ## Base map
 
-  pb <- basemap(limits = limits, data = data, bathymetry = bathymetry, glaciers = glaciers, resolution = resolution, rotate = rotate, legends = legends, legend.position = legend.position, lon.interval = lon.interval, lat.interval = lat.interval, bathy.style = bathy.style, bathy.border.col = bathy.border.col, bathy.size = bathy.size, land.col = land.col, land.border.col = land.border.col, land.size = land.size, gla.col = gla.col, gla.border.col = gla.border.col, gla.size = gla.size, grid.col = grid.col, grid.size = grid.size, base_size = base_size, projection.grid = projection.grid, verbose = verbose)
+  if(is.null(limits)) {
+    limits <- auto_limits(data = data, lon = "rLon", lat = "rLat", expand.factor = 1.1)$ddLimits
+  }
+  
+  pb <- suppressMessages(basemap(limits = limits, data = NULL, bathymetry = bathymetry, glaciers = glaciers, resolution = resolution, rotate = rotate, legends = legends, legend.position = legend.position, lon.interval = lon.interval, lat.interval = lat.interval, bathy.style = bathy.style, bathy.border.col = bathy.border.col, bathy.size = bathy.size, land.col = land.col, land.border.col = land.border.col, land.size = land.size, gla.col = gla.col, gla.border.col = gla.border.col, gla.size = gla.size, grid.col = grid.col, grid.size = grid.size, base_size = base_size, projection.grid = projection.grid, verbose = verbose))
 
   ## Geoms
 
