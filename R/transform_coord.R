@@ -28,136 +28,138 @@
 # lon = NULL; lat = NULL; new.names = "auto"; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
 # lon = NULL; lat = NULL; new.names = "auto"; proj.in = "+init=epsg:4326"; proj.out = "+init=epsg:32636"; verbose = FALSE; bind = FALSE; na = "ignore"
 transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", proj.in = "+init=epsg:4326", proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
-
+  
   # Checks ----
-
-  if(new.names == "auto") {
-    new.names <- if(bind) c("lon.proj", "lat.proj") else NULL
+  
+  if(length(new.names) == 1) {
+    if(new.names == "auto") {
+      new.names <- if(bind) c("lon.proj", "lat.proj") else NULL
+    }
   }
-
+  
   if(is.null(proj.out) & !grepl("+proj=longlat", sp::CRS(proj.in))) stop("proj.in has to be decimal degrees when proj.out = NULL.")
   if(!is.null(proj.out)) {
-
+    
     error_test <- quiet(try(match.arg(proj.out, shapefile_list("all")$name), silent = TRUE))
-
+    
     if(class(error_test) != "try-error") {
       proj.out <- paste0("+init=epsg:", shapefile_list(proj.out)$crs)
     }
   }
-
+  
   if(is.null(proj.in)) {
     if(is.null(x)) stop("a spatial object as x is required when proj.in = NULL")
-
+    
     proj.in <- sp::proj4string(x)
   }
-
-
-    ## Case for defined x and undefined lon or/and lat
+  
+  
+  ## Case for defined x and undefined lon or/and lat
   if(!is.null(x) & (is.null(lon) | is.null(lat))) {
     if(all(class(x) != "data.frame")) stop("x argument has to be a data.frame or NULL")
-
+    
     tmp <- guess_coordinate_columns(x)
-
+    
     lon <- unname(tmp[names(tmp) == "lon"])
     lat <- unname(tmp[names(tmp) == "lat"])
-
+    
     if(verbose) {
       message(paste0("Used ", lon, " and ", lat, " as input coordinate column names in x"))
     }
   }
-
+  
   if(is.null(x) & (!is.numeric(lon) | !is.numeric(lat))) {
     stop("Define either x or lon and lat as numeric vectors")
   }
-
+  
   ## Convert tibble to data.frame
   if(any(class(x) == "tbl")) {
     x <- as.data.frame(x)
   }
-
+  
   ## Make the data frame ----
-
+  
   if(is.null(x) & (is.numeric(lon) | is.numeric(lat))) {
     if(length(lon) != length(lat)) stop("lat and lon must be of equal length")
     y <- data.frame(lon = lon, lat = lat)
     lon <- "lon"; lat <- "lat"
   }
-
+  
   if(!is.null(x)) {
     if(!is.data.frame(x)) stop("x must be a data frame")
     oldrownames <- rownames(x)
     rownames(x) <- 1:nrow(x)
     y <- x
   }
-
+  
   ## NA action
-
+  
   if(na == "ignore") {
-      z <- y[is.na(y[[lon]]) | is.na(y[[lat]]), c(lon, lat)]
-      y <- y[!is.na(y[[lon]]) | !is.na(y[[lat]]),]
+    z <- y[is.na(y[[lon]]) | is.na(y[[lat]]), c(lon, lat)]
+    y <- y[!is.na(y[[lon]]) | !is.na(y[[lat]]),]
   } else if(na == "remove") {
-      y <- y[!is.na(y[[lon]]) | !is.na(y[[lat]]),]
-      message("Removed rows that contained missing coordinates.")
+    y <- y[!is.na(y[[lon]]) | !is.na(y[[lat]]),]
+    message("Removed rows that contained missing coordinates.")
   } else {
-      stop("lon or lat coordinates contain missing values. Adjust the na argument or take care of the NAs.")
+    stop("lon or lat coordinates contain missing values. Adjust the na argument or take care of the NAs.")
   }
-
+  
   ## Output projection if not defined ----
-
+  
   if(is.null(proj.out)) {
     limits <- c(range(y[[lon]]), range(y[[lat]]))
     shapefile.def <- define_shapefiles(limits)
     proj.out <- paste0("+init=epsg:",shapefile_list(shapefile.def$shapefile.name)$crs)
   }
-
+  
   ## Coordinate transformation ----
-
+  
   sp::coordinates(y) <- c(lon, lat)
   sp::proj4string(y) <- sp::CRS(proj.in) # original projection
-
+  
   y <- sp::spTransform(y, sp::CRS(proj.out))
   y <- data.frame(sp::coordinates(y))
-
+  
   ## ----
-
+  
   if(na == "ignore" & nrow(z) > 0) {
     y <- rbind(y, z)
     y <- y[order(as.numeric(rownames(y))),]
   }
-
+  
   if(!is.null(new.names)) {
     if(any(length(new.names) != 2, !is.character(new.names))) {
       stop("new.names must be a character vector with length of 2")
     }
     colnames(y) <- new.names
   }
-
+  
   if(verbose) {
     message(paste("projection transformed from", proj.in, "to", proj.out))
   }
-
+  
   # Final modifications ---
-
+  
   if(bind) {
     out <- cbind(x, y)
-    } else {
-      out <- y
-    }
-
+  } else {
+    out <- y
+  }
+  
   if(exists("oldrownames")) {
     rownames(out) <- oldrownames
     out <- out
   } else {
     out <- out
   }
-
+  
   # Add projection information as attributes
-
+  
   attributes(out)$proj.in <- proj.in
   attributes(out)$proj.out <- proj.out
-
+  
   # Return
-
+  
   out
 }
 
