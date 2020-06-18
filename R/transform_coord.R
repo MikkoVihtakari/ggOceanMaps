@@ -26,6 +26,7 @@
 
 ## Debug data
 # lon = NULL; lat = NULL; new.names = "auto"; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
+# lon = "rLon"; lat = "rLat"; new.names = c("rLon.proj", "rLat.proj"); proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; bind = TRUE; na = "ignore"
 # lon = NULL; lat = NULL; new.names = "auto"; proj.in = "+init=epsg:4326"; proj.out = "+init=epsg:32636"; verbose = FALSE; bind = FALSE; na = "ignore"
 transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", proj.in = "+init=epsg:4326", proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
   
@@ -96,7 +97,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   
   if(na == "ignore") {
     z <- y[is.na(y[[lon]]) | is.na(y[[lat]]), c(lon, lat)]
-    y <- y[!is.na(y[[lon]]) | !is.na(y[[lat]]),]
+    y <- y[!(is.na(y[[lon]]) | is.na(y[[lat]])),]
   } else if(na == "remove") {
     y <- y[!is.na(y[[lon]]) | !is.na(y[[lat]]),]
     message("Removed rows that contained missing coordinates.")
