@@ -21,7 +21,15 @@
 # lon = NULL; lat = NULL; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; expand.factor = NULL; verbose = TRUE
 auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326", proj.out = NULL, expand.factor = NULL, verbose = TRUE) {
   
+  # Get limits from spatial polygons
+  
+  if(class(data) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons")) {
+    data <- data.frame(t(data@bbox))
+    names(data) <- c("lon", "lat")
+  }
+  
   # Convert the coordinates
+  
   if(is.null(lon) | is.null(lat)) {
     tmp <- guess_coordinate_columns(data)
     

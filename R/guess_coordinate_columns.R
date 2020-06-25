@@ -17,12 +17,18 @@ guess_coordinate_columns <- function(data, lon = NULL, lat = NULL) {
       if(is.na(lon)) {
         lon <- colnames(data)[grep("lon", gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", gsub("[[:punct:]]", " ", colnames(data)), perl = TRUE), ignore.case = TRUE, perl = TRUE)][1]
       }
+      if(is.na(lon)) {
+        lon <- colnames(data)[grep("^x$", gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", gsub("[[:punct:]]", " ", colnames(data)), perl = TRUE), ignore.case = TRUE, perl = TRUE)][1]
+      }
     }
 
     if(is.null(lat)) {
       lat <- colnames(data)[grep("^lat$|latitude", gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", gsub("[[:punct:]]", " ", colnames(data)), perl = TRUE), ignore.case = TRUE, perl = TRUE)][1]
       if(is.na(lat)) {
         lat <- colnames(data)[grep("lat", gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", gsub("[[:punct:]]", " ", colnames(data)), perl = TRUE), ignore.case = TRUE, perl = TRUE)][1]
+      }
+      if(is.na(lat)) {
+        lat <- colnames(data)[grep("^y$", gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", gsub("[[:punct:]]", " ", colnames(data)), perl = TRUE), ignore.case = TRUE, perl = TRUE)][1]
       }
     }
 
