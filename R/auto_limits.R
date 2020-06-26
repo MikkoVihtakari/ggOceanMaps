@@ -23,7 +23,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   
   # Get limits from spatial polygons
   
-  if(class(data) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons")) {
+  if(any(class(data) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
     proj.in <- sp::proj4string(data)
     data <- as.data.frame(as(as(data, "SpatialLinesDataFrame"), "SpatialPointsDataFrame"))[c("x", "y")]
     names(data) <- c("lon", "lat")
