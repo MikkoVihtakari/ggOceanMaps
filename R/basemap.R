@@ -6,7 +6,7 @@
 #'   \item \strong{single integer} between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.
 #' }
 #' Can be omitted if \code{data} or \code{shapefiles} are defined.
-#' @param data Data frame or spatial polgyons shape containing longitude and latitude coordinates in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.
+#' @param data Data frame or \link[sp]{SpatialPolygons} shape containing longitude and latitude coordinates in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.
 #' @param shapefiles Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.
 #' @param resolution Not implemented yet.
 #' @param bathymetry Logical indicating whether bathymetry should be added to the map.

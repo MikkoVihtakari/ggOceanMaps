@@ -24,7 +24,8 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   # Get limits from spatial polygons
   
   if(class(data) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons")) {
-    data <- data.frame(t(data@bbox))
+    proj.in <- sp::proj4string(data)
+    data <- as.data.frame(as(as(data, "SpatialLinesDataFrame"), "SpatialPointsDataFrame"))[c("x", "y")]
     names(data) <- c("lon", "lat")
   }
   
@@ -56,7 +57,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   # 
   # Coordinate ranges
   
-  if(proj.in == "+init=epsg:4326") {
+  if(grepl("proj=longlat", CRS(proj.in))) {
     decLims <- c(deg_to_dd(range(dd_to_deg(x[[lon]]), na.rm = TRUE)), range(x[[lat]], na.rm = TRUE))
     projLims <- c(range(x[["lon.proj"]], na.rm = TRUE), range(x[["lat.proj"]], na.rm = TRUE))
     proj.in <- attributes(x)$proj.in
