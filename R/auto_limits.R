@@ -25,7 +25,14 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   
   if(any(class(data) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
     proj.in <- sp::proj4string(data)
-    data <- as.data.frame(as(as(data, "SpatialLinesDataFrame"), "SpatialPointsDataFrame"))[c("x", "y")]
+    
+    if(!grepl("proj=longlat", sp::CRS(proj.in))) {
+      data <- sp::spTransform(data, sp::CRS("+init=epsg:4326"))
+      proj.in <- "+init=epsg:4326"
+      message("The data argument is a spatial polygons object, which is not given as decimal degrees. Converted to decimal degrees.")
+    }
+    
+    data <- ggplot2::fortify(data)[c("long", "lat")]
     names(data) <- c("lon", "lat")
   }
   
@@ -57,7 +64,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   # 
   # Coordinate ranges
   
-  if(grepl("proj=longlat", CRS(proj.in))) {
+  if(grepl("proj=longlat", sp::CRS(proj.in))) {
     decLims <- c(deg_to_dd(range(dd_to_deg(x[[lon]]), na.rm = TRUE)), range(x[[lat]], na.rm = TRUE))
     projLims <- c(range(x[["lon.proj"]], na.rm = TRUE), range(x[["lat.proj"]], na.rm = TRUE))
     proj.in <- attributes(x)$proj.in
