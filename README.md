@@ -2,7 +2,7 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-0.4.0**
+0.4.1**
 
 ## Overview
 
@@ -33,11 +33,11 @@ welcomed. See [*Contributions*](#contributions) for further details.
 
 ## Installation
 
-The package comes in three versions with a different update cycle: 1)
-the [CRAN](https://cran.r-project.org/) version is updated infrequently
-(a few times a year), 2) The
+The package comes in three versions with different update cycles: 1) the
+[CRAN](https://cran.r-project.org/) version is updated infrequently (a
+few times a year), 2) The
 [drat](https://cran.r-project.org/web/packages/drat/index.html) version
-is updated when major features or bugs are added or fixed, and 3) the
+is updated when major features are added or bad bugs fixed, and 3) the
 GitHub version is updated whenever the author works with the package.
 
 When available, the CRAN version can be installed using
@@ -45,7 +45,7 @@ When available, the CRAN version can be installed using
 version of the package can be installed as follows:
 
 ``` r
-install.packages("ggOceanMaps", repos = "https://mikkovihtakari.github.io/drat")
+install.packages("ggOceanMaps", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org"))
 ```
 
 Due to the package size limitations, ggOceanMaps requires the

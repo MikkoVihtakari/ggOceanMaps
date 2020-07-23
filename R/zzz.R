@@ -1,18 +1,11 @@
 #' @importFrom utils install.packages
 .onLoad <- function(libname, pkgname) {
   
-  # Set repo for the data package
-  
-  repos <- getOption("repos")
-  repos["ggOceanMaps"] = "https://mikkovihtakari.github.io/drat"
-  options(repos = repos)
-  invisible(repos)
-  
   # Install the data package
   
   if (!requireNamespace("ggOceanMapsData", quietly = TRUE)) {
     # message("ggOceanMaps requires ggOceanMapsData, which is not installed. Installing the package.")
-    utils::install.packages("ggOceanMapsData")
+    utils::install.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org"))
   }
 }
 

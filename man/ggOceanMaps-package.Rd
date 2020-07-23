@@ -22,7 +22,6 @@ data.frame(lon = 50, tat = 70), aes(x = lon, y = lat))} as an example).
 Useful links:
 \itemize{
   \item \url{https://mikkovihtakari.github.io/ggOceanMaps}
-  \item \url{https://github.com/MikkoVihtakari/ggOceanMaps}
   \item Report bugs at \url{https://github.com/MikkoVihtakari/ggOceanMaps/issues}
 }
 

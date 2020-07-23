@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
 <div id="ggoceanmaps" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#ggoceanmaps" class="anchor"></a>ggOceanMaps</h1></div>
-<p><strong>Plot data on oceanographic maps using ggplot2. R package version 0.4.0</strong></p>
+<p><strong>Plot data on oceanographic maps using ggplot2. R package version 0.4.1</strong></p>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
@@ -102,9 +102,9 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>The package comes in three versions with a different update cycle: 1) the <a href="https://cran.r-project.org/">CRAN</a> version is updated infrequently (a few times a year), 2) The <a href="https://cran.r-project.org/web/packages/drat/index.html">drat</a> version is updated when major features or bugs are added or fixed, and 3) the GitHub version is updated whenever the author works with the package.</p>
+<p>The package comes in three versions with different update cycles: 1) the <a href="https://cran.r-project.org/">CRAN</a> version is updated infrequently (a few times a year), 2) The <a href="https://cran.r-project.org/web/packages/drat/index.html">drat</a> version is updated when major features are added or bad bugs fixed, and 3) the GitHub version is updated whenever the author works with the package.</p>
 <p>When available, the CRAN version can be installed using <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("ggOceanMaps")</a></code>. A more frequently updated drat version of the package can be installed as follows:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"ggOceanMaps"</span>, <span class="kw">repos</span> <span class="kw">=</span> <span class="st">"https://mikkovihtakari.github.io/drat"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"ggOceanMaps"</span>, <span class="kw">repos</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"https://mikkovihtakari.github.io/drat"</span>, <span class="st">"https://cloud.r-project.org"</span>))</pre></div>
 <p>Due to the package size limitations, ggOceanMaps requires the <a href="https://github.com/MikkoVihtakari/ggOceanMapsData">ggOceanMapsData</a> package which stores the shapefiles and should be installed automatically when ggOceanMaps is loaded. Note that actual installation size of the package is larger (about 35 Mb) than stated on CRAN due to shapefiles used by ggOceanMaps.</p>
 <p>Frequently updated developmental version can be installed using the <a href="https://cran.r-project.org/web/packages/devtools/index.html"><strong>devtools</strong></a> package.</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"MikkoVihtakari/ggOceanMapsData"</span>) <span class="co"># required by ggOceanMaps</span>
