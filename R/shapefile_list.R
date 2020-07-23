@@ -25,9 +25,21 @@ shapefile_list <- function(name, get.data = FALSE) {
   # List of alternatives
 
   alternatives <- list(
-    list(name = "ArcticStereographic", land = "arctic_land", glacier = "arctic_glacier", bathy = "arctic_bathy", crs = 3995),
-    list(name = "AntarcticStereographic", land = "antarctic_land", glacier = "antarctic_glacier", bathy = "antarctic_bathy", crs = 3031),
-    list(name = "DecimalDegree", land = "dd_land", glacier = "dd_glacier", bathy = "dd_bathy", crs = 4326)
+    list(name = "ArcticStereographic", 
+         land = "ggOceanMapsData::arctic_land", 
+         glacier = "ggOceanMapsData::arctic_glacier",
+         bathy = "ggOceanMapsData::arctic_bathy",
+         crs = 3995),
+    list(name = "AntarcticStereographic", 
+         land = "ggOceanMapsData::antarctic_land",
+         glacier = "ggOceanMapsData::antarctic_glacier",
+         bathy = "ggOceanMapsData::antarctic_bathy",
+         crs = 3031),
+    list(name = "DecimalDegree", 
+         land = "ggOceanMapsData::dd_land",
+         glacier = "ggOceanMapsData::dd_glacier",
+         bathy = "ggOceanMapsData::dd_bathy",
+         crs = 4326)
   )
 
   names(alternatives) <- sapply(alternatives, function(k) k$name)

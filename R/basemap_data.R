@@ -17,7 +17,7 @@
 #' @seealso \code{\link{basemap}}
 
 # Test paramters
-# limits = NULL; data = dt; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = TRUE
+# limits = 60; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = TRUE
 basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = TRUE) {
   
   # 1. shapefiles argument dictates the used shapefile. If NULL, shapefiles are obtained from limits ####
@@ -107,7 +107,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
           stop("Cannot detect the required shapefiles automatically from projected limits coordinates. Change the limits to decimal degrees, provide data with decimal degree information or specify the shapefiles argument.")
         }
         
-        clipLimits <- auto_limits(data = expand.grid(data.frame(lon = limits[1:2], lat = limits[3:4])), proj.in = sp::proj4string(get(shapefiles$land)), proj.out = "+init=epsg:4326")
+        clipLimits <- auto_limits(data = expand.grid(data.frame(lon = limits[1:2], lat = limits[3:4])), proj.in = sp::proj4string(eval(parse(text = shapefiles$land))), proj.out = "+init=epsg:4326")
         
       } else { # Limits given as decimal degrees
         
@@ -125,12 +125,17 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
         midLon <- deg_to_dd(midLon)
         
         if(is.null(shapefiles)) {
-          clipLimits <- auto_limits(data = expand.grid(lon = sort(c(limits[1:2], midLon)), lat = limits[3:4]))
+          clipLimits <- auto_limits(data = expand.grid(lon = sort(c(limits[1:2], midLon)), lat = limits[3:4]),
+                                    verbose = !rotate)
         } else {
           clipLimits <- auto_limits(data = expand.grid(lon = sort(c(limits[1:2], midLon)), lat = limits[3:4]), 
-                                    proj.out = ifelse(grepl("SpatialPolygons", class(shapefiles$land)), sp::proj4string(shapefiles$land), sp::proj4string(get(shapefiles$land))))
+                                    proj.out = ifelse(grepl("SpatialPolygons", class(shapefiles$land)), 
+                                                      sp::proj4string(shapefiles$land), 
+                                                      sp::proj4string(eval(parse(text = shapefiles$land)))
+                                    ),
+                                    verbose = !rotate)
         } 
-      
+        
       }
     }
     
@@ -145,7 +150,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     polarMap <- FALSE
   }
   
-  # 3. data argument defines the limits and shapefiles if not specified. Also helps the limits argument to find shapefile if it was given as projected coordinates ####
+  # 3. data argument defines the limits and shapefiles if not specified. Also helps the limits argument to find shapefile if it was given as projected coordinates ###
   
   if(!is.null(data) & is.null(limits)) {
     
@@ -184,22 +189,22 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     }
   }
   
-  # 4. Define the shapefiles to be used in the map ####
+  # 4. Define the shapefiles to be used in the map ###
   
   if(!exists("customShapefiles")) {
     
     if(exists("shapefile.name") & is.null(shapefiles)) shapefiles <- shapefile_list(shapefile.name)
     
-    shapefiles$land <- get(shapefiles$land)
+    shapefiles$land <- eval(parse(text = shapefiles$land))
     
     if(glaciers) {
-      shapefiles$glacier <- get(shapefiles$glacier)
+      shapefiles$glacier <- eval(parse(text = shapefiles$glacier))
     } else {
       shapefiles$glacier <- NULL
     }
     
     if(bathymetry) {
-      shapefiles$bathy <- get(shapefiles$bathy)
+      shapefiles$bathy <- eval(parse(text = shapefiles$bathy))
     } else {
       shapefiles$bathy <- NULL
     }
@@ -215,11 +220,11 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   
   LandCRS <- sp::proj4string(shapefiles$land)
   
-  # 5. Crop and rotate shapefiles if needed ###
+  # 5. Crop and rotate shapefiles if needed ####
   
   if(is.null(limits)) { # For cases when limits and data are not defined
     
-    if(rotate) message("Rotating maps defined with only the shapefiles argument have not been implemented. Changed rotate to FALSE")
+    if(rotate) message("Rotating maps defined using only the shapefiles argument have not been implemented. Changed rotate to FALSE")
     
     # Define map limits
     
@@ -280,10 +285,10 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
       LandCRS <- gsub("lon_0=0", paste0("lon_0=", midLon), LandCRS)
       clipLimits <- auto_limits(data = expand.grid(lon = sort(c(limits[1:2], midLon)), lat = limits[3:4]), proj.out = LandCRS)
       
-      shapefiles$land <- sp::spTransform(shapefiles$land, CRSobj = sp::CRS(LandCRS))
+      shapefiles$land <- suppressWarnings(sp::spTransform(shapefiles$land, CRSobj = suppressWarnings(sp::CRS(LandCRS))))
       
-      if(glaciers) shapefiles$glacier <- sp::spTransform(shapefiles$glacier, CRSobj = sp::CRS(LandCRS))
-      if(bathymetry) shapefiles$bathy <- sp::spTransform(shapefiles$bathy, CRSobj = sp::CRS(LandCRS))
+      if(glaciers) shapefiles$glacier <- suppressWarnings(sp::spTransform(shapefiles$glacier, CRSobj = suppressWarnings(sp::CRS(LandCRS))))
+      if(bathymetry) shapefiles$bathy <- suppressWarnings(sp::spTransform(shapefiles$bathy, CRSobj = suppressWarnings(sp::CRS(LandCRS))))
       
     }
     
@@ -301,7 +306,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     
   }
   
-  # 6. Define the grid lines ###
+  # 6. Define the grid lines ####
   
   ## Define intervals if not specified
   

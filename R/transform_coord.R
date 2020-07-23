@@ -38,7 +38,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     }
   }
   
-  if(is.null(proj.out) & !grepl("+proj=longlat", sp::CRS(proj.in))) stop("proj.in has to be decimal degrees when proj.out = NULL.")
+  if(is.null(proj.out) & !grepl("+proj=longlat", suppressWarnings(sp::CRS(proj.in)))) stop("proj.in has to be decimal degrees when proj.out = NULL.")
   if(!is.null(proj.out)) {
     
     error_test <- quiet(try(match.arg(proj.out, shapefile_list("all")$name), silent = TRUE))
@@ -116,9 +116,9 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   ## Coordinate transformation ----
   
   sp::coordinates(y) <- c(lon, lat)
-  sp::proj4string(y) <- sp::CRS(proj.in) # original projection
+  sp::proj4string(y) <- suppressWarnings(sp::CRS(proj.in)) # original projection
   
-  y <- sp::spTransform(y, sp::CRS(proj.out))
+  y <- sp::spTransform(y, suppressWarnings(sp::CRS(proj.out)))
   y <- data.frame(sp::coordinates(y))
   
   ## ----

@@ -29,12 +29,14 @@
 #' @author Mikko Vihtakari
 #' @examples 
 #' 
+#' \donttest{
 #' dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
 #' qmap(dt, color = I("red")) # Set color
 #' qmap(dt, color = var) # Map color
 #' 
 #' dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
 #' qmap(dt, rotate = TRUE)
+#' }
 #' @export
 
 # data = dt; x = NULL; y = NULL; geom = "point"; limits = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; rotate = TRUE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = FALSE

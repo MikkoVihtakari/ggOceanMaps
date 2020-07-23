@@ -118,6 +118,10 @@ See Examples.
 \strong{Line width and font size}
  
 The line size aesthetics in \link[ggplot2]{ggplot2} generates approximately 2.13 wider lines measured in pt than the given values. If you want a specific line width in pt, use the internal function \code{\link{LS}} to convert the desired line width to ggplot2 equivalent. A similar function is also available for font sizes (\code{\link{FS}}).
+
+\strong{CRS warnings}
+
+Open-source GIS systems are rolling over to a new \href{https://rgdal.r-forge.r-project.org/articles/CRS_projections_transformations.html}{to a new projection definition system}. The changes to underlying systems appear to sometimes trigger warnings the user can ignore as long as the resulting map looks OK. Bug reports regarding these warnings are appreciated.
 }
 \examples{
 # The easiest way to produce a map is to use the limits
@@ -181,7 +185,7 @@ basemap(limits = 60, projection.grid = TRUE)
 basemap(limits = c(2.5e4, -2.5e6, 2e6, -2.5e5), shapefiles = "Arctic")
 
 # Using custom shapefiles
-data(bs_shapes)
+data(bs_shapes, package = "ggOceanMapsData")
 basemap(shapefiles = list(land = bs_land, glacier = NULL, bathy = bs_bathy),
 bathymetry = TRUE)
 
@@ -197,7 +201,7 @@ basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) + xlab("Lat")
 
 basemap(limits = c(0, 60, 68, 80)) + labs(x = NULL, y = NULL)
 
-basemap(limits = c(0, 60, 68, 80)) +
+basemap(limits = c(0, 60, 68, 80), rotate = TRUE) +
 theme(axis.title = element_blank(),
       axis.text = element_blank(),
       axis.ticks.x = element_blank(),

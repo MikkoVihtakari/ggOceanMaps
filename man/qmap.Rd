@@ -83,12 +83,14 @@ qmap(
 }
 \examples{
 
+\donttest{
 dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
 qmap(dt, color = I("red")) # Set color
 qmap(dt, color = var) # Map color
 
 dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
 qmap(dt, rotate = TRUE)
+}
 }
 \seealso{
 Other basemap functions: 

@@ -77,9 +77,3 @@ deg_to_dd <- function(x) {
   x <- x - ifelse(x/360 > 1, floor(x/360), 0)*360
   ifelse(x > 0 & x <= 180, x, ifelse(x > 180, -1*(360 - x), NA))
 }
-
-
-# Define global variables
-utils::globalVariables(c("rdiff.lon", "rdiff.lat"))
-
-# "long", "lat", "group", "round.lat", "round.lon", "n.lat.grid", "n.lon.grid", "lat.interval", "lon.interval", "keep.glaciers", "MapType", "proj4.utm", "n.points", "..level..", "abb", "x", "y", "sal", "temp", "xmin", "xmax", "ymin", "ymax", ".", "variable", "ymin", "ymax", "X", "arctic_bathy", "barents_bathy", "barents_currents", "kongsfjord_watermasses", "svalbard_bathy"

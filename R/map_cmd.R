@@ -49,10 +49,11 @@ map_cmd <- function(command, alternative = FALSE) {
       ggspatial::layer_spatial(data = X$shapefiles$glacier, fill = gla.col, color = gla.border.col, size = gla.size)
     ',
     defs_rect = '
-      scale_y_continuous(breaks = X$map.grid$lat.breaks) +
-      scale_x_continuous(breaks = X$map.grid$lon.breaks) +
+      scale_y_continuous(breaks = X$map.grid$lat.breaks, expand = c(0,0.1)) +
+      scale_x_continuous(breaks = X$map.grid$lon.breaks, expand = c(0,0.1)) +
       labs(y = "Latitude (decimal degrees)", x = "Longitude (decimal degrees)") +
-      coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], expand = FALSE, crs = X$proj, default = TRUE) +
+      coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4],
+        crs = X$proj, default = TRUE) +
       theme_map(base_size = base_size, grid.col = grid.col, grid.size = grid.size) +
       theme(legend.position = legend.position,
       legend.margin=margin(t = 0.2, b = 0, unit = "cm")
@@ -60,7 +61,8 @@ map_cmd <- function(command, alternative = FALSE) {
     ',
     defs_rect_proj = '
       labs(y = "Latitude (meters)", x = "Longitude (meters)") +
-      coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], expand = FALSE, crs = X$proj, datum = X$proj, default = TRUE) +
+      coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], 
+        expand = FALSE, crs = X$proj, datum = X$proj, default = TRUE) +
       theme_map(base_size = base_size, grid.col = grid.col, grid.size = grid.size) +
       theme(legend.position = legend.position,
       legend.margin=margin(t = 0.2, b = 0, unit = "cm")

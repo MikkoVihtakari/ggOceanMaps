@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -167,20 +167,24 @@
 <code><a href='transform_coord.html'>transform_coord</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>shapefile_list</span>(<span class='st'>"all"</span>)</div><div class='output co'>#&gt;                     name           land           glacier           bathy  crs
-#&gt; 1    ArcticStereographic    arctic_land    arctic_glacier    arctic_bathy 3995
-#&gt; 2 AntarcticStereographic antarctic_land antarctic_glacier antarctic_bathy 3031
-#&gt; 3          DecimalDegree        dd_land        dd_glacier        dd_bathy 4326</div><div class='input'><span class='fu'>shapefile_list</span>(<span class='st'>"Arctic"</span>) <span class='co'># partial matching</span></div><div class='output co'>#&gt; $name
+    <pre class="examples"><div class='input'><span class='fu'>shapefile_list</span>(<span class='st'>"all"</span>)</div><div class='output co'>#&gt;                     name                            land
+#&gt; 1    ArcticStereographic    ggOceanMapsData::arctic_land
+#&gt; 2 AntarcticStereographic ggOceanMapsData::antarctic_land
+#&gt; 3          DecimalDegree        ggOceanMapsData::dd_land
+#&gt;                              glacier                            bathy  crs
+#&gt; 1    ggOceanMapsData::arctic_glacier    ggOceanMapsData::arctic_bathy 3995
+#&gt; 2 ggOceanMapsData::antarctic_glacier ggOceanMapsData::antarctic_bathy 3031
+#&gt; 3        ggOceanMapsData::dd_glacier        ggOceanMapsData::dd_bathy 4326</div><div class='input'><span class='fu'>shapefile_list</span>(<span class='st'>"Arctic"</span>) <span class='co'># partial matching</span></div><div class='output co'>#&gt; $name
 #&gt; [1] "ArcticStereographic"
 #&gt; 
 #&gt; $land
-#&gt; [1] "arctic_land"
+#&gt; [1] "ggOceanMapsData::arctic_land"
 #&gt; 
 #&gt; $glacier
-#&gt; [1] "arctic_glacier"
+#&gt; [1] "ggOceanMapsData::arctic_glacier"
 #&gt; 
 #&gt; $bathy
-#&gt; [1] "arctic_bathy"
+#&gt; [1] "ggOceanMapsData::arctic_bathy"
 #&gt; 
 #&gt; $crs
 #&gt; [1] 3995

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -189,7 +189,7 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>auto_limits</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='kw'>lon</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>120</span>, <span class='fl'>180</span>, <span class='fl'>120</span>), <span class='kw'>lat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>60</span>, <span class='fl'>60</span>, <span class='fl'>80</span>)))</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:3995</span></div><div class='output co'>#&gt; $ddLimits
-#&gt; [1] -139.10661  139.10661   50.94316   63.43154
+#&gt; [1]  120 -120   60   80
 #&gt; 
 #&gt; $projLimits
 #&gt; [1] -2886578.7  2886578.7   544589.7  3333134.0
@@ -198,7 +198,7 @@
 #&gt; class       : SpatialPolygons 
 #&gt; features    : 1 
 #&gt; extent      : -2886579, 2886579, 544589.7, 3333134  (xmin, xmax, ymin, ymax)
-#&gt; crs         : +init=epsg:3995 +proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#&gt; crs         : +proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs 
 #&gt; 
 #&gt; $proj.in
 #&gt; [1] "+init=epsg:4326"

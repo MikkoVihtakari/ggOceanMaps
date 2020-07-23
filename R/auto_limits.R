@@ -21,12 +21,12 @@
 # lon = NULL; lat = NULL; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; expand.factor = NULL; verbose = TRUE
 auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326", proj.out = NULL, expand.factor = NULL, verbose = TRUE) {
   
-  # Get limits from spatial polygons
+  # Get limits from spatial polygons ####
   
   if(any(class(data) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
     proj.in <- sp::proj4string(data)
     
-    if(!grepl("proj=longlat", sp::CRS(proj.in))) {
+    if(!grepl("proj=longlat", suppressWarnings(sp::CRS(proj.in)))) {
       data <- sp::spTransform(data, sp::CRS("+init=epsg:4326"))
       proj.in <- "+init=epsg:4326"
       message("The data argument is a spatial polygons object, which is not given as decimal degrees. Converted to decimal degrees.")
@@ -62,14 +62,21 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   #   x <- na.omit(x[,c(lon, lat, "lon.proj", "lat.proj")])
   # }
   # 
-  # Coordinate ranges
+  # Coordinate ranges ####
   
-  if(grepl("proj=longlat", sp::CRS(proj.in))) {
+  if(grepl("proj=longlat", suppressWarnings(sp::CRS(proj.in)))) {
     decLims <- c(deg_to_dd(range(dd_to_deg(x[[lon]]), na.rm = TRUE)), range(x[[lat]], na.rm = TRUE))
+    
+    if(decLims[1] == 180 & sign(decLims[2]) == -1) { # Anti-meridian exception
+      decLims[1] <- -180
+    }
+    
     projLims <- c(range(x[["lon.proj"]], na.rm = TRUE), range(x[["lat.proj"]], na.rm = TRUE))
     proj.in <- attributes(x)$proj.in
     proj.out <- attributes(x)$proj.out
-  } else  {
+  
+    } else  {
+      
     decLims <- c(deg_to_dd(range(dd_to_deg(x[["lon.proj"]]), na.rm = TRUE)), range(x[["lat.proj"]], na.rm = TRUE))
     projLims <- c(range(x[[lon]], na.rm = TRUE), range(x[[lat]], na.rm = TRUE))
     proj.in <- attributes(x)$proj.out
@@ -93,10 +100,10 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   # Projected boundaries
   
   projBound <- sp::Polygon(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4], projLims[2], projLims[4], projLims[2], projLims[3], projLims[1], projLims[3]), ncol = 2, byrow = TRUE))
-  projBound <- sp::SpatialPolygons(list(sp::Polygons(list(projBound), ID = "clip_boundary")), proj4string = sp::CRS(proj.out))
+  projBound <- sp::SpatialPolygons(list(sp::Polygons(list(projBound), ID = "clip_boundary")), proj4string = suppressWarnings(sp::CRS(proj.out)))
   
   tmp <- as.data.frame(t(sp::bbox(projBound)))
-  projBoundNodes <- sp::SpatialPoints(expand.grid(lon = tmp$x, lat = tmp$y), proj4string = sp::CRS(proj.out))
+  projBoundNodes <- sp::SpatialPoints(expand.grid(lon = tmp$x, lat = tmp$y), proj4string = suppressWarnings(sp::CRS(proj.out)))
   
   # projxRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[2], projLims[3]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
   # projyRange <- sp::SpatialPoints(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4]), ncol = 2, byrow = TRUE), proj4string = sp::CRS(proj.out))
@@ -108,13 +115,13 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   # decxRange <- sp::spTransform(projxRange, sp::CRS(proj.in))
   # decyRange <- sp::spTransform(projyRange, sp::CRS(proj.in))
   
-  decBoundNodes <- sp::spTransform(projBoundNodes, sp::CRS(proj.in))
+  decBoundNodes <- sp::spTransform(projBoundNodes, suppressWarnings(sp::CRS(proj.in)))
   
   if(!identical(sign(projLims[3]), sign(projLims[4]))) { # Spans across the pole
     decLims <- c(raster::extent(decBoundNodes)[1:3], 90)
-  } else {
+  } else if(sign(decLims[1]) != sign(decLims[2]) & decLims[1] < decLims[2]) { # Antimeridian correction
     decLims <- c(raster::extent(decBoundNodes)[1:4])
-  }
+  } 
   
   # Return
   

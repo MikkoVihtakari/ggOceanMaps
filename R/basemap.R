@@ -62,6 +62,10 @@
 #' \strong{Line width and font size}
 #'  
 #' The line size aesthetics in \link[ggplot2]{ggplot2} generates approximately 2.13 wider lines measured in pt than the given values. If you want a specific line width in pt, use the internal function \code{\link{LS}} to convert the desired line width to ggplot2 equivalent. A similar function is also available for font sizes (\code{\link{FS}}).
+#' 
+#' \strong{CRS warnings}
+#' 
+#' Open-source GIS systems are rolling over to a new \href{https://rgdal.r-forge.r-project.org/articles/CRS_projections_transformations.html}{to a new projection definition system}. The changes to underlying systems appear to sometimes trigger warnings the user can ignore as long as the resulting map looks OK. Bug reports regarding these warnings are appreciated. 
 #'
 #' @references Note that if you use this function to generate maps for a publication, it is advised to cite the underlying data. The spatial data used by this function have been acquired from following sources:
 #' \itemize{
@@ -136,7 +140,7 @@
 #' basemap(limits = c(2.5e4, -2.5e6, 2e6, -2.5e5), shapefiles = "Arctic")
 #' 
 #' # Using custom shapefiles
-#' data(bs_shapes)
+#' data(bs_shapes, package = "ggOceanMapsData")
 #' basemap(shapefiles = list(land = bs_land, glacier = NULL, bathy = bs_bathy),
 #' bathymetry = TRUE)
 #' 
@@ -152,7 +156,7 @@
 #' 
 #' basemap(limits = c(0, 60, 68, 80)) + labs(x = NULL, y = NULL)
 #'
-#' basemap(limits = c(0, 60, 68, 80)) +
+#' basemap(limits = c(0, 60, 68, 80), rotate = TRUE) +
 #' theme(axis.title = element_blank(),
 #'       axis.text = element_blank(),
 #'       axis.ticks.x = element_blank(),
@@ -160,15 +164,14 @@
 #'       )
 #' }
 #' 
-#' @import ggplot2 ggspatial sp sf ggOceanMapsData
+#' @import ggplot2 ggspatial sp sf
 #' @export
 
 ## Test parameters
-# limits = NULL; data = NULL; shapefiles = list(land = bs_land, glacier = bs_glacier, bathy = bs_bathy); bathymetry = TRUE; glaciers = TRUE; legends = TRUE; resolution = "low"; rotate = TRUE; legend.position = "right"; limits.lon = NULL; limits.lat = NULL; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.detailed = FALSE; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE
+# limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = TRUE
 
 basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, verbose = TRUE) {
-  # From PlotSvalbard, add or remove: round.lon = FALSE, n.lon.grid = 3, lon.interval = NULL, round.lat = FALSE, n.lat.grid = 3, lat.interval = NULL, plot = TRUE, currents = FALSE, arc.col = "blue", atl.col = "#BB1512", current.size = 0.5, current.alpha = 1, label.print = TRUE, label.offset = 1.05, label.font = 8; limits.lon = NULL; limits.lat = NULL
-
+  
   # Checks ####
 
   if(is.null(data) & is.null(limits) & is.null(shapefiles)) stop("One or several of the arguments limits, data and shapefiles is required.")
