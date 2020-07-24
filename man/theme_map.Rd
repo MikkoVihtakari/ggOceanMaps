@@ -7,7 +7,7 @@
 theme_map(..., grid.col, grid.size)
 }
 \arguments{
-\item{...}{additional arguments passed to \code{\link[ggplot2]{theme_bw}}.}
+\item{...}{additional arguments passed to \code{\link[ggplot2]{ggtheme}}.}
 
 \item{grid.col}{Character code specifying the color of grid lines. Use \code{NA} to remove the grid lines.}
 

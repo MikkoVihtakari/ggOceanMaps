@@ -72,7 +72,7 @@ qmap(
 
 \item{land.size, gla.size, bathy.size, grid.size}{Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the \code{\link{LS}} function for a specific width in pt. See Details.}
 
-\item{base_size}{Base size parameter for ggplot. See \link[ggplot2]{theme_bw}.}
+\item{base_size}{Base size parameter for ggplot. See \link[ggplot2]{ggtheme}.}
 
 \item{projection.grid}{Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.}
 

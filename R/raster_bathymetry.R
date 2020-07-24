@@ -2,7 +2,7 @@
 #' @description Simplifies bathymetry raster ready for the \code{\link{vector_bathymetry}} function. Warning: processing may take a long time if the bathymetry raster is large.
 #' @param bathy A \link[raster]{raster} object or a string giving the path to a bathymetry NetCDF or grd file
 #' @param depths Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}.
-#' @param proj.out A character string specifying the PROJ.4 projection arguments for the output. See \code{\link[sp]{CRS}} and \href{https://proj.org/}{proj.org}. 
+#' @param proj.out A character string specifying the PROJ.4 projection arguments for the output. See \code{\link[sp:CRS-class]{CRS}} and \href{https://proj.org/}{proj.org}. 
 #' @param boundary A \link[sp]{SpatialPolygons}(DataFrame) object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.
 #' @param file.name A character string specifying the file path \strong{without extension} where the output should be saved. If \code{NULL} a temporary file will be used. See \code{\link[raster]{writeRaster}}.
 #' @param aggregation.factor An integer defining the \code{fact} argument from the \code{\link[raster]{aggregate}} function. Set to \code{NA} to ignore aggregation.

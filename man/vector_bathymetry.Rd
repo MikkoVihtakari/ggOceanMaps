@@ -21,7 +21,7 @@ vector_bathymetry(
 \item{smooth}{Logical indicating whether the pixelated contours should be smoothed. Uses the \link[smoothr]{smooth_ksmooth} function.}
 }
 \value{
-\link[sp]{SpatialPolygonsDataFrame} containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sp]{CRS}}).
+\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame} containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sp:CRS-class]{CRS}}).
 }
 \description{
 Vectorizes bathymetry rasters. Designed to be used for the output of \code{\link{raster_bathymetry}} function. Warning: processing may take a long time if the bathymetry raster is large.

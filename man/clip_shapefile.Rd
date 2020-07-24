@@ -14,15 +14,15 @@ clip_shapefile(
 )
 }
 \arguments{
-\item{x}{Original shape file to be clipped. Required. Must contain \code{\link[sp]{proj4string}} information.}
+\item{x}{Original shape file to be clipped. Required. Must contain \code{\link[sp:is.projected]{proj4string}} information.}
 
-\item{limits}{The constraining area used to clip \code{x}. Required. Either a numeric vector of length 4 or a \link[sp]{SpatialPolygons} object. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. The \link[sp]{SpatialPolygons} object must contain \code{\link[sp]{proj4string}} information. See details.}
+\item{limits}{The constraining area used to clip \code{x}. Required. Either a numeric vector of length 4 or a \link[sp]{SpatialPolygons} object. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. The \link[sp]{SpatialPolygons} object must contain \code{\link[sp:is.projected]{proj4string}} information. See details.}
 
-\item{proj.limits}{The \code{\link[sp]{proj4string}} projection attributes for \code{limits}. Defaults to decimal degrees (see **Usage**).}
+\item{proj.limits}{The \code{\link[sp:is.projected]{proj4string}} projection attributes for \code{limits}. Defaults to decimal degrees (see **Usage**).}
 
-\item{simplify}{Should the \code{x} geometry be simplified before clipping? Useful to make the function faster for large shape files. Uses \code{\link[rgeos]{gSimplify}} function.}
+\item{simplify}{Should the \code{x} geometry be simplified before clipping? Useful to make the function faster for large shape files. Uses \code{\link[rgeos:gSimplify]{gSimplify}} function.}
 
-\item{tol}{Numerical tolerance value to be used for simplification. See \code{\link[rgeos]{gSimplify}}.}
+\item{tol}{Numerical tolerance value to be used for simplification. See \code{\link[rgeos:gSimplify]{gSimplify}}.}
 
 \item{return.boundary}{logical. If \code{TRUE} returns the clip boundary together with the shapefile}
 }
@@ -30,7 +30,7 @@ clip_shapefile(
 Clips an area from a larger shape file (\link[sp]{SpatialPolygons}).
 }
 \details{
-The function uses the \code{\link[rgeos]{gIntersection}} function to clip smaller \link[sp]{SpatialPolygons} from larger ones. The clip area is constrained by either a numeric vector or \link[sp]{SpatialPolygons} object in the \code{limits} argument. One of these arguments must be given. Defining \code{limits} by a \link[sp]{SpatialPolygons} object gives greater freedom for the clip area as the area does not have to be rectangular.
+The function uses the \code{\link[rgeos:gIntersection]{gIntersection}} function to clip smaller \link[sp]{SpatialPolygons} from larger ones. The clip area is constrained by either a numeric vector or \link[sp]{SpatialPolygons} object in the \code{limits} argument. One of these arguments must be given. Defining \code{limits} by a \link[sp]{SpatialPolygons} object gives greater freedom for the clip area as the area does not have to be rectangular.
 }
 \seealso{
 Other create shapefiles: 

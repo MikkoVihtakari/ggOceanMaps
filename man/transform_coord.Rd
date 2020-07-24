@@ -23,9 +23,9 @@ transform_coord(
 
 \item{new.names}{Character vector of length 2 specifying the names of transformed longitude and latitude columns, respectively. Alternatively \code{NULL}, which returns column names from \code{x} or "auto", which uses \code{NULL} if \code{bind = FALSE} and \code{c("lon.proj", "lat.proj")} if \code{bind = TRUE}.}
 
-\item{proj.in}{Original \code{\link[sp]{proj4string}} projection. If \code{NULL}, the projection is taken from \code{x}. \code{x} must be a \link[sp]{Spatial} object in that case.}
+\item{proj.in}{Original \code{\link[sp:is.projected]{proj4string}} projection. If \code{NULL}, the projection is taken from \code{x}. \code{x} must be a \link[sp:Spatial-class]{Spatial} object in that case.}
 
-\item{proj.out}{Character. Either \code{NULL}, \code{\link[sp]{proj4string}} projection the coordinates should be transformed to or a name of shapefiles in \code{\link{shapefile_list}}. If \code{NULL}, the output projection will be automatically determined from data. This option requires decimal degrees as input option.}
+\item{proj.out}{Character. Either \code{NULL}, \code{\link[sp:is.projected]{proj4string}} projection the coordinates should be transformed to or a name of shapefiles in \code{\link{shapefile_list}}. If \code{NULL}, the output projection will be automatically determined from data. This option requires decimal degrees as input option.}
 
 \item{verbose}{Logical indicating whether information about the projection should be returned as message. Set to \code{FALSE} to make the function silent.}
 

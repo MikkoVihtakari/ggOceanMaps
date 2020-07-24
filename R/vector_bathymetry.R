@@ -5,7 +5,7 @@
 #' @param remove.holes Single numeric value specifying a threshold (area in km2) for holes which should be removed. Set to \code{NULL} to bypass the removal. Uses the \link[smoothr]{fill_holes} function.
 #' @param smooth Logical indicating whether the pixelated contours should be smoothed. Uses the \link[smoothr]{smooth_ksmooth} function.
 #' @details The \code{drop.crumbs} and \code{remove.holes} arguments can be used to make the resulting object smaller in file size. The \code{smooth} argument can be used to remove the pixelated contours, but often increases file size. Note also that using this option will bias the contours with respect to real world.
-#' @return \link[sp]{SpatialPolygonsDataFrame} containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sp]{CRS}}).
+#' @return \link[sp:SpatialPolygons]{SpatialPolygonsDataFrame} containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sp:CRS-class]{CRS}}).
 #' @import sp rgeos
 #' @rawNamespace import(raster, except = shift)
 #' @importFrom smoothr drop_crumbs

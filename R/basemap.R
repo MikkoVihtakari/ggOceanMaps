@@ -25,11 +25,11 @@
 #' @param land.col,gla.col,grid.col Character code specifying the color of land, glaciers and grid lines, respectively. Use \code{NA} to remove the grid lines.
 #' @param land.border.col,gla.border.col,bathy.border.col Character code specifying the color of the border line for land, glacier, and bathymetry shapes.
 #' @param land.size,gla.size,bathy.size,grid.size Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the \code{\link{LS}} function for a specific width in pt. See Details.
-#' @param base_size Base size parameter for ggplot. See \link[ggplot2]{theme_bw}.
+#' @param base_size Base size parameter for ggplot. See \link[ggplot2]{ggtheme}.
 #' @param projection.grid Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.
 #' @param verbose Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.
-#' @return Returns a \link[ggplot2]{ggplot2} map, which can be assigned to an object and modified as any ggplot object.
-#' @details The function uses \link[ggplot2]{ggplot2}, \link[ggspatial]{ggspatial}, GIS packages of R, and shapefiles to plot maps of the world's oceans. 
+#' @return Returns a \link[ggplot2]{ggplot} map, which can be assigned to an object and modified as any ggplot object.
+#' @details The function uses \link[ggplot2:ggplot2-package]{ggplot2}, \link[ggspatial:ggspatial-package]{ggspatial}, GIS packages of R, and shapefiles to plot maps of the world's oceans. 
 #' 
 #' \strong{Projections}
 #' 
@@ -52,16 +52,16 @@
 #' 
 #' Custom shapefiles have to be a named list containing at least following elements:
 #' \itemize{
-#' \item \strong{land} Object name of the \code{\link[sp]{SpatialPolygonsDataFrame}} containing land. Required.
-#' \item \strong{glacier} Object name of the \code{\link[sp]{SpatialPolygonsDataFrame}} containing glaciers. Use \code{NULL} if glaciers are not needed.
-#' \item \strong{bathy} Object name of the \code{\link[sp]{SpatialPolygonsDataFrame}} containing bathymetry contours. Use \code{NULL} if bathymetry is not needed.
+#' \item \strong{land} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing land. Required.
+#' \item \strong{glacier} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing glaciers. Use \code{NULL} if glaciers are not needed.
+#' \item \strong{bathy} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing bathymetry contours. Use \code{NULL} if bathymetry is not needed.
 #' }
 #'
 #' See Examples.
 #'
 #' \strong{Line width and font size}
 #'  
-#' The line size aesthetics in \link[ggplot2]{ggplot2} generates approximately 2.13 wider lines measured in pt than the given values. If you want a specific line width in pt, use the internal function \code{\link{LS}} to convert the desired line width to ggplot2 equivalent. A similar function is also available for font sizes (\code{\link{FS}}).
+#' The line size aesthetics in \link[ggplot2:ggplot2-package]{ggplot2} generates approximately 2.13 wider lines measured in pt than the given values. If you want a specific line width in pt, use the internal function \code{\link{LS}} to convert the desired line width to ggplot2 equivalent. A similar function is also available for font sizes (\code{\link{FS}}).
 #' 
 #' \strong{CRS warnings}
 #' 
@@ -75,7 +75,7 @@
 #' }
 #' 
 #' @family basemap functions
-#' @seealso \code{\link[ggplot2]{ggplot2}}
+#' @seealso \code{\link[ggplot2]{ggplot}}
 #' @author Mikko Vihtakari
 #' 
 #' @examples

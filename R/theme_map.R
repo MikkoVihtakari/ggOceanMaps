@@ -2,7 +2,7 @@
 #' @description A ggplot2 theme for maps.
 #' @param grid.col Character code specifying the color of grid lines. Use \code{NA} to remove the grid lines.
 #' @param grid.size Numeric value specifying the width of grid lines.
-#' @param ... additional arguments passed to \code{\link[ggplot2]{theme_bw}}.
+#' @param ... additional arguments passed to \code{\link[ggplot2]{ggtheme}}.
 #' @import ggplot2
 #' @family customize shapefiles
 #' @export

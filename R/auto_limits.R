@@ -1,7 +1,7 @@
 #' @title Automatic limits for basemap
 #' @description Find limits for a \code{\link{basemap}} from a data frame.
 #' @param data Data frame containing data for which the limits should be calculated.
-#' @param proj.in Original \code{\link[sp]{proj4string}} projection. Must be defined as character argument.
+#' @param proj.in Original \code{\link[sp:is.projected]{proj4string}} projection. Must be defined as character argument.
 #' @param proj.out Resulting map projection. See \code{\link{transform_coord}}.
 #' @param lon,lat Names of longitude and latitude columns in \code{data} as character or integer index. If \code{NULL}, the column names are \link[=guess_coordinate_columns]{guessed}.
 #' @param expand.factor Expansion factor for map limits. Set to \code{NULL} to ignore.

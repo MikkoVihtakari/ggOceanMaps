@@ -19,7 +19,7 @@ auto_limits(
 
 \item{lon, lat}{Names of longitude and latitude columns in \code{data} as character or integer index. If \code{NULL}, the column names are \link[=guess_coordinate_columns]{guessed}.}
 
-\item{proj.in}{Original \code{\link[sp]{proj4string}} projection. Must be defined as character argument.}
+\item{proj.in}{Original \code{\link[sp:is.projected]{proj4string}} projection. Must be defined as character argument.}
 
 \item{proj.out}{Resulting map projection. See \code{\link{transform_coord}}.}
 
