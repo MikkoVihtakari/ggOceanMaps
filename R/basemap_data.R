@@ -107,7 +107,10 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
           stop("Cannot detect the required shapefiles automatically from projected limits coordinates. Change the limits to decimal degrees, provide data with decimal degree information or specify the shapefiles argument.")
         }
         
-        clipLimits <- auto_limits(data = expand.grid(data.frame(lon = limits[1:2], lat = limits[3:4])), proj.in = sp::proj4string(eval(parse(text = shapefiles$land))), proj.out = "+init=epsg:4326")
+        clipLimits <- auto_limits(data = expand.grid(data.frame(lon = limits[1:2], lat = limits[3:4])), 
+                                  lon = "lon", lat = "lat", 
+                                  proj.in = sp::proj4string(eval(parse(text = shapefiles$land))), 
+                                  proj.out = "+init=epsg:4326")
         
       } else { # Limits given as decimal degrees
         
@@ -126,9 +129,11 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
         
         if(is.null(shapefiles)) {
           clipLimits <- auto_limits(data = expand.grid(lon = sort(c(limits[1:2], midLon)), lat = limits[3:4]),
+                                    lon = "lon", lat = "lat",
                                     verbose = !rotate)
         } else {
-          clipLimits <- auto_limits(data = expand.grid(lon = sort(c(limits[1:2], midLon)), lat = limits[3:4]), 
+          clipLimits <- auto_limits(data = expand.grid(lon = sort(c(limits[1:2], midLon)), lat = limits[3:4]),
+                                    lon = "lon", lat = "lat",
                                     proj.out = ifelse(grepl("SpatialPolygons", class(shapefiles$land)), 
                                                       sp::proj4string(shapefiles$land), 
                                                       sp::proj4string(eval(parse(text = shapefiles$land)))
@@ -246,7 +251,9 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     tmp <- as.data.frame(do.call(rbind, tmp))
     map.limits <- c(min(tmp[1]), max(tmp[2]), min(tmp[3]), max(tmp[4]))
     
-    clipLimits <- auto_limits(data = expand.grid(lon = c(tmp[[1]], tmp[[2]]), lat = c(tmp[[3]], tmp[[4]])), proj.in = LandCRS, proj.out = "+init=epsg:4326")
+    clipLimits <- auto_limits(data = expand.grid(lon = c(tmp[[1]], tmp[[2]]), lat = c(tmp[[3]], tmp[[4]])), 
+                              lon = "lon", lat = "lat",
+                              proj.in = LandCRS, proj.out = "+init=epsg:4326")
     
     # Clip the shapefiles (Clipping likely not required. Untick if it is.)
     
@@ -283,7 +290,9 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     
     if(rotate) {
       LandCRS <- gsub("lon_0=0", paste0("lon_0=", midLon), LandCRS)
-      clipLimits <- auto_limits(data = expand.grid(lon = sort(c(limits[1:2], midLon)), lat = limits[3:4]), proj.out = LandCRS)
+      clipLimits <- auto_limits(data = expand.grid(lon = sort(c(limits[1:2], midLon)), lat = limits[3:4]),
+                                lon = "lon", lat = "lat",
+                                proj.out = LandCRS)
       
       shapefiles$land <- suppressWarnings(sp::spTransform(shapefiles$land, CRSobj = suppressWarnings(sp::CRS(LandCRS))))
       
