@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert line sizes measured as points to ggplot line sizes — LS • ggOceanMaps</title>
+<title>Pick a suitable number of cores — getCores • ggOceanMaps</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Convert line sizes measured as points to ggplot line sizes — LS" />
-<meta property="og:description" content="Converts line sizes measured as points (as given by most programs such as Adobe Illustrator etc.) to ggplot font sizes" />
+<meta property="og:title" content="Pick a suitable number of cores — getCores" />
+<meta property="og:description" content="Picks maximum four cores for parallel processing" />
 
 
 
@@ -123,33 +123,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert line sizes measured as points to ggplot line sizes</h1>
+    <h1>Pick a suitable number of cores</h1>
     <small class="dont-index">Source: <a href='https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/R/internal_functions.R'><code>R/internal_functions.R</code></a></small>
-    <div class="hidden name"><code>LS.Rd</code></div>
+    <div class="hidden name"><code>getCores.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Converts line sizes measured as points (as given by most programs such as Adobe Illustrator etc.) to ggplot font sizes</p>
+    <p>Picks maximum four cores for parallel processing</p>
     </div>
 
-    <pre class="usage"><span class='fu'>LS</span>(<span class='kw'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>getCores</span>()</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>numeric vector giving the lines sizes in points</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Returns a numeric vector of lenght <code>x</code> of ggplot line sizes</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other size adjustors: 
-<code><a href='FS.html'>FS</a>()</code></p></div>
+    <p>The <a href='https://github.com/StoXProject/RstoxData/blob/master/R/Utilities.R'>StoXProject</a></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
