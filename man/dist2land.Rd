@@ -32,7 +32,7 @@ dist2land(
 
 \item{binary}{Logical indicating whether binary (TRUE = the position is in the ocean, FALSE = the position is on land) should be returned instead of distances. Speeds up the function considerably.}
 
-\item{cores}{Integer value defining how many cores should be used in the distance calculations. Parallelization speeds up the function (see \code{\link[parallel]{mclapply}}), but naturally eats up computer resources during the calculation. Set to 1 to remove parallelization.}
+\item{cores}{Integer value defining how many cores should be used in the distance calculations. Parallelization speeds up the function (see \code{parallel::mclapply}), but naturally eats up computer resources during the calculation. Set to 1 to remove parallelization.}
 
 \item{verbose}{Logical indicating whether information about the process should be returned as messages. Set to \code{FALSE} to make the function silent.}
 }
@@ -43,7 +43,7 @@ Returns a vector if \code{bind = FALSE}, otherwise a data frame. The distances a
 Calculates the closest distance to land for coordinates in a data frame
 }
 \details{
-The function calculates distances using projected coordinates and the \code{\link[rgeos:gDistance]{gDistance}} function. These distances do not consider the curvature of the Earth unless the projection of the used land shape does so (check out geosphere::dist2Line and \href{https://stackoverflow.com/a/51842756/1082004}{this SO solution if you want exact distances}). The function is fairly slow for large datasets. If you only want to use the function to remove (wrong) observations reported on land, set the \code{binary} argument to \code{TRUE}. This speeds up the calculations considerably.
+The function calculates distances using projected coordinates and the \code{rgeos::gDistance} function. These distances do not consider the curvature of the Earth unless the projection of the used land shape does so (check out geosphere::dist2Line and \href{https://stackoverflow.com/a/51842756/1082004}{this SO solution if you want exact distances}). The function is fairly slow for large datasets. If you only want to use the function to remove (wrong) observations reported on land, set the \code{binary} argument to \code{TRUE}. This speeds up the calculations considerably.
 
 The \code{dist2land} function offers parallel processing, which speeds up the calculations for large datasets. Parallel processing has not been tested under Windows yet and may not work.
 }

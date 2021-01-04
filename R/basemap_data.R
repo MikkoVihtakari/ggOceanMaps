@@ -20,6 +20,10 @@
 # limits = 60; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = TRUE
 basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = TRUE) {
   
+  # Switches and checks 
+  
+  shapefilesDefined <- FALSE
+  
   # 1. shapefiles argument dictates the used shapefile. If NULL, shapefiles are obtained from limits ####
   
   if(!is.null(shapefiles)) {
@@ -28,12 +32,33 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     
     if(class(error_test) != "try-error") {
       shapefiles <- shapefile_list(shapefiles)
+      
+      ## Load the shapefiles if download required
+      
+      if(!is.na(shapefiles$path)) {
+        tmp <- load_map_data(x = shapefiles) 
+        
+        shapefiles <- lapply(shapefiles, function(k) {
+          test <- which(names(tmp) == k)
+          
+          if(length(test) != 1) {
+            k
+          } else {
+            tmp[[test]] 
+          }
+        })
+        
+        shapefilesDefined <- TRUE
+      }
+      
     } else {
       if(any(!c("land", "glacier", "bathy") %in% names(shapefiles))) stop("Shapefiles object must be a list and contain named elements: 'land', 'glacier', 'bathy'. See Details.")
       customShapefiles <- sapply(shapefiles[c("land", "glacier", "bathy")], function(k) class(k))
       
       if(any(!customShapefiles %in% c("NULL", "SpatialPolygonsDataFrame", "SpatialPolygons"))) stop("Shapefiles elements 'land', 'glacier', and 'bathy' must either be a SpatialPolygonsDataFrame, SpatialPolygons, or NULL. See Details.")
       if(all(customShapefiles == "NULL")) stop("One of following shapefiles elements 'land', 'glacier', and 'bathy' must be a SpatialPolygonsDataFrame. See Details.")
+      
+      shapefilesDefined <- TRUE
     }
   }
   
@@ -110,7 +135,8 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
         clipLimits <- auto_limits(data = expand.grid(data.frame(lon = limits[1:2], lat = limits[3:4])), 
                                   lon = "lon", lat = "lat", 
                                   proj.in = sp::proj4string(eval(parse(text = shapefiles$land))), 
-                                  proj.out = "+init=epsg:4326")
+                                  proj.out = "+init=epsg:4326",
+                                  verbose = verbose)
         
       } else { # Limits given as decimal degrees
         
@@ -196,7 +222,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   
   # 4. Define the shapefiles to be used in the map ###
   
-  if(!exists("customShapefiles")) {
+  if(!shapefilesDefined) {
     
     if(exists("shapefile.name") & is.null(shapefiles)) shapefiles <- shapefile_list(shapefile.name)
     
@@ -306,8 +332,10 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     shapefiles$land <- clip_shapefile(shapefiles$land, limits = clipLimits$projBound, proj.limits = clipLimits$proj.out)
     
     if(glaciers) shapefiles$glacier <- clip_shapefile(shapefiles$glacier, limits = clipLimits$projBound, proj.limits = clipLimits$proj.out)
-    if(bathymetry) shapefiles$bathy <- clip_shapefile(shapefiles$bathy, limits = clipLimits$projBound, proj.limits = clipLimits$proj.out)
-    
+    if(bathymetry) {
+      shapefiles$bathy <- clip_shapefile(shapefiles$bathy, limits = clipLimits$projBound, proj.limits = clipLimits$proj.out)
+      shapefiles$bathy@data <- droplevels(shapefiles$bathy@data)
+    }
     
     # Define map limits
     

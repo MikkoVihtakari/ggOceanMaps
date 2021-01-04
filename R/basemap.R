@@ -165,6 +165,7 @@
 #' }
 #' 
 #' @import ggplot2 ggspatial sp sf
+#' @importFrom utils menu install.packages
 #' @export
 
 ## Test parameters
@@ -172,23 +173,37 @@
 
 basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, verbose = TRUE) {
   
+  # Install ggOceanMapsData if not installed
+  if (!requireNamespace("ggOceanMapsData", quietly = TRUE)) {
+    message("ggOceanMaps requires ggOceanMapsData, which is not installed. Do you want to install the package now?")
+    ret.val <- utils::menu(c("Yes", "No"), "")
+    
+    if(ret.val != 1) {
+      stop('The ggOceanMapsData package needs to be installed for ggOceanMaps to function.\nInstall the data package by running\ninstall.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org")')
+    } else {
+      utils::install.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat",
+                                                           "https://cloud.r-project.org")
+      )
+    }
+  }
+  
   # Checks ####
-
+  
   if(is.null(data) & is.null(limits) & is.null(shapefiles)) stop("One or several of the arguments limits, data and shapefiles is required.")
   if(class(legends) != "logical" | !length(legends) %in% 1:2) stop("'legends' argument has to be a logical vector of length 1 or 2. Read the explantion for the argument in ?basemap")
-
+  
   ###########
   # Data ####
-
+  
   X <- basemap_data(limits = limits, data = data, shapefiles = shapefiles, bathymetry = bathymetry, glaciers = glaciers, resolution = resolution, lon.interval = lon.interval, lat.interval = lat.interval, rotate = rotate, verbose = verbose)
-
+  
   ###########
   # Plot ####
-
+  
   ## Bathymetry data
-
+  
   if(bathymetry & !is.null(X$shapefiles$bathy)) {
-
+    
     bathy_cmd <- switch(bathy.style,
                         poly_blues = "bathy_pb",
                         poly_greys = "bathy_pg",
@@ -196,33 +211,33 @@ basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = 
                         contour_grey = "bathy_cg",
                         stop(paste("bathy.style not found"))
     )
-
+    
     bathy.legend <- ifelse(length(legends) == 1, legends, legends[1])
-
+    
     if(bathy_cmd == "bathy_cg" & is.na(bathy.border.col)) bathy.border.col <- "grey"
-
+    
     layers <- paste(map_cmd("base"), map_cmd(bathy_cmd), sep = " + ")
-
+    
   } else {
     layers <- map_cmd("base")
   }
-
+  
   ## Land
-
+  
   if (length(X$shapefiles$land) > 0) {
     layers <- paste(layers, map_cmd("land"), sep = " + ")
   }
-
+  
   ## Glaciers
-
+  
   if(glaciers & !is.null(X$shapefiles$glacier)) {
     if(length(X$shapefiles$glacier) > 0) {
       layers <- paste(layers, map_cmd("glacier"), sep = " + ")
     }
   }
-
+  
   ## Grid and definitions
-
+  
   if(X$polar.map) {
     if(projection.grid) {
       layers <- paste(layers, map_cmd("defs_polar_proj"), sep = " + ")
@@ -236,9 +251,9 @@ basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = 
       layers <- paste(layers, map_cmd("defs_rect"), sep = " + ")
     }
   }
-
+  
   ## Final plotting
-
+  
   out <- eval(parse(text=layers))
   
   attributes(out)$class <- c(attributes(out)$class, "ggOceanMaps")

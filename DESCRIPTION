@@ -1,13 +1,13 @@
 Package: ggOceanMaps
 Type: Package
 Title: Plot Data on Oceanographic Maps using 'ggplot2'
-Version: 0.5.0
-Date: 2020-07-24
+Version: 0.5.1
+Date: 2021-01-04
 Authors@R: c(person("Mikko", "Vihtakari", email = "mikko.vihtakari@hi.no",
                   role = c("aut", "cre"), 
                   comment = c(affiliation = "Institute of Marine Research", 
                   ORCID = "0000-0003-0371-4319")))
-URL: https://mikkovihtakari.github.io/ggOceanMaps
+URL: https://mikkovihtakari.github.io/ggOceanMaps/
 BugReports: https://github.com/MikkoVihtakari/ggOceanMaps/issues
 Description: Allows plotting data on bathymetric maps using 'ggplot2'. Plotting
   oceanographic spatial data is made as simple as feasible, but also flexible

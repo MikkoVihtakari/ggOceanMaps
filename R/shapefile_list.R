@@ -29,17 +29,26 @@ shapefile_list <- function(name, get.data = FALSE) {
          land = "ggOceanMapsData::arctic_land", 
          glacier = "ggOceanMapsData::arctic_glacier",
          bathy = "ggOceanMapsData::arctic_bathy",
-         crs = 3995),
+         crs = 3995,
+         path = NA),
     list(name = "AntarcticStereographic", 
          land = "ggOceanMapsData::antarctic_land",
          glacier = "ggOceanMapsData::antarctic_glacier",
          bathy = "ggOceanMapsData::antarctic_bathy",
-         crs = 3031),
+         crs = 3031,
+         path = NA),
     list(name = "DecimalDegree", 
          land = "ggOceanMapsData::dd_land",
          glacier = "ggOceanMapsData::dd_glacier",
          bathy = "ggOceanMapsData::dd_bathy",
-         crs = 4326)
+         crs = 4326,
+         path = NA),
+    list(name = "Svalbard",
+         land = "svalbard_land",
+         glacier = "svalbard_glacier",
+         bathy = "svalbard_bathy",
+         crs = 32633,
+         path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/svalbard.rda")
   )
 
   names(alternatives) <- sapply(alternatives, function(k) k$name)

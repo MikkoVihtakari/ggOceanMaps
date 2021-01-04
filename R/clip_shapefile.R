@@ -3,10 +3,10 @@
 #' @param x Original shape file to be clipped. Required. Must contain \code{\link[sp:is.projected]{proj4string}} information.
 #' @param limits The constraining area used to clip \code{x}. Required. Either a numeric vector of length 4 or a \link[sp]{SpatialPolygons} object. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. The \link[sp]{SpatialPolygons} object must contain \code{\link[sp:is.projected]{proj4string}} information. See details.
 #' @param proj.limits The \code{\link[sp:is.projected]{proj4string}} projection attributes for \code{limits}. Defaults to decimal degrees (see **Usage**).
-#' @param simplify Should the \code{x} geometry be simplified before clipping? Useful to make the function faster for large shape files. Uses \code{\link[rgeos:gSimplify]{gSimplify}} function.
-#' @param tol Numerical tolerance value to be used for simplification. See \code{\link[rgeos:gSimplify]{gSimplify}}.
+#' @param simplify Should the \code{x} geometry be simplified before clipping? Useful to make the function faster for large shape files. Uses \code{rgeos::gSimplify} function.
+#' @param tol Numerical tolerance value to be used for simplification. See \code{?rgeos::gSimplify}.
 #' @param return.boundary logical. If \code{TRUE} returns the clip boundary together with the shapefile
-#' @details The function uses the \code{\link[rgeos:gIntersection]{gIntersection}} function to clip smaller \link[sp]{SpatialPolygons} from larger ones. The clip area is constrained by either a numeric vector or \link[sp]{SpatialPolygons} object in the \code{limits} argument. One of these arguments must be given. Defining \code{limits} by a \link[sp]{SpatialPolygons} object gives greater freedom for the clip area as the area does not have to be rectangular.
+#' @details The function uses the \code{rgeos::gIntersection} function to clip smaller \link[sp]{SpatialPolygons} from larger ones. The clip area is constrained by either a numeric vector or \link[sp]{SpatialPolygons} object in the \code{limits} argument. One of these arguments must be given. Defining \code{limits} by a \link[sp]{SpatialPolygons} object gives greater freedom for the clip area as the area does not have to be rectangular.
 #' @keywords internal
 #' @family create shapefiles
 #' @import sp rgdal
