@@ -175,16 +175,18 @@ basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = 
   
   # Install ggOceanMapsData if not installed
   if (!requireNamespace("ggOceanMapsData", quietly = TRUE)) {
-    message("ggOceanMaps requires ggOceanMapsData, which is not installed. Do you want to install the package now?")
-    ret.val <- utils::menu(c("Yes", "No"), "")
+    # message("ggOceanMaps requires ggOceanMapsData, which is not installed. Do you want to install the package now?")
+    # ret.val <- utils::menu(c("Yes", "No"), "")
+    # 
+    # if(ret.val != 1) {
+    #   stop('The ggOceanMapsData package needs to be installed for ggOceanMaps to function.\nInstall the data package by running\ninstall.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org")')
+    # } else {
+    #   utils::install.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat",
+    #                                                        "https://cloud.r-project.org")
+    #   )
+    # }
     
-    if(ret.val != 1) {
-      stop('The ggOceanMapsData package needs to be installed for ggOceanMaps to function.\nInstall the data package by running\ninstall.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org")')
-    } else {
-      utils::install.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat",
-                                                           "https://cloud.r-project.org")
-      )
-    }
+    stop('The ggOceanMapsData package needs to be installed for ggOceanMaps to function.\nInstall the data package by running\ninstall.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org")\nOR\ndevtools::install_github("MikkoVihtakari/ggOceanMapsData")')
   }
   
   # Checks ####
@@ -269,15 +271,3 @@ basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = 
   
   ## END ####
 }
-
-# ggplot2::ggplot() + ggspatial::layer_spatial(data = X$shapefiles$bathy, aes(fill = depth), show.legend = bathy.legend, color = bathy.border.col, size = bathy.size) + ggspatial::layer_spatial(data = X$shapefiles$land, fill = land.col, color = land.border.col, size = land.size)
-#
-# # scale_fill_manual(name = \"Depth (m)\", values = colorRampPalette(c(\"#F7FBFF\", \"#DEEBF7\", \"#9ECAE1\", \"#4292C6\", \"#08306B\"))(nlevels(X$shapefiles$bathy@data$depth)), guide =         if(bathy.legend) {           guide_legend(order = 1, override.aes = list(colour = NA))         } else {           FALSE         }) +
-#
-#
-#
-#
-#  + {     if(!is.na(grid.col)) ggspatial::geom_spatial_path(data = X$LonGridLines, aes(x = lon, y = lat), crs = 4326, color = grid.col, size = grid.size)     } + {
-#
-#
-#  if(!is.na(grid.col)) ggspatial::geom_spatial_path(data = X$LatGridLines, aes(x = lon, y = lat), crs = 4326, color = grid.col, size = grid.size)     } +     ggspatial::geom_spatial_path(data = X$LatLimitLine, aes(x = lon, y = lat), crs = 4326, color = land.border.col, size = land.size) +     coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], expand = FALSE, crs = X$proj) +     theme_void(base_size = base_size) +     theme(legend.position = legend.position,           legend.margin = margin(t = 0.2, b = 0, r = 0.2, unit = \"cm\")     )
