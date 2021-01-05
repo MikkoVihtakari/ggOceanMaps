@@ -40,13 +40,10 @@ vignettes/*.pdf
 inst/doc
 
 # README.html
-
 README.html
 
 # MAC specific
-
 .DS_Store
 
 # Rstudio project
-
 *.Rproj
