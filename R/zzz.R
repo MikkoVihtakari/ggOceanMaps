@@ -17,12 +17,12 @@
   # Specify the download folder
   
   if(is.null(.ggOceanMapsenv$datapath)) {
-    options(ggOceanMaps.datapath = paste(R.home(), "library", "ggOceanMapsLargeData", sep = "/"))
+    options(ggOceanMaps.datapath = paste(getwd(), "ggOceanMapsLargeData", sep = "/"))
     
     msg <- paste0("Setting data download folder to ", getOption("ggOceanMaps.datapath"),
                  ". To change the default path, add following lines to your .Rprofile file: {",
                  ".ggOceanMapsenv <- new.env(); ",
-                 ".ggOceanMapsenv$datapath <<- 'YourCustomPath'}",
+                 ".ggOceanMapsenv$datapath <- 'YourCustomPath'}",
                  ". You can use usethis::edit_r_profile() to edit the file.")
   
     packageStartupMessage(paste(strwrap(msg), collapse= "\n"))

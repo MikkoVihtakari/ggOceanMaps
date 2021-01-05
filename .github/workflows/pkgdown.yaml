@@ -33,7 +33,8 @@ jobs:
           utils::install.packages("ggOceanMapsData", 
           repos = c("https://mikkovihtakari.github.io/drat",
           "https://cloud.r-project.org"))
-          remotes::install_deps(dependencies = TRUE)
+          install.packages("rgdal")
+          # remotes::install_deps(dependencies = TRUE)
           remotes::install_dev("pkgdown")
         shell: Rscript {0}
 
