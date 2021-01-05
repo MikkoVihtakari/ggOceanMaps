@@ -140,10 +140,10 @@ dt <- data.frame(lon = c(-150, 150), lat = c(60, 90))
 basemap(data = dt, bathymetry = TRUE) +
 geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
 }
-# Note that writing out data = dt is required because there are multiple
-# underlying ggplot layers plotted already:
 
 \dontrun{
+# Note that writing out data = dt is required because there are multiple
+# underlying ggplot layers plotted already:
 basemap(data = dt) +
 geom_spatial_point(dt, aes(x = lon, y = lat), color = "red")
 #> Error: `mapping` must be created by `aes()`

@@ -8,6 +8,7 @@
 #' @param resolution See \code{\link{basemap}}
 #' @param lon.interval,lat.interval See \code{\link{basemap}}
 #' @param expand.factor See \code{\link{auto_limits}}
+#' @param rotate See \code{\link{basemap}}
 #' @param verbose See \code{\link{basemap}}
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function. Common users do not need to worry about these details.
 #' @keywords internal

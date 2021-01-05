@@ -29,5 +29,12 @@ Useful links:
 \author{
 \strong{Maintainer}: Mikko Vihtakari \email{mikko.vihtakari@hi.no} (\href{https://orcid.org/0000-0003-0371-4319}{ORCID}) (Institute of Marine Research)
 
+Other contributors:
+\itemize{
+  \item Hadley Wickham [contributor]
+  \item Simon O'Hanlon [contributor]
+  \item Roger Bivand [contributor]
+}
+
 }
 \keyword{internal}

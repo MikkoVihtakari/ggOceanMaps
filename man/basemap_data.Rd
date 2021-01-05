@@ -35,6 +35,8 @@ basemap_data(
 
 \item{expand.factor}{See \code{\link{auto_limits}}}
 
+\item{rotate}{See \code{\link{basemap}}}
+
 \item{verbose}{See \code{\link{basemap}}}
 }
 \description{
