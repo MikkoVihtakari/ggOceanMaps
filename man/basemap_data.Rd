@@ -39,6 +39,9 @@ basemap_data(
 
 \item{verbose}{See \code{\link{basemap}}}
 }
+\value{
+A list of class \code{basemapData} containing information required for plotting a \code{\link{basemap}}.
+}
 \description{
 Internal function to create a \code{basemapData} object for \code{\link{basemap}}
 }

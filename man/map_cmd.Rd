@@ -11,6 +11,9 @@ map_cmd(command, alternative = FALSE)
 
 \item{alternative}{logical to return alternative formmatting in certain cases. Used to reduce \code{if}-\code{else} statements in \code{\link{basemap}}.}
 }
+\value{
+A character string containing a ggplot2 plotting command. Use \code{eval(parse(text=...))} to plot the string.
+}
 \description{
 An internal function to make \code{\link{basemap}} code more readable
 }

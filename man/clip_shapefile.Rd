@@ -26,6 +26,9 @@ clip_shapefile(
 
 \item{return.boundary}{logical. If \code{TRUE} returns the clip boundary together with the shapefile}
 }
+\value{
+Clipped \code{\link[sp]{SpatialPolygons}} object. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
+}
 \description{
 Clips an area from a larger shape file (\link[sp]{SpatialPolygons}).
 }

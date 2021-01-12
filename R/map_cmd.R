@@ -3,6 +3,7 @@
 #' @param command basemap layer to be added
 #' @param alternative logical to return alternative formmatting in certain cases. Used to reduce \code{if}-\code{else} statements in \code{\link{basemap}}.
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function. Common users do not need to worry about these details. Basemap elements can added together using this function, \code{\link[base]{parse}} and \code{\link[base]{eval}}.
+#' @return A character string containing a ggplot2 plotting command. Use \code{eval(parse(text=...))} to plot the string. 
 #' @examples ## An example for utm map without glaciers or bathymetry
 #' \dontrun{eval(parse(text=paste(map_cmd("base"), map_cmd("land_utm"),
 #' map_cmd("grid_utm"), map_cmd("defs_utm"), sep = "+")))}

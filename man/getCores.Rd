@@ -6,6 +6,9 @@
 \usage{
 getCores()
 }
+\value{
+Integer of suitable number of cores
+}
 \description{
 Picks maximum four cores for parallel processing
 }

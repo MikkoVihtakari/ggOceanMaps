@@ -25,18 +25,29 @@
 #' @param projection.grid Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.
 #' @param verbose Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.
 #' @import ggplot2 ggspatial
+#' @return Returns a \link[ggplot2]{ggplot} map, which can be assigned to an object and modified as any ggplot object.
 #' @family basemap functions
 #' @author Mikko Vihtakari
 #' @examples 
 #' 
-#' \donttest{
 #' dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
-#' qmap(dt, color = I("red")) # Set color
-#' qmap(dt, color = var) # Map color
+#' 
+#' # Set color
+#' 
+#' if(requireNamespace("ggOceanMapsData")) {
+#' qmap(dt, color = I("red")) 
+#' }
+#' # Map color
+#' \donttest{
+#' qmap(dt, color = var) 
+#' }
 #' 
 #' dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
+#' 
+#' if(requireNamespace("ggOceanMapsData")) {
 #' qmap(dt, rotate = TRUE)
 #' }
+#' 
 #' @export
 
 # data = dt; x = NULL; y = NULL; geom = "point"; limits = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; rotate = TRUE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = FALSE

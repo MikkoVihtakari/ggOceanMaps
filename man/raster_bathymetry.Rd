@@ -39,7 +39,7 @@ Note that the size of the output is heavily influenced by the number of depth co
 }
 \references{
 GEBCO Compilation Group (2019) GEBCO 2019 15-arcsecond grid (doi:10.5285/836f016a-33be-6ddc-e053-6c86abc0788e). URL: \url{https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html}.
-ETOPO1 1 Arc-Minute Global Relief Model. URL: \url{https://doi.org/10.7289/V5C8276M}.
+ETOPO1 1 Arc-Minute Global Relief Model. URL: \url{https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf}.
 }
 \seealso{
 Other create shapefiles: 

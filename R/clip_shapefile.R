@@ -7,6 +7,7 @@
 #' @param tol Numerical tolerance value to be used for simplification. See \code{?rgeos::gSimplify}.
 #' @param return.boundary logical. If \code{TRUE} returns the clip boundary together with the shapefile
 #' @details The function uses the \code{rgeos::gIntersection} function to clip smaller \link[sp]{SpatialPolygons} from larger ones. The clip area is constrained by either a numeric vector or \link[sp]{SpatialPolygons} object in the \code{limits} argument. One of these arguments must be given. Defining \code{limits} by a \link[sp]{SpatialPolygons} object gives greater freedom for the clip area as the area does not have to be rectangular.
+#' @return Clipped \code{\link[sp]{SpatialPolygons}} object. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
 #' @keywords internal
 #' @family create shapefiles
 #' @import sp rgdal

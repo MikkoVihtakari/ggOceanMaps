@@ -4,6 +4,7 @@
 #' @param grid.size Numeric value specifying the width of grid lines.
 #' @param ... additional arguments passed to \code{\link[ggplot2]{ggtheme}}.
 #' @import ggplot2
+#' @return A ggplot2 theme layer.
 #' @family customize shapefiles
 #' @export
 

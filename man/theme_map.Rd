@@ -13,6 +13,9 @@ theme_map(..., grid.col, grid.size)
 
 \item{grid.size}{Numeric value specifying the width of grid lines.}
 }
+\value{
+A ggplot2 theme layer.
+}
 \description{
 A ggplot2 theme for maps.
 }

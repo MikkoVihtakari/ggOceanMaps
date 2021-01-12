@@ -3,6 +3,7 @@
 #' @param x An object from \code{\link{shapefile_list}}.
 #' @param force Logical indicating whether to download the file even though it exists. Useful when files in the \href{https://github.com/MikkoVihtakari/ggOceanMapsLargeData}{Github repository have been changed}. Overwrites the old file. 
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function. Common users do not need to worry about these details.
+#' @return A list of \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrames}}
 #' @keywords internal
 #' @export
 #' @importFrom utils menu download.file

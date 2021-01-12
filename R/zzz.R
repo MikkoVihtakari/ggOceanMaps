@@ -17,13 +17,18 @@
   # Specify the download folder
   
   if(is.null(.ggOceanMapsenv$datapath)) {
-    options(ggOceanMaps.datapath = paste(getwd(), "ggOceanMapsLargeData", sep = "/"))
+    options(ggOceanMaps.datapath = tempdir())
     
-    msg <- paste0("Setting data download folder to ", getOption("ggOceanMaps.datapath"),
-                 ". To change the default path, add following lines to your .Rprofile file: {",
+    msg <- paste0("Setting data download folder to a temporary folder ", 
+                  getOption("ggOceanMaps.datapath"),
+                 ". This means that any downloaded map data need to be downloaded again when you restart R",
+                 ". To avoid this problem, change the default path to a permanent folder on your computer", 
+                 ". Add following lines to your .Rprofile file: {",
                  ".ggOceanMapsenv <- new.env(); ",
                  ".ggOceanMapsenv$datapath <- 'YourCustomPath'}",
-                 ". You can use usethis::edit_r_profile() to edit the file.")
+                 ". You can use usethis::edit_r_profile() to edit the file.", 
+                 " paste(R.home(), 'library', 'ggOceanMapsLargeData', sep = '/') ",
+                 "would make the folder in your R package location. Might require administrative rights.")
   
     packageStartupMessage(paste(strwrap(msg), collapse= "\n"))
     
@@ -31,7 +36,8 @@
     options(ggOceanMaps.datapath = .ggOceanMapsenv$datapath)
     
     msg <- paste0("Using ", getOption("ggOceanMaps.datapath"),
-                  " as data download folder.")
+                  " as data download folder. ",
+                  "This folder is customly defined and does not require downloading the detailed map data again.")
     
     packageStartupMessage(paste(strwrap(msg), collapse= "\n"))
     

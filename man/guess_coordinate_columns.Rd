@@ -11,6 +11,9 @@ guess_coordinate_columns(data, lon = NULL, lat = NULL)
 
 \item{lon, lat}{Character defining the name of the longitude and latitude columns in \code{data}. Use \code{NULL} to guess the longitude and/or latitude columns in \code{x}.}
 }
+\value{
+A named vector of colummn names.
+}
 \description{
 An internal function to make \code{\link{basemap}} code more readable
 }

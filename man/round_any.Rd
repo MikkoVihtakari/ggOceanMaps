@@ -11,8 +11,10 @@ round_any(x, accuracy, f = round)
 
 \item{accuracy}{number to round to; for POSIXct objects, a number of seconds}
 
-\item{f}{rounding function: \code{\link{floor}}, \code{\link{ceiling}} or
-\code{\link{round}}}
+\item{f}{rounding function: \code{\link{floor}}, \code{\link{ceiling}} or \code{\link{round}}}
+}
+\value{
+Rounded numeric vector
 }
 \description{
 Round to multiple of any number

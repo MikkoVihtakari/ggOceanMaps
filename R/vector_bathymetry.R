@@ -122,6 +122,7 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
 #' @param x SpatialPolygonsDataFrame
 #' @param k The \code{smoothness} parameter in \code{\link[smoothr]{smooth_ksmooth}}
 #' @param N The \code{n} parameter in \code{\link[smoothr]{smooth_ksmooth}}
+#' @return Smoothed \code{SpatialPolygonsDataFrame}
 #' @keywords internal
 #' @import smoothr
 #' @export

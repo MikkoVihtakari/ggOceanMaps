@@ -3,6 +3,7 @@
 #' @param data Dataframe containing data for which the limits should be calculated.
 #' @param lon,lat Character defining the name of the longitude and latitude columns in \code{data}. Use \code{NULL} to guess the longitude and/or latitude columns in \code{x}.
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function.
+#' @return A named vector of colummn names. 
 #' @keywords internal
 #' @export
 #' @author Mikko Vihtakari

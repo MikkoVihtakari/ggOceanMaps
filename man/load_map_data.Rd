@@ -11,6 +11,9 @@ load_map_data(x, force = FALSE)
 
 \item{force}{Logical indicating whether to download the file even though it exists. Useful when files in the \href{https://github.com/MikkoVihtakari/ggOceanMapsLargeData}{Github repository have been changed}. Overwrites the old file.}
 }
+\value{
+A list of \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrames}}
+}
 \description{
 Internal function to load large shapefile objects. Downloads the files if they are not found \code{getOption("ggOceanMaps.datapath")}
 }

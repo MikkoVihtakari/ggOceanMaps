@@ -13,6 +13,9 @@ ksmooth_polys(x, k, N)
 
 \item{N}{The \code{n} parameter in \code{\link[smoothr]{smooth_ksmooth}}}
 }
+\value{
+Smoothed \code{SpatialPolygonsDataFrame}
+}
 \description{
 Wrapper to \code{\link[smoothr]{smooth_ksmooth}} SpatialPolygonsDataFrames
 }

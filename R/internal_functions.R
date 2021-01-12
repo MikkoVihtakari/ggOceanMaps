@@ -22,6 +22,7 @@ LS <- function(x) x/2.13
 #' @description Selects y'th element of each vector from a list
 #' @param x list
 #' @param y number of element. Must be integer
+#' @return The selected element from the list
 #' @keywords internal
 #' @export
 #'
@@ -30,8 +31,8 @@ select_element <- function(x,y) sapply(x, "[", y)
 #' @title Round to multiple of any number
 #' @param x numeric vector to round
 #' @param accuracy number to round to; for POSIXct objects, a number of seconds
-#' @param f rounding function: \code{\link{floor}}, \code{\link{ceiling}} or
-#'  \code{\link{round}}
+#' @param f rounding function: \code{\link{floor}}, \code{\link{ceiling}} or \code{\link{round}}
+#' @return Rounded numeric vector
 #' @keywords internal
 #' @author Hadley Wickham
 #' @export
@@ -43,6 +44,7 @@ round_any <- function(x, accuracy, f = round) {
 #' @title Return function output quietly
 #' @description Returns function output without printed \code{\link{cat}} messages
 #' @param x function
+#' @return Output of \code{x}
 #' @keywords internal
 #' @author Hadley Wickham
 #' @export
@@ -56,6 +58,7 @@ quiet <- function(x) {
 #' @title Convert decimal degree values to angular degrees
 #' @description Converts decimal degree values to angular degrees. Used in decimal degree limit calculations.
 #' @param x numeric to be converted
+#' @return A vector of angular degrees
 #' @keywords internal
 #' @author Mikko Vihtakari
 #' @family degree converters
@@ -68,6 +71,7 @@ dd_to_deg <- function(x) {
 #' @title Convert angular degrees to decimal degree values
 #' @description Converts angular degree values to decimal degrees. Used in decimal degree limit calculations.
 #' @param x numeric to be converted
+#' @return A vector of decimal degrees
 #' @keywords internal
 #' @author Mikko Vihtakari
 #' @family degree converters
@@ -80,6 +84,7 @@ deg_to_dd <- function(x) {
 
 #' @title Pick a suitable number of cores
 #' @description Picks maximum four cores for parallel processing
+#' @return Integer of suitable number of cores
 #' @keywords internal
 #' @importFrom parallel detectCores
 #' @author The \href{https://github.com/StoXProject/RstoxData/blob/master/R/Utilities.R}{StoXProject}

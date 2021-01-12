@@ -11,6 +11,7 @@
 #' @param rotate See \code{\link{basemap}}
 #' @param verbose See \code{\link{basemap}}
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function. Common users do not need to worry about these details.
+#' @return A list of class \code{basemapData} containing information required for plotting a \code{\link{basemap}}.
 #' @keywords internal
 #' @export
 #' @import sp sf raster rgeos
@@ -18,14 +19,15 @@
 #' @seealso \code{\link{basemap}}
 
 # Test paramters
-# limits = 60; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = TRUE
+# limits = c(-75, 20, -50, -75)
+# limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE; verbose = TRUE
 basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = TRUE) {
   
-  # Switches and checks 
+  # Switches and checks ####
   
   shapefilesDefined <- FALSE
   
-  # 1. shapefiles argument dictates the used shapefile. If NULL, shapefiles are obtained from limits ####
+  # 1. shapefiles argument dictates the used shapefile. If NULL, shapefiles are obtained from limits ###
   
   if(!is.null(shapefiles)) {
     
@@ -252,7 +254,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   
   LandCRS <- sp::proj4string(shapefiles$land)
   
-  # 5. Crop and rotate shapefiles if needed ####
+  # 5. Crop and rotate shapefiles if needed ###
   
   if(is.null(limits)) { # For cases when limits and data are not defined
     
@@ -390,9 +392,14 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     
     mapGrid <- list(lon.grid.lines = LonGridLines, lat.grid.lines = LatGridLines, lat.limit.line = LatLimitLine)
     
-    
   } else {
-    tmp <- sort(c(round_any(clipLimits$ddLimits[3], 10, floor), ifelse(clipLimits$ddLimits[4] > 0, 90, -90)))
+    tmp <- sort(c(
+      ifelse(clipLimits$ddLimits[3] > 0, 
+             round_any(clipLimits$ddLimits[3], 10, floor), round_any(clipLimits$ddLimits[3], 10, ceiling)
+      ), 
+      ifelse(clipLimits$ddLimits[4] > 0, 90, -90)
+    ))
+    
     lat.breaks <- seq(tmp[1], tmp[2], lat.interval)
     lon.breaks <- unique(c(seq(0, 180, lon.interval), seq(-180, 0, lon.interval)))
     mapGrid <- list(lon.breaks = lon.breaks, lat.breaks = lat.breaks)

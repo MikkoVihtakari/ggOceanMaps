@@ -9,6 +9,9 @@ dd_to_deg(x)
 \arguments{
 \item{x}{numeric to be converted}
 }
+\value{
+A vector of angular degrees
+}
 \description{
 Converts decimal degree values to angular degrees. Used in decimal degree limit calculations.
 }

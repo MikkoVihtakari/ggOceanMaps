@@ -11,6 +11,9 @@ select_element(x, y)
 
 \item{y}{number of element. Must be integer}
 }
+\value{
+The selected element from the list
+}
 \description{
 Selects y'th element of each vector from a list
 }
