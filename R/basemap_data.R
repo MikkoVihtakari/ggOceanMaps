@@ -348,6 +348,13 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   
   # 6. Define the grid lines ####
   
+  ## A quick fix. Improve later
+  
+  if(exists("clipLimits")) {
+    tmp <- sp::spTransform(clipLimits$projBound, sp::CRS(SRS_string = "EPSG:4326"))@bbox
+    clipLimits$ddLimits <- unname(c(sort(tmp[1,]), sort(tmp[2,])))
+  }
+  
   ## Define intervals if not specified
   
   if(is.null(lat.interval)) {
@@ -393,14 +400,14 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     mapGrid <- list(lon.grid.lines = LonGridLines, lat.grid.lines = LatGridLines, lat.limit.line = LatLimitLine)
     
   } else {
-    tmp <- sort(c(
-      ifelse(clipLimits$ddLimits[3] > 0, 
-             round_any(clipLimits$ddLimits[3], 10, floor), round_any(clipLimits$ddLimits[3], 10, ceiling)
-      ), 
-      ifelse(clipLimits$ddLimits[4] > 0, 90, -90)
-    ))
     
-    lat.breaks <- seq(tmp[1], tmp[2], lat.interval)
+    minLat <- min(clipLimits$ddLimits[3:4])
+    maxLat <- max(clipLimits$ddLimits[3:4])
+    
+    minLat <- ifelse(minLat < 0, -90, round_any(minLat, 10, floor))
+    maxLat <- ifelse(maxLat > 0, 90, round_any(maxLat, 10, ceiling))
+    
+    lat.breaks <- seq(minLat, maxLat, lat.interval)
     lon.breaks <- unique(c(seq(0, 180, lon.interval), seq(-180, 0, lon.interval)))
     mapGrid <- list(lon.breaks = lon.breaks, lat.breaks = lat.breaks)
   }
