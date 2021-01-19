@@ -19,7 +19,7 @@
 #' @seealso \code{\link{basemap}}
 
 # Test paramters
-# limits = c(-75, 20, -50, -75)
+# limits = c(30, 50, 60, 80)
 # limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE; verbose = TRUE
 basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = TRUE) {
   
@@ -351,8 +351,10 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   ## A quick fix. Improve later
   
   if(exists("clipLimits")) {
+    if(abs(clipLimits$ddLimits[4]) != 90) {
     tmp <- sp::spTransform(clipLimits$projBound, sp::CRS(SRS_string = "EPSG:4326"))@bbox
     clipLimits$ddLimits <- unname(c(sort(tmp[1,]), sort(tmp[2,])))
+    }
   }
   
   ## Define intervals if not specified

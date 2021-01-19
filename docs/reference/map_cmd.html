@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.7</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/MikkoVihtakari/ggOceanMaps/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,7 +132,7 @@
     <p>An internal function to make <code><a href='basemap.html'>basemap</a></code> code more readable</p>
     </div>
 
-    <pre class="usage"><span class='fu'>map_cmd</span>(<span class='no'>command</span>, <span class='kw'>alternative</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>map_cmd</span><span class='op'>(</span><span class='va'>command</span>, alternative <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,17 +147,24 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A character string containing a ggplot2 plotting command. Use <code><a href='https://rdrr.io/r/base/eval.html'>eval(parse(text=...))</a></code> to plot the string.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This is an internal function, which is automatically run by the <code><a href='basemap.html'>basemap</a></code> function. Common users do not need to worry about these details. Basemap elements can added together using this function, <code><a href='https://rdrr.io/r/base/parse.html'>parse</a></code> and <code><a href='https://rdrr.io/r/base/eval.html'>eval</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='basemap.html'>basemap</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Mikko Vihtakari</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## An example for utm map without glaciers or bathymetry</span>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) <span class='fu'><a href='https://rdrr.io/r/base/eval.html'>eval</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/parse.html'>parse</a></span>(<span class='kw'>text</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'>map_cmd</span>(<span class='st'>"base"</span>), <span class='fu'>map_cmd</span>(<span class='st'>"land_utm"</span>),
-<span class='fu'>map_cmd</span>(<span class='st'>"grid_utm"</span>), <span class='fu'>map_cmd</span>(<span class='st'>"defs_utm"</span>), <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"+"</span>)))</div></pre>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/eval.html'>eval</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/parse.html'>parse</a></span><span class='op'>(</span>text<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'>map_cmd</span><span class='op'>(</span><span class='st'>"base"</span><span class='op'>)</span>, <span class='fu'>map_cmd</span><span class='op'>(</span><span class='st'>"land_utm"</span><span class='op'>)</span>,
+<span class='fu'>map_cmd</span><span class='op'>(</span><span class='st'>"grid_utm"</span><span class='op'>)</span>, <span class='fu'>map_cmd</span><span class='op'>(</span><span class='st'>"defs_utm"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>"+"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -173,7 +180,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -72,13 +72,24 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
     }
     
     projLims <- c(range(x[["lon.proj"]], na.rm = TRUE), range(x[["lat.proj"]], na.rm = TRUE))
+    
     proj.in <- attributes(x)$proj.in
     proj.out <- attributes(x)$proj.out
-  
-    } else  {
-      
+    
+  } else if(!grepl("proj=longlat", suppressWarnings(sp::CRS(proj.out)))) {
+    projLims <- c(range(x[[lon]], na.rm = TRUE), range(x[[lat]], na.rm = TRUE))
+    
+    tmp <- suppressWarnings(sp::SpatialPoints(x[c(lon, lat)], proj4string = sp::CRS(proj.out)))
+    tmp <- sp::spTransform(tmp, sp::CRS(SRS_string = "EPSG:4326"))@bbox  
+    decLims <- unname(c(sort(tmp[1,]), sort(tmp[2,])))
+    
+    proj.in <- attributes(x)$proj.in
+    proj.out <- attributes(x)$proj.out
+    
+  } else {
     decLims <- c(deg_to_dd(range(dd_to_deg(x[["lon.proj"]]), na.rm = TRUE)), range(x[["lat.proj"]], na.rm = TRUE))
     projLims <- c(range(x[[lon]], na.rm = TRUE), range(x[[lat]], na.rm = TRUE))
+    
     proj.in <- attributes(x)$proj.out
     proj.out <- attributes(x)$proj.in
   }
@@ -115,7 +126,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   # decxRange <- sp::spTransform(projxRange, sp::CRS(proj.in))
   # decyRange <- sp::spTransform(projyRange, sp::CRS(proj.in))
   
-  decBoundNodes <- sp::spTransform(projBoundNodes, suppressWarnings(sp::CRS(proj.in)))
+  decBoundNodes <- sp::spTransform(projBoundNodes, suppressWarnings(sp::CRS(SRS_string = "EPSG:4326"))) # proj.in
   
   if(!identical(sign(projLims[3]), sign(projLims[4]))) { # Spans across the pole
     decLims <- c(raster::extent(decBoundNodes)[1:3], 90)

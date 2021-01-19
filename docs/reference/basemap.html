@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.7</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/MikkoVihtakari/ggOceanMaps/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,33 +132,33 @@
     <p>Creates a ggplot2 basemap for further plotting of variables.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>basemap</span>(
-  <span class='kw'>limits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>shapefiles</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>bathymetry</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>glaciers</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>resolution</span> <span class='kw'>=</span> <span class='st'>"low"</span>,
-  <span class='kw'>rotate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>legends</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>legend.position</span> <span class='kw'>=</span> <span class='st'>"right"</span>,
-  <span class='kw'>lon.interval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>lat.interval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>bathy.style</span> <span class='kw'>=</span> <span class='st'>"poly_blues"</span>,
-  <span class='kw'>bathy.border.col</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>bathy.size</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>land.col</span> <span class='kw'>=</span> <span class='st'>"grey60"</span>,
-  <span class='kw'>land.border.col</span> <span class='kw'>=</span> <span class='st'>"black"</span>,
-  <span class='kw'>land.size</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>gla.col</span> <span class='kw'>=</span> <span class='st'>"grey95"</span>,
-  <span class='kw'>gla.border.col</span> <span class='kw'>=</span> <span class='st'>"black"</span>,
-  <span class='kw'>gla.size</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>grid.col</span> <span class='kw'>=</span> <span class='st'>"grey70"</span>,
-  <span class='kw'>grid.size</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>base_size</span> <span class='kw'>=</span> <span class='fl'>11</span>,
-  <span class='kw'>projection.grid</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>basemap</span><span class='op'>(</span>
+  limits <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  shapefiles <span class='op'>=</span> <span class='cn'>NULL</span>,
+  bathymetry <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  glaciers <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  resolution <span class='op'>=</span> <span class='st'>"low"</span>,
+  rotate <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  legends <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  legend.position <span class='op'>=</span> <span class='st'>"right"</span>,
+  lon.interval <span class='op'>=</span> <span class='cn'>NULL</span>,
+  lat.interval <span class='op'>=</span> <span class='cn'>NULL</span>,
+  bathy.style <span class='op'>=</span> <span class='st'>"poly_blues"</span>,
+  bathy.border.col <span class='op'>=</span> <span class='cn'>NA</span>,
+  bathy.size <span class='op'>=</span> <span class='fl'>0.1</span>,
+  land.col <span class='op'>=</span> <span class='st'>"grey60"</span>,
+  land.border.col <span class='op'>=</span> <span class='st'>"black"</span>,
+  land.size <span class='op'>=</span> <span class='fl'>0.1</span>,
+  gla.col <span class='op'>=</span> <span class='st'>"grey95"</span>,
+  gla.border.col <span class='op'>=</span> <span class='st'>"black"</span>,
+  gla.size <span class='op'>=</span> <span class='fl'>0.1</span>,
+  grid.col <span class='op'>=</span> <span class='st'>"grey70"</span>,
+  grid.size <span class='op'>=</span> <span class='fl'>0.1</span>,
+  base_size <span class='op'>=</span> <span class='fl'>11</span>,
+  projection.grid <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -246,7 +246,7 @@
     <p>Returns a <a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a> map, which can be assigned to an object and modified as any ggplot object.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function uses <a href='https://ggplot2.tidyverse.org/reference/ggplot2-package.html'>ggplot2</a>, <a href='https://rdrr.io/pkg/ggspatial/man/ggspatial-package.html'>ggspatial</a>, GIS packages of R, and shapefiles to plot maps of the world's oceans.</p>
+    <p>The function uses <a href='https://ggplot2.tidyverse.org/reference/ggplot2-package.html'>ggplot2</a>, <a href='https://paleolimbot.github.io/ggspatial/reference/ggspatial-package.html'>ggspatial</a>, GIS packages of R, and shapefiles to plot maps of the world's oceans.</p>
 <p><strong>Projections</strong></p>
 <p>If the <code>shapefiles</code> are not specified, the function uses either the <code>limits</code> or <code>data</code> arguments to decide which projection to use. Up-to-date conditions are defined in <code><a href='define_shapefiles.html'>define_shapefiles</a></code> and <code><a href='shapefile_list.html'>shapefile_list</a></code> functions. At the time of writing, the function uses three different projections (given as <a href='https://epsg.io/'>EPSG codes</a>)</p><ul>
 <li><p><strong>3995</strong> WGS 84 / Arctic Polar Stereographic. Called "ArcticStereographic". For max latitude (<code>limits[4]</code>) &gt;= 60 (if min latitude (<code>limits[3]</code>) &gt;= 30), and single integer latitudes &gt;= 30 and &lt;= 89.</p></li>
@@ -275,7 +275,7 @@
     <p>Note that if you use this function to generate maps for a publication, it is advised to cite the underlying data. The spatial data used by this function have been acquired from following sources:</p><ul>
 <li><p><strong>Land polygons.</strong> <a href='http://www.naturalearthdata.com/downloads/10m-physical-vectors/'>Natural Earth Data</a> 1:10m Physical Vectors with the Land and Minor Island datasets combined. Distributed under the <a href='https://creativecommons.org/publicdomain/'>CC Public Domain license</a> (<a href='http://www.naturalearthdata.com/about/terms-of-use/'>terms of use</a>).</p></li>
 <li><p><strong>Glacier polygons.</strong> <a href='http://www.naturalearthdata.com/downloads/10m-physical-vectors/'>Natural Earth Data</a> 1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice Shelves datasets combined. Distributed under the <a href='https://creativecommons.org/publicdomain/'>CC Public Domain license</a> (<a href='http://www.naturalearthdata.com/about/terms-of-use/'>terms of use</a>)</p></li>
-<li><p><strong>Bathymetry.</strong> <a href='https://doi.org/10.7289/V5C8276M'>Amante, C. and B.W. Eakins, 2009. ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National Geophysical Data Center, NOAA</a>. Distributed under the <a href='https://www.usa.gov/government-works'>U.S. Government Work license</a>.</p></li>
+<li><p><strong>Bathymetry.</strong> <a href='https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf'>Amante, C. and B.W. Eakins, 2009. ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National Geophysical Data Center, NOAA</a>. Distributed under the <a href='https://www.usa.gov/government-works'>U.S. Government Work license</a>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -285,78 +285,98 @@
 <code><a href='qmap.html'>qmap</a>()</code>,
 <code><a href='shapefile_list.html'>shapefile_list</a>()</code>,
 <code><a href='transform_coord.html'>transform_coord</a>()</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Mikko Vihtakari</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># The easiest way to produce a map is to use the limits</span>
 <span class='co'># argument and decimal degrees:</span>
-<span class='co'># \donttest{</span>
-<span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fl'>60</span>)</div><div class='img'><img src='basemap-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># Bathymetry and glaciers can be added using the respective arguments:</span>
 
-<span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> -<span class='fl'>60</span>, <span class='kw'>bathymetry</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>glaciers</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='basemap-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"ggOceanMapsData"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>basemap</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fl'>60</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: ggOceanMapsData</span></div><div class='img'><img src='basemap-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># Bathymetry and glaciers can be added using the respective arguments:</span>
+<span class='co'># \donttest{</span>
+<span class='fu'>basemap</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='op'>-</span><span class='fl'>60</span>, bathymetry <span class='op'>=</span> <span class='cn'>TRUE</span>, glaciers <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='img'><img src='basemap-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 <span class='co'># The easiest way to add data on the maps is to use the ggspatial functions:</span>
 
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>lon</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>150</span>, <span class='fl'>150</span>), <span class='kw'>lat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>60</span>, <span class='fl'>90</span>))
-
-<span class='fu'>basemap</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='kw'>bathymetry</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-<span class='fu'>geom_spatial_point</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>lon</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>lat</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"red"</span>)</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:3995</span></div><div class='output co'>#&gt; <span class='message'>Assuming `crs = 4326` in stat_spatial_identity()</span></div><div class='img'><img src='basemap-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>150</span>, <span class='fl'>150</span><span class='op'>)</span>, lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>60</span>, <span class='fl'>90</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># \donttest{</span>
+<span class='fu'>basemap</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>dt</span>, bathymetry <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span>
+<span class='fu'>geom_spatial_point</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>dt</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>lon</span>, y <span class='op'>=</span> <span class='va'>lat</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:3995</span></div><div class='output co'>#&gt; <span class='message'>Assuming `crs = 4326` in stat_spatial_identity()</span></div><div class='img'><img src='basemap-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Note that writing out data = dt is required because there are multiple</span>
 <span class='co'># underlying ggplot layers plotted already:</span>
-
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>basemap</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>) +
-<span class='fu'>geom_spatial_point</span>(<span class='no'>dt</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>lon</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>lat</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"red"</span>)
+<span class='fu'>basemap</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>dt</span><span class='op'>)</span> <span class='op'>+</span>
+<span class='fu'>geom_spatial_point</span><span class='op'>(</span><span class='va'>dt</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>lon</span>, y <span class='op'>=</span> <span class='va'>lat</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
 <span class='co'>#&gt; Error: `mapping` must be created by `aes()`</span>
-}
+<span class='op'>}</span>
 
 <span class='co'># If you want to use native ggplot commands, you need to transform your data</span>
 <span class='co'># to the projection used by the map:</span>
-<span class='co'># \donttest{</span>
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='transform_coord.html'>transform_coord</a></span>(<span class='no'>dt</span>, <span class='kw'>bind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>basemap</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>) + <span class='fu'>geom_point</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>lon.proj</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>lat.proj</span>))</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:3995</span></div><div class='img'><img src='basemap-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='transform_coord.html'>transform_coord</a></span><span class='op'>(</span><span class='va'>dt</span>, bind <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"ggOceanMapsData"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>basemap</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>dt</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>geom_point</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>dt</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>lon.proj</span>, y <span class='op'>=</span> <span class='va'>lat.proj</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:3995</span></div><div class='img'><img src='basemap-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># The limits argument of length 4 plots a map anywhere in the world:</span>
 
-<span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>160</span>, -<span class='fl'>20</span>, <span class='fl'>30</span>), <span class='kw'>bathymetry</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:4326</span></div><div class='img'><img src='basemap-5.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>basemap</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>160</span>, <span class='op'>-</span><span class='fl'>20</span>, <span class='fl'>30</span><span class='op'>)</span>, bathymetry <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:4326</span></div><div class='img'><img src='basemap-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># The argument leads to expanded maps towards poles:</span>
 
-<span class='no'>dt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>lon</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>160</span>, <span class='fl'>160</span>, <span class='fl'>160</span>, -<span class='fl'>160</span>), <span class='kw'>lat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>80</span>, <span class='fl'>80</span>, <span class='fl'>60</span>, <span class='fl'>60</span>))
+<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>160</span>, <span class='fl'>160</span>, <span class='fl'>160</span>, <span class='op'>-</span><span class='fl'>160</span><span class='op'>)</span>, lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>80</span>, <span class='fl'>80</span>, <span class='fl'>60</span>, <span class='fl'>60</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>160</span>, -<span class='fl'>160</span>, <span class='fl'>60</span>, <span class='fl'>80</span>)) +
-<span class='fu'>geom_spatial_polygon</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>lon</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>lat</span>),
-<span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"red"</span>)</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:3995</span></div><div class='output co'>#&gt; <span class='message'>Assuming `crs = 4326` in stat_spatial_identity()</span></div><div class='img'><img src='basemap-6.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>basemap</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>160</span>, <span class='op'>-</span><span class='fl'>160</span>, <span class='fl'>60</span>, <span class='fl'>80</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+<span class='fu'>geom_spatial_polygon</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>dt</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>lon</span>, y <span class='op'>=</span> <span class='va'>lat</span><span class='op'>)</span>,
+fill <span class='op'>=</span> <span class='cn'>NA</span>, color <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:3995</span></div><div class='output co'>#&gt; <span class='message'>Assuming `crs = 4326` in stat_spatial_identity()</span></div><div class='img'><img src='basemap-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># The limits are further expanded when using the data argument:</span>
 
-<span class='fu'>basemap</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>) +
-<span class='fu'>geom_spatial_polygon</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>lon</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>lat</span>),
-<span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"red"</span>)</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:3995</span></div><div class='output co'>#&gt; <span class='message'>Assuming `crs = 4326` in stat_spatial_identity()</span></div><div class='img'><img src='basemap-7.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>basemap</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>dt</span><span class='op'>)</span> <span class='op'>+</span>
+<span class='fu'>geom_spatial_polygon</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>dt</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>lon</span>, y <span class='op'>=</span> <span class='va'>lat</span><span class='op'>)</span>,
+fill <span class='op'>=</span> <span class='cn'>NA</span>, color <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:3995</span></div><div class='output co'>#&gt; <span class='message'>Assuming `crs = 4326` in stat_spatial_identity()</span></div><div class='img'><img src='basemap-7.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Rotate:</span>
 
-<span class='fu'>basemap</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='kw'>rotate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-<span class='fu'>geom_spatial_polygon</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dt</span>, <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>lon</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>lat</span>),
-                    <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"red"</span>)</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +proj=stere +lat_0=90 +lat_ts=71 +lon_0=180 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0</span></div><div class='output co'>#&gt; <span class='message'>Assuming `crs = 4326` in stat_spatial_identity()</span></div><div class='img'><img src='basemap-8.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>basemap</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>dt</span>, rotate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span>
+<span class='fu'>geom_spatial_polygon</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>dt</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>lon</span>, y <span class='op'>=</span> <span class='va'>lat</span><span class='op'>)</span>,
+                    fill <span class='op'>=</span> <span class='cn'>NA</span>, color <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +proj=stere +lat_0=90 +lat_ts=71 +lon_0=180 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0</span></div><div class='output co'>#&gt; <span class='message'>Assuming `crs = 4326` in stat_spatial_identity()</span></div><div class='img'><img src='basemap-8.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## To find UTM coordinates to limit a polar map:</span>
-<span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fl'>60</span>, <span class='kw'>projection.grid</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='basemap-9.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.5e4</span>, -<span class='fl'>2.5e6</span>, <span class='fl'>2e6</span>, -<span class='fl'>2.5e5</span>), <span class='kw'>shapefiles</span> <span class='kw'>=</span> <span class='st'>"Arctic"</span>)</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 to +init=epsg:4326</span></div><div class='img'><img src='basemap-10.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>basemap</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fl'>60</span>, projection.grid <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='img'><img src='basemap-9.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>basemap</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2.5e4</span>, <span class='op'>-</span><span class='fl'>2.5e6</span>, <span class='fl'>2e6</span>, <span class='op'>-</span><span class='fl'>2.5e5</span><span class='op'>)</span>, shapefiles <span class='op'>=</span> <span class='st'>"Arctic"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 to +init=epsg:4326</span></div><div class='img'><img src='basemap-10.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Using custom shapefiles</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>bs_shapes</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"ggOceanMapsData"</span>)
-<span class='fu'>basemap</span>(<span class='kw'>shapefiles</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>land</span> <span class='kw'>=</span> <span class='no'>bs_land</span>, <span class='kw'>glacier</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>bathy</span> <span class='kw'>=</span> <span class='no'>bs_bathy</span>),
-<span class='kw'>bathymetry</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:32636 +proj=utm +zone=36 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 to +init=epsg:4326</span></div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Message 1: +init=epsg:XXXX syntax is deprecated. It might return a CRS with a non-EPSG compliant axis order.</span></div><div class='img'><img src='basemap-11.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>bs_shapes</span>, package <span class='op'>=</span> <span class='st'>"ggOceanMapsData"</span><span class='op'>)</span>
+<span class='fu'>basemap</span><span class='op'>(</span>shapefiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>land <span class='op'>=</span> <span class='va'>bs_land</span>, glacier <span class='op'>=</span> <span class='cn'>NULL</span>, bathy <span class='op'>=</span> <span class='va'>bs_bathy</span><span class='op'>)</span>,
+bathymetry <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:32636 +proj=utm +zone=36 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 to +init=epsg:4326</span></div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Message 1: +init=epsg:XXXX syntax is deprecated. It might return a CRS with a non-EPSG compliant axis order.</span></div><div class='img'><img src='basemap-11.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># grid.col = NA removes grid lines, rotate = TRUE rotates northwards</span>
 
-<span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>180</span>, -<span class='fl'>140</span>, <span class='fl'>50</span>, <span class='fl'>70</span>), <span class='kw'>grid.col</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>rotate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +proj=stere +lat_0=90 +lat_ts=71 +lon_0=-160 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0</span></div><div class='img'><img src='basemap-12.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>basemap</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>180</span>, <span class='op'>-</span><span class='fl'>140</span>, <span class='fl'>50</span>, <span class='fl'>70</span><span class='op'>)</span>, grid.col <span class='op'>=</span> <span class='cn'>NA</span>, rotate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +proj=stere +lat_0=90 +lat_ts=71 +lon_0=-160 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0</span></div><div class='img'><img src='basemap-12.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Rename axis labels</span>
 
-<span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>140</span>, -<span class='fl'>105</span>, <span class='fl'>20</span>, <span class='fl'>40</span>), <span class='kw'>bathymetry</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) + <span class='fu'>xlab</span>(<span class='st'>"Lat"</span>)</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:4326</span></div><div class='img'><img src='basemap-13.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>basemap</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>140</span>, <span class='op'>-</span><span class='fl'>105</span>, <span class='fl'>20</span>, <span class='fl'>40</span><span class='op'>)</span>, bathymetry <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>xlab</span><span class='op'>(</span><span class='st'>"Lat"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:4326</span></div><div class='img'><img src='basemap-13.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Remove axis labels</span>
 
-<span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>60</span>, <span class='fl'>68</span>, <span class='fl'>80</span>)) + <span class='fu'>labs</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:3995</span></div><div class='img'><img src='basemap-14.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>basemap</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>60</span>, <span class='fl'>68</span>, <span class='fl'>80</span>), <span class='kw'>rotate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-<span class='fu'>theme</span>(<span class='kw'>axis.title</span> <span class='kw'>=</span> <span class='fu'>element_blank</span>(),
-      <span class='kw'>axis.text</span> <span class='kw'>=</span> <span class='fu'>element_blank</span>(),
-      <span class='kw'>axis.ticks.x</span> <span class='kw'>=</span> <span class='fu'>element_blank</span>(),
-      <span class='kw'>axis.ticks.y</span> <span class='kw'>=</span> <span class='fu'>element_blank</span>()
-      )</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +proj=stere +lat_0=90 +lat_ts=71 +lon_0=30 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0</span></div><div class='img'><img src='basemap-15.png' alt='' width='700' height='433' /></div><div class='input'># }
-
+<span class='fu'>basemap</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>60</span>, <span class='fl'>68</span>, <span class='fl'>80</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='cn'>NULL</span>, y <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:3995</span></div><div class='img'><img src='basemap-14.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>basemap</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>60</span>, <span class='fl'>68</span>, <span class='fl'>80</span><span class='op'>)</span>, rotate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span>
+<span class='fu'>theme</span><span class='op'>(</span>axis.title <span class='op'>=</span> <span class='fu'>element_blank</span><span class='op'>(</span><span class='op'>)</span>,
+      axis.text <span class='op'>=</span> <span class='fu'>element_blank</span><span class='op'>(</span><span class='op'>)</span>,
+      axis.ticks.x <span class='op'>=</span> <span class='fu'>element_blank</span><span class='op'>(</span><span class='op'>)</span>,
+      axis.ticks.y <span class='op'>=</span> <span class='fu'>element_blank</span><span class='op'>(</span><span class='op'>)</span>
+      <span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +proj=stere +lat_0=90 +lat_ts=71 +lon_0=30 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0</span></div><div class='img'><img src='basemap-15.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -373,7 +393,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

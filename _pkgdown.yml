@@ -24,6 +24,7 @@ reference:
   - qmap
   - transform_coord
   - shapefile_list 
+  - dist2land
 
 - title: Functions to help customizing basemaps
   desc: >

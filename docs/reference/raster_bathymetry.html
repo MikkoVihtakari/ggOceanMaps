@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.7</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/MikkoVihtakari/ggOceanMaps/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,14 +132,14 @@
     <p>Simplifies bathymetry raster ready for the <code><a href='vector_bathymetry.html'>vector_bathymetry</a></code> function. Warning: processing may take a long time if the bathymetry raster is large.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>raster_bathymetry</span>(
-  <span class='no'>bathy</span>,
-  <span class='no'>depths</span>,
-  <span class='no'>proj.out</span>,
-  <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>file.name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>aggregation.factor</span> <span class='kw'>=</span> <span class='fl'>NA</span>
-)</pre>
+    <pre class="usage"><span class='fu'>raster_bathymetry</span><span class='op'>(</span>
+  <span class='va'>bathy</span>,
+  <span class='va'>depths</span>,
+  <span class='va'>proj.out</span>,
+  boundary <span class='op'>=</span> <span class='cn'>NULL</span>,
+  file.name <span class='op'>=</span> <span class='cn'>NULL</span>,
+  aggregation.factor <span class='op'>=</span> <span class='cn'>NA</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,12 +180,15 @@
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>GEBCO Compilation Group (2019) GEBCO 2019 15-arcsecond grid (doi:10.5285/836f016a-33be-6ddc-e053-6c86abc0788e). URL: <a href='https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html'>https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html</a>.
-ETOPO1 1 Arc-Minute Global Relief Model. URL: <a href='https://doi.org/10.7289/V5C8276M'>https://doi.org/10.7289/V5C8276M</a>.</p>
+ETOPO1 1 Arc-Minute Global Relief Model. URL: <a href='https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf'>https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other create shapefiles: 
 <code><a href='clip_shapefile.html'>clip_shapefile</a>()</code>,
 <code><a href='vector_bathymetry.html'>vector_bathymetry</a>()</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Mikko Vihtakari</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -202,7 +205,7 @@ ETOPO1 1 Arc-Minute Global Relief Model. URL: <a href='https://doi.org/10.7289/V
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
