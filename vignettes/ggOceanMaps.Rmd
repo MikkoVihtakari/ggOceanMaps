@@ -201,6 +201,10 @@ qmap(dt, color = I("red")) # set color
 qmap(dt, color = var) # map color
 ```
 
+## Detailed maps
+
+Not added yet.
+
 # Advanced use
 
 This section focuses on flexibility and user modifications. It is assumed that advanced users understand the basics of geographic information systems (GIS) and how to use these systems in R (e.g. see the [Making Maps with R](https://geocompr.robinlovelace.net/adv-map.html) chapter in [Lovelace et al. 2020](https://geocompr.robinlovelace.net/index.html)). 
