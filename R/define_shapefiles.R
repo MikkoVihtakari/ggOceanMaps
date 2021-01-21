@@ -26,23 +26,29 @@ define_shapefiles <- function(limits) {
     if(is_decimal_limit(limits)) {
       decLimits <- TRUE
 
+      if(max(limits[3:4]) > 90) stop("limits[3:4] must be < 90")
+      if(min(limits[3:4]) < -90) stop("limits[3:4] must be > -90")
       
-      if(limits[4] > 70) {
-        shapefiles <- "ArcticStereographic"
-      } else if(limits[4] < -70) {
-        shapefiles <- "AntarcticStereographic"
-      } else if(min(abs(limits[3:4])) < 30) {
-        shapefiles <- "DecimalDegree"
-      } else if(max(abs(limits[3:4])) < 60) {
-        shapefiles <- "DecimalDegree"
-      } else if(max(limits[3:4]) >= 60) {
-        shapefiles <- "ArcticStereographic"
+      if(max(limits[3:4]) >= 60) {
+        if(min(limits[3:4]) < 30) {
+          shapefiles <- "DecimalDegree"  
+        } else {
+          shapefiles <- "ArcticStereographic"
+        }
       } else if(min(limits[3:4]) <= -60) {
+        if(max(limits[3:4]) > 30) {
+          shapefiles <- "DecimalDegree"  
+        } else {
+          shapefiles <- "AntarcticStereographic"
+        }
+      } else if(all(limits[3:4] >= 40)) {
+        shapefiles <- "ArcticStereographic"
+      } else if(all(limits[3:4] <= -40)) {
         shapefiles <- "AntarcticStereographic"
       } else {
-        stop("Unexpected error in decimal degree shapefile definition")
+        shapefiles <- "DecimalDegree"
       }
-
+     
     } else {
       decLimits <- FALSE
       shapefiles <- NA

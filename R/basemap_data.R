@@ -252,7 +252,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   
   ##  Define the CRS for the underlying data ###
   
-  LandCRS <- sp::proj4string(shapefiles$land)
+  LandCRS <- suppressWarnings(sp::proj4string(shapefiles$land))
   
   # 5. Crop and rotate shapefiles if needed ###
   
