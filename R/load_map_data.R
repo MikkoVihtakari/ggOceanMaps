@@ -26,7 +26,6 @@ load_map_data <- function(x, force = FALSE) {
       stop(paste(strwrap(msg), collapse= "\n"))
     } else {
       dir.create(getOption("ggOceanMaps.datapath"))
-      dir.create(paste(getOption("ggOceanMaps.datapath"), "data", sep = "/"))
       msg <- paste0("The ggOceanMaps.datapath directory created to ", getOption("ggOceanMaps.datapath"))
       message(paste(strwrap(msg), collapse= "\n"))
     }
@@ -34,7 +33,7 @@ load_map_data <- function(x, force = FALSE) {
   
   # Check whether the data has already been downloaded
   
-  filepath <- paste(getOption("ggOceanMaps.datapath"), "data", paste0(tolower(x$name), ".rda"), sep = "/")
+  filepath <- paste(getOption("ggOceanMaps.datapath"), paste0(tolower(x$name), ".rda"), sep = "/")
   
   if(file.exists(filepath) & !force) {
     return(mget(load(filepath)))
