@@ -24,7 +24,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   # Get limits from spatial polygons ####
   
   if(any(class(data) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
-    proj.in <- sp::proj4string(data)
+    proj.in <- suppressWarnings(sp::proj4string(data))
     
     if(!grepl("proj=longlat", suppressWarnings(sp::CRS(proj.in)))) {
       data <- sp::spTransform(data, sp::CRS("+init=epsg:4326"))
