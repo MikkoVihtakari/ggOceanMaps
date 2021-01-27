@@ -307,12 +307,6 @@ labels <- sp::SpatialPointsDataFrame(rgeos::gCentroid(fishingAreasNor, byid=TRUE
                                      data = fishingAreasNor@data)
 labels <- df_spatial(labels)
 
-# To correct for a bug in ggspatial 1.1.1
-if("x_without_geom[df_geom$feature_id, ]" %in% names(labels)) {
-  names(labels)[names(labels) == "x_without_geom[df_geom$feature_id, ]"] <- "FID"
-}
-# Bug correction end.
-
 fishingAreasNor@data$area <- raster::area(fishingAreasNor)/1e9 # calculate area in 1000 km2
 
 p <- basemap(limits = raster::extent(fishingAreasNor)[1:4]) +

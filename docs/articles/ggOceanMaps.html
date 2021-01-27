@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.13</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
       <h1 data-toc-skip>ggOceanMaps User Manual</h1>
                         <h4 class="author">Mikko Vihtakari (Institute of Marine Research)</h4>
             
-            <h4 class="date">19 January, 2021</h4>
+            <h4 class="date">27 January, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/vignettes/ggOceanMaps.Rmd"><code>vignettes/ggOceanMaps.Rmd</code></a></small>
       <div class="hidden name"><code>ggOceanMaps.Rmd</code></div>
@@ -336,12 +336,6 @@
                                      data <span class="op">=</span> <span class="va">fishingAreasNor</span><span class="op">@</span><span class="va">data</span><span class="op">)</span>
 <span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu">df_spatial</span><span class="op">(</span><span class="va">labels</span><span class="op">)</span>
 
-<span class="co"># To correct for a bug in ggspatial 1.1.1</span>
-<span class="kw">if</span><span class="op">(</span><span class="st">"x_without_geom[df_geom$feature_id, ]"</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">labels</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">labels</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">labels</span><span class="op">)</span> <span class="op">==</span> <span class="st">"x_without_geom[df_geom$feature_id, ]"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"FID"</span>
-<span class="op">}</span>
-<span class="co"># Bug correction end.</span>
-
 <span class="va">fishingAreasNor</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">area</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/area.html">area</a></span><span class="op">(</span><span class="va">fishingAreasNor</span><span class="op">)</span><span class="op">/</span><span class="fl">1e9</span> <span class="co"># calculate area in 1000 km2</span>
 
 <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html">extent</a></span><span class="op">(</span><span class="va">fishingAreasNor</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span>
@@ -518,7 +512,7 @@
 <span class="co">#&gt; To cite package 'ggOceanMaps' in publications use:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   Mikko Vihtakari (2021). ggOceanMaps: Plot Data on Oceanographic Maps</span>
-<span class="co">#&gt;   using 'ggplot2'. R package version 1.0.9.</span>
+<span class="co">#&gt;   using 'ggplot2'. R package version 1.0.13.</span>
 <span class="co">#&gt;   https://mikkovihtakari.github.io/ggOceanMaps/</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
@@ -527,7 +521,7 @@
 <span class="co">#&gt;     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},</span>
 <span class="co">#&gt;     author = {Mikko Vihtakari},</span>
 <span class="co">#&gt;     year = {2021},</span>
-<span class="co">#&gt;     note = {R package version 1.0.9},</span>
+<span class="co">#&gt;     note = {R package version 1.0.13},</span>
 <span class="co">#&gt;     url = {https://mikkovihtakari.github.io/ggOceanMaps/},</span>
 <span class="co">#&gt;   }</span></code></pre></div>
 </div>
