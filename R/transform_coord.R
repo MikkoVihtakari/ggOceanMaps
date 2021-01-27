@@ -51,7 +51,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   if(is.null(proj.in)) {
     if(is.null(x)) stop("a spatial object as x is required when proj.in = NULL")
     
-    proj.in <- sp::proj4string(x)
+    proj.in <- suppressWarnings(sp::proj4string(x))
   }
   
   
