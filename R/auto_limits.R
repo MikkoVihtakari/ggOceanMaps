@@ -97,6 +97,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   # Expansion factor
   
   if(!is.null(expand.factor)) {
+    
     lon.rdiff <- diff(projLims[1:2])
     lon.shift <- ((lon.rdiff*expand.factor) - lon.rdiff)/2
     projLims[1] <- projLims[1] - lon.shift
@@ -106,6 +107,16 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
     lat.shift <- ((lat.rdiff*expand.factor) - lat.rdiff)/2
     projLims[3] <- projLims[3] - lat.shift
     projLims[4] <- projLims[4] + lat.shift
+    
+    # Correct >= 180/90 limits for expanded decimal degree coordinates
+    
+    if(grepl("proj=longlat", suppressWarnings(sp::CRS(proj.in))) & grepl("proj=longlat", suppressWarnings(sp::CRS(proj.out)))) {
+      if(projLims[1] < -180) projLims[1] <- -180
+      if(projLims[2] > -180) projLims[2] <- 180
+      if(projLims[3] < -90) projLims[3] <- -90
+      if(projLims[3] > 90) projLims[4] <- 90
+    }
+    
   }
   
   # Projected boundaries

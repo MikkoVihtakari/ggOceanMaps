@@ -19,13 +19,14 @@
 #' @seealso \code{\link{basemap}}
 
 # Test paramters
-# limits = c(30, 50, 60, 80)
+# limits = c(-180, 180, -60, 60)
 # limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE; verbose = TRUE
 basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = TRUE) {
   
   # Switches and checks ####
   
   shapefilesDefined <- FALSE
+  polarMap <- FALSE
   
   # 1. shapefiles argument dictates the used shapefile. If NULL, shapefiles are obtained from limits ###
   
@@ -81,13 +82,16 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     if(length(limits) == 1) {
       if(!decLimits) stop("Limits of length 1 have to be given as decimal degrees.")
       
-      if(abs(limits) <= 88 & abs(limits) >= 30) {
+      if(abs(limits) <= 89 & abs(limits) >= 30) {
         polarMap <- TRUE
       } else {
-        stop("The limits argument has to be between 30 and 88 (or negative) for polar stereographic maps.")
+        stop("The limits argument has to be between 30 and 89 (or negative) for polar stereographic maps.")
       }
       
-    } else if(all(abs(limits[1:2]) == 180) | all(abs(limits[1:2]) == 0)) { ## Fix the problem with limits ending up on a single line in polar maps
+    } else if(
+      (all(abs(limits[1:2]) == 180) & diff(limits[3:4]) <= 60) | 
+      all(abs(limits[1:2]) == 0)
+    ) { ## Fix the problem with limits ending up on a single line in polar maps
       
       limits <- c(sort(limits[1:2]), sort(limits[3:4]))
       
@@ -110,8 +114,6 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     } else { # Rectangular maps, length(limits) == 4
       
       if(identical(limits[1], limits[2])) stop("Longitude limits[1:2] equal. Cannot plot a map")
-      
-      polarMap <- FALSE
       
       if(!decLimits){ # Limits given as UTM coordinates
         
@@ -180,9 +182,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
       shapefile.name <- shapefile.def$shapefile.name
     }
     
-  } else { # No limits defined
-    polarMap <- FALSE
-  }
+  } 
   
   # 3. data argument defines the limits and shapefiles if not specified. Also helps the limits argument to find shapefile if it was given as projected coordinates ###
   
@@ -352,8 +352,8 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   
   if(exists("clipLimits")) {
     if(abs(clipLimits$ddLimits[4]) != 90) {
-    tmp <- sp::spTransform(clipLimits$projBound, sp::CRS(SRS_string = "EPSG:4326"))@bbox
-    clipLimits$ddLimits <- unname(c(sort(tmp[1,]), sort(tmp[2,])))
+      tmp <- sp::spTransform(clipLimits$projBound, sp::CRS(SRS_string = "EPSG:4326"))@bbox
+      clipLimits$ddLimits <- unname(c(sort(tmp[1,]), sort(tmp[2,])))
     }
   }
   
@@ -374,12 +374,16 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     if(polarMap) {
       lon.interval <- 45
     } else {
-      tmp <- dd_to_deg(round(clipLimits$ddLimits)[1:2])
-      
-      if(tmp[1] > tmp[2]) {
-        lonDist <- 360 - tmp[1] + tmp[2]
+      if(diff(clipLimits$ddLimits[1:2]) == 360) {
+        lonDist <- 360
       } else {
-        lonDist <- tmp[2] - tmp[1]
+        tmp <- dd_to_deg(round(clipLimits$ddLimits)[1:2])
+        
+        if(tmp[1] > tmp[2]) {
+          lonDist <- 360 - tmp[1] + tmp[2]
+        } else {
+          lonDist <- tmp[2] - tmp[1]
+        }
       }
       
       lon.interval <- ifelse(lonDist > 180, 45, ifelse(lonDist > 90, 30, ifelse(lonDist >= 40, 10, ifelse(lonDist > 10, 5, ifelse(lonDist > 4, 2, 1)))))
