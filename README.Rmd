@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 **Plot data on oceanographic maps using ggplot2. R package version `r packageVersion("ggOceanMaps")`**
 
 [![DOI](https://zenodo.org/badge/254818056.svg)](https://zenodo.org/badge/latestdoi/254818056)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://cran.r-project.org/package=ggOceanMaps)
 
 ## Overview
 
