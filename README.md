@@ -2,7 +2,9 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-1.0.9**
+1.0.15**
+
+[![DOI](https://zenodo.org/badge/254818056.svg)](https://zenodo.org/badge/latestdoi/254818056)
 
 ## Overview
 
@@ -115,8 +117,7 @@ shapefiles every time they restart R. This limitation is set by [CRAN
 policies](https://cran.r-project.org/web/packages/policies.html). You
 can define a custom folder for high-resolution shapefiles on your
 computer by modifying your .Rprofile file
-(e.g. `usethis::edit_r_profile()`). Add the following lines to the
-file:
+(e.g. `usethis::edit_r_profile()`). Add the following lines to the file:
 
 ``` r
 .ggOceanMapsenv <- new.env()
@@ -124,9 +125,10 @@ file:
 ```
 
 If you wanted to place the files in your R library folder, you could
-define the custom path as `paste(R.home(), 'library',
-'ggOceanMapsLargeData', sep = '/')`. Please note that modifying your R
-library folder might not work for all computer setups.
+define the custom path as
+`paste(R.home(), 'library', 'ggOceanMapsLargeData', sep = '/')`. Please
+note that modifying your R library folder might not work for all
+computer setups.
 
 You will need to set up the data path to your .Rprofile file only once
 and ggOceanMaps will find the path even though you updated your R or
@@ -141,19 +143,19 @@ important that you cite the data sources used in a map you generate with
 the package. The spatial data used by this package have been acquired
 from the following sources:
 
-  - **Land polygons.** [Natural Earth
+-   **Land polygons.** [Natural Earth
     Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
     1:10m Physical Vectors with the Land and Minor Island datasets
     combined. Distributed under the [CC Public Domain
     license](https://creativecommons.org/publicdomain/) ([terms of
     use](https://www.naturalearthdata.com/about/terms-of-use/)).
-  - **Glacier polygons.** [Natural Earth
+-   **Glacier polygons.** [Natural Earth
     Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
     1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice
     Shelves datasets combined. Distributed under the [CC Public Domain
     license](https://creativecommons.org/publicdomain/) ([terms of
     use](https://www.naturalearthdata.com/about/terms-of-use/)).
-  - **Bathymetry.** [Amante, C. and B.W. Eakins, 2009. ETOPO1 1
+-   **Bathymetry.** [Amante, C. and B.W. Eakins, 2009. ETOPO1 1
     Arc-Minute Global Relief Model: Procedures, Data Sources and
     Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National
     Geophysical Data Center,
@@ -170,8 +172,8 @@ citation("ggOceanMaps")
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Mikko Vihtakari (2021). ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'. R package version 1.0.9.
-#>   https://CRAN.R-project.org/package=ggOceanMaps
+#>   using 'ggplot2'. R package version 1.0.15.
+#>   https://mikkovihtakari.github.io/ggOceanMaps/
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -179,8 +181,8 @@ citation("ggOceanMaps")
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2021},
-#>     note = {R package version 1.0.9},
-#>     url = {https://CRAN.R-project.org/package=ggOceanMaps},
+#>     note = {R package version 1.0.15},
+#>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```
 
@@ -224,12 +226,12 @@ package does not contain any C++ code and should compile easily.
 If you encounter problems during the devtools installation, you may set
 the `upgrade` argument to `"never"` and try the following steps:
 
-1.  Manually update all R packages you have installed (Packages -\>
-    Update -\> Select all -\> Install updates in R Studio). If an update
-    of a package fails, try installing that package again using the
-    `install.packages` function or the R Studio menu.
-2.  Run `devtools::install_github("MikkoVihtakari/ggOceanMaps", upgrade
-    = "never")`.
+1.  Manually update all R packages you have installed (Packages -&gt;
+    Update -&gt; Select all -&gt; Install updates in R Studio). If an
+    update of a package fails, try installing that package again using
+    the `install.packages` function or the R Studio menu.
+2.  Run
+    `devtools::install_github("MikkoVihtakari/ggOceanMaps", upgrade = "never")`.
 3.  If installation of a dependency fails, try installing that package
     manually and repeat step 2.
 4.  Since R has lately been updated to 4.0, you may have to update your

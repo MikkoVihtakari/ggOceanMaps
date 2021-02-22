@@ -15,6 +15,8 @@ knitr::opts_chunk$set(
 # ggOceanMaps
 **Plot data on oceanographic maps using ggplot2. R package version `r packageVersion("ggOceanMaps")`**
 
+[![DOI](https://zenodo.org/badge/254818056.svg)](https://zenodo.org/badge/latestdoi/254818056)
+
 ## Overview
 
 The ggOceanMaps package for [R](https://www.r-project.org/) allows plotting data on bathymetric maps using [ggplot2](https://ggplot2.tidyverse.org/reference). The package is designed for ocean sciences and greatly simplifies bathymetric map plotting anywhere around the globe. ggOceanMaps uses openly available geographic data. Citing the particular data sources is advised by the CC-BY licenses whenever maps from the package are published (see the [*Citations and data sources*](#citations-and-data-sources) section). 
