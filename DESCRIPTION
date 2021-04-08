@@ -1,8 +1,8 @@
 Package: ggOceanMaps
 Type: Package
 Title: Plot Data on Oceanographic Maps using 'ggplot2'
-Version: 1.0.15
-Date: 2021-01-27
+Version: 1.0.16
+Date: 2021-04-08
 Authors@R: c(person("Mikko", "Vihtakari", email = "mikko.vihtakari@hi.no",
                   role = c("aut", "cre"), 
                   comment = c(affiliation = "Institute of Marine Research", 
