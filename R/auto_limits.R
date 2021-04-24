@@ -27,12 +27,12 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
     proj.in <- suppressWarnings(sp::proj4string(data))
     
     if(!grepl("proj=longlat", suppressWarnings(sp::CRS(proj.in)))) {
-      data <- sp::spTransform(data, sp::CRS("+init=epsg:4326"))
+      data <- sp::spTransform(data, suppressWarnings(sp::CRS("+init=epsg:4326")))
       proj.in <- "+init=epsg:4326"
       message("The data argument is a spatial polygons object, which is not given as decimal degrees. Converted to decimal degrees.")
     }
     
-    data <- ggplot2::fortify(data)[c("long", "lat")]
+    data <- suppressMessages(ggplot2::fortify(data)[c("long", "lat")])
     names(data) <- c("lon", "lat")
   }
   
@@ -80,7 +80,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
     projLims <- c(range(x[[lon]], na.rm = TRUE), range(x[[lat]], na.rm = TRUE))
     
     tmp <- suppressWarnings(sp::SpatialPoints(x[c(lon, lat)], proj4string = sp::CRS(proj.out)))
-    tmp <- sp::spTransform(tmp, sp::CRS(SRS_string = "EPSG:4326"))@bbox  
+    tmp <- sp::spTransform(tmp, suppressWarnings(sp::CRS(SRS_string = "EPSG:4326")))@bbox  
     decLims <- unname(c(sort(tmp[1,]), sort(tmp[2,])))
     
     proj.in <- attributes(x)$proj.in

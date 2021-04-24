@@ -183,8 +183,9 @@ basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = 
     # if(ret.val != 1) {
     #   stop('The ggOceanMapsData package needs to be installed for ggOceanMaps to function.\nInstall the data package by running\ninstall.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org")')
     # } else {
-    #   utils::install.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat",
-    #                                                        "https://cloud.r-project.org")
+    #   utils::install.packages("ggOceanMapsData", 
+    #                           repos = c("https://mikkovihtakari.github.io/drat",
+    #                           "https://cloud.r-project.org")
     #   )
     # }
     
