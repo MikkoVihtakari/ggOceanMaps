@@ -145,8 +145,10 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
                         ), 
                       lon = "lon", lat = "lat", 
                       proj.in = 
-                        sp::proj4string(eval(parse(text = shapefiles$land))), 
-                      proj.out = "+init=epsg:4326",
+                        ifelse(class(shapefiles$land) == "SpatialPolygonsDataFrame",
+                               suppressWarnings(sp::proj4string(shapefiles$land)),
+                               suppressWarnings(sp::proj4string(eval(parse(text = shapefiles$land))))),
+                      proj.out = "EPSG:4326",
                       verbose = verbose)
         
       } else { # Limits given as decimal degrees
