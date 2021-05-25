@@ -9,7 +9,7 @@ transform_coord(
   lon = NULL,
   lat = NULL,
   new.names = "auto",
-  proj.in = "+init=epsg:4326",
+  proj.in = "EPSG:4326",
   proj.out = NULL,
   verbose = FALSE,
   bind = FALSE,

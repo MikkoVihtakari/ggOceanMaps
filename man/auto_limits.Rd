@@ -8,7 +8,7 @@ auto_limits(
   data,
   lon = NULL,
   lat = NULL,
-  proj.in = "+init=epsg:4326",
+  proj.in = "EPSG:4326",
   proj.out = NULL,
   expand.factor = NULL,
   verbose = TRUE
@@ -39,7 +39,10 @@ Find limits for a \code{\link{basemap}} from a data frame.
 This is an internal function, which is automatically run by the \code{\link{basemap}} function. The function does some funky illogical action (seeing the argument names) when feeding in projected coordinates. This is to make the automatic limits to work for projected coordinates too. Despite the funkiness, the function may be useful when customising \code{\link{basemap}}s.
 }
 \examples{
-auto_limits(data = expand.grid(lon = c(-120, 180, 120), lat = c(60, 60, 80)))
+if(requireNamespace("ggOceanMapsData")) {
+auto_limits(data = expand.grid(lon = c(-120, 180, 120), 
+   lat = c(60, 60, 80)))
+}    
 }
 \seealso{
 Other customize shapefiles: 

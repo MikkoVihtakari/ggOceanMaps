@@ -28,7 +28,7 @@
 # lon = NULL; lat = NULL; new.names = "auto"; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
 # lon = "rLon"; lat = "rLat"; new.names = c("rLon.proj", "rLat.proj"); proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; bind = TRUE; na = "ignore"
 # lon = NULL; lat = NULL; new.names = "auto"; proj.in = "+init=epsg:4326"; proj.out = "+init=epsg:32636"; verbose = FALSE; bind = FALSE; na = "ignore"
-transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", proj.in = "+init=epsg:4326", proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
+transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", proj.in = "EPSG:4326", proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
   
   # Checks ----
   
@@ -38,13 +38,13 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     }
   }
   
-  if(is.null(proj.out) & !grepl("+proj=longlat", suppressWarnings(sp::CRS(proj.in)))) stop("proj.in has to be decimal degrees when proj.out = NULL.")
+  if(is.null(proj.out) & !grepl("+proj=longlat", suppressWarnings(sp::CRS(proj.in))@projargs)) stop("proj.in has to be decimal degrees when proj.out = NULL.")
   if(!is.null(proj.out)) {
     
     error_test <- quiet(try(match.arg(proj.out, shapefile_list("all")$name), silent = TRUE))
     
     if(class(error_test) != "try-error") {
-      proj.out <- paste0("+init=epsg:", shapefile_list(proj.out)$crs)
+      proj.out <- paste0("EPSG:", shapefile_list(proj.out)$crs)
     }
   }
   
@@ -110,7 +110,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   if(is.null(proj.out)) {
     limits <- c(range(y[[lon]]), range(y[[lat]]))
     shapefile.def <- define_shapefiles(limits)
-    proj.out <- paste0("+init=epsg:",shapefile_list(shapefile.def$shapefile.name)$crs)
+    proj.out <- paste0("EPSG:",shapefile_list(shapefile.def$shapefile.name)$crs)
   }
   
   ## Coordinate transformation ----

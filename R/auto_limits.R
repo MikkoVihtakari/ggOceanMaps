@@ -15,20 +15,23 @@
 #' @importFrom grDevices chull
 #' @family customize shapefiles
 #' @examples 
-#' auto_limits(data = expand.grid(lon = c(-120, 180, 120), lat = c(60, 60, 80)))
+#' if(requireNamespace("ggOceanMapsData")) {
+#' auto_limits(data = expand.grid(lon = c(-120, 180, 120), 
+#'    lat = c(60, 60, 80)))
+#' }    
 #' @export
 
 # lon = NULL; lat = NULL; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; expand.factor = NULL; verbose = TRUE
-auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326", proj.out = NULL, expand.factor = NULL, verbose = TRUE) {
+auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "EPSG:4326", proj.out = NULL, expand.factor = NULL, verbose = TRUE) {
   
   # Get limits from spatial polygons ####
   
   if(any(class(data) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
     proj.in <- suppressWarnings(sp::proj4string(data))
     
-    if(!grepl("proj=longlat", suppressWarnings(sp::CRS(proj.in)))) {
-      data <- sp::spTransform(data, suppressWarnings(sp::CRS("+init=epsg:4326")))
-      proj.in <- "+init=epsg:4326"
+    if(!grepl("+proj=longlat", suppressWarnings(sp::CRS(proj.in))@projargs)) {
+      data <- sp::spTransform(data, suppressWarnings(sp::CRS("EPSG:4326")))
+      proj.in <- "EPSG:4326"
       message("The data argument is a spatial polygons object, which is not given as decimal degrees. Converted to decimal degrees.")
     }
     
@@ -64,7 +67,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   # 
   # Coordinate ranges ####
   
-  if(grepl("proj=longlat", suppressWarnings(sp::CRS(proj.in)))) {
+  if(grepl("+proj=longlat", suppressWarnings(sp::CRS(proj.in))@projargs)) {
     decLims <- c(deg_to_dd(range(dd_to_deg(x[[lon]]), na.rm = TRUE)), range(x[[lat]], na.rm = TRUE))
     
     if(decLims[1] == 180 & sign(decLims[2]) == -1) { # Anti-meridian exception
@@ -76,7 +79,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
     proj.in <- attributes(x)$proj.in
     proj.out <- attributes(x)$proj.out
     
-  } else if(!grepl("proj=longlat", suppressWarnings(sp::CRS(proj.out)))) {
+  } else if(!grepl("+proj=longlat", suppressWarnings(sp::CRS(proj.out))@projargs)) {
     projLims <- c(range(x[[lon]], na.rm = TRUE), range(x[[lat]], na.rm = TRUE))
     
     tmp <- suppressWarnings(sp::SpatialPoints(x[c(lon, lat)], proj4string = sp::CRS(proj.out)))
@@ -110,7 +113,9 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
     
     # Correct >= 180/90 limits for expanded decimal degree coordinates
     
-    if(grepl("proj=longlat", suppressWarnings(sp::CRS(proj.in))) & grepl("proj=longlat", suppressWarnings(sp::CRS(proj.out)))) {
+    if(grepl("+proj=longlat", suppressWarnings(sp::CRS(proj.in))@projargs) & 
+       grepl("+proj=longlat", suppressWarnings(sp::CRS(proj.out))@projargs)
+       ) {
       if(projLims[1] < -180) projLims[1] <- -180
       if(projLims[2] > -180) projLims[2] <- 180
       if(projLims[3] < -90) projLims[3] <- -90

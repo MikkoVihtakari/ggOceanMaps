@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -267,17 +267,17 @@
 <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"ggOceanMapsData"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='fu'>qmap</span><span class='op'>(</span><span class='va'>dt</span>, color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/AsIs.html'>I</a></span><span class='op'>(</span><span class='st'>"red"</span><span class='op'>)</span><span class='op'>)</span> 
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:4326</span></div><div class='img'><img src='qmap-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Map color</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from EPSG:4326 to EPSG:4326</span></div><div class='img'><img src='qmap-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Map color</span>
 <span class='co'># \donttest{</span>
 <span class='fu'>qmap</span><span class='op'>(</span><span class='va'>dt</span>, color <span class='op'>=</span> <span class='va'>var</span><span class='op'>)</span> 
-</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +init=epsg:4326</span></div><div class='img'><img src='qmap-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from EPSG:4326 to EPSG:4326</span></div><div class='img'><img src='qmap-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 
 <span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>80</span>, <span class='op'>-</span><span class='fl'>80</span>, <span class='op'>-</span><span class='fl'>50</span>, <span class='op'>-</span><span class='fl'>50</span><span class='op'>)</span>, lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>65</span>, <span class='fl'>80</span>, <span class='fl'>80</span>, <span class='fl'>65</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"ggOceanMapsData"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># \donttest{</span>
 <span class='fu'>qmap</span><span class='op'>(</span><span class='va'>dt</span>, rotate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from +init=epsg:4326 to +proj=stere +lat_0=90 +lat_ts=71 +lon_0=-65 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0</span></div><div class='img'><img src='qmap-3.png' alt='' width='700' height='433' /></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from EPSG:4326 to +proj=stere +lat_0=90 +lat_ts=71 +lon_0=-65 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0</span></div><div class='img'><img src='qmap-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

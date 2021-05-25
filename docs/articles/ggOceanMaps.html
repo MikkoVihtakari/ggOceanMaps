@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -79,13 +79,13 @@
 
       
 
-      </header><script src="ggOceanMaps_files/header-attrs-2.6/header-attrs.js"></script><script src="ggOceanMaps_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="ggOceanMaps_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>ggOceanMaps User Manual</h1>
                         <h4 class="author">Mikko Vihtakari (Institute of Marine Research)</h4>
             
-            <h4 class="date">27 January, 2021</h4>
+            <h4 class="date">25 May, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/vignettes/ggOceanMaps.Rmd"><code>vignettes/ggOceanMaps.Rmd</code></a></small>
       <div class="hidden name"><code>ggOceanMaps.Rmd</code></div>
@@ -104,7 +104,7 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"ggOceanMapsData"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"https://mikkovihtakari.github.io/drat"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Once the packages have been installed, you can load them normally:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps">ggOceanMapsData</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/">ggOceanMapsData</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/">ggOceanMaps</a></span><span class="op">)</span></code></pre></div>
 <div id="limits" class="section level2">
 <h2 class="hasAnchor">
@@ -343,7 +343,7 @@
   <span class="fu">geom_spatial_text</span><span class="op">(</span>data <span class="op">=</span> <span class="va">labels</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, label <span class="op">=</span> <span class="va">FID</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="../reference/FS.html">FS</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>, fontface <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">scale_fill_distiller</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Area\n(1000 km2)"</span>,
                        palette <span class="op">=</span> <span class="st">"Spectral"</span>, na.value <span class="op">=</span> <span class="st">"white"</span>,
-                       limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span><span class="op">)</span>, oob <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/oob.html">squish</a></span><span class="op">)</span>
+                       limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span><span class="op">)</span>, oob <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/oob.html">squish</a></span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/reorder_layers.html">reorder_layers</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></code></pre></div>
 <p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
@@ -512,7 +512,7 @@
 <span class="co">#&gt; To cite package 'ggOceanMaps' in publications use:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   Mikko Vihtakari (2021). ggOceanMaps: Plot Data on Oceanographic Maps</span>
-<span class="co">#&gt;   using 'ggplot2'. R package version 1.0.13.</span>
+<span class="co">#&gt;   using 'ggplot2'. R package version 1.1.1.</span>
 <span class="co">#&gt;   https://mikkovihtakari.github.io/ggOceanMaps/</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
@@ -521,7 +521,7 @@
 <span class="co">#&gt;     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},</span>
 <span class="co">#&gt;     author = {Mikko Vihtakari},</span>
 <span class="co">#&gt;     year = {2021},</span>
-<span class="co">#&gt;     note = {R package version 1.0.13},</span>
+<span class="co">#&gt;     note = {R package version 1.1.1},</span>
 <span class="co">#&gt;     url = {https://mikkovihtakari.github.io/ggOceanMaps/},</span>
 <span class="co">#&gt;   }</span></code></pre></div>
 </div>

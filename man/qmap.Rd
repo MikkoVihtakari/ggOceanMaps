@@ -100,7 +100,7 @@ qmap(dt, color = var)
 
 dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
 
-if(requireNamespace("ggOceanMapsData")) {
+\donttest{
 qmap(dt, rotate = TRUE)
 }
 
