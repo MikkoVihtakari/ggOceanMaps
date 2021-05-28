@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -138,7 +138,8 @@
     <pre class="usage"><span class='fu'>raster_bathymetry</span><span class='op'>(</span>
   <span class='va'>bathy</span>,
   <span class='va'>depths</span>,
-  <span class='va'>proj.out</span>,
+  proj.out <span class='op'>=</span> <span class='cn'>NULL</span>,
+  proj.bathy <span class='op'>=</span> <span class='st'>"EPSG:4326"</span>,
   boundary <span class='op'>=</span> <span class='cn'>NULL</span>,
   file.name <span class='op'>=</span> <span class='cn'>NULL</span>,
   aggregation.factor <span class='op'>=</span> <span class='cn'>NA</span>
@@ -157,7 +158,11 @@
     </tr>
     <tr>
       <th>proj.out</th>
-      <td><p>A character string specifying the PROJ6 projection arguments for the output. See <code><a href='https://rdrr.io/pkg/sp/man/CRS-class.html'>CRS</a></code> and <a href='https://proj.org/'>proj.org</a>.</p></td>
+      <td><p>A character string specifying the PROJ6 projection arguments for the output. See <code><a href='https://rdrr.io/pkg/sp/man/CRS-class.html'>CRS</a></code> and <a href='https://proj.org/'>proj.org</a>. If <code>NULL</code>, the projection is retrieved from <code>bathy</code>. If <code>proj.out == proj.bathy</code>, the output will not be reprojected.</p></td>
+    </tr>
+    <tr>
+      <th>proj.bathy</th>
+      <td><p>A character string specifying the PROJ6 projection arguments for the input (<code>bathy</code>). Only required if <code>bathy</code> lacks CRS information.</p></td>
     </tr>
     <tr>
       <th>boundary</th>

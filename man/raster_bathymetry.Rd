@@ -7,7 +7,8 @@
 raster_bathymetry(
   bathy,
   depths,
-  proj.out,
+  proj.out = NULL,
+  proj.bathy = "EPSG:4326",
   boundary = NULL,
   file.name = NULL,
   aggregation.factor = NA
@@ -18,7 +19,9 @@ raster_bathymetry(
 
 \item{depths}{Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}).}
 
-\item{proj.out}{A character string specifying the PROJ6 projection arguments for the output. See \code{\link[sp:CRS-class]{CRS}} and \href{https://proj.org/}{proj.org}.}
+\item{proj.out}{A character string specifying the PROJ6 projection arguments for the output. See \code{\link[sp:CRS-class]{CRS}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy}. If \code{proj.out == proj.bathy}, the output will not be reprojected.}
+
+\item{proj.bathy}{A character string specifying the PROJ6 projection arguments for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information.}
 
 \item{boundary}{A \link[sp]{SpatialPolygons}(DataFrame) or \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.}
 

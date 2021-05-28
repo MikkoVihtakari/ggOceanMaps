@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -228,7 +228,7 @@
 <code class="sourceCode R"><span class="va">bound.limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">25</span>, <span class="fl">75</span>, <span class="fl">65</span>, <span class="fl">84</span><span class="op">)</span>
 
 <span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span>
-  bathy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">etopoPath</span>, <span class="st">"ETOPO1_Ice_g_gmt4.grd"</span><span class="op">)</span>, 
+  bathy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">gebcoPath</span>, <span class="st">"GEBCO_2020.nc"</span><span class="op">)</span>, 
   depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">400</span>, <span class="fl">500</span>, <span class="fl">750</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, 
              <span class="fl">3000</span>, <span class="fl">4000</span>, <span class="fl">5000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, 
   proj.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Barents"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span>, 
@@ -268,19 +268,29 @@
      compress <span class="op">=</span> <span class="st">"xz"</span>
 <span class="op">)</span></code></pre></div>
 </div>
+<div id="high-resolution-arctic-stereographic" class="section level2">
+<h2 class="hasAnchor">
+<a href="#high-resolution-arctic-stereographic" class="anchor"></a>High resolution Arctic stereographic</h2>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span>
+  bathy <span class="op">=</span> <span class="st">"/Users/a22357/Downloads/IBCAO_v4_200m.nc"</span>, 
+  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">400</span>, <span class="fl">500</span>, <span class="fl">750</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, 
+             <span class="fl">3000</span>, <span class="fl">4000</span>, <span class="fl">5000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, 
+  proj.bathy <span class="op">=</span> <span class="st">"EPSG:3996"</span>
+<span class="op">)</span>
+
+<span class="va">ibcao_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">ibcao_bathy</span>, 
+     file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsLargeData/ibcao_bathy.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,
+     compress <span class="op">=</span> <span class="st">"xz"</span>
+<span class="op">)</span></code></pre></div>
+</div>
 </div>
 <div id="data-sources" class="section level1">
 <h1 class="hasAnchor">
 <a href="#data-sources" class="anchor"></a>Data sources</h1>
-<p>The data used by the package are not the property of the Institute of Marine Research nor the author of the package. It is, therefore, important that you cite the data sources used in a map you generate with the package. The spatial data used by this package have been acquired from the following sources:</p>
-<ul>
-<li>
-<strong>Land polygons.</strong> <a href="https://www.naturalearthdata.com/downloads/10m-physical-vectors/">Natural Earth Data</a> 1:10m Physical Vectors with the Land and Minor Island datasets combined. Distributed under the <a href="https://creativecommons.org/publicdomain/">CC Public Domain license</a> (<a href="https://www.naturalearthdata.com/about/terms-of-use/">terms of use</a>).</li>
-<li>
-<strong>Glacier polygons.</strong> <a href="https://www.naturalearthdata.com/downloads/10m-physical-vectors/">Natural Earth Data</a> 1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice Shelves datasets combined. Distributed under the <a href="https://creativecommons.org/publicdomain/">CC Public Domain license</a> (<a href="https://www.naturalearthdata.com/about/terms-of-use/">terms of use</a>).</li>
-<li>
-<strong>Bathymetry.</strong> <a href="https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf">Amante, C. and B.W. Eakins, 2009. ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National Geophysical Data Center, NOAA</a>. Distributed under the <a href="https://www.usa.gov/government-works">U.S. Government Work license</a>.</li>
-</ul>
+<p>The data used by the package are not the property of the Institute of Marine Research nor the author of the package. It is, therefore, important that you cite the data sources used in a map you generate with the package. Please see <a href="https://mikkovihtakari.github.io/ggOceanMaps/#citations-and-data-sources">here</a> for a list of data sources.</p>
 </div>
   </div>
 
