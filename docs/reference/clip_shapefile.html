@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@
       <a href="../articles/premade-shapefiles.html">Pre-made shapefiles</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -134,8 +137,8 @@
 
     <pre class="usage"><span class='fu'>clip_shapefile</span><span class='op'>(</span>
   <span class='va'>x</span>,
-  limits <span class='op'>=</span> <span class='cn'>NULL</span>,
-  proj.limits <span class='op'>=</span> <span class='st'>"+init=epsg:4326"</span>,
+  <span class='va'>limits</span>,
+  proj.limits <span class='op'>=</span> <span class='st'>"EPSG:4326"</span>,
   simplify <span class='op'>=</span> <span class='cn'>FALSE</span>,
   tol <span class='op'>=</span> <span class='fl'>60</span>,
   return.boundary <span class='op'>=</span> <span class='cn'>FALSE</span>
@@ -146,15 +149,15 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Original shape file to be clipped. Required. Must contain <code><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></code> information.</p></td>
+      <td><p>Original shape file to be clipped as a an <a href='https://rdrr.io/pkg/sp/man/00sp.html'>sp</a> or <a href='https://r-spatial.github.io/sf/reference/sf.html'>sf</a> polygons object. Required. Must contain <code><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>CRS</a></code> information.</p></td>
     </tr>
     <tr>
       <th>limits</th>
-      <td><p>The constraining area used to clip <code>x</code>. Required. Either a numeric vector of length 4 or a <a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygons</a> object. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. The <a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygons</a> object must contain <code><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></code> information. See details.</p></td>
+      <td><p>The constraining area used to clip <code>x</code>. Required. Either a numeric vector of length 4 or a <a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygons</a> object. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. The <a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygons</a> object must contain <code><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>CRS</a></code> information. See details.</p></td>
     </tr>
     <tr>
       <th>proj.limits</th>
-      <td><p>The <code><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></code> projection attributes for <code>limits</code>. Defaults to decimal degrees (see **Usage**).</p></td>
+      <td><p>The <code><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>CRS</a></code> projection attributes for <code>limits</code> as character string (will be passed to <code><a href='https://rdrr.io/pkg/sp/man/CRS-class.html'>CRS</a></code>). Use the PROJ6 format. Defaults to decimal degrees (see Usage).</p></td>
     </tr>
     <tr>
       <th>simplify</th>

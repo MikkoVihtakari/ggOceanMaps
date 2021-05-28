@@ -10,7 +10,7 @@
 #' @return Clipped \code{\link[sp]{SpatialPolygons}} object. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
 #' @keywords internal
 #' @family create shapefiles
-#' @import sp rgdal
+#' @import sp
 #' @importFrom rgeos gIntersection gIntersects gSimplify
 #' @importFrom sf as_Spatial
 #' @importFrom methods slot slot<-

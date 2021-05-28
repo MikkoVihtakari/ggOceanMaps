@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • ggOceanMaps</title>
+<title>Changelog • ggOceanMaps</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -58,7 +58,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-article-index">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -125,21 +125,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <dl>
-        <dt><a href="ggOceanMaps.html">ggOceanMaps User Manual</a></dt>
-        <dd></dt>
-        <dt><a href="premade-shapefiles.html">Pre-made shapefiles</a></dt>
-        <dd></dt>
-      </dl>
-    </div>
+    <div id="ggoceanmaps-12-development-version" class="section level1">
+<h1 class="page-header" data-toc-text="1.2">
+<a href="#ggoceanmaps-12-development-version" class="anchor"></a>ggOceanMaps 1.2 (development version)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Added NEWS.md</li>
+<li>Improved premade_shapefiles and shapefile documentation.</li>
+<li>Continued the PROJ4 to PROJ6 conversion. This change will eventually make the old ggOceanMapsData files incompatible with ggOceanMaps 1.2 and vice versa.</li>
+<li>Moved the rgdal package from Imports to Suggests.</li>
+</ul>
+</div>
+    <div id="ggoceanmaps-11" class="section level1">
+<h1 class="page-header" data-toc-text="1.1">
+<a href="#ggoceanmaps-11" class="anchor"></a>ggOceanMaps 1.1<small> 2021-05-21 </small>
+</h1>
+<ul>
+<li>Generally bug fixes. Started replacing the <a href="https://www.earthdatascience.org/courses/use-data-open-source-python/intro-vector-data-python/spatial-data-vector-shapefiles/epsg-proj4-coordinate-reference-system-formats-python/">PROJ4 system by the PROJ6 wkt based system</a> by replacing “+init=epsg:NNNN” strings by “EPSG:NNNN”. Did not finish the conversion.</li>
+</ul>
+</div>
+    <div id="ggoceanmaps-109" class="section level1">
+<h1 class="page-header" data-toc-text="1.0.9">
+<a href="#ggoceanmaps-109" class="anchor"></a>ggOceanMaps 1.0.9<small> 2021-01-14 </small>
+</h1>
+<ul>
+<li>First CRAN release. Contains the core of the package code rewritten from <a href="https://github.com/MikkoVihtakari/PlotSvalbard/">PlotSvalbard</a>
+</li>
+</ul>
+</div>
   </div>
+
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
+  </div>
+
 </div>
 
 
