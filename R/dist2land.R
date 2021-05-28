@@ -49,9 +49,9 @@
 #' @export
 
 ## Test parameters
-# lon = NULL; lat = NULL; shapefiles = NULL; proj.in = "+init=epsg:4326"; bind = TRUE; dist.col = "ldist"; binary = FALSE; geodesic.distances = FALSE; verbose = TRUE; cores = getCores()
+# lon = NULL; lat = NULL; shapefile = NULL; proj.in = "EPSG:4326"; bind = TRUE; dist.col = "ldist"; binary = FALSE; geodesic.distances = FALSE; verbose = TRUE; cores = getCores()
 
-dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = "+init=epsg:4326", bind = TRUE, dist.col = "ldist", binary = FALSE, cores = getCores(), verbose = TRUE) {
+dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = "EPSG:4326", bind = TRUE, dist.col = "ldist", binary = FALSE, cores = getCores(), verbose = TRUE) {
   
   ## Case for defined x and undefined lon or/and lat ####
   
@@ -98,6 +98,7 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = 
       land <- shapefile
     }
   } else {
+    
     ddLimits <- auto_limits(data = x, lon = "lon", lat = "lat", proj.in = proj.in, verbose = FALSE)$ddLimits
     
     shapefile.def <- define_shapefiles(ddLimits)
@@ -113,7 +114,7 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = 
   
   sp::coordinates(x) <- c("lon", "lat")
   sp::proj4string(x) <- sp::CRS(proj.in)
-  x <- suppressWarnings(sp::spTransform(x, sp::CRS(sp::proj4string(land))))
+  x <- suppressWarnings(sp::spTransform(x, sp::CRS(suppressWarnings(sp::proj4string(land)))))
   if(!suppressWarnings(sp::identicalCRS(land, x))) stop("Cannot convert projections correctly.")
   
   ############################

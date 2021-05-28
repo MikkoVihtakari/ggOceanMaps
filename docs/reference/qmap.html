@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@
       <a href="../articles/premade-shapefiles.html">Pre-made shapefiles</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -140,7 +143,6 @@
   limits <span class='op'>=</span> <span class='cn'>NULL</span>,
   bathymetry <span class='op'>=</span> <span class='cn'>FALSE</span>,
   glaciers <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  resolution <span class='op'>=</span> <span class='st'>"low"</span>,
   rotate <span class='op'>=</span> <span class='cn'>FALSE</span>,
   legends <span class='op'>=</span> <span class='cn'>TRUE</span>,
   legend.position <span class='op'>=</span> <span class='st'>"right"</span>,
@@ -180,7 +182,10 @@
     </tr>
     <tr>
       <th>limits</th>
-      <td><p>Map limits. See the <code>limits</code> argument in <code><a href='basemap.html'>basemap</a></code>. If <code>NULL</code> the limits are automatically taken from <code>data</code></p></td>
+      <td><p>Map limits. One of the following:</p><ul>
+<li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
+<li><p><strong>single integer</strong> between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.</p></li>
+</ul><p>Can be omitted if <code>data</code> or <code>shapefiles</code> are defined.</p></td>
     </tr>
     <tr>
       <th>bathymetry</th>
@@ -189,10 +194,6 @@
     <tr>
       <th>glaciers</th>
       <td><p>Logical indicating whether glaciers and ice-sheets should be added to the map.</p></td>
-    </tr>
-    <tr>
-      <th>resolution</th>
-      <td><p>Not implemented yet.</p></td>
     </tr>
     <tr>
       <th>rotate</th>
@@ -207,7 +208,11 @@
       <td><p>The position for ggplot2 legend. See the argument with the same name in <a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a>.</p></td>
     </tr>
     <tr>
-      <th>lon.interval, lat.interval</th>
+      <th>lon.interval</th>
+      <td><p>Numeric value specifying the interval of longitude and latitude grids. <code>NULL</code> finds reasonable defaults depending on <code>limits</code>.</p></td>
+    </tr>
+    <tr>
+      <th>lat.interval</th>
       <td><p>Numeric value specifying the interval of longitude and latitude grids. <code>NULL</code> finds reasonable defaults depending on <code>limits</code>.</p></td>
     </tr>
     <tr>
@@ -220,15 +225,43 @@
 </ul></td>
     </tr>
     <tr>
-      <th>land.col, gla.col, grid.col</th>
-      <td><p>Character code specifying the color of land, glaciers and grid lines, respectively. Use <code>NA</code> to remove the grid lines.</p></td>
-    </tr>
-    <tr>
-      <th>land.border.col, gla.border.col, bathy.border.col</th>
+      <th>bathy.border.col</th>
       <td><p>Character code specifying the color of the border line for land, glacier, and bathymetry shapes.</p></td>
     </tr>
     <tr>
-      <th>land.size, gla.size, bathy.size, grid.size</th>
+      <th>bathy.size</th>
+      <td><p>Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the <code><a href='LS.html'>LS</a></code> function for a specific width in pt. See Details.</p></td>
+    </tr>
+    <tr>
+      <th>land.col</th>
+      <td><p>Character code specifying the color of land, glaciers and grid lines, respectively. Use <code>NA</code> to remove the grid lines.</p></td>
+    </tr>
+    <tr>
+      <th>land.border.col</th>
+      <td><p>Character code specifying the color of the border line for land, glacier, and bathymetry shapes.</p></td>
+    </tr>
+    <tr>
+      <th>land.size</th>
+      <td><p>Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the <code><a href='LS.html'>LS</a></code> function for a specific width in pt. See Details.</p></td>
+    </tr>
+    <tr>
+      <th>gla.col</th>
+      <td><p>Character code specifying the color of land, glaciers and grid lines, respectively. Use <code>NA</code> to remove the grid lines.</p></td>
+    </tr>
+    <tr>
+      <th>gla.border.col</th>
+      <td><p>Character code specifying the color of the border line for land, glacier, and bathymetry shapes.</p></td>
+    </tr>
+    <tr>
+      <th>gla.size</th>
+      <td><p>Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the <code><a href='LS.html'>LS</a></code> function for a specific width in pt. See Details.</p></td>
+    </tr>
+    <tr>
+      <th>grid.col</th>
+      <td><p>Character code specifying the color of land, glaciers and grid lines, respectively. Use <code>NA</code> to remove the grid lines.</p></td>
+    </tr>
+    <tr>
+      <th>grid.size</th>
       <td><p>Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the <code><a href='LS.html'>LS</a></code> function for a specific width in pt. See Details.</p></td>
     </tr>
     <tr>
@@ -276,7 +309,7 @@
 
 <span class='co'># \donttest{</span>
 <span class='fu'>qmap</span><span class='op'>(</span><span class='va'>dt</span>, rotate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from EPSG:4326 to +proj=stere +lat_0=90 +lat_ts=71 +lon_0=-65 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0</span></div><div class='img'><img src='qmap-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from EPSG:4326 to +proj=stere +lat_0=90 +lat_ts=71 +lon_0=-65 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs</span></div><div class='img'><img src='qmap-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 
 </div></pre>
   </div>

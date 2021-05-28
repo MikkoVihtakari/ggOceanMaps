@@ -9,7 +9,7 @@ dist2land(
   lon = NULL,
   lat = NULL,
   shapefile = NULL,
-  proj.in = "+init=epsg:4326",
+  proj.in = "EPSG:4326",
   bind = TRUE,
   dist.col = "ldist",
   binary = FALSE,

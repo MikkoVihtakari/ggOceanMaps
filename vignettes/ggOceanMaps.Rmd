@@ -358,7 +358,7 @@ The bathymetry needs first to be reclassified and formatted for the consequent v
 ```{r eval = FALSE}
 etopoPath <- "" # Replace by the path to the folder where the ETOPO1 grd file is located.
 lims <- c(-8, 65, 68, 82)
-projection <- "+init=epsg:32636"
+projection <- "EPSG:32636"
 basemap(limits = lims)
 ```
 
@@ -489,10 +489,6 @@ basemap(limits = raster::extent(fishingAreasNor)[1:4], bathymetry = TRUE,
 ```
 
 If you really need the polygon bathymetries, you can use the [ggnewscale](https://github.com/eliocamp/ggnewscale) package to make the data `fill` mapping disconnected from that in `basemap`.
-
-<!-- ### Other issues -->
-
-<!-- This section is here to remind that the maps do not work as intended yet. The examples here will hopefully disappear over time. The code has not been evaluated. Copy a respective piece of code and see if you can find a solution for it (if you feel like helping). -->
 
 # Citations and data sources
 

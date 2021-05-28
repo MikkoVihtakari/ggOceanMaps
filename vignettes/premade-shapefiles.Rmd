@@ -186,11 +186,6 @@ rb <- raster_bathymetry(
 )
 
 barentssea_bathy <- vector_bathymetry(rb)
-
-save(barentssea_bathy, 
-     file = paste(outPath, "ggOceanMapsLargeData/barentssea_bathy.rda", sep = "/"), 
-     compress = "xz"
-)
 ```
 
 Land:
@@ -202,11 +197,6 @@ barentssea_land <- sp::spTransform(
   sp::CRS(paste0("EPSG:", shapefile_list("Barents")$crs))
 )
 barentssea_land <- rgeos::gBuffer(barentssea_land, byid = TRUE, width = 0)
-
-save(barentssea_land, 
-     file = paste(outPath, "ggOceanMapsLargeData/barentssea_land.rda", sep = "/"),
-     compress = "xz"
-)
 ```
 
 Glaciers:
@@ -218,9 +208,13 @@ barentssea_glacier <- sp::spTransform(
   sp::CRS(paste0("EPSG:", shapefile_list("Barents")$crs))
 )
 barentssea_glacier <- rgeos::gBuffer(barentssea_glacier, byid = TRUE, width = 0)
+```
 
-save(barentssea_glacier, 
-     file = paste(outPath, "ggOceanMapsLargeData/barentssea_glacier.rda", sep = "/"),
+Save the data
+
+```{r}
+save(barentssea_land, barentssea_glacier, barentssea_bathy,
+     file = paste(outPath, "ggOceanMapsLargeData/barentssea.rda", sep = "/"),
      compress = "xz"
 )
 ```

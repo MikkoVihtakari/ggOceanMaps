@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
       <h1 data-toc-skip>ggOceanMaps User Manual</h1>
                         <h4 class="author">Mikko Vihtakari (Institute of Marine Research)</h4>
             
-            <h4 class="date">28 May, 2021</h4>
+            <h4 class="date">29 May, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/vignettes/ggOceanMaps.Rmd"><code>vignettes/ggOceanMaps.Rmd</code></a></small>
       <div class="hidden name"><code>ggOceanMaps.Rmd</code></div>
@@ -319,7 +319,9 @@
 <span class="co">#&gt; [1] 3031</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $proj</span>
-<span class="co">#&gt; [1] "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"</span></code></pre></div>
+<span class="co">#&gt; CRS arguments:</span>
+<span class="co">#&gt;  +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84</span>
+<span class="co">#&gt; +units=m +no_defs</span></code></pre></div>
 <p>Accessing the <code>attributes</code> allow custom modifications of maps produced by the <code>basemap</code> function. See the <a href="#reordering-layers">Reordering layers</a> section as an example.</p>
 <div id="reordering-layers" class="section level3">
 <h3 class="hasAnchor">
@@ -390,7 +392,7 @@
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">etopoPath</span> <span class="op">&lt;-</span> <span class="st">""</span> <span class="co"># Replace by the path to the folder where the ETOPO1 grd file is located.</span>
 <span class="va">lims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">8</span>, <span class="fl">65</span>, <span class="fl">68</span>, <span class="fl">82</span><span class="op">)</span>
-<span class="va">projection</span> <span class="op">&lt;-</span> <span class="st">"+init=epsg:32636"</span>
+<span class="va">projection</span> <span class="op">&lt;-</span> <span class="st">"EPSG:32636"</span>
 <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="va">lims</span><span class="op">)</span></code></pre></div>
 <p>We also need to define an appropriate projection. We will use the <a href="http://epsg.io/32636">UTM 36N zone projection</a>, which is approximately in the middle of our area of interest. We define higher resolution contour in depths 0-500 m because our area of interest is relatively shallow. The <code>raster_bathymetry</code> function is relatively slow for large data. The <code>aggregation.factor</code> argument can be used to reduce file size but will influence the resolution of the resulting shapefile (higher factors lead to a lower resolution).</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
@@ -491,8 +493,6 @@
   <span class="fu">annotation_spatial</span><span class="op">(</span><span class="va">fishingAreasNor</span>, <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">area</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu">coord_sf</span><span class="op">(</span>expand <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p>If you really need the polygon bathymetries, you can use the <a href="https://github.com/eliocamp/ggnewscale">ggnewscale</a> package to make the data <code>fill</code> mapping disconnected from that in <code>basemap</code>.</p>
-<!-- ### Other issues -->
-<!-- This section is here to remind that the maps do not work as intended yet. The examples here will hopefully disappear over time. The code has not been evaluated. Copy a respective piece of code and see if you can find a solution for it (if you feel like helping). -->
 </div>
 </div>
 </div>
@@ -507,7 +507,7 @@
 <span class="co">#&gt; To cite package 'ggOceanMaps' in publications use:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   Mikko Vihtakari (2021). ggOceanMaps: Plot Data on Oceanographic Maps</span>
-<span class="co">#&gt;   using 'ggplot2'. R package version 1.1.4.</span>
+<span class="co">#&gt;   using 'ggplot2'. R package version 1.1.5.</span>
 <span class="co">#&gt;   https://mikkovihtakari.github.io/ggOceanMaps/</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
@@ -516,7 +516,7 @@
 <span class="co">#&gt;     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},</span>
 <span class="co">#&gt;     author = {Mikko Vihtakari},</span>
 <span class="co">#&gt;     year = {2021},</span>
-<span class="co">#&gt;     note = {R package version 1.1.4},</span>
+<span class="co">#&gt;     note = {R package version 1.1.5},</span>
 <span class="co">#&gt;     url = {https://mikkovihtakari.github.io/ggOceanMaps/},</span>
 <span class="co">#&gt;   }</span></code></pre></div>
 </div>

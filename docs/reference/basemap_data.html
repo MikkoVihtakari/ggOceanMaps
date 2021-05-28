@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@
       <a href="../articles/premade-shapefiles.html">Pre-made shapefiles</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -138,7 +141,6 @@
   shapefiles <span class='op'>=</span> <span class='cn'>NULL</span>,
   bathymetry <span class='op'>=</span> <span class='cn'>FALSE</span>,
   glaciers <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  resolution <span class='op'>=</span> <span class='st'>"low"</span>,
   lon.interval <span class='op'>=</span> <span class='cn'>NULL</span>,
   lat.interval <span class='op'>=</span> <span class='cn'>NULL</span>,
   expand.factor <span class='op'>=</span> <span class='fl'>1.1</span>,
@@ -151,43 +153,42 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>limits</th>
-      <td><p>See <code><a href='basemap.html'>basemap</a></code></p></td>
+      <td><p>Map limits. One of the following:</p><ul>
+<li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
+<li><p><strong>single integer</strong> between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.</p></li>
+</ul><p>Can be omitted if <code>data</code> or <code>shapefiles</code> are defined.</p></td>
     </tr>
     <tr>
       <th>data</th>
-      <td><p>See <code><a href='basemap.html'>basemap</a></code></p></td>
+      <td><p>Data frame or <a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygons</a> shape containing longitude and latitude coordinates in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to <a href='guess_coordinate_columns.html'>guess the correct columns</a> and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if <code>limits</code> or <code>shapefiles</code> are defined.</p></td>
     </tr>
     <tr>
       <th>shapefiles</th>
-      <td><p>See <code><a href='basemap.html'>basemap</a></code></p></td>
+      <td><p>Either a <a href='shapefile_list.html'>list containing shapefile information</a> or a character argument referring to a name of pre-made shapefiles in <code><a href='shapefile_list.html'>shapefile_list</a></code>. This name is partially matched. Can be omitted if <code>limits</code> or <code>data</code> are defined as decimal degrees.</p></td>
     </tr>
     <tr>
       <th>bathymetry</th>
-      <td><p>See <code><a href='basemap.html'>basemap</a></code></p></td>
+      <td><p>Logical indicating whether bathymetry should be added to the map.</p></td>
     </tr>
     <tr>
       <th>glaciers</th>
-      <td><p>See <code><a href='basemap.html'>basemap</a></code></p></td>
+      <td><p>Logical indicating whether glaciers and ice-sheets should be added to the map.</p></td>
     </tr>
     <tr>
-      <th>resolution</th>
-      <td><p>See <code><a href='basemap.html'>basemap</a></code></p></td>
+      <th>lon.interval</th>
+      <td><p>Numeric value specifying the interval of longitude and latitude grids. <code>NULL</code> finds reasonable defaults depending on <code>limits</code>.</p></td>
     </tr>
     <tr>
-      <th>lon.interval, lat.interval</th>
-      <td><p>See <code><a href='basemap.html'>basemap</a></code></p></td>
-    </tr>
-    <tr>
-      <th>expand.factor</th>
-      <td><p>See <code><a href='auto_limits.html'>auto_limits</a></code></p></td>
+      <th>lat.interval</th>
+      <td><p>Numeric value specifying the interval of longitude and latitude grids. <code>NULL</code> finds reasonable defaults depending on <code>limits</code>.</p></td>
     </tr>
     <tr>
       <th>rotate</th>
-      <td><p>See <code><a href='basemap.html'>basemap</a></code></p></td>
+      <td><p>Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. Experimental.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>See <code><a href='basemap.html'>basemap</a></code></p></td>
+      <td><p>Logical indicating whether information about the projection and guessed column names should be returned as message. Set to <code>FALSE</code> to make the function silent.</p></td>
     </tr>
     </table>
 

@@ -8,7 +8,6 @@
 #' Can be omitted if \code{data} or \code{shapefiles} are defined.
 #' @param data Data frame or \link[sp]{SpatialPolygons} shape containing longitude and latitude coordinates in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.
 #' @param shapefiles Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.
-#' @param resolution Not implemented yet.
 #' @param bathymetry Logical indicating whether bathymetry should be added to the map.
 #' @param glaciers Logical indicating whether glaciers and ice-sheets should be added to the map.
 #' @param rotate Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. Experimental.
@@ -167,28 +166,15 @@
 #'       )
 #' }
 #' @import ggplot2 ggspatial sp sf
-#' @importFrom utils menu install.packages
 #' @export
 
 ## Test parameters
-# limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = TRUE
+# limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = TRUE
 
-basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, verbose = TRUE) {
+basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, verbose = TRUE) {
   
   # Install ggOceanMapsData if not installed
   if (!requireNamespace("ggOceanMapsData", quietly = TRUE)) {
-    # message("ggOceanMaps requires ggOceanMapsData, which is not installed. Do you want to install the package now?")
-    # ret.val <- utils::menu(c("Yes", "No"), "")
-    # 
-    # if(ret.val != 1) {
-    #   stop('The ggOceanMapsData package needs to be installed for ggOceanMaps to function.\nInstall the data package by running\ninstall.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org")')
-    # } else {
-    #   utils::install.packages("ggOceanMapsData", 
-    #                           repos = c("https://mikkovihtakari.github.io/drat",
-    #                           "https://cloud.r-project.org")
-    #   )
-    # }
-    
     stop('The ggOceanMapsData package needs to be installed for ggOceanMaps to function.\nInstall the data package by running\ninstall.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org")\nOR\ndevtools::install_github("MikkoVihtakari/ggOceanMapsData")')
   }
   
@@ -200,7 +186,7 @@ basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = 
   ###########
   # Data ####
   
-  X <- basemap_data(limits = limits, data = data, shapefiles = shapefiles, bathymetry = bathymetry, glaciers = glaciers, resolution = resolution, lon.interval = lon.interval, lat.interval = lat.interval, rotate = rotate, verbose = verbose)
+  X <- basemap_data(limits = limits, data = data, shapefiles = shapefiles, bathymetry = bathymetry, glaciers = glaciers, lon.interval = lon.interval, lat.interval = lat.interval, rotate = rotate, verbose = verbose)
   
   ###########
   # Plot ####

@@ -54,7 +54,7 @@ map_cmd <- function(command, alternative = FALSE) {
       scale_x_continuous(breaks = X$map.grid$lon.breaks, expand = c(0,0.1)) +
       labs(y = "Latitude (decimal degrees)", x = "Longitude (decimal degrees)") +
       coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4],
-        crs = X$proj, default = TRUE) +
+        crs = sf::st_crs(X$proj), default = TRUE) +
       theme_map(base_size = base_size, grid.col = grid.col, grid.size = grid.size) +
       theme(legend.position = legend.position,
       legend.margin=margin(t = 0.2, b = 0, unit = "cm")
@@ -63,7 +63,7 @@ map_cmd <- function(command, alternative = FALSE) {
     defs_rect_proj = '
       labs(y = "Latitude (meters)", x = "Longitude (meters)") +
       coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], 
-        expand = FALSE, crs = X$proj, datum = X$proj, default = TRUE) +
+        expand = FALSE, crs = sf::st_crs(X$proj), datum = sf::st_crs(X$proj), default = TRUE) +
       theme_map(base_size = base_size, grid.col = grid.col, grid.size = grid.size) +
       theme(legend.position = legend.position,
       legend.margin=margin(t = 0.2, b = 0, unit = "cm")
@@ -76,7 +76,7 @@ map_cmd <- function(command, alternative = FALSE) {
     if(!is.na(grid.col)) ggspatial::geom_spatial_path(data = X$map.grid$lat.grid.lines, aes(x = lon, y = lat), crs = 4326, color = grid.col, size = grid.size)
     } +
     ggspatial::geom_spatial_path(data = X$map.grid$lat.limit.line, aes(x = lon, y = lat), crs = 4326, color = land.border.col, size = land.size) +
-    coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], expand = FALSE, crs = X$proj, default = TRUE) +
+    coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], expand = FALSE, crs = sf::st_crs(X$proj), default = TRUE) +
     theme_void(base_size = base_size) +
     theme(legend.position = legend.position,
           legend.margin = margin(t = 0.2, b = 0, r = 0.2, unit = "cm")
@@ -85,7 +85,7 @@ map_cmd <- function(command, alternative = FALSE) {
     defs_polar_proj = '
     labs(y = "Latitude (meters)", x = "Longitude (meters)") +
     ggspatial::geom_spatial_path(data = X$map.grid$lat.limit.line, aes(x = lon, y = lat), crs = 4326, color = land.border.col, size = land.size) +
-    coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], expand = FALSE, crs = X$proj, datum = X$proj, default = TRUE) +
+    coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], expand = FALSE, crs = sf::st_crs(X$proj), datum = sf::st_crs(X$proj), default = TRUE) +
     theme_map(base_size = base_size, grid.col = grid.col, grid.size = grid.size) +
     theme(legend.position = legend.position,
           legend.margin = margin(t = 0.2, b = 0, r = 0.2, unit = "cm")

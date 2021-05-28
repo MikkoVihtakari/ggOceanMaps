@@ -10,7 +10,6 @@ basemap_data(
   shapefiles = NULL,
   bathymetry = FALSE,
   glaciers = FALSE,
-  resolution = "low",
   lon.interval = NULL,
   lat.interval = NULL,
   expand.factor = 1.1,
@@ -19,25 +18,28 @@ basemap_data(
 )
 }
 \arguments{
-\item{limits}{See \code{\link{basemap}}}
+\item{limits}{Map limits. One of the following:
+\itemize{
+  \item \strong{numeric vector} of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.
+  \item \strong{single integer} between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.
+}
+Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
-\item{data}{See \code{\link{basemap}}}
+\item{data}{Data frame or \link[sp]{SpatialPolygons} shape containing longitude and latitude coordinates in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.}
 
-\item{shapefiles}{See \code{\link{basemap}}}
+\item{shapefiles}{Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.}
 
-\item{bathymetry}{See \code{\link{basemap}}}
+\item{bathymetry}{Logical indicating whether bathymetry should be added to the map.}
 
-\item{glaciers}{See \code{\link{basemap}}}
+\item{glaciers}{Logical indicating whether glaciers and ice-sheets should be added to the map.}
 
-\item{resolution}{See \code{\link{basemap}}}
+\item{lon.interval}{Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.}
 
-\item{lon.interval, lat.interval}{See \code{\link{basemap}}}
+\item{lat.interval}{Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.}
 
-\item{expand.factor}{See \code{\link{auto_limits}}}
+\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. Experimental.}
 
-\item{rotate}{See \code{\link{basemap}}}
-
-\item{verbose}{See \code{\link{basemap}}}
+\item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.}
 }
 \value{
 A list of class \code{basemapData} containing information required for plotting a \code{\link{basemap}}.

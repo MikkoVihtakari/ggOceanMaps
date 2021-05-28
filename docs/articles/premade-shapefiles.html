@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
       <h1 data-toc-skip>Pre-made shapefiles</h1>
                         <h4 class="author">Mikko Vihtakari (Institute of Marine Research)</h4>
             
-            <h4 class="date">28 May, 2021</h4>
+            <h4 class="date">29 May, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/vignettes/premade-shapefiles.Rmd"><code>vignettes/premade-shapefiles.Rmd</code></a></small>
       <div class="hidden name"><code>premade-shapefiles.Rmd</code></div>
@@ -235,12 +235,7 @@
   boundary <span class="op">=</span> <span class="va">bound.limits</span>
 <span class="op">)</span>
 
-<span class="va">barentssea_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">barentssea_bathy</span>, 
-     file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsLargeData/barentssea_bathy.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, 
-     compress <span class="op">=</span> <span class="st">"xz"</span>
-<span class="op">)</span></code></pre></div>
+<span class="va">barentssea_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span></code></pre></div>
 <p>Land:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">barentssea_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">bound.limits</span><span class="op">)</span>
@@ -248,12 +243,7 @@
   <span class="va">barentssea_land</span>, 
   <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">CRS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Barents"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="va">barentssea_land</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">barentssea_land</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">barentssea_land</span>, 
-     file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsLargeData/barentssea_land.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,
-     compress <span class="op">=</span> <span class="st">"xz"</span>
-<span class="op">)</span></code></pre></div>
+<span class="va">barentssea_land</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">barentssea_land</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
 <p>Glaciers:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">barentssea_glacier</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">glaciers</span>, <span class="va">bound.limits</span><span class="op">)</span>
@@ -261,17 +251,18 @@
   <span class="va">barentssea_glacier</span>, 
   <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">CRS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Barents"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="va">barentssea_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">barentssea_glacier</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">barentssea_glacier</span>, 
-     file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsLargeData/barentssea_glacier.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,
+<span class="va">barentssea_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">barentssea_glacier</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<p>Save the data</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">barentssea_land</span>, <span class="va">barentssea_glacier</span>, <span class="va">barentssea_bathy</span>,
+     file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsLargeData/barentssea.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,
      compress <span class="op">=</span> <span class="st">"xz"</span>
 <span class="op">)</span></code></pre></div>
 </div>
 <div id="high-resolution-arctic-stereographic" class="section level2">
 <h2 class="hasAnchor">
 <a href="#high-resolution-arctic-stereographic" class="anchor"></a>High resolution Arctic stereographic</h2>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span>
   bathy <span class="op">=</span> <span class="st">"/Users/a22357/Downloads/IBCAO_v4_200m.nc"</span>, 
   depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">400</span>, <span class="fl">500</span>, <span class="fl">750</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, 

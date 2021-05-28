@@ -10,7 +10,6 @@ basemap(
   shapefiles = NULL,
   bathymetry = FALSE,
   glaciers = FALSE,
-  resolution = "low",
   rotate = FALSE,
   legends = TRUE,
   legend.position = "right",
@@ -47,8 +46,6 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 \item{bathymetry}{Logical indicating whether bathymetry should be added to the map.}
 
 \item{glaciers}{Logical indicating whether glaciers and ice-sheets should be added to the map.}
-
-\item{resolution}{Not implemented yet.}
 
 \item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. Experimental.}
 

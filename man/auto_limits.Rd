@@ -36,7 +36,7 @@ A list of limits and projections in \code{proj.in} and \code{proj.out} formats.
 Find limits for a \code{\link{basemap}} from a data frame.
 }
 \details{
-This is an internal function, which is automatically run by the \code{\link{basemap}} function. The function does some funky illogical action (seeing the argument names) when feeding in projected coordinates. This is to make the automatic limits to work for projected coordinates too. Despite the funkiness, the function may be useful when customising \code{\link{basemap}}s.
+This is an internal function, which is automatically run by the \code{\link{basemap}} function.
 }
 \examples{
 if(requireNamespace("ggOceanMapsData")) {

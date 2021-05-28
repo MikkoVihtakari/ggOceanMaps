@@ -9,6 +9,8 @@
 #' to \code{\link[ggplot2]{ggplot}} function from the \pkg{ggplot2} package. 
 #' Remember to use \code{data = <<NAMEOFDATASET>>} for additional geometries
 #' you plot on \code{basemaps} (\code{basemap(60) + geom_point(data = 
-#' data.frame(lon = 50, tat = 70), aes(x = lon, y = lat))} as an example).
+#' data.frame(lon = 50, lat = 70), aes(x = lon, y = lat))} as an example). As
+#' a shortcut, you may also use qmap(data.frame(lon = c(10, 50), lat = c(60, 70))).
+#' Bathymetry is plotted using the \code{bathymetry} argument.
 #' @keywords internal
 "_PACKAGE"

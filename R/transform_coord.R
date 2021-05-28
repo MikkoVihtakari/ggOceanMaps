@@ -13,6 +13,7 @@
 #' @family basemap functions
 #' @author Mikko Vihtakari
 #' @import sp
+#' @importFrom sf st_is_longlat
 #' @examples
 #' # Coordinates are automatically transformed to the pre-made shapefile 
 #' # projections:
@@ -25,9 +26,8 @@
 #' @export
 
 ## Debug data
-# lon = NULL; lat = NULL; new.names = "auto"; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
-# lon = "rLon"; lat = "rLat"; new.names = c("rLon.proj", "rLat.proj"); proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; bind = TRUE; na = "ignore"
-# lon = NULL; lat = NULL; new.names = "auto"; proj.in = "+init=epsg:4326"; proj.out = "+init=epsg:32636"; verbose = FALSE; bind = FALSE; na = "ignore"
+# x = data; bind = TRUE; na = "ignore"; new.names = "auto"
+# x = NULL; lon = NULL; lat = NULL; new.names = "auto"; proj.in = "EPSG:4326"; proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
 transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", proj.in = "EPSG:4326", proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
   
   # Checks ----
@@ -38,7 +38,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     }
   }
   
-  if(is.null(proj.out) & !grepl("+proj=longlat", suppressWarnings(sp::CRS(proj.in))@projargs)) stop("proj.in has to be decimal degrees when proj.out = NULL.")
+  if(is.null(proj.out) & !sf::st_is_longlat(proj.in)) stop("proj.in has to be decimal degrees when proj.out = NULL.")
   if(!is.null(proj.out)) {
     
     error_test <- quiet(try(match.arg(proj.out, shapefile_list("all")$name), silent = TRUE))
@@ -51,9 +51,8 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   if(is.null(proj.in)) {
     if(is.null(x)) stop("a spatial object as x is required when proj.in = NULL")
     
-    proj.in <- suppressWarnings(sp::proj4string(x))
+    proj.in <- raster::crs(x)
   }
-  
   
   ## Case for defined x and undefined lon or/and lat
   if(!is.null(x) & (is.null(lon) | is.null(lat))) {
@@ -113,12 +112,13 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     proj.out <- paste0("EPSG:",shapefile_list(shapefile.def$shapefile.name)$crs)
   }
   
+  
   ## Coordinate transformation ----
   
   sp::coordinates(y) <- c(lon, lat)
-  sp::proj4string(y) <- suppressWarnings(sp::CRS(proj.in)) # original projection
+  sp::proj4string(y) <- if(class(proj.in) == "CRS") {proj.in} else {sp::CRS(proj.in)}
   
-  y <- sp::spTransform(y, suppressWarnings(sp::CRS(proj.out)))
+  y <- sp::spTransform(y, if(class(proj.out) == "CRS") {proj.out} else {sp::CRS(proj.out)})
   y <- data.frame(sp::coordinates(y))
   
   ## ----
@@ -137,6 +137,14 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   
   if(verbose) {
     message(paste("projection transformed from", proj.in, "to", proj.out))
+  }
+  
+  # Change column names if proj.in not decimal degrees
+  
+  if(!sf::st_is_longlat(proj.in) & sf::st_is_longlat(proj.out)) {
+    tmp <- names(x)
+    names(x) <- names(y)
+    names(y) <- tmp
   }
   
   # Final modifications ---

@@ -73,7 +73,7 @@ oceanographic maps anywhere around the globe." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@ oceanographic maps anywhere around the globe." />
       <a href="../articles/premade-shapefiles.html">Pre-made shapefiles</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -144,7 +147,9 @@ can be plotted. The <code><a href='basemap.html'>basemap</a></code> function is 
 to <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></code> function from the <span class="pkg">ggplot2</span> package. 
 Remember to use <code>data = &lt;&lt;NAMEOFDATASET&gt;&gt;</code> for additional geometries
 you plot on <code>basemaps</code> (<code>basemap(60) + geom_point(data = 
-data.frame(lon = 50, tat = 70), aes(x = lon, y = lat))</code> as an example).</p>
+data.frame(lon = 50, lat = 70), aes(x = lon, y = lat))</code> as an example). As
+a shortcut, you may also use qmap(data.frame(lon = c(10, 50), lat = c(60, 70))).
+Bathymetry is plotted using the <code>bathymetry</code> argument.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Useful links:</p><ul>

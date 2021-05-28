@@ -1,15 +1,6 @@
 #' @title Create basemapData object for basemap plotting
 #' @description Internal function to create a \code{basemapData} object for \code{\link{basemap}}
-#' @param limits See \code{\link{basemap}}
-#' @param data See \code{\link{basemap}}
-#' @param shapefiles See \code{\link{basemap}}
-#' @param bathymetry See \code{\link{basemap}}
-#' @param glaciers See \code{\link{basemap}}
-#' @param resolution See \code{\link{basemap}}
-#' @param lon.interval,lat.interval See \code{\link{basemap}}
-#' @param expand.factor See \code{\link{auto_limits}}
-#' @param rotate See \code{\link{basemap}}
-#' @param verbose See \code{\link{basemap}}
+#' @inheritParams basemap
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function. Common users do not need to worry about these details.
 #' @return A list of class \code{basemapData} containing information required for plotting a \code{\link{basemap}}.
 #' @keywords internal
@@ -19,9 +10,8 @@
 #' @seealso \code{\link{basemap}}
 
 # Test paramters
-# limits = c(-180, 180, -60, 60)
-# limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; resolution = "low"; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE; verbose = TRUE
-basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, resolution = "low", lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = TRUE) {
+# limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE; verbose = TRUE
+basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = TRUE) {
   
   # Switches and checks ####
   
@@ -66,7 +56,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     }
   }
   
-  # 2. limits argument dictates the limits and defines shapefile if not specified
+  # 2. limits argument dictates the limits and defines shapefile if not specified ####
   
   if(!is.null(limits)) {
     
@@ -146,8 +136,9 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
                       lon = "lon", lat = "lat", 
                       proj.in = 
                         ifelse(class(shapefiles$land) == "SpatialPolygonsDataFrame",
-                               suppressWarnings(sp::proj4string(shapefiles$land)),
-                               suppressWarnings(sp::proj4string(eval(parse(text = shapefiles$land))))),
+                               raster::crs(shapefiles$land),
+                               paste0("EPSG:", shapefiles$crs)
+                        ),
                       proj.out = "EPSG:4326",
                       verbose = verbose)
         
@@ -225,9 +216,8 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
       if(!is.null(shapefiles)) {
         clipLimits <- 
           auto_limits(data, verbose = !rotate, 
-                      proj.out = 
-                        suppressWarnings(sp::proj4string(shapefiles$land))
-                      ) 
+                      proj.out = raster::crs(shapefiles$land)
+          ) 
       } else {
         clipLimits <- auto_limits(data, expand.factor = 1.1, verbose = !rotate)
       }
@@ -276,7 +266,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   
   ##  Define the CRS for the underlying data ###
   
-  LandCRS <- suppressWarnings(sp::proj4string(shapefiles$land))
+  LandCRS <- raster::crs(shapefiles$land)
   
   # 5. Crop and rotate shapefiles if needed ###
   
@@ -308,8 +298,11 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
       auto_limits(data = expand.grid(
         lon = c(tmp[[1]], tmp[[2]]), 
         lat = c(tmp[[3]], tmp[[4]])), 
-        lon = "lon", lat = "lat",
-        proj.in = LandCRS, proj.out = "+init=epsg:4326")
+        lon = "lon",
+        lat = "lat",
+        proj.in = LandCRS, 
+        proj.out = "EPSG:4326"
+      )
     
     # Clip the shapefiles (Clipping likely not required. Untick if it is.)
     
@@ -323,11 +316,11 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     
     # Clip the shapefiles
     
-    landBoundary <- clip_shapefile(shapefiles$land, limits = limits, proj.limits = "+init=epsg:4326", return.boundary = TRUE)
+    landBoundary <- clip_shapefile(shapefiles$land, limits = limits, proj.limits = "EPSG:4326", return.boundary = TRUE)
     
     shapefiles$land <- landBoundary$shapefile
-    if(glaciers) shapefiles$glacier <- clip_shapefile(shapefiles$glacier, limits = limits, proj.limits = ifelse(decLimits, "+init=epsg:4326", LandCRS))
-    if(bathymetry) shapefiles$bathy <- clip_shapefile(shapefiles$bathy, limits = limits, proj.limits = ifelse(decLimits, "+init=epsg:4326", LandCRS))
+    if(glaciers) shapefiles$glacier <- clip_shapefile(shapefiles$glacier, limits = limits, proj.limits = ifelse(decLimits, "EPSG:4326", LandCRS))
+    if(bathymetry) shapefiles$bathy <- clip_shapefile(shapefiles$bathy, limits = limits, proj.limits = ifelse(decLimits, "EPSG:4326", LandCRS))
     
     # Define map limits
     
@@ -353,7 +346,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
                                 lon = "lon", lat = "lat",
                                 proj.out = LandCRS)
       
-      shapefiles$land <- suppressWarnings(sp::spTransform(shapefiles$land, CRSobj = suppressWarnings(sp::CRS(LandCRS))))
+      shapefiles$land <- sp::spTransform(shapefiles$land, CRSobj = LandCRS)
       
       if(glaciers) shapefiles$glacier <- suppressWarnings(sp::spTransform(shapefiles$glacier, CRSobj = suppressWarnings(sp::CRS(LandCRS))))
       if(bathymetry) shapefiles$bathy <- suppressWarnings(sp::spTransform(shapefiles$bathy, CRSobj = suppressWarnings(sp::CRS(LandCRS))))
@@ -385,7 +378,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   
   if(exists("clipLimits")) {
     if(abs(clipLimits$ddLimits[4]) != 90) {
-      tmp <- sp::spTransform(clipLimits$projBound, sp::CRS(SRS_string = "EPSG:4326"))@bbox
+      tmp <- sp::spTransform(clipLimits$projBound, sp::CRS("EPSG:4326"))@bbox
       clipLimits$ddLimits <- unname(c(sort(tmp[1,]), sort(tmp[2,])))
     }
   }

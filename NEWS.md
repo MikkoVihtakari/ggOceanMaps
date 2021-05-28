@@ -1,8 +1,8 @@
 # ggOceanMaps 1.2 (development version)
 
+* Conversion from PROJ4 to PROJ6. This change will make the old ggOceanMapsData files incompatible with ggOceanMaps 1.2 and vice versa. Changed most functions. 
 * Added NEWS.md
 * Improved premade_shapefiles and shapefile documentation.
-* Continued the PROJ4 to PROJ6 conversion. This change will eventually make the old ggOceanMapsData files incompatible with ggOceanMaps 1.2 and vice versa. 
 * Moved the rgdal package from Imports to Suggests.
 * [Fix issue with other than decimal degree input rasters](https://github.com/MikkoVihtakari/ggOceanMaps/issues/2) in `raster_bathymetry()`
          
