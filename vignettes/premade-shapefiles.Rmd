@@ -11,21 +11,26 @@ vignette: >
 
 ```{r, include = FALSE}
 library(knitr)
-knitr::opts_chunk$set(collapse = TRUE, message = FALSE, warning = FALSE, comment = "#>")
+knitr::opts_chunk$set(collapse = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      eval = FALSE,
+                      comment = "#>"
+                      )
 
 ```
 
-```{r setup}
+```{r setup, eval = TRUE}
 library(ggOceanMaps)
 ```
 
-Shapefiles used by this package have been defined as follows:
+Shapefiles used by this package are stored in two places: 1) the low-resolution shapefiles used frequently are stored in the [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData) package which should be installed automatically together with ggOceanMaps. 2) High-resolution shapefiles of selected locations are stored in the [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData) repository and downloaded automatically as needed. This document describes how each of the shapefiles is created. 
 
-# Low-resolution shapefiles shipped with ggOceanMap
+# 1. Low-resolution shapefiles in ggOceanMapData
 
 Download the datasets specified in [Data sources](#data-sources) to folders on your computer. Replace the paths under with the correct folder paths on your computer.
 
-```{r}
+```{r eval = FALSE}
 etopoPath <- ""
 NEDPath <- ""
 outPath <- ""
@@ -35,29 +40,29 @@ outPath <- ""
 
 Bathymetry:
 
-```{r eval = FALSE}
-rb <- raster_bathymetry(bathy = paste(etopoPath, "ETOPO1_Ice_g_gmt4.grd", sep = "/"),
+```{r}
+rb <- raster_bathymetry(bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"),
                         depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000), 
-                        proj.out = "+init=epsg:4326", 
+                        proj.out = "EPSG:4326", 
                         boundary = c(-180.0083, 180.0083, -90, 90), 
                         aggregation.factor = 6
 )
 
 dd_bathy <- vector_bathymetry(rb, drop.crumbs = 50, remove.holes = 50)
 
-save(dd_bathy, file = paste(outPath, "dd_bathy.rda", sep = "/"), compress = "xz")
+save(dd_bathy, file = paste(outPath, "ggOceanMapsData/dd_bathy.rda", sep = "/"), compress = "xz")
 ```
 
 Land:
 
 ```{r eval = FALSE}
-world <- rgdal::readOGR(paste(NEDPath, "ne_10m_land/ne_10m_land.shp", sep = "/"))
-islands <- rgdal::readOGR(paste(NEDPath, "ne_10m_minor_islands/ne_10m_minor_islands.shp", sep = "/"))
+world <- sf::st_read(file.path(NEDPath, "ne_10m_land/ne_10m_land.shp"))
+islands <- sf::st_read(file.path(NEDPath, "ne_10m_minor_islands/ne_10m_minor_islands.shp"))
 world <- rbind(world, islands)
 
-dd_land <- clip_shapefile(world, c(-180, 180, -90, 90))
+dd_land <- clip_shapefile(sf::as_Spatial(world), c(-180, 180, -90, 90))
 
-save(dd_land, file = paste(outPath, "dd_land.rda", sep = "/"), compress = "xz")
+save(dd_land, file = paste(outPath, "ggOceanMapsData/dd_land.rda", sep = "/"), compress = "xz")
 ```
 
 Glaciers:
@@ -73,7 +78,7 @@ dd_glacier <- clip_shapefile(glaciers, c(-180, 180, -90, 90))
 dd_glacier <- rgeos::gBuffer(dd_glacier, byid = FALSE, width = 0.1)
 dd_glacier <- rgeos::gBuffer(dd_glacier, byid = FALSE, width = -0.1)
 
-save(dd_glacier, file = paste(outPath, "dd_glacier.rda", sep = "/"), compress = "xz")
+save(dd_glacier, file = paste(outPath, "ggOceanMapsData/dd_glacier.rda", sep = "/"), compress = "xz")
 ```
 
 ## Arctic stereographic
@@ -83,14 +88,14 @@ Bathymetry:
 ```{r eval = FALSE}
 rb <- raster_bathymetry(bathy = paste(etopoPath, "ETOPO1_Ice_g_gmt4.grd", sep = "/"), 
                         depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000), 
-                        proj.out = "+init=epsg:3995", 
+                        proj.out = "EPSG:3995", 
                         boundary = c(-180.0083, 180.0083, 30, 90), 
                         aggregation.factor = 2
 )
 
 arctic_bathy <- vector_bathymetry(rb)
 
-save(arctic_bathy, file = paste(outPath, "arctic_bathy.rda", sep = "/"), compress = "xz")
+save(arctic_bathy, file = paste(outPath, "ggOceanMapsData/arctic_bathy.rda", sep = "/"), compress = "xz")
 ```
 
 Land:
@@ -100,7 +105,7 @@ arctic_land <- clip_shapefile(world, c(-180, 180, 30, 90))
 arctic_land <- sp::spTransform(arctic_land, sp::CRS(sp::proj4string(arctic_bathy)))
 arctic_land <- rgeos::gBuffer(arctic_land, byid = TRUE, width = 0)
 
-save(arctic_land, file = paste(outPath, "arctic_land.rda", sep = "/"), compress = "xz")
+save(arctic_land, file = paste(outPath, "ggOceanMapsData/arctic_land.rda", sep = "/"), compress = "xz")
 ```
 
 Glaciers:
@@ -111,7 +116,7 @@ arctic_glacier <- sp::spTransform(arctic_glacier, sp::CRS(sp::proj4string(arctic
 arctic_glacier <- rgeos::gBuffer(arctic_glacier, byid = FALSE, width = 1000)
 arctic_glacier <- rgeos::gBuffer(arctic_glacier, byid = FALSE, width = -1000)
 
-save(arctic_glacier, file = paste(outPath, "arctic_glacier.rda", sep = "/"), compress = "xz")
+save(arctic_glacier, file = paste(outPath, "ggOceanMapsData/arctic_glacier.rda", sep = "/"), compress = "xz")
 ```
 
 ## Antarctic steregraphic
@@ -121,14 +126,14 @@ Bathymetry:
 ```{r eval = FALSE}
 rb <- raster_bathymetry(bathy = paste(etopoPath, "ETOPO1_Ice_g_gmt4.grd", sep = "/"), 
                         depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000), 
-                        proj.out = "+init=epsg:3031", 
+                        proj.out = "EPSG:3031", 
                         boundary = c(-180.0083, 180.0083, -80, -30), 
                         aggregation.factor = 2
 )
 
 antarctic_bathy <- vector_bathymetry(rb)
 
-save(antarctic_bathy, file = paste(outPath, "antarctic_bathy.rda", sep = "/"), compress = "xz")
+save(antarctic_bathy, file = paste(outPath, "ggOceanMapsData/antarctic_bathy.rda", sep = "/"), compress = "xz")
 ```
 
 Land:
@@ -138,7 +143,7 @@ antarctic_land <- clip_shapefile(world, c(-180, 180, -90, -30))
 antarctic_land <- sp::spTransform(antarctic_land, sp::CRS(sp::proj4string(antarctic_bathy)))
 antarctic_land <- rgeos::gBuffer(antarctic_land, byid = TRUE, width = 0)
 
-save(antarctic_land, file = paste(outPath, "antarctic_land.rda", sep = "/"), compress = "xz")
+save(antarctic_land, file = paste(outPath, "ggOceanMapsData/antarctic_land.rda", sep = "/"), compress = "xz")
 ```
 
 Glaciers:
@@ -149,8 +154,12 @@ antarctic_glacier <- sp::spTransform(antarctic_glacier, sp::CRS(sp::proj4string(
 antarctic_glacier <- rgeos::gBuffer(antarctic_glacier, byid = FALSE, width = 1000)
 antarctic_glacier <- rgeos::gBuffer(antarctic_glacier, byid = FALSE, width = -1000)
 
-save(antarctic_glacier, file = paste(outPath, "antarctic_glacier.rda", sep = "/"), compress = "xz")
+save(antarctic_glacier, file = paste(outPath, "ggOceanMapsData/antarctic_glacier.rda", sep = "/"), compress = "xz")
 ```
+
+# 2. High-resolution shapefiles in ggOceanMapsLargeData
+
+
 
 # Data sources
 

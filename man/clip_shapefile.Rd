@@ -6,19 +6,19 @@
 \usage{
 clip_shapefile(
   x,
-  limits = NULL,
-  proj.limits = "+init=epsg:4326",
+  limits,
+  proj.limits = "EPSG:4326",
   simplify = FALSE,
   tol = 60,
   return.boundary = FALSE
 )
 }
 \arguments{
-\item{x}{Original shape file to be clipped. Required. Must contain \code{\link[sp:is.projected]{proj4string}} information.}
+\item{x}{Original shape file to be clipped as a an \link[sp]{sp} or \link[sf]{sf} polygons object. Required. Must contain \code{\link[sp:is.projected]{CRS}} information.}
 
-\item{limits}{The constraining area used to clip \code{x}. Required. Either a numeric vector of length 4 or a \link[sp]{SpatialPolygons} object. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. The \link[sp]{SpatialPolygons} object must contain \code{\link[sp:is.projected]{proj4string}} information. See details.}
+\item{limits}{The constraining area used to clip \code{x}. Required. Either a numeric vector of length 4 or a \link[sp]{SpatialPolygons} object. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. The \link[sp]{SpatialPolygons} object must contain \code{\link[sp:is.projected]{CRS}} information. See details.}
 
-\item{proj.limits}{The \code{\link[sp:is.projected]{proj4string}} projection attributes for \code{limits}. Defaults to decimal degrees (see **Usage**).}
+\item{proj.limits}{The \code{\link[sp:is.projected]{CRS}} projection attributes for \code{limits} as character string (will be passed to \code{\link[sp]{CRS}}). Use the PROJ6 format. Defaults to decimal degrees (see Usage).}
 
 \item{simplify}{Should the \code{x} geometry be simplified before clipping? Useful to make the function faster for large shape files. Uses \code{rgeos::gSimplify} function.}
 

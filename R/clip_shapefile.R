@@ -1,8 +1,8 @@
 #' @title Clip a shapefile (SpatialPolygon) using a bounding area
 #' @description Clips an area from a larger shape file (\link[sp]{SpatialPolygons}).
-#' @param x Original shape file to be clipped. Required. Must contain \code{\link[sp:is.projected]{proj4string}} information.
-#' @param limits The constraining area used to clip \code{x}. Required. Either a numeric vector of length 4 or a \link[sp]{SpatialPolygons} object. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. The \link[sp]{SpatialPolygons} object must contain \code{\link[sp:is.projected]{proj4string}} information. See details.
-#' @param proj.limits The \code{\link[sp:is.projected]{proj4string}} projection attributes for \code{limits}. Defaults to decimal degrees (see **Usage**).
+#' @param x Original shape file to be clipped as a an \link[sp]{sp} or \link[sf]{sf} polygons object. Required. Must contain \code{\link[sp:is.projected]{CRS}} information.
+#' @param limits The constraining area used to clip \code{x}. Required. Either a numeric vector of length 4 or a \link[sp]{SpatialPolygons} object. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. The \link[sp]{SpatialPolygons} object must contain \code{\link[sp:is.projected]{CRS}} information. See details.
+#' @param proj.limits The \code{\link[sp:is.projected]{CRS}} projection attributes for \code{limits} as character string (will be passed to \code{\link[sp]{CRS}}). Use the PROJ6 format. Defaults to decimal degrees (see Usage).
 #' @param simplify Should the \code{x} geometry be simplified before clipping? Useful to make the function faster for large shape files. Uses \code{rgeos::gSimplify} function.
 #' @param tol Numerical tolerance value to be used for simplification. See \code{?rgeos::gSimplify}.
 #' @param return.boundary logical. If \code{TRUE} returns the clip boundary together with the shapefile
@@ -12,26 +12,28 @@
 #' @family create shapefiles
 #' @import sp rgdal
 #' @importFrom rgeos gIntersection gIntersects gSimplify
+#' @importFrom sf as_Spatial
 #' @importFrom methods slot slot<-
 #' @importFrom grDevices chull
 #' @author Mikko Vihtakari with a solution from \href{https://stackoverflow.com/questions/15881455/how-to-clip-worldmap-with-polygon-in-r}{Simon O'Hanlon, Roger Bivand/SO community}
 #' @export
 
 # Test parameters
-# x = shapefiles$land
-# proj.limits = "+init=epsg:4326"; simplify = FALSE; tol = 60; return.boundary = FALSE
-clip_shapefile <- function(x, limits = NULL, proj.limits = "+init=epsg:4326", simplify = FALSE, tol = 60, return.boundary = FALSE) {
+# x = world; limits = c(-180, 180, -90, 90)
+# proj.limits = "EPSG:4326"; simplify = FALSE; tol = 60; return.boundary = FALSE
+clip_shapefile <- function(x, limits, proj.limits = "EPSG:4326", simplify = FALSE, tol = 60, return.boundary = FALSE) {
 
   ## Checks
-
-  if(is.null(x)) stop("x, the original shape file must be supplied")
-  if(is.null(limits)) stop("Either limits or limiting.polygon must be supplied")
+  
+  if("sf" %in% class(x)) {
+    x <- sf::as_Spatial(x)
+  }
 
   ## Projection
 
   x_proj <- suppressWarnings(sp::proj4string(x))
 
-  if(is.na(x_proj)) stop("proj4string for x is missing. Define the projection attributes and try again.")
+  if(is.na(x_proj)) stop("crs for x is missing. Define the projection attributes and try again.")
 
   ## Clip boundary
 

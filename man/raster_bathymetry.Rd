@@ -16,11 +16,11 @@ raster_bathymetry(
 \arguments{
 \item{bathy}{A \link[raster]{raster} object or a string giving the path to a bathymetry NetCDF or grd file}
 
-\item{depths}{Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}.}
+\item{depths}{Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}).}
 
-\item{proj.out}{A character string specifying the PROJ.4 projection arguments for the output. See \code{\link[sp:CRS-class]{CRS}} and \href{https://proj.org/}{proj.org}.}
+\item{proj.out}{A character string specifying the PROJ6 projection arguments for the output. See \code{\link[sp:CRS-class]{CRS}} and \href{https://proj.org/}{proj.org}.}
 
-\item{boundary}{A \link[sp]{SpatialPolygons}(DataFrame) object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.}
+\item{boundary}{A \link[sp]{SpatialPolygons}(DataFrame) or \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.}
 
 \item{file.name}{A character string specifying the file path \strong{without extension} where the output should be saved. If \code{NULL} a temporary file will be used. See \code{\link[raster]{writeRaster}}.}
 

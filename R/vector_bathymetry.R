@@ -30,7 +30,7 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
   ### Bathy argument
 
   if(class(bathy) != "bathyRaster") stop("bathy has to be output from the raster_bathymetry function.")
-  if(is.null(sp::proj4string(bathy$raster))) stop("bathy does not contain coordinate reference information")
+  if(is.na(sf::st_crs(bathy$raster))) stop("bathy does not contain coordinate reference information")
 
   ### The drop.crumbs argument
 
@@ -136,7 +136,11 @@ ksmooth_polys <- function(x, k, N) {
     # setTxtProgressBar(pb, i)
 
     for(j in 1:length(x@polygons[[i]]@Polygons)) {
-      x@polygons[[i]]@Polygons[[j]]@coords <- stats::na.omit(smoothr::smooth_ksmooth(x@polygons[[i]]@Polygons[[j]]@coords, smoothness = k, wrap = TRUE, n = N))
+      x@polygons[[i]]@Polygons[[j]]@coords <- 
+        stats::na.omit(
+          smoothr::smooth_ksmooth(x@polygons[[i]]@Polygons[[j]]@coords, 
+                                  smoothness = k, wrap = TRUE, n = N)
+          )
     }
 
     x@polygons[[i]]
@@ -144,8 +148,8 @@ ksmooth_polys <- function(x, k, N) {
   })
 
   out <- sp::SpatialPolygons(tp)
-  sp::proj4string(out) <- sp::proj4string(x)
-
+  suppressWarnings(sp::proj4string(out) <- sp::proj4string(x))
+  
   sp::SpatialPolygonsDataFrame(out, x@data)
 }
 

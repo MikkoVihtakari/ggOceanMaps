@@ -27,8 +27,8 @@
                  ".ggOceanMapsenv <- new.env(); ",
                  ".ggOceanMapsenv$datapath <- 'YourCustomPath'}",
                  ". You can use usethis::edit_r_profile() to edit the file.", 
-                 " paste(R.home(), 'library', 'ggOceanMapsLargeData', sep = '/') ",
-                 "would make the folder in your R package location. Might require administrative rights.")
+                 "'~/Documents/ggOceanMapsLargeData'",
+                 "would make it in a writable folder on most operating systems.")
   
     packageStartupMessage(paste(strwrap(msg), collapse= "\n"))
     

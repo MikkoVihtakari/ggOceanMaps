@@ -9,3 +9,4 @@
 ^pkgdown$
 ^\.github$
 ^LICENSE$
+^NEWS\.md$

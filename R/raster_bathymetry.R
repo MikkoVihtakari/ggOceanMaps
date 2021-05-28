@@ -1,9 +1,9 @@
 #' @title Simplify a bathymetry raster ready to be vectorized
 #' @description Simplifies bathymetry raster ready for the \code{\link{vector_bathymetry}} function. Warning: processing may take a long time if the bathymetry raster is large.
 #' @param bathy A \link[raster]{raster} object or a string giving the path to a bathymetry NetCDF or grd file
-#' @param depths Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}.
-#' @param proj.out A character string specifying the PROJ.4 projection arguments for the output. See \code{\link[sp:CRS-class]{CRS}} and \href{https://proj.org/}{proj.org}. 
-#' @param boundary A \link[sp]{SpatialPolygons}(DataFrame) object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.
+#' @param depths Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}).
+#' @param proj.out A character string specifying the PROJ6 projection arguments for the output. See \code{\link[sp:CRS-class]{CRS}} and \href{https://proj.org/}{proj.org}. 
+#' @param boundary A \link[sp]{SpatialPolygons}(DataFrame) or \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.
 #' @param file.name A character string specifying the file path \strong{without extension} where the output should be saved. If \code{NULL} a temporary file will be used. See \code{\link[raster]{writeRaster}}.
 #' @param aggregation.factor An integer defining the \code{fact} argument from the \code{\link[raster]{aggregate}} function. Set to \code{NA} to ignore aggregation.
 #' @details You can use \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/}{GEBCO} or \href{https://www.ngdc.noaa.gov/mgg/global/}{ETOPO1} bathymetry grids downloaded from respective sources as the \code{bathy} argument. The bathymetry grids read from files must be in NetCDF/grd format and defined using decimal degrees. Alternatively use the \code{marmap::getNOAA.bathy} function to download ETOPO1 bathymetry and convert it to a raster object using the \code{marmap::as.raster} function.
@@ -13,17 +13,14 @@
 #' @references GEBCO Compilation Group (2019) GEBCO 2019 15-arcsecond grid (doi:10.5285/836f016a-33be-6ddc-e053-6c86abc0788e). URL: \url{https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html}.
 #' ETOPO1 1 Arc-Minute Global Relief Model. URL: \url{https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf}.
 #' @import sp
-#' @importFrom rgdal readOGR
+#' @importFrom sf st_crs st_is_longlat st_read
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @rawNamespace import(raster, except = shift)
 #' @author Mikko Vihtakari
 #' @family create shapefiles
 #' @export
 
-# bathy = "../../../GIS/ETOPO bathymetry/ETOPO1_Bed_g_gmt4.grd"; boundary = c(-180.0083, 180.0083, -80, -55)
-# bathy = "../../../GIS/GEBCO bathymetry/GEBCO_2014/GEBCO_2014_1D.nc"; depths = c(50, 100, 200, 300, 400, 500, 700, 1000, 1500, 2000, 3000, 4000, 5000, 6000, 10000); boundary = c(-180.00083, 180.00083, 30, 90.00083); proj.out = map_projection("panarctic"); file.name = "bathy"
-
-# bathy = "../../../../GIS/ETOPO bathymetry/ETOPO1_Ice_g_gmt4.grd"; depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = "+init=epsg:3995"; boundary = c(-180.0083, 180.0083, 90, -30); file.name = NULL; aggregation.factor = 2
+# bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = "EPSG:4326"; file.name = NULL; boundary = c(-180.0083, 180.0083, -90, 90); aggregation.factor = 6
 
 raster_bathymetry <- function(bathy, depths, proj.out, boundary = NULL, file.name = NULL, aggregation.factor = NA) {
 
@@ -50,11 +47,11 @@ raster_bathymetry <- function(bathy, depths, proj.out, boundary = NULL, file.nam
   if(!is.null(boundary)) {
 
     #### If spatialpolygons
-    if(grepl("spatialpolygons", class(boundary), ignore.case = TRUE)) {
+    if(any(grepl("spatialpolygons|sf", class(boundary), ignore.case = TRUE))) {
 
-      if(is.null(sp::proj4string(boundary))) {
-        stop("boundary misses proj4string argument.")
-      } else if(!grepl("+proj=longlat", sp::proj4string(boundary))) {
+      if(is.na(sf::st_crs(boundary))) {
+        stop("boundary does not contain argument.")
+      } else if(!sf::st_is_longlat(boundary)) {
         stop("boundary has to be defined as decimal degrees")
       }
 
@@ -62,11 +59,11 @@ raster_bathymetry <- function(bathy, depths, proj.out, boundary = NULL, file.nam
     } else if(class(boundary) == "character" & length(boundary) == 1) {
       if(!file.exists(boundary)) stop("Boundary shapefile not found. Check your path")
 
-      boundary <- rgdal::readOGR(boundary, verbose = FALSE)
+      boundary <- sf::st_read(boundary, quiet = TRUE)
 
-      if(is.null(sp::proj4string(boundary))) {
-        stop("boundary misses proj4string argument.")
-      } else if(!grepl("\\+proj=longlat", sp::proj4string(boundary))) {
+      if(is.na(sf::st_crs(boundary))) {
+        stop("boundary does not have a defined CRS.")
+      } else if(!sf::st_is_longlat(boundary)) {
         stop("boundary has to be defined as decimal degrees")
       }
 
@@ -87,18 +84,18 @@ raster_bathymetry <- function(bathy, depths, proj.out, boundary = NULL, file.nam
 
   utils::setTxtProgressBar(pb, 2)
 
-  if(is.na(sp::proj4string(ras))) {
+  if(is.na(sf::st_crs(ras))) {
     message("bathy does not contain coordinate reference information. Assuming decimal degree projection")
-    sp::proj4string(ras) <- "+init=epsg:4326"
+    raster::crs(ras) <- "EPSG:4326"
   }
 
-  if(!grepl("\\+proj=longlat", sp::proj4string(ras))) stop("bathy has to be in decimal degree projection. Use '+init=epsg:4326'")
+  if(!sf::st_is_longlat(ras)) stop("bathy has to be in decimal degree projection. Use 'EPSG:4326'")
 
   if(!is.null(boundary)) {
 
     ras <- raster::crop(ras, raster::extent(boundary))
 
-    if(grepl("spatialpolygons", class(boundary), ignore.case = TRUE)) {
+    if(grepl("spatialpolygons|sf", class(boundary), ignore.case = TRUE)) {
       ras <- raster::mask(ras, boundary)
     }
   }
