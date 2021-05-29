@@ -4,7 +4,8 @@
 * Added NEWS.md
 * Improved premade_shapefiles and shapefile documentation.
 * Moved the rgdal package from Imports to Suggests.
-* [Fix issue with other than decimal degree input rasters](https://github.com/MikkoVihtakari/ggOceanMaps/issues/2) in `raster_bathymetry()`
+* [Fixed an issue with other than decimal degree input rasters](https://github.com/MikkoVihtakari/ggOceanMaps/issues/2) in `raster_bathymetry()`
+* [Fixed an issue with ggplot2 (>=3.3.4)](https://github.com/MikkoVihtakari/ggOceanMaps/issues/3)
          
 # ggOceanMaps 1.1
 

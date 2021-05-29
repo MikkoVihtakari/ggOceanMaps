@@ -82,8 +82,13 @@ p1 <- ggplot() +
   geom_label(data = data.frame(lon = 0, lat = 0, label = "The pole"), aes(x = lon, y = lat, label = label), size = FS(8)) +
   geom_spatial_label(data = labels.lat, aes(x = lon, y = lat, label = label), crs = 4326, size = FS(8)) +
   geom_spatial_label(data = labels.lon, aes(x = lon, y = lat, label = label), crs = 4326, color = "red", size = FS(8)) +
-  ylab("Longitude (decimal degrees)") +
-  coord_sf(crs = 3995, label_axes = "EEEE") +
+  ylab("Longitude (decimal degrees)") + {
+        if(packageVersion("ggplot2") > "3.3.3")
+        coord_sf(default_crs = NULL, crs = 3995, label_axes = "EEEE")
+      } + {
+        if(packageVersion("ggplot2") <= "3.3.3") 
+        coord_sf(crs = 3995, label_axes = "EEEE")
+      } +
   theme_map(grid.col = "grey70", grid.size = 0.1, base_size = 8)
 
 labels.proj <- data.frame(lon = c(limits[1], limits[2], mean(limits[1:2]), mean(limits[1:2])), lat = c(mean(limits[3:4]), mean(limits[3:4]), limits[3], limits[4]), label = c("limits[1]\n(Min. longitude)", "limits[2]\n(Max. longitude)", "limits[3]\n(Min. latitude)", "limits[4]\n(Max. latitude)"))
@@ -95,7 +100,13 @@ p2 <- ggplot() +
   geom_label(data = labels.proj, aes(x = lon, y = lat, label = label), color = "red", size = FS(8)) +
   geom_label(data = data.frame(lon = 0, lat = 0, label = "The pole"), aes(x = lon, y = lat, label = label), size = FS(8)) +
   geom_spatial_path(data = start.lat, aes(x = lon, y = lat), crs = 4326, color = NA) +
-  labs(y = "Latitude (meters from the pole)", x = "Longitude (meters from the pole)") +
+  labs(y = "Latitude (meters from the pole)", x = "Longitude (meters from the pole)") + {
+        if(packageVersion("ggplot2") > "3.3.3")
+        coord_sf(default_crs = NULL, crs = 3995, datum = 3995)
+      } + {
+        if(packageVersion("ggplot2") <= "3.3.3") 
+        coord_sf(crs = 3995, datum = 3995)
+      } +
   coord_sf(crs = 3995, datum = 3995) +
   theme_map(grid.col = "grey70", grid.size = 0.1, base_size = 8) + 
   theme(plot.margin = margin(t = 20, unit = "pt"))
@@ -203,7 +214,17 @@ qmap(dt, color = var) # map color
 
 ## Detailed maps
 
-Not added yet.
+Detailed shapefiles are stored in the [ggOceanMapsLargeData]() repository and downloaded as needed. Available shapefiles can be viewed using the `shapefile_list()` function.
+
+```{r}
+shapefile_list("all")
+```
+
+Plotting shapefiles from the list is done as for any other shapes. Note that the projection of the shapefiles varies.
+
+```{r eval = FALSE}
+basemap(shapefiles = "BarentsSea")
+```
 
 # Advanced use
 
