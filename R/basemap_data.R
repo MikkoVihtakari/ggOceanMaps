@@ -219,7 +219,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
                       proj.out = raster::crs(shapefiles$land)
           ) 
       } else {
-        clipLimits <- auto_limits(data, expand.factor = 1.1, verbose = !rotate)
+        clipLimits <- auto_limits(data, expand.factor = expand.factor, verbose = !rotate)
       }
       
       limits <- clipLimits$ddLimits

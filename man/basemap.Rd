@@ -28,6 +28,7 @@ basemap(
   grid.size = 0.1,
   base_size = 11,
   projection.grid = FALSE,
+  expand.factor = 1.1,
   verbose = TRUE
 )
 }
@@ -72,6 +73,8 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 \item{base_size}{Base size parameter for ggplot. See \link[ggplot2]{ggtheme}.}
 
 \item{projection.grid}{Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.}
+
+\item{expand.factor}{Expansion factor for map limits with the \code{data} argument. Can be used to zoom in and out automatically limited maps. Defaults to 1.1. Set to \code{NULL} to ignore.}
 
 \item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.}
 }

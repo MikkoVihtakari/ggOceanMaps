@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
       </span>
     </div>
 
@@ -137,7 +137,13 @@
 <li>Conversion from PROJ4 to PROJ6. This change will make the old ggOceanMapsData files incompatible with ggOceanMaps 1.2 and vice versa. Changed most functions.</li>
 <li>Added NEWS.md</li>
 <li>Improved premade_shapefiles and shapefile documentation.</li>
-<li>Moved the rgdal package from Imports to Suggests.</li>
+<li>Started rewriting the package from <code>sp</code>, <code>rgeos</code> and <code>rgdal</code> to <code>sf</code>. Slows down <code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> temporarily (until <code>sf 0.9.9</code>)</li>
+<li>Moved the <code>rgdal</code> package from Imports to Suggests.</li>
+<li>Added <code><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry()</a></code>
+</li>
+<li>Added the possiblity to adjust <code>data</code> limits using the <code>expand.factor</code> parameter in <code><a href="../reference/basemap.html">basemap()</a></code> and <code><a href="../reference/qmap.html">qmap()</a></code>
+</li>
+<li>Improved the user manual</li>
 <li>
 <a href="https://github.com/MikkoVihtakari/ggOceanMaps/issues/2">Fixed an issue with other than decimal degree input rasters</a> in <code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code>
 </li>

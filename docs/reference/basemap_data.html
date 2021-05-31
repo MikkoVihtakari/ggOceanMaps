@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
       </span>
     </div>
 
@@ -181,6 +181,10 @@
     <tr>
       <th>lat.interval</th>
       <td><p>Numeric value specifying the interval of longitude and latitude grids. <code>NULL</code> finds reasonable defaults depending on <code>limits</code>.</p></td>
+    </tr>
+    <tr>
+      <th>expand.factor</th>
+      <td><p>Expansion factor for map limits with the <code>data</code> argument. Can be used to zoom in and out automatically limited maps. Defaults to 1.1. Set to <code>NULL</code> to ignore.</p></td>
     </tr>
     <tr>
       <th>rotate</th>

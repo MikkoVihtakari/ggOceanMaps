@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Simplify a bathymetry raster ready to be vectorized — raster_bathymetry • ggOceanMaps</title>
+<title>Simplify a bathymetry raster ready for vectorization — raster_bathymetry • ggOceanMaps</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Simplify a bathymetry raster ready to be vectorized — raster_bathymetry" />
+<meta property="og:title" content="Simplify a bathymetry raster ready for vectorization — raster_bathymetry" />
 <meta property="og:description" content="Simplifies bathymetry raster ready for the vector_bathymetry function. Warning: processing may take a long time if the bathymetry raster is large." />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
       </span>
     </div>
 
@@ -126,7 +126,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Simplify a bathymetry raster ready to be vectorized</h1>
+    <h1>Simplify a bathymetry raster ready for vectorization</h1>
     <small class="dont-index">Source: <a href='https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/R/raster_bathymetry.R'><code>R/raster_bathymetry.R</code></a></small>
     <div class="hidden name"><code>raster_bathymetry.Rd</code></div>
     </div>
@@ -158,7 +158,7 @@
     </tr>
     <tr>
       <th>proj.out</th>
-      <td><p>A character string specifying the PROJ6 projection arguments for the output. See <code><a href='https://rdrr.io/pkg/sp/man/CRS-class.html'>CRS</a></code> and <a href='https://proj.org/'>proj.org</a>. If <code>NULL</code>, the projection is retrieved from <code>bathy</code>. If <code>proj.out == proj.bathy</code>, the output will not be reprojected.</p></td>
+      <td><p>A character string specifying the PROJ6 projection argument for the output. See <code><a href='https://r-spatial.github.io/sf/reference/st_crs.html'>st_crs</a></code> and <a href='https://proj.org/'>proj.org</a>. If <code>NULL</code>, the projection is retrieved from <code>bathy</code>. If <code>proj.out == proj.bathy</code>, the output will not be reprojected.</p></td>
     </tr>
     <tr>
       <th>proj.bathy</th>
@@ -166,7 +166,7 @@
     </tr>
     <tr>
       <th>boundary</th>
-      <td><p>A <a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygons</a>(DataFrame) or <a href='https://r-spatial.github.io/sf/reference/st.html'>st_polygon</a> object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which <code>bathy</code> should be cut to. Should be given as <strong>decimal degrees</strong>. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use <code>NULL</code> not to cut <code>bathy</code>.</p></td>
+      <td><p>A <a href='https://r-spatial.github.io/sf/reference/st.html'>st_polygon</a> object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which <code>bathy</code> should be cut to. Should be given as <strong>decimal degrees</strong>. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use <code>NULL</code> not to cut <code>bathy</code>.</p></td>
     </tr>
     <tr>
       <th>file.name</th>
@@ -180,11 +180,11 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with <a href='https://rdrr.io/pkg/raster/man/raster.html'>raster</a> object containing projected bathymetry defined by the <code>proj.out</code> argument and a data frame of depth intervals.</p>
+    <p>A list with a <a href='https://rdrr.io/pkg/raster/man/raster.html'>raster</a> object the containing projected bathymetry defined by the <code>proj.out</code> argument and a data frame of depth intervals.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>You can use <a href='https://www.gebco.net/data_and_products/gridded_bathymetry_data/'>GEBCO</a> or <a href='https://www.ngdc.noaa.gov/mgg/global/'>ETOPO1</a> bathymetry grids downloaded from respective sources as the <code>bathy</code> argument. The bathymetry grids read from files must be in NetCDF/grd format and defined using decimal degrees. Alternatively use the <code>marmap::getNOAA.bathy</code> function to download ETOPO1 bathymetry and convert it to a raster object using the <code>marmap::as.raster</code> function.</p>
-<p>Note that the size of the output is heavily influenced by the number of depth contours (<code>depths</code>) as well as the resolution of <code>bathy</code> and choise of <code>aggregation.factor</code>. To make the <code><a href='vector_bathymetry.html'>vector_bathymetry</a></code> function and consequent plotting faster, limiting the details of the bathymetry raster may be desireable.</p>
+    <p>You can use <a href='https://www.gebco.net/data_and_products/gridded_bathymetry_data/'>GEBCO</a>, <a href='https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/'>IBCAO</a>, <a href='https://www.ngdc.noaa.gov/mgg/global/'>ETOPO1</a> bathymetry grids downloaded from respective sources as the <code>bathy</code> argument. The bathymetry grids read from files must be in NetCDF/grd format. Alternatively use the <code>marmap::getNOAA.bathy</code> function to download ETOPO1 bathymetry and convert it to a raster object using the <code>marmap::as.raster</code> function.</p>
+<p>Note that the size of the output is heavily influenced by the number of depth contours (<code>depths</code>) as well as the resolution of <code>bathy</code> and choice of <code>aggregation.factor</code>. To make the <code><a href='vector_bathymetry.html'>vector_bathymetry</a></code> function and consequent plotting faster, limiting the details of the bathymetry raster may be desirable.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>GEBCO Compilation Group (2019) GEBCO 2019 15-arcsecond grid (doi:10.5285/836f016a-33be-6ddc-e053-6c86abc0788e). URL: <a href='https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html'>https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html</a>.
@@ -193,6 +193,7 @@ ETOPO1 1 Arc-Minute Global Relief Model. URL: <a href='https://www.ngdc.noaa.gov
 
     <div class='dont-index'><p>Other create shapefiles: 
 <code><a href='clip_shapefile.html'>clip_shapefile</a>()</code>,
+<code><a href='geonorge_bathymetry.html'>geonorge_bathymetry</a>()</code>,
 <code><a href='vector_bathymetry.html'>vector_bathymetry</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 

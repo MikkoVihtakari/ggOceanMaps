@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a SpatialPolygonsDataFrame bathymetry from a raster bathymetry file — vector_bathymetry • ggOceanMaps</title>
+<title>Create a polygon bathymetry from a raster bathymetry file — vector_bathymetry • ggOceanMaps</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Create a SpatialPolygonsDataFrame bathymetry from a raster bathymetry file — vector_bathymetry" />
+<meta property="og:title" content="Create a polygon bathymetry from a raster bathymetry file — vector_bathymetry" />
 <meta property="og:description" content="Vectorizes bathymetry rasters. Designed to be used for the output of raster_bathymetry function. Warning: processing may take a long time if the bathymetry raster is large." />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -102,11 +102,14 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/MikkoVihtakari/ggOceanMaps/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,7 +126,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a SpatialPolygonsDataFrame bathymetry from a raster bathymetry file</h1>
+    <h1>Create a polygon bathymetry from a raster bathymetry file</h1>
     <small class="dont-index">Source: <a href='https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/R/vector_bathymetry.R'><code>R/vector_bathymetry.R</code></a></small>
     <div class="hidden name"><code>vector_bathymetry.Rd</code></div>
     </div>
@@ -132,12 +135,13 @@
     <p>Vectorizes bathymetry rasters. Designed to be used for the output of <code><a href='raster_bathymetry.html'>raster_bathymetry</a></code> function. Warning: processing may take a long time if the bathymetry raster is large.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>vector_bathymetry</span>(
-  <span class='no'>bathy</span>,
-  <span class='kw'>drop.crumbs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>remove.holes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>smooth</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>vector_bathymetry</span><span class='op'>(</span>
+  <span class='va'>bathy</span>,
+  drop.crumbs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  remove.holes <span class='op'>=</span> <span class='cn'>NULL</span>,
+  smooth <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  output.sf <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,21 +152,25 @@
     </tr>
     <tr>
       <th>drop.crumbs</th>
-      <td><p>Single numeric value specifying a threshold (area in km2) for disconnected polygons which should be removed. Set to <code>NULL</code> to bypass the removal. Uses the <a href='https://rdrr.io/pkg/smoothr/man/drop_crumbs.html'>drop_crumbs</a> function.</p></td>
+      <td><p>Single numeric value specifying a threshold (area in km2) for disconnected polygons which should be removed. Set to <code>NULL</code> to bypass the removal. Uses the <a href='https://strimas.com/smoothr/reference/drop_crumbs.html'>drop_crumbs</a> function.</p></td>
     </tr>
     <tr>
       <th>remove.holes</th>
-      <td><p>Single numeric value specifying a threshold (area in km2) for holes which should be removed. Set to <code>NULL</code> to bypass the removal. Uses the <a href='https://rdrr.io/pkg/smoothr/man/fill_holes.html'>fill_holes</a> function.</p></td>
+      <td><p>Single numeric value specifying a threshold (area in km2) for holes which should be removed. Set to <code>NULL</code> to bypass the removal. Uses the <a href='https://strimas.com/smoothr/reference/fill_holes.html'>fill_holes</a> function.</p></td>
     </tr>
     <tr>
       <th>smooth</th>
-      <td><p>Logical indicating whether the pixelated contours should be smoothed. Uses the <a href='https://rdrr.io/pkg/smoothr/man/smooth_ksmooth.html'>smooth_ksmooth</a> function.</p></td>
+      <td><p>Logical indicating whether the pixelated contours should be smoothed. Uses the <a href='https://strimas.com/smoothr/reference/smooth_ksmooth.html'>smooth_ksmooth</a> function.</p></td>
+    </tr>
+    <tr>
+      <th>output.sf</th>
+      <td><p>Logical indicating whether an <code><a href='https://r-spatial.github.io/sf/reference/st.html'>sf</a></code> (<code>TRUE</code>) or <code>sp</code> (<code>FALSE</code>) polygon should be returned.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygonsDataFrame</a> containing the depth polygons. Uses same projection than <code>bathy</code> (see <code><a href='https://rdrr.io/pkg/sp/man/CRS-class.html'>CRS</a></code>).</p>
+    <p>An <a href='https://r-spatial.github.io/sf/reference/st.html'>sf</a> or <code>sp</code> object containing the depth polygons. Uses same projection than <code>bathy</code> (see <code><a href='https://r-spatial.github.io/sf/reference/st_crs.html'>CRS</a></code>).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The <code>drop.crumbs</code> and <code>remove.holes</code> arguments can be used to make the resulting object smaller in file size. The <code>smooth</code> argument can be used to remove the pixelated contours, but often increases file size. Note also that using this option will bias the contours with respect to real world.</p>
@@ -170,7 +178,11 @@
 
     <div class='dont-index'><p>Other create shapefiles: 
 <code><a href='clip_shapefile.html'>clip_shapefile</a>()</code>,
+<code><a href='geonorge_bathymetry.html'>geonorge_bathymetry</a>()</code>,
 <code><a href='raster_bathymetry.html'>raster_bathymetry</a>()</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Mikko Vihtakari</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -187,7 +199,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

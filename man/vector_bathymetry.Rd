@@ -2,13 +2,14 @@
 % Please edit documentation in R/vector_bathymetry.R
 \name{vector_bathymetry}
 \alias{vector_bathymetry}
-\title{Create a SpatialPolygonsDataFrame bathymetry from a raster bathymetry file}
+\title{Create a polygon bathymetry from a raster bathymetry file}
 \usage{
 vector_bathymetry(
   bathy,
   drop.crumbs = NULL,
   remove.holes = NULL,
-  smooth = FALSE
+  smooth = FALSE,
+  output.sf = FALSE
 )
 }
 \arguments{
@@ -19,9 +20,11 @@ vector_bathymetry(
 \item{remove.holes}{Single numeric value specifying a threshold (area in km2) for holes which should be removed. Set to \code{NULL} to bypass the removal. Uses the \link[smoothr]{fill_holes} function.}
 
 \item{smooth}{Logical indicating whether the pixelated contours should be smoothed. Uses the \link[smoothr]{smooth_ksmooth} function.}
+
+\item{output.sf}{Logical indicating whether an \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or \code{sp} (\code{FALSE}) polygon should be returned.}
 }
 \value{
-\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame} containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sp:CRS-class]{CRS}}).
+An \link[sf:st_polygon]{sf} or \code{sp} object containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sf:st_crs]{CRS}}).
 }
 \description{
 Vectorizes bathymetry rasters. Designed to be used for the output of \code{\link{raster_bathymetry}} function. Warning: processing may take a long time if the bathymetry raster is large.
@@ -32,6 +35,7 @@ The \code{drop.crumbs} and \code{remove.holes} arguments can be used to make the
 \seealso{
 Other create shapefiles: 
 \code{\link{clip_shapefile}()},
+\code{\link{geonorge_bathymetry}()},
 \code{\link{raster_bathymetry}()}
 }
 \author{

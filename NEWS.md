@@ -3,7 +3,11 @@
 * Conversion from PROJ4 to PROJ6. This change will make the old ggOceanMapsData files incompatible with ggOceanMaps 1.2 and vice versa. Changed most functions. 
 * Added NEWS.md
 * Improved premade_shapefiles and shapefile documentation.
-* Moved the rgdal package from Imports to Suggests.
+* Started rewriting the package from `sp`, `rgeos` and `rgdal` to `sf`. Slows down `vector_bathymetry()` temporarily (until `sf 0.9.9`)
+* Moved the `rgdal` package from Imports to Suggests.
+* Added `geonorge_bathymetry()`
+* Added the possiblity to adjust `data` limits using the `expand.factor` parameter in `basemap()` and `qmap()`
+* Improved the user manual
 * [Fixed an issue with other than decimal degree input rasters](https://github.com/MikkoVihtakari/ggOceanMaps/issues/2) in `raster_bathymetry()`
 * [Fixed an issue with ggplot2 (>=3.3.4)](https://github.com/MikkoVihtakari/ggOceanMaps/issues/3)
          

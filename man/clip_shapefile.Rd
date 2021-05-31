@@ -37,6 +37,7 @@ The function uses the \code{rgeos::gIntersection} function to clip smaller \link
 }
 \seealso{
 Other create shapefiles: 
+\code{\link{geonorge_bathymetry}()},
 \code{\link{raster_bathymetry}()},
 \code{\link{vector_bathymetry}()}
 }

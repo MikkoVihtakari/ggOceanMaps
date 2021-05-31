@@ -1,22 +1,18 @@
-#' @title Simplify a bathymetry raster ready to be vectorized
+#' @title Simplify a bathymetry raster ready for vectorization
 #' @description Simplifies bathymetry raster ready for the \code{\link{vector_bathymetry}} function. Warning: processing may take a long time if the bathymetry raster is large.
 #' @param bathy A \link[raster]{raster} object or a string giving the path to a bathymetry NetCDF or grd file
 #' @param depths Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}).
-#' @param proj.out A character string specifying the PROJ6 projection arguments for the output. See \code{\link[sp:CRS-class]{CRS}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy}. If \code{proj.out == proj.bathy}, the output will not be reprojected. 
+#' @param proj.out A character string specifying the PROJ6 projection argument for the output. See \code{\link[sf]{st_crs}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy}. If \code{proj.out == proj.bathy}, the output will not be reprojected. 
 #' @param proj.bathy A character string specifying the PROJ6 projection arguments for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information.
-#' @param boundary A \link[sp]{SpatialPolygons}(DataFrame) or \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.
+#' @param boundary A \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.
 #' @param file.name A character string specifying the file path \strong{without extension} where the output should be saved. If \code{NULL} a temporary file will be used. See \code{\link[raster]{writeRaster}}.
 #' @param aggregation.factor An integer defining the \code{fact} argument from the \code{\link[raster]{aggregate}} function. Set to \code{NA} to ignore aggregation.
-#' @details You can use \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/}{GEBCO} or \href{https://www.ngdc.noaa.gov/mgg/global/}{ETOPO1} bathymetry grids downloaded from respective sources as the \code{bathy} argument. The bathymetry grids read from files must be in NetCDF/grd format and defined using decimal degrees. Alternatively use the \code{marmap::getNOAA.bathy} function to download ETOPO1 bathymetry and convert it to a raster object using the \code{marmap::as.raster} function.
+#' @details You can use \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/}{GEBCO}, \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/}{IBCAO}, \href{https://www.ngdc.noaa.gov/mgg/global/}{ETOPO1} bathymetry grids downloaded from respective sources as the \code{bathy} argument. The bathymetry grids read from files must be in NetCDF/grd format. Alternatively use the \code{marmap::getNOAA.bathy} function to download ETOPO1 bathymetry and convert it to a raster object using the \code{marmap::as.raster} function.
 #'
-#' Note that the size of the output is heavily influenced by the number of depth contours (\code{depths}) as well as the resolution of \code{bathy} and choise of \code{aggregation.factor}. To make the \code{\link{vector_bathymetry}} function and consequent plotting faster, limiting the details of the bathymetry raster may be desireable.
-#' @return A list with \link[raster]{raster} object containing projected bathymetry defined by the \code{proj.out} argument and a data frame of depth intervals.
+#' Note that the size of the output is heavily influenced by the number of depth contours (\code{depths}) as well as the resolution of \code{bathy} and choice of \code{aggregation.factor}. To make the \code{\link{vector_bathymetry}} function and consequent plotting faster, limiting the details of the bathymetry raster may be desirable.
+#' @return A list with a \link[raster]{raster} object the containing projected bathymetry defined by the \code{proj.out} argument and a data frame of depth intervals.
 #' @references GEBCO Compilation Group (2019) GEBCO 2019 15-arcsecond grid (doi:10.5285/836f016a-33be-6ddc-e053-6c86abc0788e). URL: \url{https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html}.
 #' ETOPO1 1 Arc-Minute Global Relief Model. URL: \url{https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf}.
-#' @import sp
-#' @importFrom sf st_crs st_is_longlat st_read
-#' @importFrom utils txtProgressBar setTxtProgressBar
-#' @rawNamespace import(raster, except = shift)
 #' @author Mikko Vihtakari
 #' @family create shapefiles
 #' @export
