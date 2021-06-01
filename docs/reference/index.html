@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.9</span>
       </span>
     </div>
 
@@ -214,7 +214,7 @@
       <tr>
         <th colspan="2">
           <h2 id="section-create-bathymetries-and-shapefiles" class="hasAnchor"><a href="#section-create-bathymetries-and-shapefiles" class="anchor"></a>Create bathymetries and shapefiles</h2>
-          <p class="section-desc"><p>Custom bathymetry shapes can be added using the <code>raster_bathymetry</code> and <code>vector_bathymetry</code> functions in this order. The underlying data can be retrieved from the <a href="https://doi.org/10.7289/V5C8276M">ETOPO1</a> or <a href="https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html">GEBCO</a> repositories. The <code>clip_shapefile</code> function can be used to crop already existing SpatialPolygons.</p></p>
+          <p class="section-desc"><p>Custom bathymetry shapes can be added using the <code>raster_bathymetry</code> and <code>vector_bathymetry</code> functions in this order. The underlying data can be retrieved from the <a href="https://doi.org/10.7289/V5C8276M">ETOPO1</a>, <a href="https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html">GEBCO</a>, or <a href="https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/">IBCAO</a> repositories. Already existing <a href="https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a">Geonorge</a> bathymetries can be opened and added to the <code>shapefiles</code> argument as <code><a href="https://rdrr.io/r/base/list.html">list(bathy =)</a></code>. The <code>clip_shapefile</code> function can be used to crop already existing SpatialPolygons.</p></p>
         </th>
       </tr>
       
@@ -234,6 +234,12 @@
           <p><code><a href="vector_bathymetry.html">vector_bathymetry()</a></code> </p>
         </td>
         <td><p>Create a polygon bathymetry from a raster bathymetry file</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="geonorge_bathymetry.html">geonorge_bathymetry()</a></code> </p>
+        </td>
+        <td><p>Open Geonorge bathymetry shapefiles</p></td>
       </tr><tr>
         
         <td>

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.9</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
       <h1 data-toc-skip>ggOceanMaps User Manual</h1>
                         <h4 class="author">Mikko Vihtakari (Institute of Marine Research)</h4>
             
-            <h4 class="date">31 May, 2021</h4>
+            <h4 class="date">01 June, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/vignettes/ggOceanMaps.Rmd"><code>vignettes/ggOceanMaps.Rmd</code></a></small>
       <div class="hidden name"><code>ggOceanMaps.Rmd</code></div>
@@ -200,12 +200,13 @@
 <div id="quick-map" class="section level2">
 <h2 class="hasAnchor">
 <a href="#quick-map" class="anchor"></a>Quick map</h2>
-<p>The <code>qmap</code> function is designed as a shortcut to quickly take a look at a spatial dataset similar to the ggplot’s <a href="https://ggplot2.tidyverse.org/reference/qplot.html"><code>qplot</code></a> function. This function is supposed to automatically detect the type of data fed into the function and plot a map using appropriate geometries, limits, and projection. The function has not been developed properly yet and requires user feedback and testing.</p>
+<p>The <code>qmap</code> function is designed as a shortcut to quickly take a look at a spatial dataset similar to the ggplot’s <a href="https://ggplot2.tidyverse.org/reference/qplot.html"><code>qplot</code></a> function. This function is supposed to automatically detect the type of data fed into the function and plot a map using appropriate geometries, limits, and projection. You can use the <code>expand.factor</code> argument to adjust the automatic zoom into <code>data</code>. Note that too large <code>expand.factor</code> values will lead to errors.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="st">"red"</span><span class="op">)</span><span class="op">)</span> <span class="co"># set color</span></code></pre></div>
+<code class="sourceCode R"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">100</span>, <span class="op">-</span><span class="fl">80</span>, <span class="op">-</span><span class="fl">60</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">25</span>, <span class="fl">40</span><span class="op">)</span>, var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="st">"red"</span><span class="op">)</span><span class="op">)</span> <span class="co"># set color</span></code></pre></div>
 <p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="va">var</span><span class="op">)</span> <span class="co"># map color</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="va">var</span>, expand.factor <span class="op">=</span> <span class="fl">1.3</span><span class="op">)</span> <span class="co"># map color, zoom out</span></code></pre></div>
 <p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-17-2.png" width="700"></p>
 </div>
 <div id="detailed-maps" class="section level2">
@@ -535,7 +536,7 @@
 <span class="co">#&gt; To cite package 'ggOceanMaps' in publications use:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   Mikko Vihtakari (2021). ggOceanMaps: Plot Data on Oceanographic Maps</span>
-<span class="co">#&gt;   using 'ggplot2'. R package version 1.1.8.</span>
+<span class="co">#&gt;   using 'ggplot2'. R package version 1.1.9.</span>
 <span class="co">#&gt;   https://mikkovihtakari.github.io/ggOceanMaps/</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
@@ -544,7 +545,7 @@
 <span class="co">#&gt;     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},</span>
 <span class="co">#&gt;     author = {Mikko Vihtakari},</span>
 <span class="co">#&gt;     year = {2021},</span>
-<span class="co">#&gt;     note = {R package version 1.1.8},</span>
+<span class="co">#&gt;     note = {R package version 1.1.9},</span>
 <span class="co">#&gt;     url = {https://mikkovihtakari.github.io/ggOceanMaps/},</span>
 <span class="co">#&gt;   }</span></code></pre></div>
 </div>

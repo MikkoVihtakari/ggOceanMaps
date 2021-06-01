@@ -7,7 +7,7 @@
 * Moved the `rgdal` package from Imports to Suggests.
 * Added `geonorge_bathymetry()`
 * Added the possiblity to adjust `data` limits using the `expand.factor` parameter in `basemap()` and `qmap()`
-* Improved the user manual
+* Improved the user manual and website.
 * [Fixed an issue with other than decimal degree input rasters](https://github.com/MikkoVihtakari/ggOceanMaps/issues/2) in `raster_bathymetry()`
 * [Fixed an issue with ggplot2 (>=3.3.4)](https://github.com/MikkoVihtakari/ggOceanMaps/issues/3)
          

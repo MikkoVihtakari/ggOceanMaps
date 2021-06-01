@@ -22,7 +22,7 @@ An \link[sf:st_polygon]{sf} or \code{sp} object containing the depth polygons. U
 Opens and formats Geonorge bathymetry shapefiles ready for plotting in ggOceanMaps
 }
 \details{
-You can download the bathymetry polygon shapefiles from \href{https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a}{Geonorge}.
+You can download the bathymetry polygon shapefiles from \href{https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a}{Geonorge}. Download the file in \code{GLM} format.
 }
 \seealso{
 Other create shapefiles: 

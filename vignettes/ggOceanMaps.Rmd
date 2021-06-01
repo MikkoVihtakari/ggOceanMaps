@@ -14,7 +14,7 @@ library(knitr)
 knitr::opts_chunk$set(collapse = TRUE, message = FALSE, warning = FALSE, comment = "#>")
 
 if (!requireNamespace("ggOceanMapsData", quietly = TRUE)) {
-utils::install.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org"))
+  utils::install.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org"))
 }
 ```
 
@@ -83,12 +83,12 @@ p1 <- ggplot() +
   geom_spatial_label(data = labels.lat, aes(x = lon, y = lat, label = label), crs = 4326, size = FS(8)) +
   geom_spatial_label(data = labels.lon, aes(x = lon, y = lat, label = label), crs = 4326, color = "red", size = FS(8)) +
   ylab("Longitude (decimal degrees)") + {
-        if(packageVersion("ggplot2") > "3.3.3")
-        coord_sf(default_crs = NULL, crs = 3995, label_axes = "EEEE")
-      } + {
-        if(packageVersion("ggplot2") <= "3.3.3") 
-        coord_sf(crs = 3995, label_axes = "EEEE")
-      } +
+    if(packageVersion("ggplot2") > "3.3.3") {
+      coord_sf(default_crs = NULL, crs = 3995, label_axes = "EEEE")
+    } else {
+      coord_sf(crs = 3995, label_axes = "EEEE")
+    }
+  } +
   theme_map(grid.col = "grey70", grid.size = 0.1, base_size = 8)
 
 labels.proj <- data.frame(lon = c(limits[1], limits[2], mean(limits[1:2]), mean(limits[1:2])), lat = c(mean(limits[3:4]), mean(limits[3:4]), limits[3], limits[4]), label = c("limits[1]\n(Min. longitude)", "limits[2]\n(Max. longitude)", "limits[3]\n(Min. latitude)", "limits[4]\n(Max. latitude)"))
@@ -101,12 +101,12 @@ p2 <- ggplot() +
   geom_label(data = data.frame(lon = 0, lat = 0, label = "The pole"), aes(x = lon, y = lat, label = label), size = FS(8)) +
   geom_spatial_path(data = start.lat, aes(x = lon, y = lat), crs = 4326, color = NA) +
   labs(y = "Latitude (meters from the pole)", x = "Longitude (meters from the pole)") + {
-        if(packageVersion("ggplot2") > "3.3.3")
-        coord_sf(default_crs = NULL, crs = 3995, datum = 3995)
-      } + {
-        if(packageVersion("ggplot2") <= "3.3.3") 
-        coord_sf(crs = 3995, datum = 3995)
-      } +
+    if(packageVersion("ggplot2") > "3.3.3") {
+      coord_sf(default_crs = NULL, crs = 3995, datum = 3995)
+    } else {
+      coord_sf(crs = 3995, datum = 3995)
+    }
+  } +
   coord_sf(crs = 3995, datum = 3995) +
   theme_map(grid.col = "grey70", grid.size = 0.1, base_size = 8) + 
   theme(plot.margin = margin(t = 20, unit = "pt"))
@@ -205,11 +205,12 @@ A word of warning, however: the rotation involves reprojecting all shapefiles in
 
 ## Quick map
 
-The `qmap` function is designed as a shortcut to quickly take a look at a spatial dataset similar to the ggplot's [`qplot`](https://ggplot2.tidyverse.org/reference/qplot.html) function. This function is supposed to automatically detect the type of data fed into the function and plot a map using appropriate geometries, limits, and projection. The function has not been developed properly yet and requires user feedback and testing. 
+The `qmap` function is designed as a shortcut to quickly take a look at a spatial dataset similar to the ggplot's [`qplot`](https://ggplot2.tidyverse.org/reference/qplot.html) function. This function is supposed to automatically detect the type of data fed into the function and plot a map using appropriate geometries, limits, and projection. You can use the `expand.factor` argument to adjust the automatic zoom into `data`. Note that too large `expand.factor` values will lead to errors. 
 
 ```{r}
+dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
 qmap(dt, color = I("red")) # set color
-qmap(dt, color = var) # map color
+qmap(dt, color = var, expand.factor = 1.3) # map color, zoom out
 ```
 
 ## Detailed maps
