@@ -8,10 +8,11 @@ raster_bathymetry(
   bathy,
   depths,
   proj.out = NULL,
-  proj.bathy = "EPSG:4326",
+  proj.bathy,
   boundary = NULL,
   file.name = NULL,
-  aggregation.factor = NA
+  aggregation.factor = NA,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -21,13 +22,15 @@ raster_bathymetry(
 
 \item{proj.out}{A character string specifying the PROJ6 projection argument for the output. See \code{\link[sf]{st_crs}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy}. If \code{proj.out == proj.bathy}, the output will not be reprojected.}
 
-\item{proj.bathy}{A character string specifying the PROJ6 projection arguments for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information.}
+\item{proj.bathy}{A character string specifying the PROJ6 projection arguments for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information. If missing, \code{"EPSG:4326"} is assumed.}
 
 \item{boundary}{A \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.}
 
 \item{file.name}{A character string specifying the file path \strong{without extension} where the output should be saved. If \code{NULL} a temporary file will be used. See \code{\link[raster]{writeRaster}}.}
 
 \item{aggregation.factor}{An integer defining the \code{fact} argument from the \code{\link[raster]{aggregate}} function. Set to \code{NA} to ignore aggregation.}
+
+\item{verbose}{Logical indicating whether information about guessed projection should be returned as message. Set to \code{FALSE} to make the function silent.}
 }
 \value{
 A list with a \link[raster]{raster} object the containing projected bathymetry defined by the \code{proj.out} argument and a data frame of depth intervals.
