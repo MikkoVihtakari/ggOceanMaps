@@ -2,12 +2,22 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-1.1.9**
+1.1.10**
 
 [![DOI](https://zenodo.org/badge/254818056.svg)](https://zenodo.org/badge/latestdoi/254818056)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://cran.r-project.org/package=ggOceanMaps)
 
-<!-- **Important information, June 2021:** ggplot2 and ggOceanMaps are now fully shifting to the [PROJ6/GDAL3 system](https://cran.r-project.org/web/packages/rgdal/vignettes/PROJ6_GDAL3.html). This means that old versions of the package, including all shapefiles, **may not work any longer**. Update your R to >=4.1, ggplot2 to >=3.3.4, ggOceanMapsData and ggOceanMaps to >=1.2, sf, sp, rgeos, raster packages, and delete all files inside your ggOceanMapsLargeData folder to make the package work again. Deeply sorry for the inconvenience :(  -->
+**Important information, June 2021:** ggOceanMaps is **temporarily
+withdrawn from CRAN** due to [an
+issue](https://cran-archive.r-project.org/web/checks/2021/2021-06-04_check_results_ggOceanMaps.html)
+in shifting to the [PROJ6/GDAL3
+system](https://cran.r-project.org/web/packages/rgdal/vignettes/PROJ6_GDAL3.html)
+on Solaris. The package works as long as the GIS packages of R are
+linked with PROJ &gt;= 6 and GDAL &gt;= 3 (write
+`rgdal::rgdal_extSoftVersion()` to test). The ggOceanMaps package will
+be uploaded to CRAN once the issue has been solved. In the meanwhile,
+install the package from source through GitHub (see the Installation
+section).
 
 ## Overview
 
@@ -189,7 +199,7 @@ citation("ggOceanMaps")
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Mikko Vihtakari (2021). ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'. R package version 1.1.9.
+#>   using 'ggplot2'. R package version 1.1.10.
 #>   https://mikkovihtakari.github.io/ggOceanMaps/
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -198,7 +208,7 @@ citation("ggOceanMaps")
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2021},
-#>     note = {R package version 1.1.9},
+#>     note = {R package version 1.1.10},
 #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```

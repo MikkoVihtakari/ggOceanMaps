@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.10</span>
       </span>
     </div>
 
@@ -95,9 +95,9 @@
 <div id="ggoceanmaps" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#ggoceanmaps" class="anchor"></a>ggOceanMaps</h1></div>
-<p><strong>Plot data on oceanographic maps using ggplot2. R package version 1.1.9</strong></p>
+<p><strong>Plot data on oceanographic maps using ggplot2. R package version 1.1.10</strong></p>
 <p><a href="https://zenodo.org/badge/latestdoi/254818056"><img src="https://zenodo.org/badge/254818056.svg" alt="DOI"></a> <a href="https://cran.r-project.org/package=ggOceanMaps"><img src="https://www.r-pkg.org/badges/version/ggOceanMaps" alt="CRAN_Status_Badge"></a></p>
-<!-- **Important information, June 2021:** ggplot2 and ggOceanMaps are now fully shifting to the [PROJ6/GDAL3 system](https://cran.r-project.org/web/packages/rgdal/vignettes/PROJ6_GDAL3.html). This means that old versions of the package, including all shapefiles, **may not work any longer**. Update your R to >=4.1, ggplot2 to >=3.3.4, ggOceanMapsData and ggOceanMaps to >=1.2, sf, sp, rgeos, raster packages, and delete all files inside your ggOceanMapsLargeData folder to make the package work again. Deeply sorry for the inconvenience :(  -->
+<p><strong>Important information, June 2021:</strong> ggOceanMaps is <strong>temporarily withdrawn from CRAN</strong> due to <a href="https://cran-archive.r-project.org/web/checks/2021/2021-06-04_check_results_ggOceanMaps.html">an issue</a> in shifting to the <a href="https://cran.r-project.org/web/packages/rgdal/vignettes/PROJ6_GDAL3.html">PROJ6/GDAL3 system</a> on Solaris. The package works as long as the GIS packages of R are linked with PROJ &gt;= 6 and GDAL &gt;= 3 (write <code><a href="http://rgdal.r-forge.r-project.org/reference/GDALDriver-class.html">rgdal::rgdal_extSoftVersion()</a></code> to test). The ggOceanMaps package will be uploaded to CRAN once the issue has been solved. In the meanwhile, install the package from source through GitHub (see the Installation section).</p>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
@@ -168,7 +168,7 @@
 <span class="co">#&gt; To cite package 'ggOceanMaps' in publications use:</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   Mikko Vihtakari (2021). ggOceanMaps: Plot Data on Oceanographic Maps</span>
-<span class="co">#&gt;   using 'ggplot2'. R package version 1.1.9.</span>
+<span class="co">#&gt;   using 'ggplot2'. R package version 1.1.10.</span>
 <span class="co">#&gt;   https://mikkovihtakari.github.io/ggOceanMaps/</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
@@ -177,7 +177,7 @@
 <span class="co">#&gt;     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},</span>
 <span class="co">#&gt;     author = {Mikko Vihtakari},</span>
 <span class="co">#&gt;     year = {2021},</span>
-<span class="co">#&gt;     note = {R package version 1.1.9},</span>
+<span class="co">#&gt;     note = {R package version 1.1.10},</span>
 <span class="co">#&gt;     url = {https://mikkovihtakari.github.io/ggOceanMaps/},</span>
 <span class="co">#&gt;   }</span></code></pre></div>
 </div>
