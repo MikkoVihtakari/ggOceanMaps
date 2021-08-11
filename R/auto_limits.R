@@ -22,8 +22,8 @@
 #' }
 #' @export
 
-# lon = NULL; lat = NULL; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; expand.factor = NULL; verbose = TRUE
-auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326", proj.out = NULL, expand.factor = NULL, verbose = TRUE) {
+# lon = NULL; lat = NULL; proj.in = CRSargs(4326); proj.out = NULL; verbose = FALSE; expand.factor = NULL; verbose = TRUE
+auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = CRSargs(4326), proj.out = NULL, expand.factor = NULL, verbose = TRUE) {
 
   # Get limits from spatial polygons ####
 
@@ -31,8 +31,8 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
     proj.in <- raster::crs(data)
 
     # if(!sf::st_is_longlat(proj.in)) {
-    #   data <- sp::spTransform(data, sp::CRS("+init=epsg:4326"))
-    #   proj.in <- "+init=epsg:4326"
+    #   data <- sp::spTransform(data, sp::CRS(CRSargs(4326)))
+    #   proj.in <- CRSargs(4326)
     #   message("The data argument is a spatial polygons object, which is not given as decimal degrees. Converted to decimal degrees.")
     # }
 
@@ -94,7 +94,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   #   projLims <- c(range(x[["lon.proj"]], na.rm = TRUE), range(x[["lat.proj"]], na.rm = TRUE))
   #
   #   tmp <- sp::SpatialPoints(x[c("lon.proj", "lat.proj")], proj4string = sp::CRS(proj.in))
-  #   tmp <- sp::spTransform(tmp, sp::CRS("+init=epsg:4326"))@bbox
+  #   tmp <- sp::spTransform(tmp, sp::CRS(CRSargs(4326)))@bbox
   #   decLims <- unname(c(sort(tmp[1,]), sort(tmp[2,])))
   #
   #   proj.in <- attributes(x)$proj.in
@@ -157,7 +157,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "+init=epsg:4326
   # decxRange <- sp::spTransform(projxRange, sp::CRS(proj.in))
   # decyRange <- sp::spTransform(projyRange, sp::CRS(proj.in))
 
-  decBoundNodes <- sp::spTransform(projBoundNodes, sp::CRS("+init=epsg:4326")) # proj.in
+  decBoundNodes <- sp::spTransform(projBoundNodes, sp::CRS(CRSargs(4326))) # proj.in
 
   if(!identical(sign(projLims[3]), sign(projLims[4]))) { # Spans across the pole
     decLims <- c(raster::extent(decBoundNodes)[1:3], 90)

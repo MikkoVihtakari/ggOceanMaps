@@ -137,9 +137,9 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
                       proj.in =
                         ifelse(class(shapefiles$land) == "SpatialPolygonsDataFrame",
                                raster::crs(shapefiles$land),
-                               paste0("+init=epsg:", shapefiles$crs)
+                               CRSargs(shapefiles$crs)
                         ),
-                      proj.out = "+init=epsg:4326",
+                      proj.out = CRSargs(4326),
                       verbose = verbose)
 
       } else { # Limits given as decimal degrees
@@ -301,14 +301,14 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
         lon = "lon",
         lat = "lat",
         proj.in = LandCRS,
-        proj.out = "+init=epsg:4326"
+        proj.out = CRSargs(4326)
       )
 
     # Clip the shapefiles (Clipping likely not required. Untick if it is.)
 
-    # shapefiles$land <- clip_shapefile(shapefiles$land, limits = limits, proj4.limits = ifelse(decLimits, "+init=epsg:4326", sp::proj4string(shapefiles$land)))
-    # if(glaciers) shapefiles$glacier <- clip_shapefile(shapefiles$glacier, limits = limits, proj4.limits = ifelse(decLimits, "+init=epsg:4326", sp::proj4string(shapefiles$land)))
-    # if(bathymetry) shapefiles$bathy <- clip_shapefile(shapefiles$bathy, limits = limits, proj4.limits = ifelse(decLimits, "+init=epsg:4326", sp::proj4string(shapefiles$land)))
+    # shapefiles$land <- clip_shapefile(shapefiles$land, limits = limits, proj4.limits = ifelse(decLimits, CRSargs(4326), sp::proj4string(shapefiles$land)))
+    # if(glaciers) shapefiles$glacier <- clip_shapefile(shapefiles$glacier, limits = limits, proj4.limits = ifelse(decLimits, CRSargs(4326), sp::proj4string(shapefiles$land)))
+    # if(bathymetry) shapefiles$bathy <- clip_shapefile(shapefiles$bathy, limits = limits, proj4.limits = ifelse(decLimits, CRSargs(4326), sp::proj4string(shapefiles$land)))
 
   } else if(polarMap) { # Polar maps
 
@@ -316,11 +316,11 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
 
     # Clip the shapefiles
 
-    landBoundary <- clip_shapefile(shapefiles$land, limits = limits, proj.limits = "+init=epsg:4326", return.boundary = TRUE)
+    landBoundary <- clip_shapefile(shapefiles$land, limits = limits, proj.limits = CRSargs(4326), return.boundary = TRUE)
 
     shapefiles$land <- landBoundary$shapefile
-    if(glaciers) shapefiles$glacier <- clip_shapefile(shapefiles$glacier, limits = limits, proj.limits = ifelse(decLimits, "+init=epsg:4326", LandCRS))
-    if(bathymetry) shapefiles$bathy <- clip_shapefile(shapefiles$bathy, limits = limits, proj.limits = ifelse(decLimits, "+init=epsg:4326", LandCRS))
+    if(glaciers) shapefiles$glacier <- clip_shapefile(shapefiles$glacier, limits = limits, proj.limits = ifelse(decLimits, CRSargs(4326), LandCRS))
+    if(bathymetry) shapefiles$bathy <- clip_shapefile(shapefiles$bathy, limits = limits, proj.limits = ifelse(decLimits, CRSargs(4326), LandCRS))
 
     # Define map limits
 
@@ -378,7 +378,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
 
   if(exists("clipLimits")) {
     if(abs(clipLimits$ddLimits[4]) != 90) {
-      tmp <- sp::spTransform(clipLimits$projBound, sp::CRS("+init=epsg:4326"))@bbox
+      tmp <- sp::spTransform(clipLimits$projBound, sp::CRS(CRSargs(4326)))@bbox
       clipLimits$ddLimits <- unname(c(sort(tmp[1,]), sort(tmp[2,])))
     }
   }

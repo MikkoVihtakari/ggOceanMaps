@@ -27,8 +27,8 @@
 
 ## Debug data
 # x = data; bind = TRUE; na = "ignore"; new.names = "auto"
-# x = NULL; lon = NULL; lat = NULL; new.names = "auto"; proj.in = "+init=epsg:4326"; proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
-transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", proj.in = "+init=epsg:4326", proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
+# x = NULL; lon = NULL; lat = NULL; new.names = "auto"; proj.in = CRSargs(4326); proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
+transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", proj.in = CRSargs(4326), proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
 
   # Checks ----
 
@@ -44,7 +44,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     error_test <- quiet(try(match.arg(proj.out, shapefile_list("all")$name), silent = TRUE))
 
     if(class(error_test) != "try-error") {
-      proj.out <- paste0("+init=epsg:", shapefile_list(proj.out)$crs)
+      proj.out <- CRSargs(shapefile_list(proj.out)$crs)
     }
   }
 
@@ -109,7 +109,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   if(is.null(proj.out)) {
     limits <- c(range(y[[lon]]), range(y[[lat]]))
     shapefile.def <- define_shapefiles(limits)
-    proj.out <- paste0("+init=epsg:",shapefile_list(shapefile.def$shapefile.name)$crs)
+    proj.out <- CRSargs(shapefile_list(shapefile.def$shapefile.name)$crs)
   }
 
 

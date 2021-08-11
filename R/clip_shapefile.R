@@ -20,8 +20,8 @@
 
 # Test parameters
 # x = world; limits = c(-180, 180, -90, 90)
-# proj.limits = "+init=epsg:4326"; simplify = FALSE; tol = 60; return.boundary = FALSE
-clip_shapefile <- function(x, limits, proj.limits = "+init=epsg:4326", simplify = FALSE, tol = 60, return.boundary = FALSE) {
+# proj.limits = CRSargs(4326); simplify = FALSE; tol = 60; return.boundary = FALSE
+clip_shapefile <- function(x, limits, proj.limits = CRSargs(4326), simplify = FALSE, tol = 60, return.boundary = FALSE) {
 
   ## Checks
 

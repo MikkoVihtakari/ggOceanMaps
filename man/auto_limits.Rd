@@ -8,7 +8,7 @@ auto_limits(
   data,
   lon = NULL,
   lat = NULL,
-  proj.in = "EPSG:4326",
+  proj.in = CRSargs(4326),
   proj.out = NULL,
   expand.factor = NULL,
   verbose = TRUE
@@ -40,9 +40,9 @@ This is an internal function, which is automatically run by the \code{\link{base
 }
 \examples{
 if(requireNamespace("ggOceanMapsData")) {
-auto_limits(data = expand.grid(lon = c(-120, 180, 120), 
+auto_limits(data = expand.grid(lon = c(-120, 180, 120),
    lat = c(60, 60, 80)))
-}    
+}
 }
 \seealso{
 Other customize shapefiles: 

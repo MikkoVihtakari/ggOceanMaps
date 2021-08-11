@@ -49,9 +49,9 @@
 #' @export
 
 ## Test parameters
-# lon = NULL; lat = NULL; shapefile = NULL; proj.in = "+init=epsg:4326"; bind = TRUE; dist.col = "ldist"; binary = FALSE; geodesic.distances = FALSE; verbose = TRUE; cores = getCores()
+# lon = NULL; lat = NULL; shapefile = NULL; proj.in = CRSargs(4326); bind = TRUE; dist.col = "ldist"; binary = FALSE; geodesic.distances = FALSE; verbose = TRUE; cores = getCores()
 
-dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = "+init=epsg:4326", bind = TRUE, dist.col = "ldist", binary = FALSE, cores = getCores(), verbose = TRUE) {
+dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = CRSargs(4326), bind = TRUE, dist.col = "ldist", binary = FALSE, cores = getCores(), verbose = TRUE) {
 
   ## Case for defined x and undefined lon or/and lat ####
 
