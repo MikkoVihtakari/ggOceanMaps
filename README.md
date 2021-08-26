@@ -5,6 +5,7 @@
 1.1.10**
 
 [![DOI](https://zenodo.org/badge/254818056.svg)](https://zenodo.org/badge/latestdoi/254818056)
+[![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://cran.r-project.org/package=ggOceanMaps)
 
 **Important information, June 2021:** ggOceanMaps is **temporarily
