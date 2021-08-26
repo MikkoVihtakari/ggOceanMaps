@@ -25,6 +25,15 @@
 # lon = NULL; lat = NULL; proj.in = "EPSG:4326"; proj.out = NULL; verbose = FALSE; expand.factor = NULL; verbose = TRUE
 auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "EPSG:4326", proj.out = NULL, expand.factor = NULL, verbose = TRUE) {
   
+  # Try fixing the Solaris error
+  
+  if(sf::sf_extSoftVersion()[["GDAL"]] < "3.0.0" | 
+     sf::sf_extSoftVersion()[["PROJ"]] < "6.0.0") {
+    if(is.character(proj.in) & nchar(proj.in) == 9) {
+      proj.in <- paste0("+init=epsg:", select_element(strsplit(proj.in, split = ":"), 2)) 
+    }
+  }
+  
   # Get limits from spatial polygons ####
   
   if(any(class(data) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
@@ -71,25 +80,25 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "EPSG:4326", pro
   # Coordinate ranges ####
   
   # if(sf::st_is_longlat(proj.in)) {
-    decLims <- c(deg_to_dd(range(dd_to_deg(x[[lon]]), na.rm = TRUE)), range(x[[lat]], na.rm = TRUE))
-    
-    if(decLims[1] == 180 & sign(decLims[2]) == -1) { # Anti-meridian exception
-      decLims[1] <- -180
-    }
-    
-    projLims <- c(range(x[["lon.proj"]], na.rm = TRUE), range(x[["lat.proj"]], na.rm = TRUE))
-    
-    proj.in <- attributes(x)$proj.in
-    proj.out <- attributes(x)$proj.out
-    
-    if(sf::st_is_longlat(proj.in)) {
-      proj.crs <- proj.out
-    } else if(sf::st_is_longlat(proj.out)) {
-      proj.crs <- proj.in
-    } else {
-      stop("auto_limits requires either proj.in or proj.out as decimal degrees.")
-    }
-    
+  decLims <- c(deg_to_dd(range(dd_to_deg(x[[lon]]), na.rm = TRUE)), range(x[[lat]], na.rm = TRUE))
+  
+  if(decLims[1] == 180 & sign(decLims[2]) == -1) { # Anti-meridian exception
+    decLims[1] <- -180
+  }
+  
+  projLims <- c(range(x[["lon.proj"]], na.rm = TRUE), range(x[["lat.proj"]], na.rm = TRUE))
+  
+  proj.in <- attributes(x)$proj.in
+  proj.out <- attributes(x)$proj.out
+  
+  if(sf::st_is_longlat(proj.in)) {
+    proj.crs <- proj.out
+  } else if(sf::st_is_longlat(proj.out)) {
+    proj.crs <- proj.in
+  } else {
+    stop("auto_limits requires either proj.in or proj.out as decimal degrees.")
+  }
+  
   # } else if(!sf::st_is_longlat(proj.in)) {
   #   projLims <- c(range(x[["lon.proj"]], na.rm = TRUE), range(x[["lat.proj"]], na.rm = TRUE))
   #   
@@ -99,7 +108,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = "EPSG:4326", pro
   #   
   #   proj.in <- attributes(x)$proj.in
   #   proj.out <- attributes(x)$proj.out
-    
+  
   # } else {
   #   decLims <- c(deg_to_dd(range(dd_to_deg(x[["lon.proj"]]), na.rm = TRUE)), range(x[["lat.proj"]], na.rm = TRUE))
   #   projLims <- c(range(x[[lon]], na.rm = TRUE), range(x[[lat]], na.rm = TRUE))

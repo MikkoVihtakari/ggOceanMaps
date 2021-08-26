@@ -30,6 +30,15 @@
 # x = NULL; lon = NULL; lat = NULL; new.names = "auto"; proj.in = "EPSG:4326"; proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
 transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", proj.in = "EPSG:4326", proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
   
+  # Try fixing the Solaris error
+  
+  if(sf::sf_extSoftVersion()[["GDAL"]] < "3.0.0" | 
+     sf::sf_extSoftVersion()[["PROJ"]] < "6.0.0") {
+    if(is.character(proj.in) & nchar(proj.in) == 9) {
+      proj.in <- paste0("+init=epsg:", select_element(strsplit(proj.in, split = ":"), 2)) 
+    }
+  }
+  
   # Checks ----
   
   if(length(new.names) == 1) {
