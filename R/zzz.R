@@ -42,6 +42,12 @@
     packageStartupMessage(paste(strwrap(msg), collapse= "\n"))
     
   }
+  
+  # Check and store external dependency versions
+  
+  #.ggOceanMapsenv$versions <- sf::sf_extSoftVersion()
+  #.ggOceanMapsenv$SRS_string <- sf::sf_extSoftVersion()[["GDAL"]] >= "3.0.0" & sf::sf_extSoftVersion()[["PROJ"]] >= "6.0.0"
+  
 }
 
 # Define global variables

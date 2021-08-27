@@ -23,6 +23,15 @@
 # proj.limits = CRSargs(4326); simplify = FALSE; tol = 60; return.boundary = FALSE
 clip_shapefile <- function(x, limits, proj.limits = CRSargs(4326), simplify = FALSE, tol = 60, return.boundary = FALSE) {
 
+  # Try fixing the Solaris error
+  
+  if(sf::sf_extSoftVersion()[["GDAL"]] < "3.0.0" | 
+     sf::sf_extSoftVersion()[["PROJ"]] < "6.0.0") {
+    if(is.character(proj.limits) & nchar(proj.limits) == 9) {
+      proj.limits <- paste0("+init=epsg:", select_element(strsplit(proj.limits, split = ":"), 2)) 
+    }
+  }
+  
   ## Checks
 
   if("sf" %in% class(x)) {

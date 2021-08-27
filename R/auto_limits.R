@@ -24,7 +24,6 @@
 
 # lon = NULL; lat = NULL; proj.in = CRSargs(4326); proj.out = NULL; verbose = FALSE; expand.factor = NULL; verbose = TRUE
 auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = CRSargs(4326), proj.out = NULL, expand.factor = NULL, verbose = TRUE) {
-
   # Get limits from spatial polygons ####
 
   if(any(class(data) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
@@ -71,6 +70,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = CRSargs(4326), p
   # Coordinate ranges ####
 
   # if(sf::st_is_longlat(proj.in)) {
+
     decLims <- c(deg_to_dd(range(dd_to_deg(x[[lon]]), na.rm = TRUE)), range(x[[lat]], na.rm = TRUE))
 
     if(decLims[1] == 180 & sign(decLims[2]) == -1) { # Anti-meridian exception
@@ -99,7 +99,6 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = CRSargs(4326), p
   #
   #   proj.in <- attributes(x)$proj.in
   #   proj.out <- attributes(x)$proj.out
-
   # } else {
   #   decLims <- c(deg_to_dd(range(dd_to_deg(x[["lon.proj"]]), na.rm = TRUE)), range(x[["lat.proj"]], na.rm = TRUE))
   #   projLims <- c(range(x[[lon]], na.rm = TRUE), range(x[[lat]], na.rm = TRUE))
