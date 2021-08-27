@@ -124,9 +124,21 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   
   ## Coordinate transformation ----
   
+  # lon = sample(-30:60, 1e2, replace = TRUE); lat = sample(45:80, 1e2, replace = TRUE); y = data.frame(lon, lat); lon = "lon"; lat = "lat" # <- Debugging code
+  
+  ## sf version
+  # y <- sf::st_as_sf(y, coords = c(lon, lat), 
+  #                   crs = as.integer(gsub("\\D", "", proj.in)))
+  # 
+  # y <- sf::st_coordinates(sf::st_transform(y, proj.out))
+  # 
+  # colnames(y)[colnames(y) == "X"] <- lon
+  # colnames(y)[colnames(y) == "Y"] <- lat
+  
+  ## sp version 
   sp::coordinates(y) <- c(lon, lat)
   sp::proj4string(y) <- if(class(proj.in) == "CRS") {proj.in} else {sp::CRS(proj.in)}
-  
+
   y <- sp::spTransform(y, if(class(proj.out) == "CRS") {proj.out} else {sp::CRS(proj.out)})
   y <- data.frame(sp::coordinates(y))
   
