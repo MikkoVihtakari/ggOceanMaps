@@ -9,7 +9,7 @@ transform_coord(
   lon = NULL,
   lat = NULL,
   new.names = "auto",
-  proj.in = "EPSG:4326",
+  proj.in = CRSargs(4326),
   proj.out = NULL,
   verbose = FALSE,
   bind = FALSE,
@@ -43,7 +43,7 @@ Transforms spatial coordinates from original projection (decimal degrees assumed
 If \code{x} is specified, the function guesses longitude and latitude columns from \code{x} by default.
 }
 \examples{
-# Coordinates are automatically transformed to the pre-made shapefile 
+# Coordinates are automatically transformed to the pre-made shapefile
 # projections:
 dt <- data.frame(lon = c(-150, 150), lat = c(60, 90))
 transform_coord(dt)
