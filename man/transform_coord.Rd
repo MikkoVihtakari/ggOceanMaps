@@ -9,7 +9,7 @@ transform_coord(
   lon = NULL,
   lat = NULL,
   new.names = "auto",
-  proj.in = "EPSG:4326",
+  proj.in = 4326,
   proj.out = NULL,
   verbose = FALSE,
   bind = FALSE,
@@ -23,9 +23,9 @@ transform_coord(
 
 \item{new.names}{Character vector of length 2 specifying the names of transformed longitude and latitude columns, respectively. Alternatively \code{NULL}, which returns column names from \code{x} or "auto", which uses \code{NULL} if \code{bind = FALSE} and \code{c("lon.proj", "lat.proj")} if \code{bind = TRUE}.}
 
-\item{proj.in}{Original \code{\link[sp:is.projected]{proj4string}} projection. If \code{NULL}, the projection is taken from \code{x}. \code{x} must be a \link[sp:Spatial-class]{Spatial} object in that case.}
+\item{proj.in}{The original \code{\link[sf:st_crs]{CRS}}. If \code{NULL}, the projection is taken from \code{x}. \code{x} must be a \link[sf:st]{spatial} object in that case.}
 
-\item{proj.out}{Character. Either \code{NULL}, \code{\link[sp:is.projected]{proj4string}} projection the coordinates should be transformed to or a name of shapefiles in \code{\link{shapefile_list}}. If \code{NULL}, the output projection will be automatically determined from data. This option requires decimal degrees as input option.}
+\item{proj.out}{Character. Either \code{NULL}, \code{\link[sf:st_crs]{CRS}} the coordinates should be transformed to or a name of shapefiles in \code{\link{shapefile_list}}. If \code{NULL}, the output projection will be automatically determined from data. This option requires decimal degrees as input option.}
 
 \item{verbose}{Logical indicating whether information about the projection should be returned as message. Set to \code{FALSE} to make the function silent.}
 
@@ -43,14 +43,17 @@ Transforms spatial coordinates from original projection (decimal degrees assumed
 If \code{x} is specified, the function guesses longitude and latitude columns from \code{x} by default.
 }
 \examples{
-# Coordinates are automatically transformed to the pre-made shapefile 
+# Coordinates are automatically transformed to the pre-made shapefile
 # projections:
-dt <- data.frame(lon = c(-150, 150), lat = c(60, 90))
-transform_coord(dt)
-transform_coord(dt, bind = TRUE)
+x <- data.frame(lon = c(-150, 150), lat = c(60, 90))
+transform_coord(x)
+transform_coord(x, bind = TRUE)
 
-dt <- data.frame(lon = c(-150, 150), lat = c(20, 50))
-transform_coord(dt, bind = TRUE) # no transformation required.
+# NAs are ignored by default
+x <- data.frame(lon = c(-150, 100, 150, NA), lat = c(-80, NA, -60, -70))
+
+x <- data.frame(lon = c(-150, 150), lat = c(20, 50))
+transform_coord(x, bind = TRUE) # no transformation required.
 }
 \seealso{
 Other basemap functions: 

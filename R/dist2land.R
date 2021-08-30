@@ -24,7 +24,7 @@
 #' dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
 #' dt <- dist2land(dt, cores = 1)
 #' qmap(dt, color = ldist) + scale_color_viridis_c()
-#' 
+#'
 #' # No premade shapefiles for datasets covering the entire globe
 #' data.frame(lon = -20:20, lat = seq(-90, 90, length.out = 41))
 #' dist2land(dt, cores = 1) # wrong!
@@ -33,61 +33,61 @@
 #' dt <- data.frame(lon = seq(-179, 179, length.out = 1000), lat = rep(60, 1000))
 #' # The distance calculation is slow for large datasets
 #' system.time(dist2land(dt))
-#' #> user  system elapsed 
+#' #> user  system elapsed
 #' #> 0.073   0.041   5.627
-#' 
+#'
 #' # The parallel processing speeds it up
 #' system.time(dist2land(dt, cores = 1))
-#' #> user  system elapsed 
-#' #> 19.719   1.237  20.894 
-#' 
+#' #> user  system elapsed
+#' #> 19.719   1.237  20.894
+#'
 #' # binary = TRUE further speeds the function up
 #' system.time(dist2land(dt, binary = TRUE))
-#' #> user  system elapsed 
+#' #> user  system elapsed
 #' #> 1.624   0.041   1.680
 #' }
 #' @export
 
 ## Test parameters
-# lon = NULL; lat = NULL; shapefile = NULL; proj.in = "EPSG:4326"; bind = TRUE; dist.col = "ldist"; binary = FALSE; geodesic.distances = FALSE; verbose = TRUE; cores = getCores()
+# lon = NULL; lat = NULL; shapefile = NULL; proj.in = convert_crs(4326); bind = TRUE; dist.col = "ldist"; binary = FALSE; geodesic.distances = FALSE; verbose = TRUE; cores = getCores()
 
-dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = "EPSG:4326", bind = TRUE, dist.col = "ldist", binary = FALSE, cores = getCores(), verbose = TRUE) {
-  
+dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = convert_crs(4326), bind = TRUE, dist.col = "ldist", binary = FALSE, cores = getCores(), verbose = TRUE) {
+
   ## Case for defined x and undefined lon or/and lat ####
-  
+
   if(is.null(lon) | is.null(lat)) {
     if(all(class(data) != "data.frame")) stop("x argument has to be a data.frame")
-    
+
     tmp <- guess_coordinate_columns(data)
-    
+
     lon <- unname(tmp[names(tmp) == "lon"])
     lat <- unname(tmp[names(tmp) == "lat"])
-    
+
     if(verbose) {
       message(paste0("Used ", lon, " and ", lat, " as input coordinate column names in data"))
     }
-    
+
     if(length(lon) != 1 | length(lat) != 1) {
       stop("lon or lat columns were not found. Define manually.")
     }
   }
-  
-  ## Data 
-  
+
+  ## Data
+
   ### Remove NA coordinates (and add later)
-  
+
   na.rows <- is.na(data[[lon]]) | is.na(data[[lat]])
   contains.nas <- any(na.rows)
-  
+
   x <- as.data.frame(data[!na.rows, c(lon, lat)])
   colnames(x) <- c("lon", "lat")
-  
+
   ## Land shape ###
-  
+
   if(!is.null(shapefile)) {
-    
+
     error_test <- quiet(try(match.arg(shapefile, shapefile_list("all")$name), silent = TRUE))
-    
+
     if(class(error_test) != "try-error") {
       shapefile <- shapefile_list(shapefile)
       if(verbose) message(paste("Using", shapefile$name, "as land shapes."))
@@ -98,35 +98,35 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = 
       land <- shapefile
     }
   } else {
-    
+
     ddLimits <- auto_limits(data = x, lon = "lon", lat = "lat", proj.in = proj.in, verbose = FALSE)$ddLimits
-    
+
     shapefile.def <- define_shapefiles(ddLimits)
     shapefile <- shapefile_list(shapefile.def$shapefile.name)
     if(verbose) message(paste("Using", shapefile$name, "as land shapes."))
-    
+
     land <- eval(parse(text = shapefile$land))
   }
-  
+
   land <- rgeos::createSPComment(land)
-  
+
   ## Coordinate points ###
-  
+
   sp::coordinates(x) <- c("lon", "lat")
   sp::proj4string(x) <- sp::CRS(proj.in)
   x <- suppressWarnings(sp::spTransform(x, sp::CRS(suppressWarnings(sp::proj4string(land)))))
   if(!suppressWarnings(sp::identicalCRS(land, x))) stop("Cannot convert projections correctly.")
-  
+
   ############################
   ## Distance calculation ####
-  
+
   if(binary) {## Binary positions
-    
+
     if(verbose) message("Calculating binary positions...")
     tmp <- suppressWarnings(unname(is.na(sp::over(x, land)[1])))
-    
+
   } else { ## gDistance
-    
+
     if(cores == 1) {
       if(verbose) message("Calculating distances without parallel processing...")
       pb <- utils::txtProgressBar(min = 0, max = length(x), style = 3)
@@ -139,15 +139,15 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = 
     else {
       # Do not use more cores than the number of files:
       cores <- min(length(x), cores)
-      
+
       if(verbose) message("Calculating distances with parallel processing...")
-      
+
       # On Windows run special args to speed up:
       if(.Platform$OS.type == "windows") {
         cl <- parallel::makeCluster(cores, rscript_args = c("--no-init-file", "--no-site-file", "--no-environ"))
         out <- parallel::parLapply(cl, 1:length(x), function(i) suppressWarnings(rgeos::gDistance(x[i], land)/1000))
         parallel::stopCluster(cl)
-      } 
+      }
       else {
         tmp <- unlist(parallel::mclapply(1:length(x), function(i) {
           suppressWarnings(rgeos::gDistance(x[i], land)/1000)
@@ -155,22 +155,22 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = 
       }
     }
   }
-  
+
   ## Return
-  
+
   if(contains.nas) {
     na.rows[!na.rows] <- tmp
     na.rows[na.rows == 1] <- NA
     tmp <- na.rows
   }
-  
+
   if(bind) {
     data[[dist.col]] <- tmp
     data
   } else {
     tmp
   }
-  
+
 }
 
 

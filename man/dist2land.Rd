@@ -9,7 +9,7 @@ dist2land(
   lon = NULL,
   lat = NULL,
   shapefile = NULL,
-  proj.in = "EPSG:4326",
+  proj.in = convert_crs(4326),
   bind = TRUE,
   dist.col = "ldist",
   binary = FALSE,
@@ -62,17 +62,17 @@ dist2land(dt, cores = 1) # wrong!
 dt <- data.frame(lon = seq(-179, 179, length.out = 1000), lat = rep(60, 1000))
 # The distance calculation is slow for large datasets
 system.time(dist2land(dt))
-#> user  system elapsed 
+#> user  system elapsed
 #> 0.073   0.041   5.627
 
 # The parallel processing speeds it up
 system.time(dist2land(dt, cores = 1))
-#> user  system elapsed 
-#> 19.719   1.237  20.894 
+#> user  system elapsed
+#> 19.719   1.237  20.894
 
 # binary = TRUE further speeds the function up
 system.time(dist2land(dt, binary = TRUE))
-#> user  system elapsed 
+#> user  system elapsed
 #> 1.624   0.041   1.680
 }
 }

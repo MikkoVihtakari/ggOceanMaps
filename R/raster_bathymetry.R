@@ -2,8 +2,8 @@
 #' @description Simplifies bathymetry raster ready for the \code{\link{vector_bathymetry}} function. Warning: processing may take a long time if the bathymetry raster is large.
 #' @param bathy A \link[raster]{raster} object or a string giving the path to a bathymetry NetCDF or grd file
 #' @param depths Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}).
-#' @param proj.out A character string specifying the PROJ6 projection argument for the output. See \code{\link[sf]{st_crs}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy}. If \code{proj.out == proj.bathy}, the output will not be reprojected. 
-#' @param proj.bathy A character string specifying the PROJ6 projection arguments for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information. If missing, \code{"EPSG:4326"} is assumed.
+#' @param proj.out A character string specifying the PROJ6 projection argument for the output. See \code{\link[sf]{st_crs}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy}. If \code{proj.out == proj.bathy}, the output will not be reprojected.
+#' @param proj.bathy A character string specifying the \code{\link[sf:st_crs]{CRS}} projection arguments for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information. If missing, \code{"EPSG:4326"} is assumed.
 #' @param boundary A \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.
 #' @param file.name A character string specifying the file path \strong{without extension} where the output should be saved. If \code{NULL} a temporary file will be used. See \code{\link[raster]{writeRaster}}.
 #' @param aggregation.factor An integer defining the \code{fact} argument from the \code{\link[raster]{aggregate}} function. Set to \code{NA} to ignore aggregation.
@@ -18,7 +18,7 @@
 #' @family create shapefiles
 #' @export
 
-# bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = "EPSG:3996"; proj.bathy = "EPSG:3996", file.name = NULL; boundary = c(-180.0083, 180.0083, -90, 90); aggregation.factor = 6
+# bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = convert_crs("3996"); proj.bathy = convert_crs("3996"), file.name = NULL; boundary = c(-180.0083, 180.0083, -90, 90); aggregation.factor = 6
 
 raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy, boundary = NULL, file.name = NULL, aggregation.factor = NA, verbose = TRUE) {
 
@@ -87,15 +87,15 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy, bounda
   utils::setTxtProgressBar(pb, 2)
 
   if(missing(proj.bathy)) {
-    proj.bathy <- "EPSG:4326"
+    proj.bathy <- convert_crs(4326)
   }
-  
+
   if(is.na(sf::st_crs(ras))) {
     if(verbose) message(paste0("bathy does not contain coordinate reference information. Using ", proj.bathy, ". Adjust this setting by changing the proj.bathy argument"))
     raster::crs(ras) <- raster::crs(proj.bathy)
   }
 
-  
+
 
   if(!is.null(boundary)) {
 
@@ -109,11 +109,11 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy, bounda
   utils::setTxtProgressBar(pb, 3)
 
   ## Set proj.out (if not set)
-  
+
   if(is.null(proj.out) & !is.na(raster::crs(ras))) {
     proj.out <- raster::crs(ras)
   }
-  
+
   ## Aggregate (reduce size) ####
 
   if(!is.na(aggregation.factor)) ras <- raster::aggregate(ras, fact = aggregation.factor)
@@ -123,9 +123,9 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy, bounda
   ## Project the raster ####
 
   if(sf::st_crs(ras) != sf::st_crs(proj.out)) {
-    ras <- raster::projectRaster(from = ras, crs = raster::crs(proj.out)) 
+    ras <- raster::projectRaster(from = ras, crs = raster::crs(proj.out))
   }
-  
+
   utils::setTxtProgressBar(pb, 5)
 
   ## Reclassify raster ####
