@@ -7,7 +7,7 @@
 clip_shapefile(
   x,
   limits,
-  proj.limits = CRSargs(4326),
+  proj.limits = convert_crs(4326),
   simplify = FALSE,
   tol = 60,
   return.boundary = FALSE

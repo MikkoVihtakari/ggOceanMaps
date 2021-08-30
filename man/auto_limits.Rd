@@ -8,10 +8,11 @@ auto_limits(
   data,
   lon = NULL,
   lat = NULL,
-  proj.in = CRSargs(4326),
+  proj.in = 4326,
   proj.out = NULL,
   expand.factor = NULL,
-  verbose = TRUE
+  verbose = TRUE,
+  output.sf = FALSE
 )
 }
 \arguments{
@@ -19,13 +20,15 @@ auto_limits(
 
 \item{lon, lat}{Names of longitude and latitude columns in \code{data} as character or integer index. If \code{NULL}, the column names are \link[=guess_coordinate_columns]{guessed}.}
 
-\item{proj.in}{Original \code{\link[sp:is.projected]{proj4string}} projection. Must be defined as character argument.}
+\item{proj.in}{Original \code{\link[sf:st_crs]{CRS}} projection. Must be defined as character argument.}
 
 \item{proj.out}{Resulting map projection. See \code{\link{transform_coord}}.}
 
 \item{expand.factor}{Expansion factor for map limits. Set to \code{NULL} to ignore.}
 
 \item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.}
+
+\item{output.sf}{Logical indicating whether an \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or \code{sp} (\code{FALSE}) polygon should be returned.}
 
 \item{rotate}{Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.}
 }

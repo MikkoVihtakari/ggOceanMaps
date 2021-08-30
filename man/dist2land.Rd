@@ -9,7 +9,7 @@ dist2land(
   lon = NULL,
   lat = NULL,
   shapefile = NULL,
-  proj.in = CRSargs(4326),
+  proj.in = convert_crs(4326),
   bind = TRUE,
   dist.col = "ldist",
   binary = FALSE,

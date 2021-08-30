@@ -22,7 +22,7 @@ raster_bathymetry(
 
 \item{proj.out}{A character string specifying the PROJ6 projection argument for the output. See \code{\link[sf]{st_crs}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy}. If \code{proj.out == proj.bathy}, the output will not be reprojected.}
 
-\item{proj.bathy}{A character string specifying the PROJ6 projection arguments for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information. If missing, \code{"EPSG:4326"} is assumed.}
+\item{proj.bathy}{A character string specifying the \code{\link[sf:st_crs]{CRS}} projection arguments for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information. If missing, \code{"EPSG:4326"} is assumed.}
 
 \item{boundary}{A \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.}
 
