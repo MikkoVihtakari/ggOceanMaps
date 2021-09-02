@@ -11,7 +11,8 @@
 #' @family create shapefiles
 #' @export
 
-# bathy = rb; drop.crumbs = 10; remove.holes = NULL; smooth = TRUE
+
+# bathy = rb; drop.crumbs = NULL; remove.holes = NULL; smooth = FALSE; output.sf = FALSE
 vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, smooth = FALSE, output.sf = FALSE) {
 
   # Progress bar ####
@@ -86,7 +87,7 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
 
   ## Manipulate depth data
 
-  names(pol)[names(pol) == "z"] <- "depth"
+  names(pol)[1] <- "depth"
   
   tmp <- pol$depth
 

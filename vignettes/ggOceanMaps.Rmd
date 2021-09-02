@@ -215,7 +215,7 @@ qmap(dt, color = var, expand.factor = 1.3) # map color, zoom out
 
 ## Detailed maps
 
-Detailed shapefiles are stored in the [ggOceanMapsLargeData]() repository and downloaded as needed. Available shapefiles can be viewed using the `shapefile_list()` function.
+Detailed shapefiles are stored in the [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData) repository and downloaded as needed. Available shapefiles can be viewed using the `shapefile_list()` function.
 
 ```{r}
 shapefile_list("all")

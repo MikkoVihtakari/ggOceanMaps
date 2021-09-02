@@ -125,12 +125,11 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out =
   #                                     proj4string = if(class(proj.crs) == "CRS") {proj.crs} else {sp::CRS(convert_crs(proj.crs))})
   
   projBound <- sf::st_polygon(list(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4], projLims[2], projLims[4], projLims[2], projLims[3], projLims[1], projLims[3]), ncol = 2, byrow = TRUE)))
-  projBound <- sf::st_sfc(projBound,crs =  sf::st_crs(proj.crs))
+  projBound <- sf::st_sfc(projBound, crs = sf::st_crs(proj.crs))
   
   tmp <- sf::st_bbox(projBound)
   
-  projBoundNodes <- sf::st_multipoint(as.matrix(expand.grid(lon = c(tmp[["xmin"]], tmp[["xmax"]]), 
-                           lat = c(tmp[["ymin"]], tmp[["ymax"]]))))
+  projBoundNodes <- sf::st_multipoint(as.matrix(expand.grid(lon = c(tmp[["xmin"]], tmp[["xmax"]]), lat = c(tmp[["ymin"]], tmp[["ymax"]]))))
   projBoundNodes <- sf::st_sfc(projBoundNodes, crs = sf::st_crs(proj.crs))
   
   # Decimal degree limits
