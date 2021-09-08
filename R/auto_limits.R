@@ -39,6 +39,19 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out =
     names(data) <- c("lon", "lat")
   }
   
+  # Get limits from sf objects
+  
+  if(any(class(data) %in% c("sf"))) {
+    proj.in <- sf::st_crs(data)
+   
+    tmp <- sf::st_bbox(data)
+    
+    data <- expand.grid(data.frame(
+      lon = tmp[c(1,3)],
+      lat = tmp[c(2,4)])
+    )
+  }
+  
   # Convert the coordinates
   
   if(is.null(lon) | is.null(lat)) {

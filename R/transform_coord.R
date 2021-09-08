@@ -210,7 +210,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   }
   
   if(exists("oldrownames")) {
-    rownames(out) <- oldrownames
+    suppressWarnings(rownames(out) <- oldrownames)
     out <- out
   } 
   
