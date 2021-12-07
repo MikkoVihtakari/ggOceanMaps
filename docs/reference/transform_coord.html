@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.19</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@
       <a href="../articles/premade-shapefiles.html">Pre-made shapefiles</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -137,7 +140,7 @@
   lon <span class='op'>=</span> <span class='cn'>NULL</span>,
   lat <span class='op'>=</span> <span class='cn'>NULL</span>,
   new.names <span class='op'>=</span> <span class='st'>"auto"</span>,
-  proj.in <span class='op'>=</span> <span class='st'>"EPSG:4326"</span>,
+  proj.in <span class='op'>=</span> <span class='fl'>4326</span>,
   proj.out <span class='op'>=</span> <span class='cn'>NULL</span>,
   verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
   bind <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -157,15 +160,15 @@
     </tr>
     <tr>
       <th>new.names</th>
-      <td><p>Character vector of length 2 specifying the names of transformed longitude and latitude columns, respectively. Alternatively <code>NULL</code>, which returns column names from <code>x</code> or "auto", which uses <code>NULL</code> if <code>bind = FALSE</code> and <code><a href='https://rdrr.io/r/base/c.html'>c("lon.proj", "lat.proj")</a></code> if <code>bind = TRUE</code>.</p></td>
+      <td><p>Character vector of length 2 specifying the names of transformed longitude and latitude columns, respectively. Alternatively <code>NULL</code>, which returns column names from <code>x</code> or "auto", which uses <code>NULL</code> if <code>bind = FALSE</code> and <code>c("lon.proj", "lat.proj")</code> if <code>bind = TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>proj.in</th>
-      <td><p>Original <code><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></code> projection. If <code>NULL</code>, the projection is taken from <code>x</code>. <code>x</code> must be a <a href='https://rdrr.io/pkg/sp/man/Spatial-class.html'>Spatial</a> object in that case.</p></td>
+      <td><p>The original <code><a href='https://r-spatial.github.io/sf/reference/st_crs.html'>CRS</a></code>. If <code>NULL</code>, the projection is taken from <code>x</code>. <code>x</code> must be a <a href='https://r-spatial.github.io/sf/reference/st.html'>spatial</a> object in that case.</p></td>
     </tr>
     <tr>
       <th>proj.out</th>
-      <td><p>Character. Either <code>NULL</code>, <code><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></code> projection the coordinates should be transformed to or a name of shapefiles in <code><a href='shapefile_list.html'>shapefile_list</a></code>. If <code>NULL</code>, the output projection will be automatically determined from data. This option requires decimal degrees as input option.</p></td>
+      <td><p>Character. Either <code>NULL</code>, <code><a href='https://r-spatial.github.io/sf/reference/st_crs.html'>CRS</a></code> the coordinates should be transformed to or a name of shapefiles in <code><a href='shapefile_list.html'>shapefile_list</a></code>. If <code>NULL</code>, the output projection will be automatically determined from data. This option requires decimal degrees as input option.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -198,21 +201,24 @@
     <p>Mikko Vihtakari</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Coordinates are automatically transformed to the pre-made shapefile </span>
-<span class='co'># projections:</span>
-<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>150</span>, <span class='fl'>150</span><span class='op'>)</span>, lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>60</span>, <span class='fl'>90</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>transform_coord</span><span class='op'>(</span><span class='va'>dt</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        lon     lat
-#&gt; 1 -1666567 2886579
-#&gt; 2        0       0</div><div class='input'><span class='fu'>transform_coord</span><span class='op'>(</span><span class='va'>dt</span>, bind <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    lon lat lon.proj lat.proj
-#&gt; 1 -150  60 -1666567  2886579
-#&gt; 2  150  90        0        0</div><div class='input'>
-<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>150</span>, <span class='fl'>150</span><span class='op'>)</span>, lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>20</span>, <span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>transform_coord</span><span class='op'>(</span><span class='va'>dt</span>, bind <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># no transformation required.</span>
-</div><div class='output co'>#&gt;    lon lat lon.proj lat.proj
-#&gt; 1 -150  20     -150       20
-#&gt; 2  150  50      150       50</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Coordinates are automatically transformed to the pre-made shapefile</span></span>
+<span class='r-in'><span class='co'># projections:</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>150</span>, <span class='fl'>150</span><span class='op'>)</span>, lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>60</span>, <span class='fl'>90</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>transform_coord</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        lon     lat</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 -1666567 2886579</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2        0       0</span>
+<span class='r-in'><span class='fu'>transform_coord</span><span class='op'>(</span><span class='va'>x</span>, bind <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    lon lat lon.proj lat.proj</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 -150  60 -1666567  2886579</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  150  90        0        0</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>150</span>, <span class='fl'>150</span><span class='op'>)</span>, lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>20</span>, <span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>transform_coord</span><span class='op'>(</span><span class='va'>x</span>, bind <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># no transformation required.</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    lon lat lon.proj lat.proj</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 -150  20     -150       20</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  150  50      150       50</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

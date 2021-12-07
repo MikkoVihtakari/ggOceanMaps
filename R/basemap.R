@@ -172,7 +172,7 @@
 ## Test parameters
 # limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = TRUE
 
-basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = TRUE) {
+basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE) {
   
   # Install ggOceanMapsData if not installed
   if (!requireNamespace("ggOceanMapsData", quietly = TRUE)) {

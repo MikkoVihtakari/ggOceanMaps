@@ -95,8 +95,6 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy, bounda
     raster::crs(ras) <- raster::crs(proj.bathy)
   }
 
-
-
   if(!is.null(boundary)) {
 
     ras <- raster::crop(ras, raster::extent(boundary))

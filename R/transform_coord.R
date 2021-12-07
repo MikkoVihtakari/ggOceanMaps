@@ -19,32 +19,34 @@
 #' transform_coord(x)
 #' transform_coord(x, bind = TRUE)
 #'
-#' # NAs are ignored by default
-#' x <- data.frame(lon = c(-150, 100, 150, NA), lat = c(-80, NA, -60, -70))
-#'
 #' x <- data.frame(lon = c(-150, 150), lat = c(20, 50))
 #' transform_coord(x, bind = TRUE) # no transformation required.
 #' @export
 
 ## Debug parameters
-# x = NULL; lon = NULL; lat = NULL; new.names = "auto"; proj.in = 4326; proj.out = NULL; verbose = FALSE; bind = TRUE; na = "ignore"
+# x = NULL; lon = NULL; lat = NULL; new.names = "auto"; proj.in = 4326; proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
+# x = data; bind = TRUE; new.names = "auto"; na = "ignore"
 transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", proj.in = 4326, proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
   
-  ## Checks ####
+  # Checks ----
   
   if(length(new.names) == 1) {
     if(new.names == "auto") {
-      new.names <- if(bind) c("lon.proj", "lat.proj") else NULL
+      new.names <- if(bind) {
+        c("lon.proj", "lat.proj") } else {
+          new.names <- guess_coordinate_columns(x)
+        }
     }
   }
   
   if(is.null(proj.out) & !sf::st_is_longlat(proj.in)) stop("proj.in has to be decimal degrees when proj.out = NULL.")
   
   if(!is.null(proj.out)) {
+    
     error_test <- quiet(try(match.arg(proj.out, shapefile_list("all")$name), silent = TRUE))
     
     if(class(error_test) != "try-error") {
-      proj.out <- shapefile_list(proj.out)$crs
+      proj.out <- sf::st_crs(shapefile_list(proj.out)$crs)
     }
   }
   
@@ -54,13 +56,13 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     if("sf" %in% class(x)) {
       proj.in <- sf::st_crs(x) 
     } else if("sp" %in% class(x)) {
-      proj.in <- raster::crs(x) # introduces raster dependency
+      proj.in <- raster::crs(x)
     } else stop("a spatial object of class sf or sp as x is required when proj.in = NULL")
   }
   
   ## Case for defined x and undefined lon or/and lat
   if(!is.null(x) & (is.null(lon) | is.null(lat))) {
-    if(!"data.frame" %in% class(x)) stop("x argument has to be a data.frame or NULL")
+    # if(!"data.frame" %in% class(x)) stop("x argument has to be a data.frame or NULL")
     
     tmp <- guess_coordinate_columns(x)
     
@@ -81,7 +83,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   #   x <- as.data.frame(x)
   # }
   
-  ## Make the data frame ---
+  ## Make the data frame ----
   
   if(is.null(x) & (is.numeric(lon) | is.numeric(lat))) {
     if(length(lon) != length(lat)) stop("lat and lon must be of equal length")
@@ -93,45 +95,45 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     if(!is.data.frame(x)) stop("x must be a data frame")
     oldrownames <- rownames(x)
     suppressWarnings(rownames(x) <- 1:nrow(x)) # suppress in case of a tibble
-    
-    if("data.table" %in% class(x)) {
-      y <- x[, c(lon, lat), with = FALSE]
-    } else {
-      y <- x[c(lon, lat)]
-    }
-    
-    colnames(y) <- c("lon", "lat")
+    y <- x
   }
   
   ## NA action
   
   if(na == "ignore") {
     
-    y$id <- 1:nrow(y)
-    z <- y[eval(is.na(y$lon) | is.na(y$lat)),]
-    
-    if(nrow(z) > 0) { # remove partial coordinates from the projected
-      z$lon <- NA; z$lat <- NA 
+    if("data.table" %in% class(y)) {
+      z <- y[eval(is.na(y[[lon]]) | is.na(y[[lat]])), c(lon, lat), with = FALSE]
+      y <- y[eval(!(is.na(y[[lon]]) | is.na(y[[lat]]))), c(lon, lat), with = FALSE]
+    } else {
+      z <- y[is.na(y[[lon]]) | is.na(y[[lat]]), c(lon, lat)]
+      y <- y[!(is.na(y[[lon]]) | is.na(y[[lat]])), c(lon, lat)]
     }
     
-    y <- y[eval(!(is.na(y$lon) | is.na(y$lat))),]
-    
   } else if(na == "remove") {
-    y <- y[eval(!is.na(y$lon) | !is.na(y$lat)),]
+    
+    if("data.table" %in% class(y)) {
+      y <- y[eval(!is.na(y[[lon]]) | !is.na(y[[lat]])), c(lon, lat), with = FALSE]
+    } else {
+      y <- y[eval(!is.na(y[[lon]]) | !is.na(y[[lat]])), c(lon, lat)]
+    }
+    
     message("Removed rows that contained missing coordinates.")
   } else {
-    stop("lon or lat coordinates contain missing values. Adjust the na argument or take care of the NAs.")
+    if(any(c(eval(is.na(y[[lon]])), is.na(y[[lat]])))) {
+      stop("lon or lat coordinates contain missing values. Adjust the na argument or take care of the NAs.")
+    }
   }
   
-  ## Output projection if not defined ---
+  ## Output projection if not defined ----
   
   if(is.null(proj.out)) {
-    limits <- c(range(y$lon), range(y$lat))
+    limits <- c(range(y[[lon]]), range(y[[lat]]))
     shapefile.def <- define_shapefiles(limits)
     proj.out <- sf::st_crs(shapefile_list(shapefile.def$shapefile.name)$crs)
   }
   
-  ## Define the CRS objects
+  ## Fix the CRS
   
   if("crs" != class(proj.in)) {
     error_test <- quiet(try(sf::st_crs(proj.in), silent = TRUE))
@@ -153,16 +155,21 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     }
   }
   
-  ## Coordinate transformation #### 
   
-  y <- data.frame(
-    cbind(
-      sf::sf_project(from = proj.in, to = proj.out, y[,c("lon", "lat")]),
-      y$id
-    )
-  )
+  ## Coordinate transformation ----
   
-  colnames(y) <- c("lon", "lat", "id")
+  y <- data.frame(sf::sf_project(from = proj.in, to = proj.out, y[]))
+  
+  # lon = sample(-30:60, 1e2, replace = TRUE); lat = sample(45:80, 1e2, replace = TRUE); y = data.frame(lon, lat); lon = "lon"; lat = "lat" # <- Debugging code
+  
+  ## sf version
+  # y <- sf::st_as_sf(y, coords = c(lon, lat), 
+  #                   crs = as.integer(gsub("\\D", "", proj.in)))
+  # 
+  # y <- sf::st_coordinates(sf::st_transform(y, proj.out))
+  # 
+  # colnames(y)[colnames(y) == "X"] <- lon
+  # colnames(y)[colnames(y) == "Y"] <- lat
   
   ## sp version 
   # sp::coordinates(y) <- c(lon, lat)
@@ -170,17 +177,13 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   # 
   # y <- sp::spTransform(y, if(class(proj.out) == "CRS") {proj.out} else {sp::CRS(proj.out)})
   # y <- data.frame(sp::coordinates(y))
+  # 
+  ## ----
   
   if(na == "ignore" & nrow(z) > 0) {
-    y <- rbind(z, y)
-    y <- y[order(y$id),]
+    y <- rbind(y, z)
+    y <- y[order(as.numeric(rownames(y))),]
   }
-  
-  # Remove the temporary id column
-  
-  y <- y[,-3]
-  
-  # Set new names
   
   if(!is.null(new.names)) {
     if(any(length(new.names) != 2, !is.character(new.names))) {
@@ -190,18 +193,30 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   }
   
   if(verbose) {
-    message(paste("projection transformed from", proj.in$input, "to", proj.out$input))
+    if("input" %in% names(proj.in)) {
+      proj.in.msg <- proj.in$input
+    } else {
+      proj.in.msg <- proj.in
+    }
+    
+    if("input" %in% names(proj.out)) {
+      proj.out.msg <- proj.out$input
+    } else {
+      proj.out.msg <- proj.out
+    }
+    
+    message(paste("projection transformed from", proj.in.msg, "to", proj.out.msg))
   }
   
   # Change column names if proj.in not decimal degrees
   
   if(!sf::st_is_longlat(proj.in) & sf::st_is_longlat(proj.out)) {
-    tmp <- names(x)
-    names(x) <- names(y)
-    names(y) <- tmp
+    tmp <- colnames(x)
+    colnames(x) <- colnames(y)
+    colnames(y) <- tmp
   }
   
-  ## Final modifications ###
+  # Final modifications ---
   
   if(bind) {
     out <- cbind(x, y)
@@ -210,19 +225,19 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   }
   
   if(exists("oldrownames")) {
-    suppressWarnings(rownames(out) <- oldrownames)
+    rownames(out) <- oldrownames
     out <- out
-  } 
+  } else {
+    out <- out
+  }
   
   # Add projection information as attributes
   
-  attributes(out)$proj.in <- proj.in$proj4string
-  attributes(out)$proj.out <- proj.out$proj4string
+  attributes(out)$proj.in <- proj.in
+  attributes(out)$proj.out <- proj.out
   
   # Return
   
   out
-  
-  ## ####
 }
 

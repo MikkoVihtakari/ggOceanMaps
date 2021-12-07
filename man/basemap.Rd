@@ -29,7 +29,7 @@ basemap(
   base_size = 11,
   projection.grid = FALSE,
   expand.factor = 1.1,
-  verbose = TRUE
+  verbose = FALSE
 )
 }
 \arguments{

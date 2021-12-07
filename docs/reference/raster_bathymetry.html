@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.19</span>
       </span>
     </div>
 
@@ -163,7 +163,7 @@
     </tr>
     <tr>
       <th>proj.bathy</th>
-      <td><p>A character string specifying the PROJ6 projection arguments for the input (<code>bathy</code>). Only required if <code>bathy</code> lacks CRS information. If missing, <code>"EPSG:4326"</code> is assumed.</p></td>
+      <td><p>A character string specifying the <code><a href='https://r-spatial.github.io/sf/reference/st_crs.html'>CRS</a></code> projection arguments for the input (<code>bathy</code>). Only required if <code>bathy</code> lacks CRS information. If missing, <code>"EPSG:4326"</code> is assumed.</p></td>
     </tr>
     <tr>
       <th>boundary</th>
@@ -188,7 +188,7 @@
     <p>A list with a <a href='https://rdrr.io/pkg/raster/man/raster.html'>raster</a> object the containing projected bathymetry defined by the <code>proj.out</code> argument and a data frame of depth intervals.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>You can use <a href='https://www.gebco.net/data_and_products/gridded_bathymetry_data/'>GEBCO</a>, <a href='https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/'>IBCAO</a>, <a href='https://www.ngdc.noaa.gov/mgg/global/'>ETOPO1</a> bathymetry grids downloaded from respective sources as the <code>bathy</code> argument. The bathymetry grids read from files must be in NetCDF/grd format. Alternatively use the <code>marmap::getNOAA.bathy</code> function to download ETOPO1 bathymetry and convert it to a raster object using the <code>marmap::as.raster</code> function.</p>
+    <p>You can use <a href='https://www.gebco.net/data_and_products/gridded_bathymetry_data/'>GEBCO</a>, <a href='https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/'>IBCAO</a>, <a href='https://www.ngdc.noaa.gov/mgg/global/'>ETOPO1</a> bathymetry grids downloaded from respective sources as the <code>bathy</code> argument. The bathymetry grids read from files must be in NetCDF/grd format. Alternatively use the <code><a href='https://rdrr.io/pkg/marmap/man/getNOAA.bathy.html'>marmap::getNOAA.bathy</a></code> function to download ETOPO1 bathymetry and convert it to a raster object using the <code><a href='https://rdrr.io/pkg/marmap/man/as.raster.html'>marmap::as.raster</a></code> function.</p>
 <p>Note that the size of the output is heavily influenced by the number of depth contours (<code>depths</code>) as well as the resolution of <code>bathy</code> and choice of <code>aggregation.factor</code>. To make the <code><a href='vector_bathymetry.html'>vector_bathymetry</a></code> function and consequent plotting faster, limiting the details of the bathymetry raster may be desirable.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 

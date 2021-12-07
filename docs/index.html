@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.19</span>
       </span>
     </div>
 
@@ -95,9 +95,9 @@
 <div id="ggoceanmaps" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#ggoceanmaps" class="anchor"></a>ggOceanMaps</h1></div>
-<p><strong>Plot data on oceanographic maps using ggplot2. R package version 1.1.10</strong></p>
-<p><a href="https://zenodo.org/badge/latestdoi/254818056"><img src="https://zenodo.org/badge/254818056.svg" alt="DOI"></a> <a href="https://cran.r-project.org/package=ggOceanMaps"><img src="https://www.r-pkg.org/badges/version/ggOceanMaps" alt="CRAN_Status_Badge"></a></p>
-<p><strong>Important information, June 2021:</strong> ggOceanMaps is <strong>temporarily withdrawn from CRAN</strong> due to <a href="https://cran-archive.r-project.org/web/checks/2021/2021-06-04_check_results_ggOceanMaps.html">an issue</a> in shifting to the <a href="https://cran.r-project.org/web/packages/rgdal/vignettes/PROJ6_GDAL3.html">PROJ6/GDAL3 system</a> on Solaris. The package works as long as the GIS packages of R are linked with PROJ &gt;= 6 and GDAL &gt;= 3 (write <code><a href="http://rgdal.r-forge.r-project.org/reference/GDALDriver-class.html">rgdal::rgdal_extSoftVersion()</a></code> to test). The ggOceanMaps package will be uploaded to CRAN once the issue has been solved. In the meanwhile, install the package from source through GitHub (see the Installation section).</p>
+<p><strong>Plot data on oceanographic maps using ggplot2. R package version 1.1.19</strong></p>
+<p><a href="https://doi.org/10.5281/zenodo.4554714"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4554714.svg" alt="DOI"></a> <a href="https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml"><img src="https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a> <a href="https://cran.r-project.org/package=ggOceanMaps"><img src="https://www.r-pkg.org/badges/version/ggOceanMaps" alt="CRAN_Status_Badge"></a></p>
+<p><strong>Important information:</strong> ggOceanMaps is <strong>withdrawn from CRAN indefinitely</strong> due to submission issues. Install the package from source through GitHub (see the Installation section). The package works as long as the GIS packages of R are linked with PROJ &gt;= 6 and GDAL &gt;= 3 (write <code><a href="http://rgdal.r-forge.r-project.org/reference/GDALDriver-class.html">rgdal::rgdal_extSoftVersion()</a></code> to test).</p>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
@@ -107,30 +107,25 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>The package is available as a <a href="https://CRAN.R-project.org/package=ggOceanMaps">CRAN version</a>, which is updated infrequently (a few times a year), and a <a href="https://github.com/MikkoVihtakari/ggOceanMaps">GitHub version</a>, which is updated whenever the author works with the package. Try the GitHub version if you encounter a bug in the CRAN version.</p>
-<p>Due to the package size limitations, ggOceanMaps requires the <a href="https://github.com/MikkoVihtakari/ggOceanMapsData">ggOceanMapsData</a> package which stores shapefiles used in low-resolution maps. The ggOceanMapsData package is not available on CRAN but can be installed from a <a href="https://CRAN.R-project.org/package=drat">drat</a> <a href="https://github.com/MikkoVihtakari/drat">repository on GitHub</a>. To install both packages, write:</p>
+<p>The package is available as a <a href="https://github.com/MikkoVihtakari/ggOceanMaps">GitHub version</a>, which is updated whenever the author works with the package.</p>
+<p>Due to the package size limitations, ggOceanMaps requires the <a href="https://github.com/MikkoVihtakari/ggOceanMapsData">ggOceanMapsData</a> package which stores shapefiles used in low-resolution maps.</p>
+<p>The GitHub version of ggOceanMaps can be installed using the <a href="https://cran.r-project.org/web/packages/devtools/index.html"><strong>devtools</strong></a> package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ggOceanMapsData"</span>, <span class="st">"ggOceanMaps"</span><span class="op">)</span>, 
-                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"https://cloud.r-project.org"</span>,
-                           <span class="st">"https://mikkovihtakari.github.io/drat"</span>
-                 <span class="op">)</span>
-<span class="op">)</span></code></pre></div>
-<p>The (more) frequently updated GitHub version of ggOceanMaps can be installed using the <a href="https://cran.r-project.org/web/packages/devtools/index.html"><strong>devtools</strong></a> package.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"MikkoVihtakari/ggOceanMapsData"</span><span class="op">)</span> <span class="co"># required by ggOceanMaps</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"MikkoVihtakari/ggOceanMaps"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"MikkoVihtakari/ggOceanMapsData"</span><span class="op">)</span> <span class="co"># required by ggOceanMaps</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"MikkoVihtakari/ggOceanMaps"</span><span class="op">)</span></code></pre></div>
+<!-- a [CRAN version](https://CRAN.R-project.org/package=ggOceanMaps) one day, and as. Use the GitHub version if you can. The ggOceanMapsData package is not available on CRAN but can be installed from a [drat](https://CRAN.R-project.org/package=drat) [repository on GitHub](https://github.com/MikkoVihtakari/drat). To install both packages, write: -->
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<p><strong>ggOceanMaps</strong> extends on <a href="http://ggplot2.tidyverse.org/reference/"><strong>ggplot2</strong></a>. The package uses spatial shapefiles, <a href="https://cran.r-project.org/web/views/Spatial.html">GIS packages for R</a> to manipulate, and the <a href="https://cran.r-project.org/web/packages/ggspatial/index.html"><strong>ggspatial</strong></a> package to help to plot these shapefiles. The shapefile plotting is conducted internally in the <code>basemap</code> function and uses <a href="https://ggplot2.tidyverse.org/reference/ggsf.html">ggplot’s sf object plotting capabilities</a>. Maps are plotted using the <code><a href="reference/basemap.html">basemap()</a></code> or <code><a href="reference/qmap.html">qmap()</a></code> functions that work almost similarly to <a href="https://ggplot2.tidyverse.org/reference/index.html"><code>ggplot()</code> as a base</a> for adding further layers to the plot using the <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> operator. The maps generated this way already contain multiple ggplot layers. Consequently, the <a href="https://ggplot2.tidyverse.org/reference/ggplot.html"><code>data</code> argument</a> needs to be explicitly specified inside <code>geom_*</code> functions when adding <code>ggplot2</code> layers. Depending on the location of the map, the underlying coordinates may be projected. Decimal degree coordinates need to be transformed to the projected coordinates using the <code>transform_coord</code>, <a href="https://paleolimbot.github.io/ggspatial/">ggspatial</a>, or <a href="https://ggplot2.tidyverse.org/reference/ggsf.html"><code>geom_sf</code> functions.</a></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p><strong>ggOceanMaps</strong> extends on <a href="http://ggplot2.tidyverse.org/reference/"><strong>ggplot2</strong></a>. The package uses spatial shapefiles, <a href="https://cran.r-project.org/web/views/Spatial.html">GIS packages for R</a> to manipulate, and the <a href="https://cran.r-project.org/web/packages/ggspatial/index.html"><strong>ggspatial</strong></a> package to help to plot these shapefiles. The shapefile plotting is conducted internally in the <code>basemap</code> function and uses <a href="https://ggplot2.tidyverse.org/reference/ggsf.html">ggplot’s sf object plotting capabilities</a>. Maps are plotted using the <code><a href="reference/basemap.html">basemap()</a></code> or <code><a href="reference/qmap.html">qmap()</a></code> functions that work almost similarly to <a href="https://ggplot2.tidyverse.org/reference/index.html"><code>ggplot()</code> as a base</a> for adding further layers to the plot using the <code>+</code> operator. The maps generated this way already contain multiple ggplot layers. Consequently, the <a href="https://ggplot2.tidyverse.org/reference/ggplot.html"><code>data</code> argument</a> needs to be explicitly specified inside <code>geom_*</code> functions when adding <code>ggplot2</code> layers. Depending on the location of the map, the underlying coordinates may be projected. Decimal degree coordinates need to be transformed to the projected coordinates using the <code>transform_coord</code>, <a href="https://paleolimbot.github.io/ggspatial/">ggspatial</a>, or <a href="https://ggplot2.tidyverse.org/reference/ggsf.html"><code>geom_sf</code> functions.</a></p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/">ggOceanMaps</a></span><span class="op">)</span>
 
 <span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">30</span>, <span class="op">-</span><span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">30</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">80</span>, <span class="fl">80</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="reference/basemap.html">basemap</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu">geom_polygon</span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span>, fill <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_polygon.html">geom_polygon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span>, fill <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-5-1.png"><!-- --></p>
 <p>See the <a href="https://mikkovihtakari.github.io/ggOceanMaps/index.html">ggOceanMaps website</a>, <a href="https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html">function reference</a>, and the <a href="https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html">user manual</a> for how to use and modify the maps plotted by the package. You may also find <a href="https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html#1">these slides about the package</a> useful.</p>
 </div>
@@ -138,7 +133,7 @@
 <h2 class="hasAnchor">
 <a href="#data-path" class="anchor"></a>Data path</h2>
 <p>While ggOceanMaps allows plotting any custom-made shapefiles, the package contains a shortcut to plot higher resolution maps for <a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData/tree/master/data">certain areas needed by the author</a> without the need of generating the shapefiles manually. These high-resolution shapefiles are downloaded from the <a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData">ggOceanMapsLargeData</a> repository. As a default, the shapefiles are downloaded into a temporary directory meaning that the user would need to download the large shapefiles every time they restart R. This limitation is set by <a href="https://cran.r-project.org/web/packages/policies.html">CRAN policies</a>. You can define a custom folder for high-resolution shapefiles on your computer by modifying your .Rprofile file (e.g. <code><a href="https://usethis.r-lib.org/reference/edit.html">usethis::edit_r_profile()</a></code>). Add the following lines to the file:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">.ggOceanMapsenv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html">new.env</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">.ggOceanMapsenv</span><span class="op">$</span><span class="va">datapath</span> <span class="op">&lt;-</span> <span class="st">'YourCustomPath'</span></code></pre></div>
 <p>It is smart to use a directory R has writing access to. For example <code>"~/Documents/ggOceanMapsLargeData"</code> would work for most operating systems.</p>
@@ -162,14 +157,15 @@
 </li>
 </ul>
 <p>Further, please cite the package whenever maps generated by the package are published. For up-to-date citation information, please use:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html">citation</a></span><span class="op">(</span><span class="st">"ggOceanMaps"</span><span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; To cite package 'ggOceanMaps' in publications use:</span>
+<span class="co">#&gt; To cite ggOceanMaps in publications use:</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;   Mikko Vihtakari (2021). ggOceanMaps: Plot Data on Oceanographic Maps</span>
-<span class="co">#&gt;   using 'ggplot2'. R package version 1.1.10.</span>
-<span class="co">#&gt;   https://mikkovihtakari.github.io/ggOceanMaps/</span>
+<span class="co">#&gt;   Vihtakari M. (2021). ggOceanMaps: Plot Data on Oceanographic Maps</span>
+<span class="co">#&gt;   using 'ggplot2'. R package version 1.1.19. URL:</span>
+<span class="co">#&gt;   https://github.com/MikkoVihtakari/ggOceanMaps. doi:</span>
+<span class="co">#&gt;   10.5281/zenodo.4554714</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
 <span class="co">#&gt; </span>
@@ -177,8 +173,9 @@
 <span class="co">#&gt;     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},</span>
 <span class="co">#&gt;     author = {Mikko Vihtakari},</span>
 <span class="co">#&gt;     year = {2021},</span>
-<span class="co">#&gt;     note = {R package version 1.1.10},</span>
-<span class="co">#&gt;     url = {https://mikkovihtakari.github.io/ggOceanMaps/},</span>
+<span class="co">#&gt;     doi = {10.5281/zenodo.4554714},</span>
+<span class="co">#&gt;     url = {https://github.com/MikkoVihtakari/ggOceanMaps},</span>
+<span class="co">#&gt;     note = {R package version 1.1.19},</span>
 <span class="co">#&gt;   }</span></code></pre></div>
 </div>
 <div id="getting-help" class="section level2">
@@ -195,7 +192,7 @@
 <h2 class="hasAnchor">
 <a href="#debugging-installation" class="anchor"></a>Debugging installation</h2>
 <p>After a successful installation, the following code should return a plot shown under</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/">ggOceanMaps</a></span><span class="op">)</span>
 <span class="fu"><a href="reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fl">60</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-8-1.png"><!-- --></p>
@@ -203,7 +200,7 @@
 <p>If you encounter problems during the devtools installation, you may set the <code>upgrade</code> argument to <code>"never"</code> and try the following steps:</p>
 <ol>
 <li>Manually update all R packages you have installed (Packages -&gt; Update -&gt; Select all -&gt; Install updates in R Studio). If an update of a package fails, try installing that package again using the <code>install.packages</code> function or the R Studio menu.</li>
-<li>Run <code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">devtools::install_github("MikkoVihtakari/ggOceanMaps", upgrade = "never")</a></code>.</li>
+<li>Run <code>devtools::install_github("MikkoVihtakari/ggOceanMaps", upgrade = "never")</code>.</li>
 <li>If the installation of a dependency fails, try installing that package manually and repeat step 2.</li>
 <li>Since R has lately been updated to 4.0, you may have to update your R to the latest major version for all dependencies to work (<code>stars</code>, <code>rgdal</code> and <code>sf</code> have been reported to cause trouble during the installation).</li>
 </ol>
@@ -227,6 +224,12 @@
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+</ul>
+</div>
+<div class="citation">
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing ggOceanMaps</a></li>
 </ul>
 </div>
 <div class="developers">

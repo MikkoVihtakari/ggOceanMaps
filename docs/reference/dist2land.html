@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.19</span>
       </span>
     </div>
 
@@ -140,7 +140,7 @@
   lon <span class='op'>=</span> <span class='cn'>NULL</span>,
   lat <span class='op'>=</span> <span class='cn'>NULL</span>,
   shapefile <span class='op'>=</span> <span class='cn'>NULL</span>,
-  proj.in <span class='op'>=</span> <span class='st'>"EPSG:4326"</span>,
+  proj.in <span class='op'>=</span> <span class='fu'><a href='convert_crs.html'>convert_crs</a></span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span>,
   bind <span class='op'>=</span> <span class='cn'>TRUE</span>,
   dist.col <span class='op'>=</span> <span class='st'>"ldist"</span>,
   binary <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -201,116 +201,127 @@
     <p>Mikko Vihtakari</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'># Simple example:</span>
-<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>20</span>, <span class='fl'>80</span>, length.out <span class='op'>=</span> <span class='fl'>41</span><span class='op'>)</span>, lat <span class='op'>=</span> <span class='fl'>50</span><span class='op'>:</span><span class='fl'>90</span><span class='op'>)</span>
-<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'>dist2land</span><span class='op'>(</span><span class='va'>dt</span>, cores <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Used lon and lat as input coordinate column names in data</span></div><div class='output co'>#&gt; <span class='message'>Using ArcticStereographic as land shapes.</span></div><div class='output co'>#&gt; <span class='message'>Calculating distances without parallel processing...</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   2%  |                                                                              |===                                                                   |   5%  |                                                                              |=====                                                                 |   7%  |                                                                              |=======                                                               |  10%  |                                                                              |=========                                                             |  12%  |                                                                              |==========                                                            |  15%  |                                                                              |============                                                          |  17%  |                                                                              |==============                                                        |  20%  |                                                                              |===============                                                       |  22%  |                                                                              |=================                                                     |  24%  |                                                                              |===================                                                   |  27%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |========================                                              |  34%  |                                                                              |==========================                                            |  37%  |                                                                              |===========================                                           |  39%  |                                                                              |=============================                                         |  41%  |                                                                              |===============================                                       |  44%  |                                                                              |================================                                      |  46%  |                                                                              |==================================                                    |  49%  |                                                                              |====================================                                  |  51%  |                                                                              |======================================                                |  54%  |                                                                              |=======================================                               |  56%  |                                                                              |=========================================                             |  59%  |                                                                              |===========================================                           |  61%  |                                                                              |============================================                          |  63%  |                                                                              |==============================================                        |  66%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |===================================================                   |  73%  |                                                                              |=====================================================                 |  76%  |                                                                              |=======================================================               |  78%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  83%  |                                                                              |============================================================          |  85%  |                                                                              |=============================================================         |  88%  |                                                                              |===============================================================       |  90%  |                                                                              |=================================================================     |  93%  |                                                                              |===================================================================   |  95%  |                                                                              |====================================================================  |  98%  |                                                                              |======================================================================| 100%</div><div class='input'><span class='fu'><a href='qmap.html'>qmap</a></span><span class='op'>(</span><span class='va'>dt</span>, color <span class='op'>=</span> <span class='va'>ldist</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>scale_color_viridis_c</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from EPSG:4326 to EPSG:3995</span></div><div class='img'><img src='dist2land-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># No premade shapefiles for datasets covering the entire globe</span>
-<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='op'>-</span><span class='fl'>20</span><span class='op'>:</span><span class='fl'>20</span>, lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>90</span>, <span class='fl'>90</span>, length.out <span class='op'>=</span> <span class='fl'>41</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    lon   lat
-#&gt; 1  -20 -90.0
-#&gt; 2  -19 -85.5
-#&gt; 3  -18 -81.0
-#&gt; 4  -17 -76.5
-#&gt; 5  -16 -72.0
-#&gt; 6  -15 -67.5
-#&gt; 7  -14 -63.0
-#&gt; 8  -13 -58.5
-#&gt; 9  -12 -54.0
-#&gt; 10 -11 -49.5
-#&gt; 11 -10 -45.0
-#&gt; 12  -9 -40.5
-#&gt; 13  -8 -36.0
-#&gt; 14  -7 -31.5
-#&gt; 15  -6 -27.0
-#&gt; 16  -5 -22.5
-#&gt; 17  -4 -18.0
-#&gt; 18  -3 -13.5
-#&gt; 19  -2  -9.0
-#&gt; 20  -1  -4.5
-#&gt; 21   0   0.0
-#&gt; 22   1   4.5
-#&gt; 23   2   9.0
-#&gt; 24   3  13.5
-#&gt; 25   4  18.0
-#&gt; 26   5  22.5
-#&gt; 27   6  27.0
-#&gt; 28   7  31.5
-#&gt; 29   8  36.0
-#&gt; 30   9  40.5
-#&gt; 31  10  45.0
-#&gt; 32  11  49.5
-#&gt; 33  12  54.0
-#&gt; 34  13  58.5
-#&gt; 35  14  63.0
-#&gt; 36  15  67.5
-#&gt; 37  16  72.0
-#&gt; 38  17  76.5
-#&gt; 39  18  81.0
-#&gt; 40  19  85.5
-#&gt; 41  20  90.0</div><div class='input'><span class='fu'>dist2land</span><span class='op'>(</span><span class='va'>dt</span>, cores <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='co'># wrong!</span>
-</div><div class='output co'>#&gt; <span class='message'>Used lon and lat as input coordinate column names in data</span></div><div class='output co'>#&gt; <span class='message'>Using ArcticStereographic as land shapes.</span></div><div class='output co'>#&gt; <span class='message'>Calculating distances without parallel processing...</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   2%  |                                                                              |===                                                                   |   5%  |                                                                              |=====                                                                 |   7%  |                                                                              |=======                                                               |  10%  |                                                                              |=========                                                             |  12%  |                                                                              |==========                                                            |  15%  |                                                                              |============                                                          |  17%  |                                                                              |==============                                                        |  20%  |                                                                              |===============                                                       |  22%  |                                                                              |=================                                                     |  24%  |                                                                              |===================                                                   |  27%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |========================                                              |  34%  |                                                                              |==========================                                            |  37%  |                                                                              |===========================                                           |  39%  |                                                                              |=============================                                         |  41%  |                                                                              |===============================                                       |  44%  |                                                                              |================================                                      |  46%  |                                                                              |==================================                                    |  49%  |                                                                              |====================================                                  |  51%  |                                                                              |======================================                                |  54%  |                                                                              |=======================================                               |  56%  |                                                                              |=========================================                             |  59%  |                                                                              |===========================================                           |  61%  |                                                                              |============================================                          |  63%  |                                                                              |==============================================                        |  66%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |===================================================                   |  73%  |                                                                              |=====================================================                 |  76%  |                                                                              |=======================================================               |  78%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  83%  |                                                                              |============================================================          |  85%  |                                                                              |=============================================================         |  88%  |                                                                              |===============================================================       |  90%  |                                                                              |=================================================================     |  93%  |                                                                              |===================================================================   |  95%  |                                                                              |====================================================================  |  98%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt;      lon lat      ldist
-#&gt; 1  -20.0  50 770.653793
-#&gt; 2  -17.5  51 547.038461
-#&gt; 3  -15.0  52 337.546117
-#&gt; 4  -12.5  53 174.874918
-#&gt; 5  -10.0  54   0.000000
-#&gt; 6   -7.5  55   0.000000
-#&gt; 7   -5.0  56   0.000000
-#&gt; 8   -2.5  57   0.000000
-#&gt; 9    0.0  58 123.247176
-#&gt; 10   2.5  59 145.587650
-#&gt; 11   5.0  60   5.751504
-#&gt; 12   7.5  61   0.000000
-#&gt; 13  10.0  62   0.000000
-#&gt; 14  12.5  63   0.000000
-#&gt; 15  15.0  64   0.000000
-#&gt; 16  17.5  65   0.000000
-#&gt; 17  20.0  66   0.000000
-#&gt; 18  22.5  67   0.000000
-#&gt; 19  25.0  68   0.000000
-#&gt; 20  27.5  69   0.000000
-#&gt; 21  30.0  70   8.824472
-#&gt; 22  32.5  71  83.978197
-#&gt; 23  35.0  72 225.411819
-#&gt; 24  37.5  73 361.077663
-#&gt; 25  40.0  74 416.021609
-#&gt; 26  42.5  75 356.138534
-#&gt; 27  45.0  76 310.787422
-#&gt; 28  47.5  77 298.118849
-#&gt; 29  50.0  78 212.189395
-#&gt; 30  52.5  79 102.691377
-#&gt; 31  55.0  80  17.593847
-#&gt; 32  57.5  81   0.000000
-#&gt; 33  60.0  82  19.565938
-#&gt; 34  62.5  83 133.132551
-#&gt; 35  65.0  84 245.801555
-#&gt; 36  67.5  85 356.787751
-#&gt; 37  70.0  86 466.059650
-#&gt; 38  72.5  87 573.612536
-#&gt; 39  75.0  88 679.448918
-#&gt; 40  77.5  89 736.611243
-#&gt; 41  80.0  90 692.354149</div><div class='input'><span class='co'># }</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>179</span>, <span class='fl'>179</span>, length.out <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>, lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>60</span>, <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># The distance calculation is slow for large datasets</span>
-<span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>dist2land</span><span class='op'>(</span><span class='va'>dt</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'>#&gt; user  system elapsed </span>
-<span class='co'>#&gt; 0.073   0.041   5.627</span>
-
-<span class='co'># The parallel processing speeds it up</span>
-<span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>dist2land</span><span class='op'>(</span><span class='va'>dt</span>, cores <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'>#&gt; user  system elapsed </span>
-<span class='co'>#&gt; 19.719   1.237  20.894 </span>
-
-<span class='co'># binary = TRUE further speeds the function up</span>
-<span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>dist2land</span><span class='op'>(</span><span class='va'>dt</span>, binary <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'>#&gt; user  system elapsed </span>
-<span class='co'>#&gt; 1.624   0.041   1.680</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='co'># Simple example:</span></span>
+<span class='r-in'><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>20</span>, <span class='fl'>80</span>, length.out <span class='op'>=</span> <span class='fl'>41</span><span class='op'>)</span>, lat <span class='op'>=</span> <span class='fl'>50</span><span class='op'>:</span><span class='fl'>90</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'>dist2land</span><span class='op'>(</span><span class='va'>dt</span>, cores <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Used lon and lat as input coordinate column names in data</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Using ArcticStereographic as land shapes.</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Calculating distances without parallel processing...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   2%  |                                                                              |===                                                                   |   5%  |                                                                              |=====                                                                 |   7%  |                                                                              |=======                                                               |  10%  |                                                                              |=========                                                             |  12%  |                                                                              |==========                                                            |  15%  |                                                                              |============                                                          |  17%  |                                                                              |==============                                                        |  20%  |                                                                              |===============                                                       |  22%  |                                                                              |=================                                                     |  24%  |                                                                              |===================                                                   |  27%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |========================                                              |  34%  |                                                                              |==========================                                            |  37%  |                                                                              |===========================                                           |  39%  |                                                                              |=============================                                         |  41%  |                                                                              |===============================                                       |  44%  |                                                                              |================================                                      |  46%  |                                                                              |==================================                                    |  49%  |                                                                              |====================================                                  |  51%  |                                                                              |======================================                                |  54%  |                                                                              |=======================================                               |  56%  |                                                                              |=========================================                             |  59%  |                                                                              |===========================================                           |  61%  |                                                                              |============================================                          |  63%  |                                                                              |==============================================                        |  66%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |===================================================                   |  73%  |                                                                              |=====================================================                 |  76%  |                                                                              |=======================================================               |  78%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  83%  |                                                                              |============================================================          |  85%  |                                                                              |=============================================================         |  88%  |                                                                              |===============================================================       |  90%  |                                                                              |=================================================================     |  93%  |                                                                              |===================================================================   |  95%  |                                                                              |====================================================================  |  98%  |                                                                              |======================================================================| 100%</span>
+<span class='r-in'><span class='fu'><a href='qmap.html'>qmap</a></span><span class='op'>(</span><span class='va'>dt</span>, color <span class='op'>=</span> <span class='va'>ldist</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_viridis.html'>scale_color_viridis_c</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='dist2land-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># No premade shapefiles for datasets covering the entire globe</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='op'>-</span><span class='fl'>20</span><span class='op'>:</span><span class='fl'>20</span>, lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>90</span>, <span class='fl'>90</span>, length.out <span class='op'>=</span> <span class='fl'>41</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    lon   lat</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  -20 -90.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  -19 -85.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  -18 -81.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  -17 -76.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  -16 -72.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  -15 -67.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  -14 -63.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  -13 -58.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  -12 -54.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 -11 -49.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11 -10 -45.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12  -9 -40.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13  -8 -36.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14  -7 -31.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15  -6 -27.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16  -5 -22.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 17  -4 -18.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18  -3 -13.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19  -2  -9.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20  -1  -4.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21   0   0.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22   1   4.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23   2   9.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24   3  13.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 25   4  18.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 26   5  22.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 27   6  27.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 28   7  31.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 29   8  36.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 30   9  40.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 31  10  45.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 32  11  49.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 33  12  54.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 34  13  58.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 35  14  63.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 36  15  67.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 37  16  72.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 38  17  76.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 39  18  81.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 40  19  85.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 41  20  90.0</span>
+<span class='r-in'><span class='fu'>dist2land</span><span class='op'>(</span><span class='va'>dt</span>, cores <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='co'># wrong!</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Used lon and lat as input coordinate column names in data</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Using ArcticStereographic as land shapes.</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Calculating distances without parallel processing...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   2%  |                                                                              |===                                                                   |   5%  |                                                                              |=====                                                                 |   7%  |                                                                              |=======                                                               |  10%  |                                                                              |=========                                                             |  12%  |                                                                              |==========                                                            |  15%  |                                                                              |============                                                          |  17%  |                                                                              |==============                                                        |  20%  |                                                                              |===============                                                       |  22%  |                                                                              |=================                                                     |  24%  |                                                                              |===================                                                   |  27%  |                                                                              |====================                                                  |  29%  |                                                                              |======================                                                |  32%  |                                                                              |========================                                              |  34%  |                                                                              |==========================                                            |  37%  |                                                                              |===========================                                           |  39%  |                                                                              |=============================                                         |  41%  |                                                                              |===============================                                       |  44%  |                                                                              |================================                                      |  46%  |                                                                              |==================================                                    |  49%  |                                                                              |====================================                                  |  51%  |                                                                              |======================================                                |  54%  |                                                                              |=======================================                               |  56%  |                                                                              |=========================================                             |  59%  |                                                                              |===========================================                           |  61%  |                                                                              |============================================                          |  63%  |                                                                              |==============================================                        |  66%  |                                                                              |================================================                      |  68%  |                                                                              |==================================================                    |  71%  |                                                                              |===================================================                   |  73%  |                                                                              |=====================================================                 |  76%  |                                                                              |=======================================================               |  78%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  83%  |                                                                              |============================================================          |  85%  |                                                                              |=============================================================         |  88%  |                                                                              |===============================================================       |  90%  |                                                                              |=================================================================     |  93%  |                                                                              |===================================================================   |  95%  |                                                                              |====================================================================  |  98%  |                                                                              |======================================================================| 100%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      lon lat      ldist</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  -20.0  50 770.653793</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  -17.5  51 547.038461</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  -15.0  52 337.546117</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  -12.5  53 174.874918</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  -10.0  54   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6   -7.5  55   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7   -5.0  56   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8   -2.5  57   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9    0.0  58 123.247176</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10   2.5  59 145.587650</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11   5.0  60   5.751504</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12   7.5  61   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13  10.0  62   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14  12.5  63   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15  15.0  64   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16  17.5  65   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 17  20.0  66   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18  22.5  67   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19  25.0  68   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20  27.5  69   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21  30.0  70   8.824472</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22  32.5  71  83.978197</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23  35.0  72 225.411819</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24  37.5  73 361.077663</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 25  40.0  74 416.021609</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 26  42.5  75 356.138534</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 27  45.0  76 310.787422</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 28  47.5  77 298.118849</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 29  50.0  78 212.189395</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 30  52.5  79 102.691377</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 31  55.0  80  17.593847</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 32  57.5  81   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 33  60.0  82  19.565938</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 34  62.5  83 133.132551</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 35  65.0  84 245.801555</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 36  67.5  85 356.787751</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 37  70.0  86 466.059650</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 38  72.5  87 573.612536</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 39  75.0  88 679.448918</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 40  77.5  89 736.611243</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 41  80.0  90 692.354149</span>
+<span class='r-in'><span class='co'># }</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>dt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>179</span>, <span class='fl'>179</span>, length.out <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>, lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>60</span>, <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># The distance calculation is slow for large datasets</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>dist2land</span><span class='op'>(</span><span class='va'>dt</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'>#&gt; user  system elapsed</span></span>
+<span class='r-in'><span class='co'>#&gt; 0.073   0.041   5.627</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># The parallel processing speeds it up</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>dist2land</span><span class='op'>(</span><span class='va'>dt</span>, cores <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'>#&gt; user  system elapsed</span></span>
+<span class='r-in'><span class='co'>#&gt; 19.719   1.237  20.894</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># binary = TRUE further speeds the function up</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='fu'>dist2land</span><span class='op'>(</span><span class='va'>dt</span>, binary <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'>#&gt; user  system elapsed</span></span>
+<span class='r-in'><span class='co'>#&gt; 1.624   0.041   1.680</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

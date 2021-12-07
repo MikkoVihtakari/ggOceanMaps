@@ -11,7 +11,7 @@
 
 # Test paramters
 # limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE; verbose = TRUE
-basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = TRUE) {
+basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = FALSE) {
   
   # Switches and checks ####
   
@@ -135,10 +135,11 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
                         ),
                       lon = "lon", lat = "lat",
                       proj.in =
-                        ifelse(class(shapefiles$land) == "SpatialPolygonsDataFrame",
-                               raster::crs(shapefiles$land),
-                               convert_crs(shapefiles$crs)
-                        ),
+                        if(class(shapefiles$land) == "SpatialPolygonsDataFrame") {
+                          raster::crs(shapefiles$land)
+                        } else {
+                          convert_crs(shapefiles$crs)
+                        },
                       proj.out = 4326,
                       verbose = verbose)
         
@@ -163,7 +164,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
               lon = sort(c(limits[1:2], midLon)),
               lat = limits[3:4]),
               lon = "lon", lat = "lat",
-              verbose = !rotate)
+              verbose = verbose)
         } else {
           clipLimits <-
             auto_limits(data = expand.grid(
@@ -175,7 +176,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
                        sp::proj4string(shapefiles$land),
                        sp::proj4string(eval(parse(text = shapefiles$land)))
                 ),
-              verbose = !rotate)
+              verbose = verbose)
         }
         
       }
@@ -196,7 +197,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     
     if(rotate) {
       
-      clipLimits <- auto_limits(data, verbose = !rotate)
+      clipLimits <- auto_limits(data, verbose = verbose)
       limits <- clipLimits$ddLimits
       decLimits <- is_decimal_limit(limits)
       
@@ -215,11 +216,12 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
       
       if(!is.null(shapefiles)) {
         clipLimits <-
-          auto_limits(data, verbose = !rotate,
-                      proj.out = raster::crs(shapefiles$land)
+          auto_limits(data, verbose = verbose,
+                      proj.out = raster::crs(shapefiles$land),
+                      expand.factor = expand.factor
           )
       } else {
-        clipLimits <- auto_limits(data, expand.factor = expand.factor, verbose = !rotate)
+        clipLimits <- auto_limits(data, expand.factor = expand.factor, verbose = verbose)
       }
       
       limits <- clipLimits$ddLimits
@@ -311,7 +313,10 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     
     # Clip the shapefiles
     
-    landBoundary <- clip_shapefile(shapefiles$land, limits = limits, proj.limits = convert_crs(4326), return.boundary = TRUE)
+    landBoundary <- clip_shapefile(shapefiles$land, 
+                                   limits = limits, 
+                                   proj.limits = convert_crs(4326), 
+                                   return.boundary = TRUE)
     
     shapefiles$land <- landBoundary$shapefile
     if(glaciers) shapefiles$glacier <- clip_shapefile(shapefiles$glacier, limits = limits, proj.limits = ifelse(decLimits, convert_crs(4326), LandCRS))

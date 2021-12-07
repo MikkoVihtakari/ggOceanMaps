@@ -19,7 +19,7 @@
 #' @export
 
 # Test parameters
-# x = world; limits = c(-180, 180, -90, 90)
+# x = shapefiles$land; proj.limits = convert_crs(4326); return.boundary = TRUE
 # proj.limits = convert_crs(4326); simplify = FALSE; tol = 60; return.boundary = FALSE
 clip_shapefile <- function(x, limits, proj.limits = convert_crs(4326), simplify = FALSE, tol = 60, return.boundary = FALSE) {
 
@@ -45,7 +45,7 @@ clip_shapefile <- function(x, limits, proj.limits = convert_crs(4326), simplify 
     if(length(limits) == 1) {
       bd <- data.frame(lon = seq(-180, 180, by = 0.5), lat = limits)
       bd <- transform_coord(bd, proj.out = x_proj)
-      ch <- grDevices::chull(bd$lat, bd$lon)
+      ch <- grDevices::chull(bd[[2]], bd[[1]])
       coords <- as.matrix(bd[c(ch, ch[1]), 1:2])
       clip_boundary <- sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(coords)), ID = 1)))
 

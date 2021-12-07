@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.19</span>
       </span>
     </div>
 
@@ -140,7 +140,7 @@
       <tr>
         <th colspan="2">
           <h2 id="section-basemap-functions" class="hasAnchor"><a href="#section-basemap-functions" class="anchor"></a>Basemap functions</h2>
-          <p class="section-desc"><p>Maps are plotted using the <code><a href="../reference/basemap.html">basemap()</a></code> or <code><a href="../reference/qmap.html">qmap()</a></code> functions that work almost similarly to <a href="https://ggplot2.tidyverse.org/reference/index.html"><code>ggplot()</code> as a base</a> for adding further layers to the plot using the <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> operator. The maps generated this way already contain multiple ggplot layers. Consequently, the <a href="https://ggplot2.tidyverse.org/reference/ggplot.html"><code>data</code> argument</a> needs to be explicitly specified inside <code>geom_*</code> functions when adding <code>ggplot2</code> layers. Depending on the location of the map, the underlying coordinates may be projected. Decimal degree coordinates need to be transformed to the projected coordinates using the <code>transform_coord</code>, <a href="https://paleolimbot.github.io/ggspatial/">ggspatial</a>, or <a href="https://ggplot2.tidyverse.org/reference/ggsf.html"><code>geom_sf</code> functions.</a>. The <code>shapefile_list</code> function can be used to acquire <code>shapefiles</code> argument names when limiting basemaps using projected coordinates.</p></p>
+          <p class="section-desc"><p>Maps are plotted using the <code><a href="../reference/basemap.html">basemap()</a></code> or <code><a href="../reference/qmap.html">qmap()</a></code> functions that work almost similarly to <a href="https://ggplot2.tidyverse.org/reference/index.html"><code>ggplot()</code> as a base</a> for adding further layers to the plot using the <code>+</code> operator. The maps generated this way already contain multiple ggplot layers. Consequently, the <a href="https://ggplot2.tidyverse.org/reference/ggplot.html"><code>data</code> argument</a> needs to be explicitly specified inside <code>geom_*</code> functions when adding <code>ggplot2</code> layers. Depending on the location of the map, the underlying coordinates may be projected. Decimal degree coordinates need to be transformed to the projected coordinates using the <code>transform_coord</code>, <a href="https://paleolimbot.github.io/ggspatial/">ggspatial</a>, or <a href="https://ggplot2.tidyverse.org/reference/ggsf.html"><code>geom_sf</code> functions.</a>. The <code>shapefile_list</code> function can be used to acquire <code>shapefiles</code> argument names when limiting basemaps using projected coordinates.</p></p>
         </th>
       </tr>
       
@@ -214,7 +214,7 @@
       <tr>
         <th colspan="2">
           <h2 id="section-create-bathymetries-and-shapefiles" class="hasAnchor"><a href="#section-create-bathymetries-and-shapefiles" class="anchor"></a>Create bathymetries and shapefiles</h2>
-          <p class="section-desc"><p>Custom bathymetry shapes can be added using the <code>raster_bathymetry</code> and <code>vector_bathymetry</code> functions in this order. The underlying data can be retrieved from the <a href="https://doi.org/10.7289/V5C8276M">ETOPO1</a>, <a href="https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html">GEBCO</a>, or <a href="https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/">IBCAO</a> repositories. Already existing <a href="https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a">Geonorge</a> bathymetries can be opened and added to the <code>shapefiles</code> argument as <code><a href="https://rdrr.io/r/base/list.html">list(bathy =)</a></code>. The <code>clip_shapefile</code> function can be used to crop already existing SpatialPolygons.</p></p>
+          <p class="section-desc"><p>Custom bathymetry shapes can be added using the <code>raster_bathymetry</code> and <code>vector_bathymetry</code> functions in this order. The underlying data can be retrieved from the <a href="https://doi.org/10.7289/V5C8276M">ETOPO1</a>, <a href="https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html">GEBCO</a>, or <a href="https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/">IBCAO</a> repositories. Already existing <a href="https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a">Geonorge</a> bathymetries can be opened and added to the <code>shapefiles</code> argument as <code>list(bathy =)</code>. The <code>clip_shapefile</code> function can be used to crop already existing SpatialPolygons.</p></p>
         </th>
       </tr>
       

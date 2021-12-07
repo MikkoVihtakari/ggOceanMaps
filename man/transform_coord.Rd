@@ -49,9 +49,6 @@ x <- data.frame(lon = c(-150, 150), lat = c(60, 90))
 transform_coord(x)
 transform_coord(x, bind = TRUE)
 
-# NAs are ignored by default
-x <- data.frame(lon = c(-150, 100, 150, NA), lat = c(-80, NA, -60, -70))
-
 x <- data.frame(lon = c(-150, 150), lat = c(20, 50))
 transform_coord(x, bind = TRUE) # no transformation required.
 }

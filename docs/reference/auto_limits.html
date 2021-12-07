@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.19</span>
       </span>
     </div>
 
@@ -139,10 +139,11 @@
   <span class='va'>data</span>,
   lon <span class='op'>=</span> <span class='cn'>NULL</span>,
   lat <span class='op'>=</span> <span class='cn'>NULL</span>,
-  proj.in <span class='op'>=</span> <span class='st'>"EPSG:4326"</span>,
+  proj.in <span class='op'>=</span> <span class='fl'>4326</span>,
   proj.out <span class='op'>=</span> <span class='cn'>NULL</span>,
   expand.factor <span class='op'>=</span> <span class='cn'>NULL</span>,
-  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  output.sf <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -158,7 +159,7 @@
     </tr>
     <tr>
       <th>proj.in</th>
-      <td><p>Original <code><a href='https://rdrr.io/pkg/sp/man/is.projected.html'>proj4string</a></code> projection. Must be defined as character argument.</p></td>
+      <td><p>Original <code><a href='https://r-spatial.github.io/sf/reference/st_crs.html'>CRS</a></code> projection. Must be defined as character argument.</p></td>
     </tr>
     <tr>
       <th>proj.out</th>
@@ -171,6 +172,10 @@
     <tr>
       <th>verbose</th>
       <td><p>Logical indicating whether information about the projection and guessed column names should be returned as message. Set to <code>FALSE</code> to make the function silent.</p></td>
+    </tr>
+    <tr>
+      <th>output.sf</th>
+      <td><p>Logical indicating whether an <code><a href='https://r-spatial.github.io/sf/reference/st.html'>sf</a></code> (<code>TRUE</code>) or <code>sp</code> (<code>FALSE</code>) polygon should be returned.</p></td>
     </tr>
     <tr>
       <th>rotate</th>
@@ -194,28 +199,91 @@
     <p>Mikko Vihtakari</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"ggOceanMapsData"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>auto_limits</span><span class='op'>(</span>data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>120</span>, <span class='fl'>180</span>, <span class='fl'>120</span><span class='op'>)</span>, 
-   lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>60</span>, <span class='fl'>60</span>, <span class='fl'>80</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>    
-</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: ggOceanMapsData</span></div><div class='output co'>#&gt; <span class='message'>Using lon and lat as longitude and latitude columns, respectively.</span></div><div class='output co'>#&gt; <span class='message'>projection transformed from EPSG:4326 to EPSG:3995</span></div><div class='output co'>#&gt; $ddLimits
-#&gt; [1]  120 -120   60   80
-#&gt; 
-#&gt; $projLimits
-#&gt; [1] -2886578.7  2886578.7   544589.7  3333134.0
-#&gt; 
-#&gt; $projBound
-#&gt; class       : SpatialPolygons 
-#&gt; features    : 1 
-#&gt; extent      : -2886579, 2886579, 544589.7, 3333134  (xmin, xmax, ymin, ymax)
-#&gt; crs         : +proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs 
-#&gt; 
-#&gt; $proj.in
-#&gt; [1] "EPSG:4326"
-#&gt; 
-#&gt; $proj.out
-#&gt; [1] "EPSG:3995"
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"ggOceanMapsData"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'>auto_limits</span><span class='op'>(</span>data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span>lon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>120</span>, <span class='fl'>180</span>, <span class='fl'>120</span><span class='op'>)</span>,</span>
+<span class='r-in'>   lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>60</span>, <span class='fl'>60</span>, <span class='fl'>80</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required namespace: ggOceanMapsData</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ddLimits</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]  120 -120   60   80</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $projLimits</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -2886578.7  2886578.7   544589.7  3333134.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $projBound</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> class       : SpatialPolygons </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> features    : 1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> extent      : -2886579, 2886579, 544589.7, 3333134  (xmin, xmax, ymin, ymax)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> crs         : +proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $proj.in</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Coordinate Reference System:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   User input: EPSG:4326 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   wkt:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GEOGCRS["WGS 84",</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     DATUM["World Geodetic System 1984",</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         ELLIPSOID["WGS 84",6378137,298.257223563,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             LENGTHUNIT["metre",1]]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     PRIMEM["Greenwich",0,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     CS[ellipsoidal,2],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         AXIS["geodetic latitude (Lat)",north,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ORDER[1],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         AXIS["geodetic longitude (Lon)",east,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ORDER[2],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     USAGE[</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         SCOPE["Horizontal component of 3D system."],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         AREA["World."],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         BBOX[-90,-180,90,180]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     ID["EPSG",4326]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $proj.out</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Coordinate Reference System:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   User input: EPSG:3995 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   wkt:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PROJCRS["WGS 84 / Arctic Polar Stereographic",</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     BASEGEOGCRS["WGS 84",</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         DATUM["World Geodetic System 1984",</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ELLIPSOID["WGS 84",6378137,298.257223563,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 LENGTHUNIT["metre",1]]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         PRIMEM["Greenwich",0,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         ID["EPSG",4326]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     CONVERSION["Arctic Polar Stereographic",</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         METHOD["Polar Stereographic (variant B)",</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ID["EPSG",9829]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         PARAMETER["Latitude of standard parallel",71,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ID["EPSG",8832]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         PARAMETER["Longitude of origin",0,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ID["EPSG",8833]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         PARAMETER["False easting",0,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             LENGTHUNIT["metre",1],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ID["EPSG",8806]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         PARAMETER["False northing",0,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             LENGTHUNIT["metre",1],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ID["EPSG",8807]]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     CS[Cartesian,2],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         AXIS["easting (X)",south,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             MERIDIAN[90,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ORDER[1],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             LENGTHUNIT["metre",1]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         AXIS["northing (Y)",south,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             MERIDIAN[180,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ORDER[2],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             LENGTHUNIT["metre",1]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     USAGE[</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         SCOPE["Polar research."],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         AREA["Northern hemisphere - north of 60°N onshore and offshore, including Arctic."],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         BBOX[60,-180,90,180]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     ID["EPSG",3995]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

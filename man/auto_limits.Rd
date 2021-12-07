@@ -11,7 +11,7 @@ auto_limits(
   proj.in = 4326,
   proj.out = NULL,
   expand.factor = NULL,
-  verbose = TRUE,
+  verbose = FALSE,
   output.sf = FALSE
 )
 }

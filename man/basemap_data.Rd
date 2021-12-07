@@ -14,7 +14,7 @@ basemap_data(
   lat.interval = NULL,
   expand.factor = 1.1,
   rotate = FALSE,
-  verbose = TRUE
+  verbose = FALSE
 )
 }
 \arguments{
