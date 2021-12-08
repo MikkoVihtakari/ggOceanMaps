@@ -10,6 +10,7 @@ qmap(
   y = NULL,
   geom = "point",
   limits = NULL,
+  shapefiles = NULL,
   bathymetry = FALSE,
   glaciers = FALSE,
   rotate = FALSE,
@@ -40,7 +41,7 @@ qmap(
 
 \item{x, y, ...}{Aesthetics passed into each layer. Longitude and latitude columns are automatically recognized using the \code{\link{guess_coordinate_columns}} function.}
 
-\item{geom}{Character argument specifying geom(s) to draw. Defaults to "point". Other \code{geom}s have not been implemented yet.}
+\item{geom}{Character argument specifying geom(s) to draw. Defaults to "point". Other alternatives are "text" and "label". The "text" option can also be triggered by simply mapping a variable to \code{label} (see Examples).}
 
 \item{limits}{Map limits. One of the following:
 \itemize{
@@ -48,6 +49,8 @@ qmap(
   \item \strong{single integer} between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.
 }
 Can be omitted if \code{data} or \code{shapefiles} are defined.}
+
+\item{shapefiles}{Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.}
 
 \item{bathymetry}{Logical indicating whether bathymetry should be added to the map.}
 
@@ -114,13 +117,21 @@ dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a",
 if(requireNamespace("ggOceanMapsData")) {
 qmap(dt, color = I("red")) 
 }
+
 # Map color
 \donttest{
 qmap(dt, color = var) 
 }
 
-dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
+# Map text
+\donttest{
+qmap(dt, label = var) 
+} 
 
+# All basemap arguments work in qmap()
+
+dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
+ 
 \donttest{
 qmap(dt, rotate = TRUE)
 }
