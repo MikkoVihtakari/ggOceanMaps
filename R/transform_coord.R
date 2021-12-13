@@ -32,10 +32,15 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   
   if(length(new.names) == 1) {
     if(new.names == "auto") {
-      new.names <- if(bind) {
-        c("lon.proj", "lat.proj") } else {
-          new.names <- guess_coordinate_columns(x)
-        }
+      
+      if(is.null(x)) {
+        new.names <- c("lon", "lat")
+      } else if(bind) {
+        new.names <- c("lon.proj", "lat.proj")
+      } else {
+        new.names <- guess_coordinate_columns(x)
+      }
+      
     }
   }
   
@@ -89,6 +94,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     if(length(lon) != length(lat)) stop("lat and lon must be of equal length")
     y <- data.frame(lon = lon, lat = lat)
     lon <- "lon"; lat <- "lat"
+    y$id <- 1:nrow(y)
   }
   
   if(!is.null(x)) {
@@ -161,88 +167,88 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
       data.frame(sf::sf_project(from = proj.in, to = proj.out, y[,1:2])), 
       c(lon, lat)),
     id = y$id)
-    
-    # lon = sample(-30:60, 1e2, replace = TRUE); lat = sample(45:80, 1e2, replace = TRUE); y = data.frame(lon, lat); lon = "lon"; lat = "lat" # <- Debugging code
-    
-    ## sf version
-    # y <- sf::st_as_sf(y, coords = c(lon, lat), 
-    #                   crs = as.integer(gsub("\\D", "", proj.in)))
-    # 
-    # y <- sf::st_coordinates(sf::st_transform(y, proj.out))
-    # 
-    # colnames(y)[colnames(y) == "X"] <- lon
-    # colnames(y)[colnames(y) == "Y"] <- lat
-    
-    ## sp version 
-    # sp::coordinates(y) <- c(lon, lat)
-    # sp::proj4string(y) <- if(class(proj.in) == "CRS") {proj.in} else {sp::CRS(proj.in)}
-    # 
-    # y <- sp::spTransform(y, if(class(proj.out) == "CRS") {proj.out} else {sp::CRS(proj.out)})
-    # y <- data.frame(sp::coordinates(y))
   
-    ## ----
-    
-    if(na == "ignore" & nrow(z) > 0) {
-      y <- rbind(y, z)
-      rownames(y) <- y$id
-      y <- y[order(y$id), !colnames(y) %in% "id"]
+  # lon = sample(-30:60, 1e2, replace = TRUE); lat = sample(45:80, 1e2, replace = TRUE); y = data.frame(lon, lat); lon = "lon"; lat = "lat" # <- Debugging code
+  
+  ## sf version
+  # y <- sf::st_as_sf(y, coords = c(lon, lat), 
+  #                   crs = as.integer(gsub("\\D", "", proj.in)))
+  # 
+  # y <- sf::st_coordinates(sf::st_transform(y, proj.out))
+  # 
+  # colnames(y)[colnames(y) == "X"] <- lon
+  # colnames(y)[colnames(y) == "Y"] <- lat
+  
+  ## sp version 
+  # sp::coordinates(y) <- c(lon, lat)
+  # sp::proj4string(y) <- if(class(proj.in) == "CRS") {proj.in} else {sp::CRS(proj.in)}
+  # 
+  # y <- sp::spTransform(y, if(class(proj.out) == "CRS") {proj.out} else {sp::CRS(proj.out)})
+  # y <- data.frame(sp::coordinates(y))
+  
+  ## ----
+  
+  if(na == "ignore" & nrow(z) > 0) {
+    y <- rbind(y, z)
+    rownames(y) <- y$id
+    y <- y[order(y$id), !colnames(y) %in% "id"]
+  } else {
+    y <- y[, !colnames(y) %in% "id"]
+  }
+  
+  if(!is.null(new.names)) {
+    if(any(length(new.names) != 2, !is.character(new.names))) {
+      stop("new.names must be a character vector with length of 2")
+    }
+    colnames(y) <- new.names
+  }
+  
+  if(verbose) {
+    if("input" %in% names(proj.in)) {
+      proj.in.msg <- proj.in$input
     } else {
-      y <- y[, !colnames(y) %in% "id"]
+      proj.in.msg <- proj.in
     }
     
-    if(!is.null(new.names)) {
-      if(any(length(new.names) != 2, !is.character(new.names))) {
-        stop("new.names must be a character vector with length of 2")
-      }
-      colnames(y) <- new.names
-    }
-    
-    if(verbose) {
-      if("input" %in% names(proj.in)) {
-        proj.in.msg <- proj.in$input
-      } else {
-        proj.in.msg <- proj.in
-      }
-      
-      if("input" %in% names(proj.out)) {
-        proj.out.msg <- proj.out$input
-      } else {
-        proj.out.msg <- proj.out
-      }
-      
-      message(paste("projection transformed from", proj.in.msg, "to", proj.out.msg))
-    }
-    
-    # Change column names if proj.in not decimal degrees
-    
-    if(!sf::st_is_longlat(proj.in) & sf::st_is_longlat(proj.out)) {
-      tmp <- colnames(x)
-      colnames(x) <- colnames(y)
-      colnames(y) <- tmp
-    }
-    
-    # Final modifications ----
-    
-    if(bind) {
-      out <- cbind(x, y)
+    if("input" %in% names(proj.out)) {
+      proj.out.msg <- proj.out$input
     } else {
-      out <- y
+      proj.out.msg <- proj.out
     }
     
-    if(exists("oldrownames")) {
-      rownames(out) <- oldrownames
-      out <- out
-    } else {
-      out <- out
-    }
-    
-    # Add projection information as attributes
-    
-    attributes(out)$proj.in <- proj.in
-    attributes(out)$proj.out <- proj.out
-    
-    # Return
-    
-    out
+    message(paste("projection transformed from", proj.in.msg, "to", proj.out.msg))
+  }
+  
+  # Change column names if proj.in not decimal degrees
+  
+  if(!sf::st_is_longlat(proj.in) & sf::st_is_longlat(proj.out)) {
+    tmp <- colnames(x)
+    colnames(x) <- colnames(y)
+    colnames(y) <- tmp
+  }
+  
+  # Final modifications ----
+  
+  if(bind) {
+    out <- cbind(x, y)
+  } else {
+    out <- y
+  }
+  
+  if(exists("oldrownames")) {
+    rownames(out) <- oldrownames
+    out <- out
+  } else {
+    out <- out
+  }
+  
+  # Add projection information as attributes
+  
+  attributes(out)$proj.in <- proj.in
+  attributes(out)$proj.out <- proj.out
+  
+  # Return
+  
+  out
 }
 
