@@ -83,7 +83,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   #   x <- as.data.frame(x)
   # }
   
-  ## Make the data frame ----
+  ## Make the data frame ---
   
   if(is.null(x) & (is.numeric(lon) | is.numeric(lat))) {
     if(length(lon) != length(lat)) stop("lat and lon must be of equal length")
@@ -124,7 +124,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     }
   }
   
-  ## Output projection if not defined ----
+  ## Output projection if not defined ---
   
   if(is.null(proj.out)) {
     limits <- c(range(y[[lon]]), range(y[[lat]]))
@@ -154,7 +154,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     }
   }
   
-  ## Coordinate transformation ----
+  ## Coordinate transformation ---
   
   y <- cbind(
     stats::setNames(
@@ -179,13 +179,15 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     # 
     # y <- sp::spTransform(y, if(class(proj.out) == "CRS") {proj.out} else {sp::CRS(proj.out)})
     # y <- data.frame(sp::coordinates(y))
-    # 
+  
     ## ----
     
     if(na == "ignore" & nrow(z) > 0) {
       y <- rbind(y, z)
       rownames(y) <- y$id
       y <- y[order(y$id), !colnames(y) %in% "id"]
+    } else {
+      y <- y[, !colnames(y) %in% "id"]
     }
     
     if(!is.null(new.names)) {
@@ -219,7 +221,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
       colnames(y) <- tmp
     }
     
-    # Final modifications ---
+    # Final modifications ----
     
     if(bind) {
       out <- cbind(x, y)
