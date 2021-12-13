@@ -96,7 +96,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     oldrownames <- rownames(x)
     suppressWarnings(rownames(x) <- 1:nrow(x)) # suppress in case of a tibble
     
-    if("data.table" %in% class(y)) {
+    if("data.table" %in% class(x)) {
       y <- x[, c(lon, lat), with = FALSE]
     } else {
       y <- x[c(lon, lat)]  
