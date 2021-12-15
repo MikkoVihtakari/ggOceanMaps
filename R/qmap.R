@@ -40,27 +40,40 @@
 
 # data = dt; x = NULL; y = NULL; geom = "point"; limits = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = TRUE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = FALSE
 qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE, ...) {
-
+  
   ## Coordinate columns
-
-  if(is.null(x) | is.null(y)) {
+  
+  
+  if(!"sf" %in% class(data) & (is.null(x) | is.null(y))) {
     coordCols <- guess_coordinate_columns(data)
-
+    
     if(is.null(x)) {
       x <- unname(coordCols[1])
     }
-
+    
     if(is.null(y)) {
       y <- unname(coordCols[2])
     }
   }
-
+  
   ## Base map
-
-  pb <- basemap(limits = limits, data = data[c(x, y)], bathymetry = bathymetry, glaciers = glaciers, rotate = rotate, legends = legends, legend.position = legend.position, lon.interval = lon.interval, lat.interval = lat.interval, bathy.style = bathy.style, bathy.border.col = bathy.border.col, bathy.size = bathy.size, land.col = land.col, land.border.col = land.border.col, land.size = land.size, gla.col = gla.col, gla.border.col = gla.border.col, gla.size = gla.size, grid.col = grid.col, grid.size = grid.size, base_size = base_size, projection.grid = projection.grid, expand.factor = expand.factor, verbose = verbose)
-
+  
+  pb <- basemap(
+    limits = limits, 
+    data = if("sf" %in% class(data)) {data} else {data[c(x, y)]}, 
+    bathymetry = bathymetry, glaciers = glaciers, rotate = rotate, 
+    legends = legends, legend.position = legend.position, 
+    lon.interval = lon.interval, lat.interval = lat.interval, 
+    bathy.style = bathy.style, bathy.border.col = bathy.border.col, 
+    bathy.size = bathy.size, land.col = land.col, land.border.col = land.border.col, 
+    land.size = land.size, gla.col = gla.col, gla.border.col = gla.border.col,
+    gla.size = gla.size, grid.col = grid.col, grid.size = grid.size, 
+    base_size = base_size, projection.grid = projection.grid, 
+    expand.factor = expand.factor, verbose = verbose
+  )
+  
   ## Geoms
-
+  
   # geom_arguments <- list(
   #   ...,
   #   color = "red",
@@ -68,9 +81,10 @@ qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, shapef
   # )
   #
   # geom_arguments <- geom_arguments[!duplicated(names(geom_arguments))]
-
-
-  if(geom == "point" && !methods::hasArg(label)) {
+  
+  if("sf" %in% class(data)) {
+    pb + geom_sf(data = data, aes(...))
+  } else if(geom == "point" && !methods::hasArg(label)) {
     pb + ggspatial::geom_spatial_point(data = data, aes(x = get(x), y = get(y), ...), crs = 4326)
   } else if(geom == "text" | methods::hasArg("label")) {
     pb + ggspatial::geom_spatial_text(data = data, aes(x = get(x), y = get(y), ...), crs = 4326)
@@ -79,5 +93,5 @@ qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, shapef
   } else {
     stop("Other geom than point have not been implemented yet.")
   }
-
+  
 }

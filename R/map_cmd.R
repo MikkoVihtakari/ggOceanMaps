@@ -24,7 +24,7 @@ map_cmd <- function(command, alternative = FALSE) {
         if(bathy.legend) {
           guide_legend(order = 1, override.aes = list(colour = NA))
         } else {
-          FALSE
+          "none"
         })
     ',
     bathy_pg = '
@@ -33,7 +33,7 @@ map_cmd <- function(command, alternative = FALSE) {
         if(bathy.legend) {
           guide_legend(order = 1, override.aes = list(colour = NA))
         } else {
-          FALSE
+          "none"
         })
       ',
     bathy_cg = '
