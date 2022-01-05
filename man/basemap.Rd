@@ -5,6 +5,7 @@
 \title{Create a ggplot2 basemap for plotting variables}
 \usage{
 basemap(
+  x = NULL,
   limits = NULL,
   data = NULL,
   shapefiles = NULL,
@@ -33,6 +34,8 @@ basemap(
 )
 }
 \arguments{
+\item{x}{The limit type (\code{limits} or \code{data}) is automatically recognized from the class of this argument.}
+
 \item{limits}{Map limits. One of the following:
 \itemize{
   \item \strong{numeric vector} of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.
@@ -40,7 +43,7 @@ basemap(
 }
 Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
-\item{data}{Data frame or \link[sp]{SpatialPolygons} shape containing longitude and latitude coordinates in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.}
+\item{data}{A data frame, \link[sp]{SpatialPolygons}, or \link[sf]{sf} shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.}
 
 \item{shapefiles}{Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.}
 
@@ -153,9 +156,9 @@ geom_spatial_point(dt, aes(x = lon, y = lat), color = "red")
 # If you want to use native ggplot commands, you need to transform your data
 # to the projection used by the map:
 
+if(requireNamespace("ggOceanMapsData")) {
 dt <- transform_coord(dt, bind = TRUE)
 
-if(requireNamespace("ggOceanMapsData")) {
 basemap(data = dt) + geom_point(data = dt, aes(x = lon.proj, y = lat.proj))
 }
 \donttest{

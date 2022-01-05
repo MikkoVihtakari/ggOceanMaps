@@ -318,7 +318,7 @@ Accessing the `attributes` allow custom modifications of maps produced by the `b
 
 ### Reordering layers
 
-Sometimes there is a need to move land, glacier, and grid layers on top of spatial data added on a `basemap`. This can be done using the `reorder_layers` function. This example uses Norwegian fishing regions (Hovedområder f.o.m. 2018), which can be downloaded from the [Norwegian Directorate of Fisheries data portal](https://kart.fiskeridir.no/stat) (use "ESRI shapefile" option). The example works for any spatial polygons with crs information, however.
+Sometimes there is a need to move land, glacier, and grid layers on top of spatial data added on a `basemap`. This can be done using the `reorder_layers` function. This example uses Norwegian fishing regions (Hovedområder f.o.m. 2018), which can be downloaded from the [Norwegian Directorate of Fisheries data portal](https://www.fiskeridir.no/) (use "ESRI shapefile" option). The example works for any spatial polygons with crs information, however.
 
 The Norwegian fishing regions are included as an example dataset in the **ggOceanMaps** package. You can download these data and use the `rgdal::readOGR` function to read the shapefile if you wish to follow the example fully. 
 
@@ -365,7 +365,7 @@ The **ggOceanMaps package uses vector (spatial polygon) data** to make the plott
 **Vector data**
 
 - [Natural Earth Data](http://www.naturalearthdata.com/downloads/10m-physical-vectors/) provides polygon data in relatively high detail for the entire Earth. Used as data-source for land and glacier shapes throughout the package, except for the most detailed maps.
-- [Norwegian Mapping Authority](https://www.kartverket.no/en/data/Open-and-Free-geospatial-data-from-Norway/) provides high-resolution spatial data for mainland Norway and Svalbard. 
+- [Norwegian Mapping Authority](https://www.kartverket.no/) provides high-resolution spatial data for mainland Norway and Svalbard. 
 <!-- Used as data-source for detailed coastal Norwegian maps as well as for detailed bathymetry in Svalbard maps. -->
 - [Norwegian Polar Institute](https://geodata.npolar.no/) provides high-resolution vector data for Norwegian polar regions. 
 <!-- Used as data-source for detailed Svalbard maps.  -->
@@ -518,7 +518,13 @@ basemap(limits = raster::extent(fishingAreasNor)[1:4], bathymetry = TRUE,
   coord_sf(expand = FALSE)
 ```
 
-If you really need the polygon bathymetries, you can use the [ggnewscale](https://github.com/eliocamp/ggnewscale) package to make the data `fill` mapping disconnected from that in `basemap`.
+If you really need the polygon bathymetries, you can use the [ggnewscale](https://github.com/eliocamp/ggnewscale) package to make the data `fill` mapping disconnected from that in `basemap`:
+
+```{r eval = FALSE}
+basemap(limits = raster::extent(fishingAreasNor)[1:4], bathymetry = TRUE) +
+  ggnewscale::new_scale_fill() +
+  annotation_spatial(fishingAreasNor, aes(fill = area))
+```
 
 # Citations and data sources
 

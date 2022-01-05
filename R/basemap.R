@@ -1,12 +1,13 @@
 #' @title Create a ggplot2 basemap for plotting variables
 #' @description Creates a ggplot2 basemap for further plotting of variables.
+#' @param x The limit type (\code{limits} or \code{data}) is automatically recognized from the class of this argument.
 #' @param limits Map limits. One of the following:
 #' \itemize{
 #'   \item \strong{numeric vector} of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.
 #'   \item \strong{single integer} between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.
 #' }
 #' Can be omitted if \code{data} or \code{shapefiles} are defined.
-#' @param data Data frame or \link[sp]{SpatialPolygons} shape containing longitude and latitude coordinates in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.
+#' @param data A data frame, \link[sp]{SpatialPolygons}, or \link[sf]{sf} shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.
 #' @param shapefiles Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.
 #' @param bathymetry Logical indicating whether bathymetry should be added to the map.
 #' @param glaciers Logical indicating whether glaciers and ice-sheets should be added to the map.
@@ -108,9 +109,9 @@
 #' # If you want to use native ggplot commands, you need to transform your data
 #' # to the projection used by the map:
 #' 
+#' if(requireNamespace("ggOceanMapsData")) {
 #' dt <- transform_coord(dt, bind = TRUE)
 #'
-#' if(requireNamespace("ggOceanMapsData")) {
 #' basemap(data = dt) + geom_point(data = dt, aes(x = lon.proj, y = lat.proj))
 #' }
 #' \donttest{
@@ -172,11 +173,21 @@
 ## Test parameters
 # limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = TRUE
 
-basemap <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE) {
+basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE) {
   
   # Install ggOceanMapsData if not installed
   if (!requireNamespace("ggOceanMapsData", quietly = TRUE)) {
     stop('The ggOceanMapsData package needs to be installed for ggOceanMaps to function.\nInstall the data package by running\ninstall.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org")\nOR\ndevtools::install_github("MikkoVihtakari/ggOceanMapsData")')
+  }
+  
+  # The x argument to limits or data
+  
+  if(!is.null(x)) {
+    if(any(class(x) %in% c("integer", "numeric")) & is.null(limits)) {
+      limits <- x
+    } else if(any(class(x) %in% c("data.table", "sf", "SpatialPolygonsDataFrame", "SpatialPolygons")) & is.null(limits) & is.null(data)) {
+      data <- x
+    }
   }
   
   # Checks ####
