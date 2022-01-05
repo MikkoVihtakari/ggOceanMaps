@@ -23,9 +23,13 @@ knitr::opts_chunk$set(
 # ggOceanMaps
 **Plot data on oceanographic maps using ggplot2. R package version `r packageVersion("ggOceanMaps")`**
 
+<!-- badges: start -->
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4554714.svg)](https://doi.org/10.5281/zenodo.4554714)
-[![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://cran.r-project.org/package=ggOceanMaps)
+<!-- badges: end -->
+
+<!-- [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml) -->
 
 **Important information:** ggOceanMaps is **withdrawn from CRAN indefinitely** due to submission issues. Install the package from source through GitHub (see the Installation section). The package works as long as the GIS packages of R are linked with PROJ >= 6 and GDAL >= 3 (write `rgdal::rgdal_extSoftVersion()` to test).
 
