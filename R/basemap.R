@@ -185,7 +185,7 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bat
   if(!is.null(x)) {
     if(any(class(x) %in% c("integer", "numeric")) & is.null(limits)) {
       limits <- x
-    } else if(any(class(x) %in% c("data.table", "sf", "SpatialPolygonsDataFrame", "SpatialPolygons")) & is.null(limits) & is.null(data)) {
+    } else if(any(class(x) %in% c("data.frame", "data.table", "sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons")) & is.null(limits) & is.null(data)) {
       data <- x
     }
   }

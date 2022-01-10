@@ -26,12 +26,10 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4554714.svg)](https://doi.org/10.5281/zenodo.4554714)
 [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions)
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://cran.r-project.org/package=ggOceanMaps)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://CRAN.R-project.org/package=ggOceanMaps)
 <!-- badges: end -->
 
 <!-- [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml) -->
-
-**Important information:** ggOceanMaps is **withdrawn from CRAN indefinitely** due to submission issues. Install the package from source through GitHub (see the Installation section). The package works as long as the GIS packages of R are linked with PROJ >= 6 and GDAL >= 3 (write `rgdal::rgdal_extSoftVersion()` to test).
 
 ## Overview
 
@@ -41,7 +39,13 @@ The ggOceanMaps package has been developed by the [Institute of Marine Research]
 
 ## Installation
 
-The package is available as a [GitHub version](https://github.com/MikkoVihtakari/ggOceanMaps), which is updated whenever the author works with the package. 
+The package is available on [CRAN](https://CRAN.R-project.org/package=ggOceanMaps) and as a [GitHub version](https://github.com/MikkoVihtakari/ggOceanMaps), which is updated more frequently than the CRAN version. 
+
+Installation of the CRAN version:
+
+```{r eval = FALSE}
+install.packages("ggOceanMaps")
+```
 
 Due to the package size limitations, ggOceanMaps requires the [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData) package which stores shapefiles used in low-resolution maps.
 
@@ -50,16 +54,6 @@ The GitHub version of ggOceanMaps can be installed using the [**devtools**](http
 ```{r eval = FALSE}
 devtools::install_github("MikkoVihtakari/ggOceanMapsData") # required by ggOceanMaps
 devtools::install_github("MikkoVihtakari/ggOceanMaps")
-```
-
-<!-- a [CRAN version](https://CRAN.R-project.org/package=ggOceanMaps) one day, and as. Use the GitHub version if you can. The ggOceanMapsData package is not available on CRAN but can be installed from a [drat](https://CRAN.R-project.org/package=drat) [repository on GitHub](https://github.com/MikkoVihtakari/drat). To install both packages, write: -->
-
-```{r eval = FALSE, include = FALSE}
-install.packages(c("ggOceanMapsData", "ggOceanMaps"), 
-                 repos = c("https://cloud.r-project.org",
-                           "https://mikkovihtakari.github.io/drat"
-                 )
-)
 ```
 
 ## Usage

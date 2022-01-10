@@ -11,3 +11,4 @@
 ^LICENSE$
 ^NEWS\.md$
 ^ggOceanMapsData
+^vignettes$

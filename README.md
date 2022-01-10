@@ -2,22 +2,16 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-1.2.3**
+1.2.6**
 
 <!-- badges: start -->
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4554714.svg)](https://doi.org/10.5281/zenodo.4554714)
 [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://cran.r-project.org/package=ggOceanMaps)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://CRAN.R-project.org/package=ggOceanMaps)
 <!-- badges: end -->
 
 <!-- [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml) -->
-
-**Important information:** ggOceanMaps is **withdrawn from CRAN
-indefinitely** due to submission issues. Install the package from source
-through GitHub (see the Installation section). The package works as long
-as the GIS packages of R are linked with PROJ &gt;= 6 and GDAL &gt;= 3
-(write `rgdal::rgdal_extSoftVersion()` to test).
 
 ## Overview
 
@@ -40,9 +34,16 @@ welcomed. See [*Contributions*](#contributions) for further details.
 
 ## Installation
 
-The package is available as a [GitHub
+The package is available on
+[CRAN](https://CRAN.R-project.org/package=ggOceanMaps) and as a [GitHub
 version](https://github.com/MikkoVihtakari/ggOceanMaps), which is
-updated whenever the author works with the package.
+updated more frequently than the CRAN version.
+
+Installation of the CRAN version:
+
+``` r
+install.packages("ggOceanMaps")
+```
 
 Due to the package size limitations, ggOceanMaps requires the
 [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData)
@@ -56,8 +57,6 @@ package.
 devtools::install_github("MikkoVihtakari/ggOceanMapsData") # required by ggOceanMaps
 devtools::install_github("MikkoVihtakari/ggOceanMaps")
 ```
-
-<!-- a [CRAN version](https://CRAN.R-project.org/package=ggOceanMaps) one day, and as. Use the GitHub version if you can. The ggOceanMapsData package is not available on CRAN but can be installed from a [drat](https://CRAN.R-project.org/package=drat) [repository on GitHub](https://github.com/MikkoVihtakari/drat). To install both packages, write: -->
 
 ## Usage
 
@@ -185,8 +184,8 @@ citation("ggOceanMaps")
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Mikko Vihtakari (2022). ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'. R package version 1.2.3.
-#>   https://mikkovihtakari.github.io/ggOceanMaps/
+#>   using 'ggplot2'. R package version 1.2.6.
+#>   https://CRAN.R-project.org/package=ggOceanMaps
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -194,8 +193,8 @@ citation("ggOceanMaps")
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2022},
-#>     note = {R package version 1.2.3},
-#>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
+#>     note = {R package version 1.2.6},
+#>     url = {https://CRAN.R-project.org/package=ggOceanMaps},
 #>   }
 ```
 

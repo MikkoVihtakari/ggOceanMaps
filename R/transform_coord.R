@@ -190,7 +190,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   
   if(na == "ignore" & nrow(z) > 0) {
     y <- rbind(y, z)
-    rownames(y) <- y$id
+    suppressWarnings(rownames(y) <- y$id)
     y <- y[order(y$id), !colnames(y) %in% "id"]
   } else {
     y <- y[, !colnames(y) %in% "id"]
@@ -236,7 +236,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   }
   
   if(exists("oldrownames")) {
-    rownames(out) <- oldrownames
+    suppressWarnings(rownames(out) <- oldrownames)
     out <- out
   } else {
     out <- out

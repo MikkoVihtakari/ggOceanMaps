@@ -1,8 +1,8 @@
 Package: ggOceanMaps
 Type: Package
 Title: Plot Data on Oceanographic Maps using 'ggplot2'
-Version: 1.2.5
-Date: 2022-01-05
+Version: 1.2.7
+Date: 2022-01-10
 Authors@R: c(person("Mikko", "Vihtakari", email = "mikko.vihtakari@hi.no",
                   role = c("aut", "cre"), 
                   comment = c(affiliation = "Institute of Marine Research", 
@@ -32,4 +32,3 @@ Additional_repositories: https://mikkovihtakari.github.io/drat
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.1.2
-VignetteBuilder: knitr
