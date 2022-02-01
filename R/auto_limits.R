@@ -22,6 +22,7 @@
 
 # data = expand.grid(lon = sort(c(limits[1:2], midLon)), lat = limits[3:4]); lon = "lon"; lat = "lat"
 # lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; verbose = FALSE; expand.factor = NULL; verbose = TRUE
+
 auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out = NULL, expand.factor = NULL, verbose = FALSE, output.sf = FALSE) {
   
   # Get limits from spatial polygons ####

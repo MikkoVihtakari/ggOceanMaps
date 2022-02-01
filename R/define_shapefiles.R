@@ -26,8 +26,8 @@ define_shapefiles <- function(limits) {
     if(is_decimal_limit(limits)) {
       decLimits <- TRUE
 
-      if(max(limits[3:4]) > 90) stop("limits[3:4] must be <= 90")
-      if(min(limits[3:4]) < -90) stop("limits[3:4] must be >= -90")
+      if(max(round(limits[3:4], 5)) > 90) stop("limits[3:4] must be <= 90")
+      if(min(round(limits[3:4], 5)) < -90) stop("limits[3:4] must be >= -90")
       
       if(max(limits[3:4]) >= 60) {
         if(min(limits[3:4]) < 30) {

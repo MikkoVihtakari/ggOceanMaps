@@ -10,9 +10,9 @@
 
 is_decimal_limit <- function(limits) {
   if(length(limits) == 1) {
-    abs(limits) <= 90
+    round(abs(limits), 5) <= 90
   } else if(length(limits) == 4) {
-    all(c(abs(limits[1:2]) <= 180, abs(limits[3:4]) <= 90))
+    all(c(round(abs(limits[1:2]), 5) <= 180, round(abs(limits[3:4]), 5) <= 90))
   } else {
     stop("Limits have to be given as a numeric vector of length 1 or 4")
   }

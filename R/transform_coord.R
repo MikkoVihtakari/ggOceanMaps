@@ -26,6 +26,7 @@
 ## Debug parameters
 # x = NULL; lon = NULL; lat = NULL; new.names = "auto"; proj.in = 4326; proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
 # x = data; bind = TRUE; new.names = "auto"; na = "ignore"
+
 transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", proj.in = 4326, proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
   
   # Checks ----

@@ -1,9 +1,14 @@
-# ggOceanMaps 1.2 (development version)
+# ggOceanMaps 1.3 (development version)
 
+* Removed a CRS warning
+
+# ggOceanMaps 1.2
+
+* [added `x` argument to `basemap()` and `qmap()`](https://github.com/MikkoVihtakari/ggOceanMaps/issues/11)
 * Conversion from PROJ4 to PROJ6. This change will make the old ggOceanMapsData files incompatible with ggOceanMaps 1.2 and vice versa. Changed most functions. 
 * Added NEWS.md
 * Improved premade_shapefiles and shapefile documentation.
-* Started rewriting the package from `sp`, `rgeos` and `rgdal` to `sf`. Slows down `vector_bathymetry()` temporarily (until `sf 0.9.9`)
+* Started rewriting the package from `sp`, `rgeos` and `rgdal` to `sf`. 
 * Moved the `rgdal` package from Imports to Suggests.
 * Added `geonorge_bathymetry()`
 * Added the possiblity to adjust `data` limits using the `expand.factor` parameter in `basemap()` and `qmap()`
