@@ -5,8 +5,10 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{premade-shapefiles}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -33,6 +35,7 @@ Download the datasets specified in [Data sources](#data-sources) to folders on y
 ```{r eval = FALSE}
 etopoPath <- ""
 NEDPath <- ""
+ibcaoPath <- ""
 outPath <- ""
 ```
 
@@ -223,20 +226,20 @@ save(barentssea_land, barentssea_glacier, barentssea_bathy,
 
 ```{r}
 rb <- raster_bathymetry(
-  bathy = "/Users/a22357/Downloads/IBCAO_v4_200m.nc", 
-  depths = c(50, 100, 200, 300, 400, 500, 750, 1000, 1500, 2000, 
+  bathy = file.path(ibcaoPath, "IBCAO_v4_1_200m.nc"), 
+  depths = c(50, 100, 200, 300, 400, 500, 750, 1000, 1500, 2000, 2500,
              3000, 4000, 5000, 6000, 10000), 
   proj.bathy = "EPSG:3996"
 )
 
 ibcao_bathy <- vector_bathymetry(rb)
+ibcao_bathy <- spTransform(ibcao_bathy, CRS("EPSG:3995"))
 
 save(ibcao_bathy, 
      file = paste(outPath, "ggOceanMapsLargeData/ibcao_bathy.rda", sep = "/"),
      compress = "xz"
 )
 ```
-
 
 # Data sources
 

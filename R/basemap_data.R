@@ -27,23 +27,49 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     if(class(error_test) != "try-error") {
       shapefiles <- shapefile_list(shapefiles)
       
+      if(!glaciers) shapefiles$glacier <- NULL
+      if(!bathymetry) shapefiles$bathy <- NULL
+      
       ## Load the shapefiles if download required
       
-      if(!is.na(shapefiles$path)) {
+      if(!is.na(shapefiles$path) & 
+         any(sapply(
+           shapefiles[names(shapefiles) %in% c("land", "glacier", "bathy")], 
+           function(k) !grepl("::", k) & !is.null(k)))
+      ) {
+        
         tmp <- load_map_data(x = shapefiles)
         
-        shapefiles <- lapply(shapefiles, function(k) {
-          test <- which(names(tmp) == k)
+        shapefiles <- stats::setNames(lapply(seq_along(shapefiles), function(i) {
+          test <- which(names(tmp) == shapefiles[[i]])
           
           if(length(test) != 1) {
-            k
+            shapefiles[[i]]
           } else {
-            tmp[[test]]
+            if(names(shapefiles)[i] == "glacier" & !glaciers) {
+              NULL
+            } else if(names(shapefiles)[i] == "bathy" & !bathymetry) {
+              NULL
+            } else {
+              tmp[[test]]
+            }
           }
-        })
-        
-        shapefilesDefined <- TRUE
+        }), names(shapefiles))
       }
+      
+      if(class(shapefiles$land) == "character") {
+        shapefiles$land <- eval(parse(text = shapefiles$land))
+      }
+      
+      if(class(shapefiles$glacier) == "character") {
+        shapefiles$glacier <- eval(parse(text = shapefiles$glacier))
+      }
+      
+      if(class(shapefiles$bathy) == "character") {
+        shapefiles$bathy <- eval(parse(text = shapefiles$bathy))
+      }
+      
+      shapefilesDefined <- TRUE
       
     } else {
       if(any(!c("land", "glacier", "bathy") %in% names(shapefiles))) stop("Shapefiles object must be a list and contain named elements: 'land', 'glacier', 'bathy'. See Details.")
@@ -173,8 +199,8 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
               lon = "lon", lat = "lat",
               proj.out =
                 ifelse(grepl("SpatialPolygons", class(shapefiles$land)),
-                       sp::proj4string(shapefiles$land),
-                       sp::proj4string(eval(parse(text = shapefiles$land)))
+                       suppressWarnings(sp::proj4string(shapefiles$land)),
+                       suppressWarnings(sp::proj4string(eval(parse(text = shapefiles$land))))
                 ),
               verbose = verbose)
         }

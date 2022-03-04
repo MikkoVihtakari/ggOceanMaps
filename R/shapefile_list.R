@@ -54,7 +54,13 @@ shapefile_list <- function(name, get.data = FALSE) {
          glacier = "barentssea_glacier",
          bathy = "barentssea_bathy",
          crs = 32636,
-         path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda")
+         path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda"),
+    list(name = "IBCAO",
+         land = "ggOceanMapsData::arctic_land", 
+         glacier = "ggOceanMapsData::arctic_glacier",
+         bathy = "ibcao_bathy",
+         crs = 3995,
+         path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/ibcao_bathy.rda")
   )
 
   names(alternatives) <- sapply(alternatives, function(k) k$name)
