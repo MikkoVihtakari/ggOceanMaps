@@ -177,7 +177,7 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bat
   
   # Install ggOceanMapsData if not installed
   # if (!requireNamespace("ggOceanMapsData", quietly = TRUE)) {
-  #   stop('The ggOceanMapsData package needs to be installed for ggOceanMaps to function.\nInstall the data package by running\ninstall.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org")\nOR\ndevtools::install_github("MikkoVihtakari/ggOceanMapsData")')
+  #   stop('The ggOceanMapsData package needs to be installed for ggOceanMaps to function.\nInstall the data package by running\ninstall.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org"))\nOR\ndevtools::install_github("MikkoVihtakari/ggOceanMapsData")')
   # }
   
   # The x argument to limits or data

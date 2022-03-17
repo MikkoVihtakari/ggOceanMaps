@@ -60,12 +60,14 @@ qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, shapef
   
   pb <- basemap(
     limits = limits, 
-    data = if("sf" %in% class(data)) {data} else {data[c(x, y)]}, 
+    data = if("sf" %in% class(data)) {data} else {data[c(x, y)]},
+    shapefiles = shapefiles,
     bathymetry = bathymetry, glaciers = glaciers, rotate = rotate, 
     legends = legends, legend.position = legend.position, 
     lon.interval = lon.interval, lat.interval = lat.interval, 
     bathy.style = bathy.style, bathy.border.col = bathy.border.col, 
-    bathy.size = bathy.size, land.col = land.col, land.border.col = land.border.col, 
+    bathy.size = bathy.size, land.col = land.col, 
+    land.border.col = land.border.col, 
     land.size = land.size, gla.col = gla.col, gla.border.col = gla.border.col,
     gla.size = gla.size, grid.col = grid.col, grid.size = grid.size, 
     base_size = base_size, projection.grid = projection.grid, 
