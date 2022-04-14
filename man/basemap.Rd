@@ -19,6 +19,7 @@ basemap(
   bathy.style = "poly_blues",
   bathy.border.col = NA,
   bathy.size = 0.1,
+  bathy.alpha = 1,
   land.col = "grey60",
   land.border.col = "black",
   land.size = 0.1,
@@ -66,6 +67,8 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 \item \code{"contour_blues"} contour lines with different shades of blue.
 \item \code{"contour_grey"} plots gray contour lines.
 }}
+
+\item{bathy.alpha}{Transparency parameter for bathymetry fill color. See \link[ggplot2]{scale_alpha}.}
 
 \item{land.col, gla.col, grid.col}{Character code specifying the color of land, glaciers and grid lines, respectively. Use \code{NA} to remove the grid lines.}
 

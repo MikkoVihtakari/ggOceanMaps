@@ -19,7 +19,7 @@ map_cmd <- function(command, alternative = FALSE) {
       ggplot2::ggplot()
     ',
     bathy_pb = '
-      ggspatial::layer_spatial(data = X$shapefiles$bathy, aes(fill = depth), show.legend = bathy.legend, color = bathy.border.col, size = bathy.size) +
+      ggspatial::layer_spatial(data = X$shapefiles$bathy, aes(fill = depth), show.legend = bathy.legend, color = bathy.border.col, size = bathy.size, alpha = bathy.alpha) +
       scale_fill_manual(name = "Depth (m)", values = colorRampPalette(c("#F7FBFF", "#DEEBF7", "#9ECAE1", "#4292C6", "#08306B"))(nlevels(X$shapefiles$bathy@data$depth)), guide =
         if(bathy.legend) {
           guide_legend(order = 1, override.aes = list(colour = NA))
@@ -28,7 +28,7 @@ map_cmd <- function(command, alternative = FALSE) {
         })
     ',
     bathy_pg = '
-      ggspatial::layer_spatial(data = X$shapefiles$bathy, aes(fill = depth), show.legend = bathy.legend, color = bathy.border.col, size = bathy.size) +
+      ggspatial::layer_spatial(data = X$shapefiles$bathy, aes(fill = depth), show.legend = bathy.legend, color = bathy.border.col, size = bathy.size, alpha = bathy.alpha) +
       scale_fill_grey("Depth (m)", start = 1, end = 0.5, guide =
         if(bathy.legend) {
           guide_legend(order = 1, override.aes = list(colour = NA))
