@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.14</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,18 +66,18 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">basemap_data</span><span class="op">(</span>
-  limits <span class="op">=</span> <span class="cn">NULL</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  shapefiles <span class="op">=</span> <span class="cn">NULL</span>,
-  bathymetry <span class="op">=</span> <span class="cn">FALSE</span>,
-  glaciers <span class="op">=</span> <span class="cn">FALSE</span>,
-  lon.interval <span class="op">=</span> <span class="cn">NULL</span>,
-  lat.interval <span class="op">=</span> <span class="cn">NULL</span>,
-  expand.factor <span class="op">=</span> <span class="fl">1.1</span>,
-  rotate <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">basemap_data</span><span class="op">(</span></span>
+<span>  limits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  shapefiles <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bathymetry <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  glaciers <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  lon.interval <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lat.interval <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  expand.factor <span class="op">=</span> <span class="fl">1.1</span>,</span>
+<span>  rotate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -86,28 +86,45 @@
 <dd><p>Map limits. One of the following:</p><ul><li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
 <li><p><strong>single integer</strong> between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.</p></li>
 </ul><p>Can be omitted if <code>data</code> or <code>shapefiles</code> are defined.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>A data frame, <a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">SpatialPolygons</a>, or <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a> shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to <a href="guess_coordinate_columns.html">guess the correct columns</a> and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if <code>limits</code> or <code>shapefiles</code> are defined.</p></dd>
+
+
 <dt>shapefiles</dt>
 <dd><p>Either a <a href="shapefile_list.html">list containing shapefile information</a> or a character argument referring to a name of pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code>. This name is partially matched. Can be omitted if <code>limits</code> or <code>data</code> are defined as decimal degrees.</p></dd>
+
+
 <dt>bathymetry</dt>
 <dd><p>Logical indicating whether bathymetry should be added to the map.</p></dd>
+
+
 <dt>glaciers</dt>
 <dd><p>Logical indicating whether glaciers and ice-sheets should be added to the map.</p></dd>
-<dt>lon.interval</dt>
+
+
+<dt>lon.interval, lat.interval</dt>
 <dd><p>Numeric value specifying the interval of longitude and latitude grids. <code>NULL</code> finds reasonable defaults depending on <code>limits</code>.</p></dd>
-<dt>lat.interval</dt>
-<dd><p>Numeric value specifying the interval of longitude and latitude grids. <code>NULL</code> finds reasonable defaults depending on <code>limits</code>.</p></dd>
+
+
 <dt>expand.factor</dt>
 <dd><p>Expansion factor for map limits with the <code>data</code> argument. Can be used to zoom in and out automatically limited maps. Defaults to 1.1. Set to <code>NULL</code> to ignore.</p></dd>
+
+
 <dt>rotate</dt>
 <dd><p>Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. Experimental.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Logical indicating whether information about the projection and guessed column names should be returned as message. Set to <code>FALSE</code> to make the function silent.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of class <code>basemapData</code> containing information required for plotting a <code><a href="basemap.html">basemap</a></code>.</p>
+    
+
+<p>A list of class <code>basemapData</code> containing information required for plotting a <code><a href="basemap.html">basemap</a></code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -134,7 +151,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

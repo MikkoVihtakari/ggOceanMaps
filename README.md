@@ -2,13 +2,13 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-1.2.6**
+1.2.14**
 
 <!-- badges: start -->
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4554714.svg)](https://doi.org/10.5281/zenodo.4554714)
 [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://CRAN.R-project.org/package=ggOceanMaps)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://CRAN.R-project.org/package=ggOceanMaps)
 <!-- badges: end -->
 
 <!-- [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml) -->
@@ -183,9 +183,9 @@ citation("ggOceanMaps")
 #> 
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
-#>   Mikko Vihtakari (2022). ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'. R package version 1.2.6.
-#>   https://CRAN.R-project.org/package=ggOceanMaps
+#>   Vihtakari M (2022). _ggOceanMaps: Plot Data on Oceanographic Maps
+#>   using 'ggplot2'_. R package version 1.2.14,
+#>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -193,8 +193,8 @@ citation("ggOceanMaps")
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2022},
-#>     note = {R package version 1.2.6},
-#>     url = {https://CRAN.R-project.org/package=ggOceanMaps},
+#>     note = {R package version 1.2.14},
+#>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```
 
@@ -238,10 +238,10 @@ package does not contain any C++ code and should compile easily.
 If you encounter problems during the devtools installation, you may set
 the `upgrade` argument to `"never"` and try the following steps:
 
-1.  Manually update all R packages you have installed (Packages -&gt;
-    Update -&gt; Select all -&gt; Install updates in R Studio). If an
-    update of a package fails, try installing that package again using
-    the `install.packages` function or the R Studio menu.
+1.  Manually update all R packages you have installed (Packages -\>
+    Update -\> Select all -\> Install updates in R Studio). If an update
+    of a package fails, try installing that package again using the
+    `install.packages` function or the R Studio menu.
 2.  Run
     `devtools::install_github("MikkoVihtakari/ggOceanMaps", upgrade = "never")`.
 3.  If the installation of a dependency fails, try installing that

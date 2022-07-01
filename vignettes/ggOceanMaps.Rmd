@@ -2,7 +2,9 @@
 title: "ggOceanMaps User Manual"
 author: "Mikko Vihtakari (Institute of Marine Research)"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc_depth: 5
 vignette: >
   %\VignetteIndexEntry{ggOceanMaps}
   %\VignetteEngine{knitr::rmarkdown}
@@ -224,17 +226,29 @@ shapefile_list("all")
 
 Plotting shapefiles from the list is done as for any other shapes. Note that the projection of the shapefiles varies.
 
-```{r eval = FALSE}
-basemap(shapefiles = "BarentsSea")
+```{r eval = F}
+basemap(shapefiles = "BarentsSea", bathymetry = TRUE)
 ```
 
-Kongsfjorden:
+![](https://mikkovihtakari.github.io/PlotSvalbard/articles/PlotSvalbard_files/figure-html/bathystyle-1.png)
 
-```{r eval = FALSE}
+The Svalbard map from the [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package:
+
+```{r eval = F}
+basemap(shapefiles = "Svalbard", glaciers = TRUE)
+```
+
+![The PlotSvalbard maps can also be generated using ggOceanMaps with the ggOceanMapsLargeData extension. The function asks to download the data when you use it for the first time.](https://mikkovihtakari.github.io/PlotSvalbard/articles/PlotSvalbard_files/figure-html/unnamed-chunk-2-1.png)
+
+Kongsfjorden from the [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package:
+
+```{r eval = F}
 basemap(limits = c(10.9, 12.65, 78.83, 79.12), 
         bathymetry = TRUE, shapefiles = "Svalbard",
-        legends = FALSE)
+        legends = FALSE, glaciers = TRUE)
 ```
+
+![](https://mikkovihtakari.github.io/PlotSvalbard/articles/PlotSvalbard_files/figure-html/unnamed-chunk-17-1.png)
 
 # Advanced use
 
@@ -267,13 +281,15 @@ basemap(limits = c(0, 46, 70, 81), bathymetry = TRUE, bathy.style = "contour_gre
 The `bathy.style = "poly_*"` bathymetry polygons are mapped to `geom_fill_discrete` and can be modifying using standard ggplot syntax:
 
 ```{r}
-basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) + scale_fill_viridis_d("Water depth (m)")
+basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) + 
+  scale_fill_viridis_d("Water depth (m)")
 ```
 
 The `bathy.style = "contour_*"` bathymetry lines are mapped to `geom_color_discrete` and can be modifying using standard ggplot syntax:
 
 ```{r}
-basemap(limits = c(0, 60, 68, 80), bathymetry = TRUE, bathy.style = "contour_blues") + scale_color_hue()
+basemap(limits = c(0, 60, 68, 80), bathymetry = TRUE, bathy.style = "contour_blues") + 
+  scale_color_hue()
 ```
 
 ### Graphical parameters
@@ -288,10 +304,11 @@ basemap(limits = c(-20, 30, 55, 70), glaciers = TRUE,
         grid.size = 0.05)
 ```
 
-Grid lines can be removed by setting the `grid.col` to `NA`. Axis labels can be manipulated using standard ggplot code:
+Graticules (the grid lines) can be removed by setting the `grid.col` to `NA`. Axis labels can be manipulated using standard ggplot code:
 
 ```{r}
-basemap(limits = c(124, 148, 31, 50), grid.col = NA) + labs(x = NULL, y = "Only latitude for you, ...")
+basemap(limits = c(124, 148, 31, 50), grid.col = NA) + 
+  labs(x = NULL, y = "Only latitude for you, ...")
 ```
 
 ### Add scale bar and north arrow
@@ -312,7 +329,7 @@ The objects produced by the `basemap` function are standard ggplot objects with 
 
 ```{r}
 p <- basemap(-60)
-attributes(p)
+names(attributes(p))
 ```
 
 Accessing the `attributes` allow custom modifications of maps produced by the `basemap` function. See the [Reordering layers](#reordering-layers) section as an example. 
@@ -326,23 +343,20 @@ The Norwegian fishing regions are included as an example dataset in the **ggOcea
 ```{r}
 data(fishingAreasNor, package = "ggOceanMapsData")
 
-basemap(limits = raster::extent(fishingAreasNor)[1:4]) + 
+basemap(fishingAreasNor) + 
   annotation_spatial(fishingAreasNor, fill = NA) + 
-  coord_sf(expand = FALSE)
+  coord_sf(expand = FALSE) # required to keep the limits
 ```
 
 The initial plot draws the polygons. Note how we had to add `coord_sf(expand = FALSE)` because `layer_spatial` and `annotation_spatial` functions from the ggspatial package seem to modify `coord_sf` when added to the plot. The `basemap` function uses `expand = FALSE` (run the script without the addition and see the difference). Note also how the polygon boundaries are partly on land. We want to eventually hide them under land. We also add region labels and color the polygons based on their area to demonstrate the capabilities of ggplot, ggspatial and ggOceanMaps: 
 
 ```{r}
-labels <- sp::SpatialPointsDataFrame(rgeos::gCentroid(fishingAreasNor, byid=TRUE), 
-                                     data = fishingAreasNor@data)
-labels <- df_spatial(labels)
+labels <- suppressWarnings(sf::st_centroid(fishingAreasNor))
+fishingAreasNor$area <- as.numeric(sf::st_area(fishingAreasNor))/1e9 # calculate area in 1000 km2
 
-fishingAreasNor@data$area <- raster::area(fishingAreasNor)/1e9 # calculate area in 1000 km2
-
-p <- basemap(limits = raster::extent(fishingAreasNor)[1:4]) +
-  annotation_spatial(fishingAreasNor, aes(fill = area)) +
-  geom_spatial_text(data = labels, aes(x = x, y = y, label = FID), size = FS(8), fontface = 2) +
+p <- basemap(fishingAreasNor) +
+  geom_sf(data = fishingAreasNor, aes(fill = area)) +
+  geom_sf_text(data = labels, aes(label = FID), size = FS(8), fontface = 2) +
   scale_fill_distiller(name = "Area\n(1000 km2)",
                        palette = "Spectral", na.value = "white",
                        limits = c(0, 500), oob = scales::squish)
@@ -358,6 +372,101 @@ tmp <- sapply(p$layers, function(k) !is.null(k$mapping$label)) # the layer with 
 p$layers <- c(p$layers[-which(tmp)], p$layers[which(tmp)])
 p
 ```
+
+### Contolling the plotting order of graticules
+
+Graticules are plotted using [`ggplot2::coord_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html) and are regarded as the *panel* element in the [`ggplot2::theme()`](https://ggplot2.tidyverse.org/reference/theme.html). Note that also background color is included in the *panel* element (see the next section). The [`ggOceanMaps::theme_map()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/theme_map.html) function, which is automatically executed together with every `basemap()` and `qmap()` command, controls the position of the graticules and they are set on top by default:
+
+```{r}
+basemap(limits = c(-20, 15, 50, 70), grid.col = "red", grid.size = 1)
+```
+
+To move the graticules under all layers, use the `panel.ontop` argument in `ggplot2::theme()`:
+
+```{r}
+basemap(limits = c(-20, 15, 50, 70), grid.col = "red", grid.size = 1) + 
+  theme(panel.ontop = FALSE)
+```
+
+Sometimes there is a need to control the position of graticules in between layers. At the time of writing, ggplot does not offer a straightforward way to do this, but we can use the code from [`ggplot2::coord_sf()`](https://github.com/tidyverse/ggplot2/blob/7571122f6a9455ccce9f8ceb9a2196c0a70be646/R/coord-sf.R#L226) to make the graticules:
+
+```{r}
+data(ices_areas, package = "ggOceanMapsData")
+
+p <- basemap(limits = c(-20, 15, 50, 70), grid.col = NA) + # without graticules 
+  geom_sf(data = ices_areas, aes(fill = SubArea), show.legend = FALSE) 
+
+# Make the graticules:
+lims <- attributes(p)$limits 
+graticule <- sf::st_graticule(
+  c(lims[1], lims[3], lims[2], lims[4]), 
+  crs = attributes(p)$proj,
+  lon = seq(-180, 180, 15), lat = seq(-90, 90, 5))
+
+# Plot
+reorder_layers(p) +
+  geom_sf(data = graticule, color = "grey70", size = LS(0.5)) + # graticules
+  coord_sf(xlim = lims[1:2], ylim = lims[3:4], # redefine limits
+           crs = attributes(p)$proj) +
+  geom_sf_label( # labels on top of graticules
+    data = suppressWarnings(sf::st_centroid(ices_areas)), 
+    aes(label = Area_Full)
+  )
+```
+
+An exception are the polar maps for which graticules are drawn by ggOceanMaps (because ggplot2 graticules for those maps were bugged some years ago when writing the function; this part requires a revision at some point). 
+
+```{r}
+X <- basemap_data(60)
+
+basemap(60, grid.col = NA) +
+  ggspatial::geom_spatial_path(
+    data = X$map.grid$lon.grid.lines, 
+    aes(x = lon, y = lat), 
+    crs = 4326, color = "red", size = 1) +
+  ggspatial::geom_spatial_path(
+    data = X$map.grid$lat.grid.lines, 
+    aes(x = lon, y = lat), 
+    crs = 4326, 
+    color = "red", size = 1) +
+  ggspatial::layer_spatial(
+    data = X$shapefiles$land, 
+    fill = "grey60", color = "black", size = 0.1)
+```
+
+### Coloring the ocean (background)
+
+Similarly, the [`ggplot2::theme()`](https://ggplot2.tidyverse.org/reference/theme.html) *panel* element allows [coloring the ocean](https://stackoverflow.com/questions/67615318/how-to-colour-the-ocean):
+
+```{r}
+basemap(expand.grid(lon = c(-129, -124), lat = c(49, 53)), grid.col = "red", grid.size = 0.5) + 
+  theme(panel.background = element_rect(fill = "lightblue"),
+        panel.ontop = FALSE) 
+```
+
+If you want the graticules on top, you'll need to define them manually because, both, the background and the grid, are contained in the same ggplot element called *panel*:
+
+```{r}
+p <- basemap(expand.grid(lon = c(-129, -124), lat = c(49, 53)), grid.col = NA) + 
+  theme(panel.background = element_rect(fill = "lightblue"),
+        panel.ontop = FALSE) 
+
+# Make the graticules:
+lims <- attributes(p)$limits 
+graticule <- sf::st_graticule(
+  c(lims[1], lims[3], lims[2], lims[4]), 
+  crs = attributes(p)$proj,
+  lon = attributes(p)$map.grid$lon.breaks, 
+  lat = attributes(p)$map.grid$lat.breaks
+)
+
+# Plot
+p + 
+  geom_sf(data = graticule, color = "red", size = LS(1)) + # graticules
+  coord_sf(xlim = lims[1:2], ylim = lims[3:4], # redefine limits
+           crs = attributes(p)$proj) 
+```
+
 
 ### Custom shapefiles
 

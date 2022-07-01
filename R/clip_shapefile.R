@@ -19,8 +19,7 @@
 #' @export
 
 # Test parameters
-# x = shapefiles$land; proj.limits = convert_crs(4326); return.boundary = TRUE
-# proj.limits = convert_crs(4326); simplify = FALSE; tol = 60; return.boundary = FALSE
+# x = shapefiles$land; proj.limits = convert_crs(4326); simplify = FALSE; tol = 60; return.boundary = FALSE
 clip_shapefile <- function(x, limits, proj.limits = convert_crs(4326), simplify = FALSE, tol = 60, return.boundary = FALSE) {
 
   ## Checks
@@ -32,12 +31,13 @@ clip_shapefile <- function(x, limits, proj.limits = convert_crs(4326), simplify 
   ## Projection
 
   x_proj <- suppressWarnings(sp::proj4string(x))
-
+  # x_proj <- sf::st_crs(x)
+  
   if(is.na(x_proj)) stop("crs for x is missing. Define the projection attributes and try again.")
 
   ## Clip boundary
 
-  if(class(limits) == "SpatialPolygonsDataFrame" | class(limits) == "SpatialPolygons") {
+  if(inherits(limits, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
     proj.limits <- suppressWarnings(sp::proj4string(limits))
     clip_boundary <- limits
   } else {
@@ -51,7 +51,7 @@ clip_shapefile <- function(x, limits, proj.limits = convert_crs(4326), simplify 
 
       if(!rgeos::gIsValid(clip_boundary)) stop("Invalid geomethry due to clip_shapefile. Add the buffering script.")
 
-      suppressWarnings(sp::proj4string(clip_boundary) <- x_proj)
+      suppressWarnings(raster::crs(clip_boundary) <- x_proj)
 
     } else if(length(limits) != 4) {
       stop("the length of limits vector has to be 4. See limits argument")
@@ -64,7 +64,7 @@ clip_shapefile <- function(x, limits, proj.limits = convert_crs(4326), simplify 
   ## Check that the projections match
 
   if(proj.limits != x_proj) {
-    clip_boundary <- sp::spTransform(clip_boundary, suppressWarnings(sp::CRS(x_proj)))
+    clip_boundary <- suppressWarnings(sp::spTransform(clip_boundary, suppressWarnings(sp::CRS(x_proj))))
   }
 
   ## Simplify bathymetry.
@@ -82,7 +82,7 @@ clip_shapefile <- function(x, limits, proj.limits = convert_crs(4326), simplify 
 
   error_test <- suppressWarnings(quiet(try(rgeos::gIntersection(x, clip_boundary, byid = TRUE), silent = TRUE)))
 
-  if(class(error_test) == "try-error") {
+  if(inherits(error_test, "try-error")) {
     shapefile <- suppressWarnings(rgeos::gIntersection(x, clip_boundary, byid = TRUE, drop_lower_td = TRUE, checkValidity = 0L))
   } else if(is.null(error_test)) {
     shapefile <- x[-1:-length(x),]
@@ -90,7 +90,7 @@ clip_shapefile <- function(x, limits, proj.limits = convert_crs(4326), simplify 
     shapefile <- error_test
   }
 
-  if(class(x) == "SpatialPolygonsDataFrame" & length(shapefile) > 0) {
+  if(inherits(x, "SpatialPolygonsDataFrame") & length(shapefile) > 0) {
     ids <- sapply(slot(shapefile, "polygons"), function(x) slot(x, "ID"))
     ids <- select_element(strsplit(ids, " "), 1)
 

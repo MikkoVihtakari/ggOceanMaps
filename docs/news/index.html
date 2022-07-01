@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.14</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -61,11 +61,21 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.2" id="ggoceanmaps-12-development-version">ggOceanMaps 1.2 (development version)<a class="anchor" aria-label="anchor" href="#ggoceanmaps-12-development-version"></a></h2>
-<ul><li>Conversion from PROJ4 to PROJ6. This change will make the old ggOceanMapsData files incompatible with ggOceanMaps 1.2 and vice versa. Changed most functions.</li>
+<h2 class="page-header" data-toc-text="1.3" id="ggoceanmaps-13-development-version">ggOceanMaps 1.3 (development version)<a class="anchor" aria-label="anchor" href="#ggoceanmaps-13-development-version"></a></h2>
+<ul><li>Removed many CRS warning from sp and rgdal</li>
+<li>Added a way to control the plotting order of graticules</li>
+<li>Add transparency (alpha) scaling to bathymetry fill</li>
+<li>Many bug fixes</li>
+<li>Add IBCAO bathymetry which is more detailed than the ArticSterographic</li>
+<li>Improve vignette and webpage. Add a way to control the plotting order of graticules.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.2" id="ggoceanmaps-12">ggOceanMaps 1.2<a class="anchor" aria-label="anchor" href="#ggoceanmaps-12"></a></h2>
+<ul><li><a href="https://github.com/MikkoVihtakari/ggOceanMaps/issues/11" class="external-link">added <code>x</code> argument to <code>basemap()</code> and <code>qmap()</code></a></li>
+<li>Conversion from PROJ4 to PROJ6. This change will make the old ggOceanMapsData files incompatible with ggOceanMaps 1.2 and vice versa. Changed most functions.</li>
 <li>Added NEWS.md</li>
 <li>Improved premade_shapefiles and shapefile documentation.</li>
-<li>Started rewriting the package from <code>sp</code>, <code>rgeos</code> and <code>rgdal</code> to <code>sf</code>. Slows down <code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> temporarily (until <code>sf 0.9.9</code>)</li>
+<li>Started rewriting the package from <code>sp</code>, <code>rgeos</code> and <code>rgdal</code> to <code>sf</code>.</li>
 <li>Moved the <code>rgdal</code> package from Imports to Suggests.</li>
 <li>Added <code><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry()</a></code>
 </li>
@@ -100,7 +110,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

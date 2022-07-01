@@ -20,14 +20,12 @@
 #' }
 #' @export
 
-# data = expand.grid(lon = sort(c(limits[1:2], midLon)), lat = limits[3:4]); lon = "lon"; lat = "lat"
-# lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; verbose = FALSE; expand.factor = NULL; verbose = TRUE
-
+# data = expand.grid(lon = c(-120, 180, 120), lat = c(60, 60, 80)); lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; expand.factor = NULL; verbose = FALSE; output.sf = FALSE
 auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out = NULL, expand.factor = NULL, verbose = FALSE, output.sf = FALSE) {
   
   # Get limits from spatial polygons ####
   
-  if(any(class(data) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+  if(any(inherits(data, c("SpatialPolygonsDataFrame", "SpatialPolygons")))) {
     proj.in <- raster::crs(data)
     
     # if(!sf::st_is_longlat(proj.in)) {
@@ -42,7 +40,7 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out =
   
   # Get limits from sf objects
   
-  if(any(class(data) %in% c("sf"))) {
+  if(any(inherits(data, "sf"))) {
     proj.in <- sf::st_crs(data)
    
     tmp <- sf::st_bbox(data)

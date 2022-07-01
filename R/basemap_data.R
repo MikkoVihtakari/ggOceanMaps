@@ -24,7 +24,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     
     error_test <- quiet(try(match.arg(shapefiles, shapefile_list("all")$name), silent = TRUE))
     
-    if(class(error_test) != "try-error") {
+    if(!inherits(error_test, "try-error")) {
       shapefiles <- shapefile_list(shapefiles)
       
       if(!glaciers) shapefiles$glacier <- NULL
@@ -57,15 +57,15 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
         }), names(shapefiles))
       }
       
-      if(class(shapefiles$land) == "character") {
+      if(is.character(shapefiles$land)) {
         shapefiles$land <- eval(parse(text = shapefiles$land))
       }
       
-      if(class(shapefiles$glacier) == "character") {
+      if(is.character(shapefiles$glacier)) {
         shapefiles$glacier <- eval(parse(text = shapefiles$glacier))
       }
       
-      if(class(shapefiles$bathy) == "character") {
+      if(is.character(shapefiles$bathy)) {
         shapefiles$bathy <- eval(parse(text = shapefiles$bathy))
       }
       
@@ -161,7 +161,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
                         ),
                       lon = "lon", lat = "lat",
                       proj.in =
-                        if(class(shapefiles$land) == "SpatialPolygonsDataFrame") {
+                        if(inherits(shapefiles$land, "SpatialPolygonsDataFrame")) {
                           raster::crs(shapefiles$land)
                         } else {
                           convert_crs(shapefiles$crs)
@@ -171,7 +171,11 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
         
       } else { # Limits given as decimal degrees
         
-        limits <- c(limits[1:2], sort(limits[3:4]))
+        if(all(c("xmin", "ymin", "xmax", "ymax") %in% names(limits))) { # sf::st_bbox limits
+          limits <- unname(limits[c("xmin", "xmax", "ymin", "ymax")])
+        } else {
+          limits <- c(limits[1:2], sort(limits[3:4])) # ggOceanMaps/raster/sp limits
+        }
         
         tmp <- dd_to_deg(limits[1:2])
         
@@ -221,10 +225,15 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   
   if(!is.null(data) & is.null(limits)) {
     
-    if(rotate) {
+    if("sf" %in% class(data)) { # sf data
       
-      clipLimits <- auto_limits(data, verbose = verbose)
-      limits <- clipLimits$ddLimits
+      if(sf::st_is_longlat(data)) {
+        limits <- sf::st_bbox(data)
+      } else {
+        limits <- sf::st_bbox(sf::st_transform(data, 4326))
+      }
+      
+      limits <- unname(limits[c("xmin", "xmax", "ymin", "ymax")])
       decLimits <- is_decimal_limit(limits)
       
       tmp <- dd_to_deg(limits[1:2])
@@ -238,21 +247,62 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
       midLon <- tmp[1] + lonDiff/2
       midLon <- deg_to_dd(midLon)
       
-    } else {
-      
-      if(!is.null(shapefiles)) {
+      if(is.null(shapefiles)) {
         clipLimits <-
-          auto_limits(data, verbose = verbose,
-                      proj.out = raster::crs(shapefiles$land),
-                      expand.factor = expand.factor
-          )
+          auto_limits(data = expand.grid(
+            lon = sort(c(limits[1:2], midLon)),
+            lat = limits[3:4]),
+            lon = "lon", lat = "lat",
+            verbose = verbose)
       } else {
-        clipLimits <- auto_limits(data, expand.factor = expand.factor, verbose = verbose)
+        clipLimits <-
+          auto_limits(data = expand.grid(
+            lon = sort(c(limits[1:2], midLon)),
+            lat = limits[3:4]),
+            lon = "lon", lat = "lat",
+            proj.out =
+              ifelse(grepl("SpatialPolygons", class(shapefiles$land)),
+                     suppressWarnings(sp::proj4string(shapefiles$land)),
+                     suppressWarnings(sp::proj4string(eval(parse(text = shapefiles$land))))
+              ),
+            verbose = verbose)
       }
       
-      limits <- clipLimits$ddLimits
-      decLimits <- is_decimal_limit(limits)
+    } else { # data.frame etc.
       
+      if(rotate) {
+        
+        clipLimits <- auto_limits(data, verbose = verbose)
+        limits <- clipLimits$ddLimits
+        decLimits <- is_decimal_limit(limits)
+        
+        tmp <- dd_to_deg(limits[1:2])
+        
+        if(tmp[1] > tmp[2]) {
+          lonDiff <- 360 - tmp[1] + tmp[2]
+        } else {
+          lonDiff <- tmp[2] - tmp[1]
+        }
+        
+        midLon <- tmp[1] + lonDiff/2
+        midLon <- deg_to_dd(midLon)
+        
+      } else {
+        
+        if(!is.null(shapefiles)) {
+          clipLimits <-
+            auto_limits(data, verbose = verbose,
+                        proj.out = raster::crs(shapefiles$land),
+                        expand.factor = expand.factor
+            )
+        } else {
+          clipLimits <- auto_limits(data, expand.factor = expand.factor, verbose = verbose)
+        }
+        
+        limits <- clipLimits$ddLimits
+        decLimits <- is_decimal_limit(limits)
+        
+      }
     }
     
     if(is.null(shapefiles)) {

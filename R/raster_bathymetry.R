@@ -30,13 +30,13 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy, bounda
 
   ### Bathy argument
 
-  if(class(bathy) != "RasterLayer") {
+  if(!inherits(bathy, "RasterLayer")) {
     if(!file.exists(bathy)) stop("Bathy raster file not found. Check the path in the bathy argument.")
   }
 
   ### The depths argument
 
-  if(!(is.vector(depths) & class(depths) %in% c("numeric", "integer"))) {
+  if(!(is.vector(depths) & inherits(depths, c("numeric", "integer")))) {
     stop("The depths parameter has to be a numeric or integer vector.")
   }
 
@@ -54,7 +54,7 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy, bounda
       }
 
       #### If file
-    } else if(class(boundary) == "character" & length(boundary) == 1) {
+    } else if(is.character(boundary) & length(boundary) == 1) {
       if(!file.exists(boundary)) stop("Boundary shapefile not found. Check your path")
 
       boundary <- sf::st_read(boundary, quiet = TRUE)
@@ -74,7 +74,7 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy, bounda
 
   ## Open raster ###
 
-  if(class(bathy) == "RasterLayer") {
+  if(inherits(bathy, "RasterLayer")) {
     ras <- bathy
   } else {
     if(verbose) {

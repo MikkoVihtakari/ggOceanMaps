@@ -51,7 +51,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     
     error_test <- quiet(try(match.arg(proj.out, shapefile_list("all")$name), silent = TRUE))
     
-    if(class(error_test) != "try-error") {
+    if(!inherits(error_test, "try-error")) {
       proj.out <- sf::st_crs(shapefile_list(proj.out)$crs)
     }
   }
@@ -141,20 +141,20 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   
   ## Fix the CRS
   
-  if("crs" != class(proj.in)) {
+  if(!inherits(proj.in, "crs")) {
     error_test <- quiet(try(sf::st_crs(proj.in), silent = TRUE))
     
-    if(class(error_test) == "try-error") {
+    if(inherits(error_test, "try-error")) {
       stop("Failed to convert the argument proj.in to sf::st_crs object in the transform_coord function. This is likely a bug. If so, please file a bug report on GitHub.")
     } else {
       proj.in <- error_test
     }
   }
   
-  if("crs" != class(proj.out)) {
+  if(!inherits(proj.out, "crs")) {
     error_test <- quiet(try(sf::st_crs(proj.out), silent = TRUE))
     
-    if(class(error_test) == "try-error") {
+    if(inherits(error_test, "try-error")) {
       stop("Failed to convert the argument proj.out to sf::st_crs object in the transform_coord function. This is likely a bug. If so, please file a bug report on GitHub.")
     } else {
       proj.out <- error_test

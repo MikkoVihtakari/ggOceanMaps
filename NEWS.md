@@ -1,6 +1,11 @@
 # ggOceanMaps 1.3 (development version)
 
-* Removed a CRS warning
+* Removed many CRS warning from sp and rgdal
+* Added a way to control the plotting order of graticules
+* Add transparency (alpha) scaling to bathymetry fill
+* Many bug fixes
+* Add IBCAO bathymetry which is more detailed than the ArticSterographic
+* Improve vignette and webpage. Add a way to control the plotting order of graticules.
 
 # ggOceanMaps 1.2
 

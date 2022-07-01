@@ -172,7 +172,7 @@
 #' @export
 
 ## Test parameters
-# limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = TRUE
+# x = NULL; limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = TRUE
 
 basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, bathy.alpha = 1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE) {
   
@@ -184,7 +184,7 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bat
   # The x argument to limits or data
   
   if(!is.null(x)) {
-    if(any(class(x) %in% c("integer", "numeric")) & is.null(limits)) {
+    if(any(class(x) %in% c("integer", "numeric", "bbox")) & is.null(limits)) {
       limits <- x
     } else if(any(class(x) %in% c("data.frame", "data.table", "sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons")) & is.null(limits) & is.null(data)) {
       data <- x
@@ -194,7 +194,7 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bat
   # Checks ####
   
   if(is.null(data) & is.null(limits) & is.null(shapefiles)) stop("One or several of the arguments limits, data and shapefiles is required.")
-  if(class(legends) != "logical" | !length(legends) %in% 1:2) stop("'legends' argument has to be a logical vector of length 1 or 2. Read the explantion for the argument in ?basemap")
+  if(!is.logical(legends) | !length(legends) %in% 1:2) stop("'legends' argument has to be a logical vector of length 1 or 2. Read the explantion for the argument in ?basemap")
   
   ###########
   # Data ####
@@ -266,6 +266,7 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bat
   attributes(out)$glaciers <- glaciers
   attributes(out)$limits <- X$map.limits
   attributes(out)$polarmap <- X$polar.map
+  attributes(out)$map.grid <- X$map.grid
   attributes(out)$crs <- X$shapefiles$crs
   attributes(out)$proj <- X$proj
   

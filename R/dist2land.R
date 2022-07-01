@@ -56,7 +56,7 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = 
   ## Case for defined x and undefined lon or/and lat ####
 
   if(is.null(lon) | is.null(lat)) {
-    if(all(class(data) != "data.frame")) stop("x argument has to be a data.frame")
+    if(all(!is.data.frame(data))) stop("x argument has to be a data.frame")
 
     tmp <- guess_coordinate_columns(data)
 
@@ -88,12 +88,12 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = 
 
     error_test <- quiet(try(match.arg(shapefile, shapefile_list("all")$name), silent = TRUE))
 
-    if(class(error_test) != "try-error") {
+    if(!inherits(error_test, "try-error")) {
       shapefile <- shapefile_list(shapefile)
       if(verbose) message(paste("Using", shapefile$name, "as land shapes."))
       land <- eval(parse(text = shapefile$land))
     } else {
-      if(!class(shapefile) %in% c("SpatialPolygonsDataFrame", "SpatialPolygons")) stop("The shapefile must either be matchable string to shapefile_list or a SpatialPolygons object.")
+      if(!inherits(shapefile, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) stop("The shapefile must either be matchable string to shapefile_list or a SpatialPolygons object.")
       if(verbose) message("Using custom land shapes.")
       land <- shapefile
     }

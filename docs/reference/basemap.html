@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.14</span>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,84 +66,126 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">basemap</span><span class="op">(</span>
-  x <span class="op">=</span> <span class="cn">NULL</span>,
-  limits <span class="op">=</span> <span class="cn">NULL</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  shapefiles <span class="op">=</span> <span class="cn">NULL</span>,
-  bathymetry <span class="op">=</span> <span class="cn">FALSE</span>,
-  glaciers <span class="op">=</span> <span class="cn">FALSE</span>,
-  rotate <span class="op">=</span> <span class="cn">FALSE</span>,
-  legends <span class="op">=</span> <span class="cn">TRUE</span>,
-  legend.position <span class="op">=</span> <span class="st">"right"</span>,
-  lon.interval <span class="op">=</span> <span class="cn">NULL</span>,
-  lat.interval <span class="op">=</span> <span class="cn">NULL</span>,
-  bathy.style <span class="op">=</span> <span class="st">"poly_blues"</span>,
-  bathy.border.col <span class="op">=</span> <span class="cn">NA</span>,
-  bathy.size <span class="op">=</span> <span class="fl">0.1</span>,
-  land.col <span class="op">=</span> <span class="st">"grey60"</span>,
-  land.border.col <span class="op">=</span> <span class="st">"black"</span>,
-  land.size <span class="op">=</span> <span class="fl">0.1</span>,
-  gla.col <span class="op">=</span> <span class="st">"grey95"</span>,
-  gla.border.col <span class="op">=</span> <span class="st">"black"</span>,
-  gla.size <span class="op">=</span> <span class="fl">0.1</span>,
-  grid.col <span class="op">=</span> <span class="st">"grey70"</span>,
-  grid.size <span class="op">=</span> <span class="fl">0.1</span>,
-  base_size <span class="op">=</span> <span class="fl">11</span>,
-  projection.grid <span class="op">=</span> <span class="cn">FALSE</span>,
-  expand.factor <span class="op">=</span> <span class="fl">1.1</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">basemap</span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  limits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  shapefiles <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bathymetry <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  glaciers <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  rotate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  legends <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  legend.position <span class="op">=</span> <span class="st">"right"</span>,</span>
+<span>  lon.interval <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lat.interval <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bathy.style <span class="op">=</span> <span class="st">"poly_blues"</span>,</span>
+<span>  bathy.border.col <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  bathy.size <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  bathy.alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  land.col <span class="op">=</span> <span class="st">"grey60"</span>,</span>
+<span>  land.border.col <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  land.size <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  gla.col <span class="op">=</span> <span class="st">"grey95"</span>,</span>
+<span>  gla.border.col <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  gla.size <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  grid.col <span class="op">=</span> <span class="st">"grey70"</span>,</span>
+<span>  grid.size <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  base_size <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>  projection.grid <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  expand.factor <span class="op">=</span> <span class="fl">1.1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>The limit type (<code>limits</code> or <code>data</code>) is automatically recognized from the class of this argument.</p></dd>
+
+
 <dt>limits</dt>
 <dd><p>Map limits. One of the following:</p><ul><li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
 <li><p><strong>single integer</strong> between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.</p></li>
 </ul><p>Can be omitted if <code>data</code> or <code>shapefiles</code> are defined.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>A data frame, <a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">SpatialPolygons</a>, or <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a> shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to <a href="guess_coordinate_columns.html">guess the correct columns</a> and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if <code>limits</code> or <code>shapefiles</code> are defined.</p></dd>
+
+
 <dt>shapefiles</dt>
 <dd><p>Either a <a href="shapefile_list.html">list containing shapefile information</a> or a character argument referring to a name of pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code>. This name is partially matched. Can be omitted if <code>limits</code> or <code>data</code> are defined as decimal degrees.</p></dd>
+
+
 <dt>bathymetry</dt>
 <dd><p>Logical indicating whether bathymetry should be added to the map.</p></dd>
+
+
 <dt>glaciers</dt>
 <dd><p>Logical indicating whether glaciers and ice-sheets should be added to the map.</p></dd>
+
+
 <dt>rotate</dt>
 <dd><p>Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. Experimental.</p></dd>
+
+
 <dt>legends</dt>
 <dd><p>Logical indicating whether the legend for bathymetry should be shown.</p></dd>
+
+
 <dt>legend.position</dt>
 <dd><p>The position for ggplot2 legend. See the argument with the same name in <a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a>.</p></dd>
+
+
 <dt>lon.interval, lat.interval</dt>
 <dd><p>Numeric value specifying the interval of longitude and latitude grids. <code>NULL</code> finds reasonable defaults depending on <code>limits</code>.</p></dd>
+
+
 <dt>bathy.style</dt>
 <dd><p>Character defining the style for bathymetry contours. Alternatives:</p><ul><li><p><code>"poly_blues"</code> plots polygons filled with different shades of blue.</p></li>
 <li><p><code>"poly_greys"</code> plots polygons filled with different shades of gray.</p></li>
 <li><p><code>"contour_blues"</code> contour lines with different shades of blue.</p></li>
 <li><p><code>"contour_grey"</code> plots gray contour lines.</p></li>
 </ul></dd>
+
+
+<dt>bathy.alpha</dt>
+<dd><p>Transparency parameter for bathymetry fill color. See <a href="https://ggplot2.tidyverse.org/reference/scale_alpha.html" class="external-link">scale_alpha</a>.</p></dd>
+
+
 <dt>land.col, gla.col, grid.col</dt>
 <dd><p>Character code specifying the color of land, glaciers and grid lines, respectively. Use <code>NA</code> to remove the grid lines.</p></dd>
+
+
 <dt>land.border.col, gla.border.col, bathy.border.col</dt>
 <dd><p>Character code specifying the color of the border line for land, glacier, and bathymetry shapes.</p></dd>
+
+
 <dt>land.size, gla.size, bathy.size, grid.size</dt>
 <dd><p>Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the <code><a href="LS.html">LS</a></code> function for a specific width in pt. See Details.</p></dd>
+
+
 <dt>base_size</dt>
 <dd><p>Base size parameter for ggplot. See ggtheme.</p></dd>
+
+
 <dt>projection.grid</dt>
 <dd><p>Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.</p></dd>
+
+
 <dt>expand.factor</dt>
 <dd><p>Expansion factor for map limits with the <code>data</code> argument. Can be used to zoom in and out automatically limited maps. Defaults to 1.1. Set to <code>NULL</code> to ignore.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Logical indicating whether information about the projection and guessed column names should be returned as message. Set to <code>FALSE</code> to make the function silent.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a <a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a> map, which can be assigned to an object and modified as any ggplot object.</p>
+    
+
+<p>Returns a <a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a> map, which can be assigned to an object and modified as any ggplot object.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -187,113 +229,113 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># The easiest way to produce a map is to use the limits</span></span>
-<span class="r-in"><span class="co"># argument and decimal degrees:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"ggOceanMapsData"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># The easiest way to produce a map is to use the limits</span></span></span>
+<span class="r-in"><span><span class="co"># argument and decimal degrees:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"ggOceanMapsData"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: ggOceanMapsData</span>
 <span class="r-plt img"><img src="basemap-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Bathymetry and glaciers can be added using the respective arguments:</span></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="op">-</span><span class="fl">60</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Bathymetry and glaciers can be added using the respective arguments:</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="op">-</span><span class="fl">60</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="basemap-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"><span class="co"># The easiest way to add data on the maps is to use the ggspatial functions:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">150</span>, <span class="fl">150</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in"><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># The easiest way to add data on the maps is to use the ggspatial functions:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">150</span>, <span class="fl">150</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Assuming `crs = 4326` in stat_spatial_identity()</span>
 <span class="r-plt img"><img src="basemap-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># Note that writing out data = dt is required because there are multiple</span></span>
-<span class="r-in"><span class="co"># underlying ggplot layers plotted already:</span></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in"><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_point</a></span><span class="op">(</span><span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co">#&gt; Error: `mapping` must be created by `aes()`</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># If you want to use native ggplot commands, you need to transform your data</span></span>
-<span class="r-in"><span class="co"># to the projection used by the map:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"ggOceanMapsData"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="va">dt</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon.proj</span>, y <span class="op">=</span> <span class="va">lat.proj</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># Note that writing out data = dt is required because there are multiple</span></span></span>
+<span class="r-in"><span><span class="co"># underlying ggplot layers plotted already:</span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_point</a></span><span class="op">(</span><span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; Error: `mapping` must be created by `aes()`</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># If you want to use native ggplot commands, you need to transform your data</span></span></span>
+<span class="r-in"><span><span class="co"># to the projection used by the map:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"ggOceanMapsData"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="va">dt</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon.proj</span>, y <span class="op">=</span> <span class="va">lat.proj</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-plt img"><img src="basemap-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># The limits argument of length 4 plots a map anywhere in the world:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># The limits argument of length 4 plots a map anywhere in the world:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="basemap-5.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># The argument leads to expanded maps towards poles:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>, <span class="fl">160</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">160</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">80</span>, <span class="fl">60</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">160</span>, <span class="op">-</span><span class="fl">160</span>, <span class="fl">60</span>, <span class="fl">80</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in"><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_polygon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>,</span>
-<span class="r-in">fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The argument leads to expanded maps towards poles:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>, <span class="fl">160</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">160</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">80</span>, <span class="fl">60</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">160</span>, <span class="op">-</span><span class="fl">160</span>, <span class="fl">60</span>, <span class="fl">80</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_polygon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Assuming `crs = 4326` in stat_spatial_identity()</span>
 <span class="r-plt img"><img src="basemap-6.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># The limits are further expanded when using the data argument:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in"><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_polygon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>,</span>
-<span class="r-in">fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The limits are further expanded when using the data argument:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_polygon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Assuming `crs = 4326` in stat_spatial_identity()</span>
 <span class="r-plt img"><img src="basemap-7.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Rotate:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in"><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_polygon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>,</span>
-<span class="r-in">                    fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Rotate:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_polygon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Assuming `crs = 4326` in stat_spatial_identity()</span>
 <span class="r-plt img"><img src="basemap-8.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## To find UTM coordinates to limit a polar map:</span></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fl">60</span>, projection.grid <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## To find UTM coordinates to limit a polar map:</span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fl">60</span>, projection.grid <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="basemap-9.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5e4</span>, <span class="op">-</span><span class="fl">2.5e6</span>, <span class="fl">2e6</span>, <span class="op">-</span><span class="fl">2.5e5</span><span class="op">)</span>, shapefiles <span class="op">=</span> <span class="st">"Arctic"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5e4</span>, <span class="op">-</span><span class="fl">2.5e6</span>, <span class="fl">2e6</span>, <span class="op">-</span><span class="fl">2.5e5</span><span class="op">)</span>, shapefiles <span class="op">=</span> <span class="st">"Arctic"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="basemap-10.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Using custom shapefiles</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">bs_shapes</span>, package <span class="op">=</span> <span class="st">"ggOceanMapsData"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">bs_land</span>, glacier <span class="op">=</span> <span class="cn">NULL</span>, bathy <span class="op">=</span> <span class="va">bs_bathy</span><span class="op">)</span>,</span>
-<span class="r-in">bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Using custom shapefiles</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">bs_shapes</span>, package <span class="op">=</span> <span class="st">"ggOceanMapsData"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">bs_land</span>, glacier <span class="op">=</span> <span class="cn">NULL</span>, bathy <span class="op">=</span> <span class="va">bs_bathy</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="basemap-11.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># grid.col = NA removes grid lines, rotate = TRUE rotates northwards</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">140</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>, grid.col <span class="op">=</span> <span class="cn">NA</span>, rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># grid.col = NA removes grid lines, rotate = TRUE rotates northwards</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">140</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>, grid.col <span class="op">=</span> <span class="cn">NA</span>, rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="basemap-12.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Rename axis labels</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">140</span>, <span class="op">-</span><span class="fl">105</span>, <span class="fl">20</span>, <span class="fl">40</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Lat"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Rename axis labels</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">140</span>, <span class="op">-</span><span class="fl">105</span>, <span class="fl">20</span>, <span class="fl">40</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Lat"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="basemap-13.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Remove axis labels</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span>, <span class="fl">68</span>, <span class="fl">80</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Remove axis labels</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span>, <span class="fl">68</span>, <span class="fl">80</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="basemap-14.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span>, <span class="fl">68</span>, <span class="fl">80</span><span class="op">)</span>, rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">      axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">      axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">      axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in">      <span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span>, <span class="fl">68</span>, <span class="fl">80</span><span class="op">)</span>, rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
 <span class="r-plt img"><img src="basemap-15.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -308,7 +350,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

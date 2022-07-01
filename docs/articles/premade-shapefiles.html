@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggOceanMaps</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.14</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/ggOceanMaps.html">Get started</a>
 </li>
@@ -50,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -67,7 +63,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/MikkoVihtakari/ggOceanMaps/">
+  <a href="https://github.com/MikkoVihtakari/ggOceanMaps/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -82,15 +78,16 @@
 
       
 
-      </header><script src="premade-shapefiles_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pre-made shapefiles</h1>
-                        <h4 class="author">Mikko Vihtakari (Institute of Marine Research)</h4>
+                        <h4 data-toc-skip class="author">Mikko Vihtakari
+(Institute of Marine Research)</h4>
             
-            <h4 class="date">29 May, 2021</h4>
+            <h4 data-toc-skip class="date">01 July, 2022</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/vignettes/premade-shapefiles.Rmd"><code>vignettes/premade-shapefiles.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/premade-shapefiles.Rmd" class="external-link"><code>vignettes/premade-shapefiles.Rmd</code></a></small>
       <div class="hidden name"><code>premade-shapefiles.Rmd</code></div>
 
     </div>
@@ -98,190 +95,203 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/">ggOceanMaps</a></span><span class="op">)</span></code></pre></div>
-<p>Shapefiles used by this package are stored in two places: 1) the low-resolution shapefiles used frequently are stored in the <a href="https://github.com/MikkoVihtakari/ggOceanMapsData">ggOceanMapsData</a> package which should be installed automatically together with ggOceanMaps. 2) High-resolution shapefiles of selected locations are stored in the <a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData">ggOceanMapsLargeData</a> repository and downloaded automatically as needed. This document describes how each of the shapefiles is created.</p>
-<div id="low-resolution-shapefiles-in-ggoceanmapdata" class="section level1">
-<h1 class="hasAnchor">
-<a href="#low-resolution-shapefiles-in-ggoceanmapdata" class="anchor"></a>1. Low-resolution shapefiles in ggOceanMapData</h1>
-<p>Download the datasets specified in <a href="#data-sources">Data sources</a> to folders on your computer. Replace the paths under with the correct folder paths on your computer.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/" class="external-link">ggOceanMaps</a></span><span class="op">)</span></span></code></pre></div>
+<p>Shapefiles used by this package are stored in two places: 1) the
+low-resolution shapefiles used frequently are stored in the <a href="https://github.com/MikkoVihtakari/ggOceanMapsData" class="external-link">ggOceanMapsData</a>
+package which should be installed automatically together with
+ggOceanMaps. 2) High-resolution shapefiles of selected locations are
+stored in the <a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData" class="external-link">ggOceanMapsLargeData</a>
+repository and downloaded automatically as needed. This document
+describes how each of the shapefiles is created.</p>
+<div class="section level2">
+<h2 id="low-resolution-shapefiles-in-ggoceanmapdata">1. Low-resolution shapefiles in ggOceanMapData<a class="anchor" aria-label="anchor" href="#low-resolution-shapefiles-in-ggoceanmapdata"></a>
+</h2>
+<p>Download the datasets specified in <a href="#data-sources">Data
+sources</a> to folders on your computer. Replace the paths under with
+the correct folder paths on your computer.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">etopoPath</span> <span class="op">&lt;-</span> <span class="st">""</span>
-<span class="va">NEDPath</span> <span class="op">&lt;-</span> <span class="st">""</span>
-<span class="va">outPath</span> <span class="op">&lt;-</span> <span class="st">""</span></code></pre></div>
-<p>Define the the <a href="https://mgimond.github.io/Spatial/coordinate-systems-in-r.html">coordinate reference systems</a>.</p>
+<code class="sourceCode R"><span><span class="va">etopoPath</span> <span class="op">&lt;-</span> <span class="st">""</span></span>
+<span><span class="va">NEDPath</span> <span class="op">&lt;-</span> <span class="st">""</span></span>
+<span><span class="va">outPath</span> <span class="op">&lt;-</span> <span class="st">""</span></span></code></pre></div>
+<p>Define the the <a href="https://mgimond.github.io/Spatial/coordinate-systems-in-r.html" class="external-link">coordinate
+reference systems</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">arcticCRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Arctic"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span>
-<span class="va">antarcticCRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Antarctic"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span>
-<span class="va">ddCRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Decimal"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span></code></pre></div>
-<div id="decimal-degrees" class="section level2">
-<h2 class="hasAnchor">
-<a href="#decimal-degrees" class="anchor"></a>Decimal degrees</h2>
+<code class="sourceCode R"><span><span class="va">arcticCRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Arctic"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span></span>
+<span><span class="va">antarcticCRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Antarctic"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span></span>
+<span><span class="va">ddCRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Decimal"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="decimal-degrees">Decimal degrees<a class="anchor" aria-label="anchor" href="#decimal-degrees"></a>
+</h3>
 <p>Bathymetry:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span>
-  bathy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">etopoPath</span>, <span class="st">"ETOPO1_Ice_g_gmt4.grd"</span><span class="op">)</span>,
-  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">300</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, <span class="fl">4000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, 
-  proj.out <span class="op">=</span> <span class="va">ddCRS</span>, 
-  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180.0083</span>, <span class="fl">180.0083</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span><span class="op">)</span>, 
-  aggregation.factor <span class="op">=</span> <span class="fl">6</span>
-<span class="op">)</span>
-
-<span class="va">dd_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span>, drop.crumbs <span class="op">=</span> <span class="fl">50</span>, remove.holes <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">dd_bathy</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/dd_bathy.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span></span>
+<span>  bathy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">etopoPath</span>, <span class="st">"ETOPO1_Ice_g_gmt4.grd"</span><span class="op">)</span>,</span>
+<span>  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">300</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, <span class="fl">4000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, </span>
+<span>  proj.out <span class="op">=</span> <span class="va">ddCRS</span>, </span>
+<span>  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180.0083</span>, <span class="fl">180.0083</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span><span class="op">)</span>, </span>
+<span>  aggregation.factor <span class="op">=</span> <span class="fl">6</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dd_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span>, drop.crumbs <span class="op">=</span> <span class="fl">50</span>, remove.holes <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">dd_bathy</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/dd_bathy.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></span></code></pre></div>
 <p>Land:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_land/ne_10m_land.shp"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">islands</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_minor_islands/ne_10m_minor_islands.shp"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">world</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">islands</span><span class="op">)</span>
-
-<span class="va">dd_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">world</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">dd_land</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/dd_land.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_land/ne_10m_land.shp"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">islands</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_minor_islands/ne_10m_minor_islands.shp"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">islands</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dd_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">world</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">dd_land</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/dd_land.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></span></code></pre></div>
 <p>Glaciers:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_glaciated_areas/ne_10m_glaciated_areas.shp"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">iceshelves</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_antarctic_ice_shelves_polys/ne_10m_antarctic_ice_shelves_polys.shp"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/coerce-methods.html">as_Spatial</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">glaciers</span>, <span class="va">iceshelves</span><span class="op">)</span><span class="op">)</span>
-<span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">glaciers</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-
-<span class="va">dd_glacier</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">glaciers</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span>
-<span class="va">dd_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">dd_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>
-<span class="va">dd_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">dd_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">dd_glacier</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/dd_glacier.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_glaciated_areas/ne_10m_glaciated_areas.shp"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">iceshelves</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_antarctic_ice_shelves_polys/ne_10m_antarctic_ice_shelves_polys.shp"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/coerce-methods.html" class="external-link">as_Spatial</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">glaciers</span>, <span class="va">iceshelves</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">glaciers</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dd_glacier</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">glaciers</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dd_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">dd_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="va">dd_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">dd_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">dd_glacier</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/dd_glacier.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="arctic-stereographic" class="section level2">
-<h2 class="hasAnchor">
-<a href="#arctic-stereographic" class="anchor"></a>Arctic stereographic</h2>
+<div class="section level3">
+<h3 id="arctic-stereographic">Arctic stereographic<a class="anchor" aria-label="anchor" href="#arctic-stereographic"></a>
+</h3>
 <p>Bathymetry:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span>
-  bathy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">etopoPath</span>, <span class="st">"ETOPO1_Ice_g_gmt4.grd"</span><span class="op">)</span>, 
-  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">300</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, <span class="fl">4000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, 
-  proj.out <span class="op">=</span> <span class="va">arcticCRS</span>, 
-  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180.0083</span>, <span class="fl">180.0083</span>, <span class="fl">30</span>, <span class="fl">90</span><span class="op">)</span>, 
-  aggregation.factor <span class="op">=</span> <span class="fl">2</span>
-<span class="op">)</span>
-
-<span class="va">arctic_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">arctic_bathy</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/arctic_bathy.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span></span>
+<span>  bathy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">etopoPath</span>, <span class="st">"ETOPO1_Ice_g_gmt4.grd"</span><span class="op">)</span>, </span>
+<span>  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">300</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, <span class="fl">4000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, </span>
+<span>  proj.out <span class="op">=</span> <span class="va">arcticCRS</span>, </span>
+<span>  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180.0083</span>, <span class="fl">180.0083</span>, <span class="fl">30</span>, <span class="fl">90</span><span class="op">)</span>, </span>
+<span>  aggregation.factor <span class="op">=</span> <span class="fl">2</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">arctic_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">arctic_bathy</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/arctic_bathy.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></span></code></pre></div>
 <p>Land:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">arctic_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">world</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">30</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span>
-<span class="va">arctic_land</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html">spTransform</a></span><span class="op">(</span><span class="va">arctic_land</span>, <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">CRS</a></span><span class="op">(</span><span class="va">arcticCRS</span><span class="op">)</span><span class="op">)</span>
-<span class="va">arctic_land</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">arctic_land</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">arctic_land</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/arctic_land.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">arctic_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">world</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">30</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">arctic_land</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html" class="external-link">spTransform</a></span><span class="op">(</span><span class="va">arctic_land</span>, <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html" class="external-link">CRS</a></span><span class="op">(</span><span class="va">arcticCRS</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">arctic_land</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">arctic_land</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">arctic_land</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/arctic_land.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></span></code></pre></div>
 <p>Glaciers:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">arctic_glacier</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">glaciers</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">40</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span>
-<span class="va">arctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html">spTransform</a></span><span class="op">(</span><span class="va">arctic_glacier</span>, <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">CRS</a></span><span class="op">(</span><span class="va">arcticCRS</span><span class="op">)</span><span class="op">)</span>
-<span class="va">arctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">arctic_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
-<span class="va">arctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">arctic_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="op">-</span><span class="fl">1000</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">arctic_glacier</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/arctic_glacier.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">arctic_glacier</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">glaciers</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">40</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">arctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html" class="external-link">spTransform</a></span><span class="op">(</span><span class="va">arctic_glacier</span>, <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html" class="external-link">CRS</a></span><span class="op">(</span><span class="va">arcticCRS</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">arctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">arctic_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">arctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">arctic_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="op">-</span><span class="fl">1000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">arctic_glacier</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/arctic_glacier.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="antarctic-steregraphic" class="section level2">
-<h2 class="hasAnchor">
-<a href="#antarctic-steregraphic" class="anchor"></a>Antarctic steregraphic</h2>
+<div class="section level3">
+<h3 id="antarctic-steregraphic">Antarctic steregraphic<a class="anchor" aria-label="anchor" href="#antarctic-steregraphic"></a>
+</h3>
 <p>Bathymetry:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span>
-  bathy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">etopoPath</span>, <span class="st">"ETOPO1_Ice_g_gmt4.grd"</span><span class="op">)</span>, 
-  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">300</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, <span class="fl">4000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, 
-  proj.out <span class="op">=</span> <span class="va">antarcticCRS</span>, 
-  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180.0083</span>, <span class="fl">180.0083</span>, <span class="op">-</span><span class="fl">80</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>, 
-  aggregation.factor <span class="op">=</span> <span class="fl">2</span>
-<span class="op">)</span>
-
-<span class="va">antarctic_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">antarctic_bathy</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/antarctic_bathy.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span></span>
+<span>  bathy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">etopoPath</span>, <span class="st">"ETOPO1_Ice_g_gmt4.grd"</span><span class="op">)</span>, </span>
+<span>  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">300</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, <span class="fl">4000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, </span>
+<span>  proj.out <span class="op">=</span> <span class="va">antarcticCRS</span>, </span>
+<span>  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180.0083</span>, <span class="fl">180.0083</span>, <span class="op">-</span><span class="fl">80</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span>, </span>
+<span>  aggregation.factor <span class="op">=</span> <span class="fl">2</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">antarctic_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">antarctic_bathy</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/antarctic_bathy.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></span></code></pre></div>
 <p>Land:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">antarctic_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">world</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
-<span class="va">antarctic_land</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html">spTransform</a></span><span class="op">(</span><span class="va">antarctic_land</span>, <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">CRS</a></span><span class="op">(</span><span class="va">antarcticCRS</span><span class="op">)</span><span class="op">)</span>
-<span class="va">antarctic_land</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">antarctic_land</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">antarctic_land</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/antarctic_land.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">antarctic_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">world</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">antarctic_land</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html" class="external-link">spTransform</a></span><span class="op">(</span><span class="va">antarctic_land</span>, <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html" class="external-link">CRS</a></span><span class="op">(</span><span class="va">antarcticCRS</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">antarctic_land</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">antarctic_land</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">antarctic_land</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/antarctic_land.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></span></code></pre></div>
 <p>Glaciers:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">antarctic_glacier</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">glaciers</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
-<span class="va">antarctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html">spTransform</a></span><span class="op">(</span><span class="va">antarctic_glacier</span>, <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">CRS</a></span><span class="op">(</span><span class="va">antarcticCRS</span><span class="op">)</span><span class="op">)</span>
-<span class="va">antarctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">antarctic_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
-<span class="va">antarctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">antarctic_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="op">-</span><span class="fl">1000</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">antarctic_glacier</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/antarctic_glacier.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">antarctic_glacier</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">glaciers</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="op">-</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">antarctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html" class="external-link">spTransform</a></span><span class="op">(</span><span class="va">antarctic_glacier</span>, <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html" class="external-link">CRS</a></span><span class="op">(</span><span class="va">antarcticCRS</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">antarctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">antarctic_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">antarctic_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">antarctic_glacier</span>, byid <span class="op">=</span> <span class="cn">FALSE</span>, width <span class="op">=</span> <span class="op">-</span><span class="fl">1000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">antarctic_glacier</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsData/antarctic_glacier.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div id="high-resolution-shapefiles-in-ggoceanmapslargedata" class="section level1">
-<h1 class="hasAnchor">
-<a href="#high-resolution-shapefiles-in-ggoceanmapslargedata" class="anchor"></a>2. High-resolution shapefiles in ggOceanMapsLargeData</h1>
-<div id="barents-sea" class="section level2">
-<h2 class="hasAnchor">
-<a href="#barents-sea" class="anchor"></a>Barents Sea</h2>
+<div class="section level2">
+<h2 id="high-resolution-shapefiles-in-ggoceanmapslargedata">2. High-resolution shapefiles in ggOceanMapsLargeData<a class="anchor" aria-label="anchor" href="#high-resolution-shapefiles-in-ggoceanmapslargedata"></a>
+</h2>
+<div class="section level3">
+<h3 id="barents-sea">Barents Sea<a class="anchor" aria-label="anchor" href="#barents-sea"></a>
+</h3>
 <p>Bathymetry:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bound.limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">25</span>, <span class="fl">75</span>, <span class="fl">65</span>, <span class="fl">84</span><span class="op">)</span>
-
-<span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span>
-  bathy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">gebcoPath</span>, <span class="st">"GEBCO_2020.nc"</span><span class="op">)</span>, 
-  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">400</span>, <span class="fl">500</span>, <span class="fl">750</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, 
-             <span class="fl">3000</span>, <span class="fl">4000</span>, <span class="fl">5000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, 
-  proj.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Barents"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span>, 
-  boundary <span class="op">=</span> <span class="va">bound.limits</span>
-<span class="op">)</span>
-
-<span class="va">barentssea_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">bound.limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">25</span>, <span class="fl">75</span>, <span class="fl">65</span>, <span class="fl">84</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span></span>
+<span>  bathy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">gebcoPath</span>, <span class="st">"GEBCO_2020.nc"</span><span class="op">)</span>, </span>
+<span>  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">400</span>, <span class="fl">500</span>, <span class="fl">750</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, </span>
+<span>             <span class="fl">3000</span>, <span class="fl">4000</span>, <span class="fl">5000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, </span>
+<span>  proj.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Barents"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span>, </span>
+<span>  boundary <span class="op">=</span> <span class="va">bound.limits</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">barentssea_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span></span></code></pre></div>
 <p>Land:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">barentssea_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">bound.limits</span><span class="op">)</span>
-<span class="va">barentssea_land</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html">spTransform</a></span><span class="op">(</span>
-  <span class="va">barentssea_land</span>, 
-  <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">CRS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Barents"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="va">barentssea_land</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">barentssea_land</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">barentssea_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">bound.limits</span><span class="op">)</span></span>
+<span><span class="va">barentssea_land</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html" class="external-link">spTransform</a></span><span class="op">(</span></span>
+<span>  <span class="va">barentssea_land</span>, </span>
+<span>  <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html" class="external-link">CRS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Barents"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">barentssea_land</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">barentssea_land</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <p>Glaciers:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">barentssea_glacier</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">glaciers</span>, <span class="va">bound.limits</span><span class="op">)</span>
-<span class="va">barentssea_glacier</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html">spTransform</a></span><span class="op">(</span>
-  <span class="va">barentssea_glacier</span>, 
-  <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html">CRS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Barents"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="va">barentssea_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html">gBuffer</a></span><span class="op">(</span><span class="va">barentssea_glacier</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">barentssea_glacier</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">glaciers</span>, <span class="va">bound.limits</span><span class="op">)</span></span>
+<span><span class="va">barentssea_glacier</span> <span class="op">&lt;-</span> <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/spTransform.html" class="external-link">spTransform</a></span><span class="op">(</span></span>
+<span>  <span class="va">barentssea_glacier</span>, </span>
+<span>  <span class="fu">sp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sp/man/CRS-class.html" class="external-link">CRS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"EPSG:"</span>, <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Barents"</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">barentssea_glacier</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">barentssea_glacier</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <p>Save the data</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">barentssea_land</span>, <span class="va">barentssea_glacier</span>, <span class="va">barentssea_bathy</span>,
-     file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsLargeData/barentssea.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,
-     compress <span class="op">=</span> <span class="st">"xz"</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">barentssea_land</span>, <span class="va">barentssea_glacier</span>, <span class="va">barentssea_bathy</span>,</span>
+<span>     file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsLargeData/barentssea.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,</span>
+<span>     compress <span class="op">=</span> <span class="st">"xz"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="high-resolution-arctic-stereographic" class="section level2">
-<h2 class="hasAnchor">
-<a href="#high-resolution-arctic-stereographic" class="anchor"></a>High resolution Arctic stereographic</h2>
+<div class="section level3">
+<h3 id="high-resolution-arctic-stereographic">High resolution Arctic stereographic<a class="anchor" aria-label="anchor" href="#high-resolution-arctic-stereographic"></a>
+</h3>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span>
-  bathy <span class="op">=</span> <span class="st">"/Users/a22357/Downloads/IBCAO_v4_200m.nc"</span>, 
-  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">400</span>, <span class="fl">500</span>, <span class="fl">750</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, 
-             <span class="fl">3000</span>, <span class="fl">4000</span>, <span class="fl">5000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, 
-  proj.bathy <span class="op">=</span> <span class="st">"EPSG:3996"</span>
-<span class="op">)</span>
-
-<span class="va">ibcao_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">ibcao_bathy</span>, 
-     file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsLargeData/ibcao_bathy.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,
-     compress <span class="op">=</span> <span class="st">"xz"</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span></span>
+<span>  bathy <span class="op">=</span> <span class="st">"/Users/a22357/Downloads/IBCAO_v4_200m.nc"</span>, </span>
+<span>  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">400</span>, <span class="fl">500</span>, <span class="fl">750</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, </span>
+<span>             <span class="fl">3000</span>, <span class="fl">4000</span>, <span class="fl">5000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, </span>
+<span>  proj.bathy <span class="op">=</span> <span class="st">"EPSG:3996"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ibcao_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">ibcao_bathy</span>, </span>
+<span>     file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"ggOceanMapsLargeData/ibcao_bathy.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,</span>
+<span>     compress <span class="op">=</span> <span class="st">"xz"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div id="data-sources" class="section level1">
-<h1 class="hasAnchor">
-<a href="#data-sources" class="anchor"></a>Data sources</h1>
-<p>The data used by the package are not the property of the Institute of Marine Research nor the author of the package. It is, therefore, important that you cite the data sources used in a map you generate with the package. Please see <a href="https://mikkovihtakari.github.io/ggOceanMaps/#citations-and-data-sources">here</a> for a list of data sources.</p>
+<div class="section level2">
+<h2 id="data-sources">Data sources<a class="anchor" aria-label="anchor" href="#data-sources"></a>
+</h2>
+<p>The data used by the package are not the property of the Institute of
+Marine Research nor the author of the package. It is, therefore,
+important that you cite the data sources used in a map you generate with
+the package. Please see <a href="https://mikkovihtakari.github.io/ggOceanMaps/#citations-and-data-sources" class="external-link">here</a>
+for a list of data sources.</p>
 </div>
   </div>
 
@@ -296,11 +306,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Mikko Vihtakari.</p>
+  <p></p>
+<p>Developed by Mikko Vihtakari.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>
@@ -308,6 +320,8 @@
 
   
 
+
+  
 
   </body>
 </html>

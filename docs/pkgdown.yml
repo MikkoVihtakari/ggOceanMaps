@@ -1,8 +1,8 @@
-pandoc: 2.11.4
-pkgdown: 2.0.1
+pandoc: 2.17.1.1
+pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   ggOceanMaps: ggOceanMaps.html
   premade-shapefiles: premade-shapefiles.html
-last_built: 2022-01-10T08:55Z
+last_built: 2022-07-01T13:40Z
 

@@ -62,9 +62,7 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
 \item{legend.position}{The position for ggplot2 legend. See the argument with the same name in \link[ggplot2]{theme}.}
 
-\item{lon.interval}{Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.}
-
-\item{lat.interval}{Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.}
+\item{lon.interval, lat.interval}{Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.}
 
 \item{bathy.style}{Character defining the style for bathymetry contours. Alternatives:
 \itemize{
@@ -74,25 +72,11 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 \item \code{"contour_grey"} plots gray contour lines.
 }}
 
-\item{bathy.border.col}{Character code specifying the color of the border line for land, glacier, and bathymetry shapes.}
+\item{land.col, gla.col, grid.col}{Character code specifying the color of land, glaciers and grid lines, respectively. Use \code{NA} to remove the grid lines.}
 
-\item{bathy.size}{Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the \code{\link{LS}} function for a specific width in pt. See Details.}
+\item{land.border.col, gla.border.col, bathy.border.col}{Character code specifying the color of the border line for land, glacier, and bathymetry shapes.}
 
-\item{land.col}{Character code specifying the color of land, glaciers and grid lines, respectively. Use \code{NA} to remove the grid lines.}
-
-\item{land.border.col}{Character code specifying the color of the border line for land, glacier, and bathymetry shapes.}
-
-\item{land.size}{Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the \code{\link{LS}} function for a specific width in pt. See Details.}
-
-\item{gla.col}{Character code specifying the color of land, glaciers and grid lines, respectively. Use \code{NA} to remove the grid lines.}
-
-\item{gla.border.col}{Character code specifying the color of the border line for land, glacier, and bathymetry shapes.}
-
-\item{gla.size}{Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the \code{\link{LS}} function for a specific width in pt. See Details.}
-
-\item{grid.col}{Character code specifying the color of land, glaciers and grid lines, respectively. Use \code{NA} to remove the grid lines.}
-
-\item{grid.size}{Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the \code{\link{LS}} function for a specific width in pt. See Details.}
+\item{land.size, gla.size, bathy.size, grid.size}{Numeric value specifying the width of the border line land, glacier and bathymetry shapes as well as the grid lines, respectively. Use the \code{\link{LS}} function for a specific width in pt. See Details.}
 
 \item{base_size}{Base size parameter for ggplot. See \link[ggplot2]{ggtheme}.}
 
