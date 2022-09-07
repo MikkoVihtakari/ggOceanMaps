@@ -19,61 +19,61 @@
 #' @export
 
 # bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = convert_crs("3996"); proj.bathy = convert_crs("3996"), file.name = NULL; boundary = c(-180.0083, 180.0083, -90, 90); aggregation.factor = 6
-
+# bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = arcticCRS; boundary = c(-180.0083, 180.0083, 30, 90); aggregation.factor = 2; file.name = NULL; verbose = TRUE
 raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy, boundary = NULL, file.name = NULL, aggregation.factor = NA, verbose = TRUE) {
-
+  
   # Progress bar ####
-
+  
   pb <- utils::txtProgressBar(min = 0, max = 6, initial = 0, style = 3)
-
+  
   ## General checks ####
-
+  
   ### Bathy argument
-
+  
   if(!inherits(bathy, "RasterLayer")) {
     if(!file.exists(bathy)) stop("Bathy raster file not found. Check the path in the bathy argument.")
   }
-
+  
   ### The depths argument
-
+  
   if(!(is.vector(depths) & inherits(depths, c("numeric", "integer")))) {
     stop("The depths parameter has to be a numeric or integer vector.")
   }
-
+  
   ### The boundary argument
-
+  
   if(!is.null(boundary)) {
-
+    
     #### If spatialpolygons
     if(any(grepl("spatialpolygons|sf", class(boundary), ignore.case = TRUE))) {
-
+      
       if(is.na(sf::st_crs(boundary))) {
         stop("boundary does not contain argument.")
       } else if(!sf::st_is_longlat(boundary)) {
         stop("boundary has to be defined as decimal degrees")
       }
-
+      
       #### If file
     } else if(is.character(boundary) & length(boundary) == 1) {
       if(!file.exists(boundary)) stop("Boundary shapefile not found. Check your path")
-
+      
       boundary <- sf::st_read(boundary, quiet = TRUE)
-
+      
       if(is.na(sf::st_crs(boundary))) {
         stop("boundary does not have a defined CRS.")
       } else if(!sf::st_is_longlat(boundary)) {
         stop("boundary has to be defined as decimal degrees")
       }
-
+      
     } else if(!(is.vector(boundary) & class(boundary) %in% c("numeric", "integer") & length(boundary) == 4)) {
       stop("The boundary parameter has to be a numeric/integer vector of length 4 giving the decimal degree longitude and latitude limits for the strata region OR a character argument giving the location of the shapefile polygon.")
     }
   }
-
+  
   utils::setTxtProgressBar(pb, 1)
-
+  
   ## Open raster ###
-
+  
   if(inherits(bathy, "RasterLayer")) {
     ras <- bathy
   } else {
@@ -83,76 +83,83 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy, bounda
       ras <- suppressMessages(raster::raster(bathy))
     }
   }
-
+  
   utils::setTxtProgressBar(pb, 2)
-
+  
   if(missing(proj.bathy)) {
     proj.bathy <- convert_crs(4326)
   }
-
+  
   if(is.na(sf::st_crs(ras))) {
     if(verbose) message(paste0("bathy does not contain coordinate reference information. Using ", proj.bathy, ". Adjust this setting by changing the proj.bathy argument"))
     raster::crs(ras) <- raster::crs(proj.bathy)
   }
-
+  
   if(!is.null(boundary)) {
-
+    
     ras <- raster::crop(ras, raster::extent(boundary))
-
+    
     if(grepl("spatialpolygons|sf", class(boundary), ignore.case = TRUE)) {
       ras <- raster::mask(ras, boundary)
     }
   }
-
+  
   utils::setTxtProgressBar(pb, 3)
-
+  
   ## Set proj.out (if not set)
-
+  
   if(is.null(proj.out) & !is.na(raster::crs(ras))) {
     proj.out <- raster::crs(ras)
   }
-
+  
   ## Aggregate (reduce size) ####
-
+  
   if(!is.na(aggregation.factor)) ras <- raster::aggregate(ras, fact = aggregation.factor)
-
+  
   utils::setTxtProgressBar(pb, 4)
-
+  
   ## Project the raster ####
-
+  
   if(sf::st_crs(ras) != sf::st_crs(proj.out)) {
     ras <- raster::projectRaster(from = ras, crs = raster::crs(proj.out))
   }
-
+  
   utils::setTxtProgressBar(pb, 5)
-
+  
   ## Reclassify raster ####
-
+  
   if(all(depths >= 0)) depths <- sort(-1 * depths)
-
+  
   depths <- sort(unique(c(-Inf, depths, 0, Inf)))
-
+  
   cut_int <- paste(abs(depths[-1]), abs(depths[-length(depths)]), sep = "-")
-
-  cut_df <- data.frame(from = depths[-length(depths)],
-                       to = depths[-1],
-                       average = sapply(strsplit(cut_int, "-"), function(k) mean(as.numeric(k))),
-                       interval = cut_int,
-                       stringsAsFactors = FALSE)
-
+  
+  cut_df <- data.frame(
+    from = depths[-length(depths)],
+    to = depths[-1],
+    average = sapply(strsplit(cut_int, "-"), function(k) mean(as.numeric(k))),
+    interval = cut_int,
+    stringsAsFactors = FALSE
+  )
+  
   cut_df[nrow(cut_df), "average"] <- NA
-
+  
   cut_matrix <- as.matrix(cut_df[-ncol(cut_df)])
-
-  r <- raster::reclassify(ras, rcl = cut_matrix, right = NA, filename = ifelse(is.null(file.name), '', paste0(file.name, ".grd")))
-
+  
+  r <- raster::reclassify(
+    ras, 
+    rcl = cut_matrix,
+    right = NA, 
+    filename = ifelse(is.null(file.name), '', paste0(file.name, ".grd"))
+    )
+  
   utils::setTxtProgressBar(pb, 6)
-
+  
   ## Return
-
+  
   out <- list(raster = r, depth.invervals = cut_df)
-
+  
   class(out) <- "bathyRaster"
-
+  
   out
 }

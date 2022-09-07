@@ -54,11 +54,11 @@ map_cmd <- function(command, alternative = FALSE) {
       scale_x_continuous(breaks = X$map.grid$lon.breaks, expand = c(0,0.1)) +
       labs(y = "Latitude (decimal degrees)", x = "Longitude (decimal degrees)") + {
         if(packageVersion("ggplot2") > "3.3.3")
-        coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4],
+        coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], 
                  default_crs = NULL, crs = sf::st_crs(X$proj), default = TRUE)
       } + {
         if(packageVersion("ggplot2") <= "3.3.3") 
-        coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4],
+        coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], 
                  crs = sf::st_crs(X$proj), default = TRUE)
       } +
       theme_map(base_size = base_size, grid.col = grid.col, grid.size = grid.size) +

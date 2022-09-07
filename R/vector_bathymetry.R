@@ -23,7 +23,7 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
 
   ### Bathy argument
 
-  if(inherits(bathy, "bathyRaster")) stop("bathy has to be output from the raster_bathymetry function.")
+  if(!inherits(bathy, "bathyRaster")) stop("bathy has to be output from the raster_bathymetry function.")
   if(is.na(sf::st_crs(bathy$raster))) stop("bathy does not contain coordinate reference information")
 
   ### The drop.crumbs argument
