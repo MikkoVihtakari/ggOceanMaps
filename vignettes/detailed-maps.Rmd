@@ -1,0 +1,104 @@
+---
+title: "Detailed maps"
+author: "Mikko Vihtakari (Institute of Marine Research)"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  rmarkdown::html_vignette:
+    toc_depth: 6
+vignette: >
+  %\VignetteIndexEntry{detailed-maps}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+library(knitr)
+knitr::opts_chunk$set(collapse = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      eval = FALSE,
+                      comment = "#>"
+)
+
+```
+
+```{r setup, eval = TRUE, include = FALSE}
+library(ggOceanMaps)
+```
+
+# General
+
+The ggOceanMaps package contains a possibility to plot premade detailed shapefiles within limited regions the package author has needed in his work. The detailed shapefiles are stored in the [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData) repository and downloaded as needed. Available shapefiles can be viewed using the `shapefile_list()` function.
+
+```{r}
+shapefile_list("all")
+```
+
+Plotting shapefiles from the list is done as for any other shapes. Note that the projection of the shapefiles varies.
+
+```{r eval = F}
+basemap(shapefiles = "BarentsSea", bathymetry = TRUE)
+```
+
+The detailed shapefiles can be **large**. Use the standard basemap data sources to find the limits for your map before you make detailed plots. Exporting to a file is advised over plotting into the plot window. Note that the detailed shapefile approach **generally does not work for large areas**. The solution is sub-optimal and a possibility of plotting raster from WMS is under work.
+
+# Shapefiles
+
+The detailed shapefiles for time being are:
+
+## GEBCO based maps
+
+### Barents Sea
+
+The Barents Sea and surroundings vectorized from [the GEBCO grid](https://www.gebco.net/data_and_products/gridded_bathymetry_data/). A subset of IBCAO and GEBCO datasets. Use this one for speed when you can. Replace by IBCAO when your ROI is exceeding the limits of this one. 
+
+```{r eval = F}
+basemap(shapefiles = "BarentsSea", bathymetry = TRUE)
+```
+
+![](https://mikkovihtakari.github.io/PlotSvalbard/articles/PlotSvalbard_files/figure-html/bathystyle-1.png)
+
+### The Arctic (IBCAO)
+
+[The IBCAO grid (by GEBCO)](https://www.gebco.net/about_us/committees_and_groups/scrum/ibcao/) vectorized from the North Pole to approximately 60-65&deg;N. A subset of the GEBCO dataset under. Definitely use this one over the GEBCO alternative whenever you can. It is about ten times faster. 
+
+```{r eval = F}
+basemap(shapefiles = "IBCAO", bathymetry = TRUE)
+```
+
+## The Northern hemisphere (GEBCO)
+
+The entire GEBCO grid from the North Pole to 10&deg;N vectorized and packed into a >60 Mb R data file. When opened, the data take >3 Gb. This is a clumsy approach and plotting maps using this option can take a long time (up to 10 minutes on a test machine) and will make your computer to beg for mercy. Use this as the last resort and do not blame the package author that you were not warned ;)
+
+```{r eval = F}
+basemap(shapefiles = "GEBCO", bathymetry = TRUE)
+```
+
+## Geonorge based maps
+
+### Svalbard
+
+The Svalbard map from the [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package:
+
+```{r eval = F}
+basemap(shapefiles = "Svalbard", glaciers = TRUE)
+```
+
+![The PlotSvalbard maps can also be generated using ggOceanMaps with the ggOceanMapsLargeData extension. The function asks to download the data when you use it for the first time.](https://mikkovihtakari.github.io/PlotSvalbard/articles/PlotSvalbard_files/figure-html/unnamed-chunk-2-1.png)
+
+Kongsfjorden from the [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package:
+
+```{r eval = F}
+basemap(limits = c(10.9, 12.65, 78.83, 79.12), 
+        bathymetry = TRUE, shapefiles = "Svalbard",
+        legends = FALSE, glaciers = TRUE)
+```
+
+![](https://mikkovihtakari.github.io/PlotSvalbard/articles/PlotSvalbard_files/figure-html/unnamed-chunk-17-1.png)
+
+## EMODnet based maps
+
+### Northeast Atlantic
+

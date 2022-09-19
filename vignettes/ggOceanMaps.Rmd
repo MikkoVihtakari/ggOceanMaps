@@ -4,11 +4,13 @@ author: "Mikko Vihtakari (Institute of Marine Research)"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   rmarkdown::html_vignette:
-    toc_depth: 5
+    toc_depth: 6
 vignette: >
   %\VignetteIndexEntry{ggOceanMaps}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -218,37 +220,7 @@ qmap(dt, color = var, expand.factor = 1.3) # map color, zoom out
 
 ## Detailed maps
 
-Detailed shapefiles are stored in the [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData) repository and downloaded as needed. Available shapefiles can be viewed using the `shapefile_list()` function.
-
-```{r}
-shapefile_list("all")
-```
-
-Plotting shapefiles from the list is done as for any other shapes. Note that the projection of the shapefiles varies.
-
-```{r eval = F}
-basemap(shapefiles = "BarentsSea", bathymetry = TRUE)
-```
-
-![](https://mikkovihtakari.github.io/PlotSvalbard/articles/PlotSvalbard_files/figure-html/bathystyle-1.png)
-
-The Svalbard map from the [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package:
-
-```{r eval = F}
-basemap(shapefiles = "Svalbard", glaciers = TRUE)
-```
-
-![The PlotSvalbard maps can also be generated using ggOceanMaps with the ggOceanMapsLargeData extension. The function asks to download the data when you use it for the first time.](https://mikkovihtakari.github.io/PlotSvalbard/articles/PlotSvalbard_files/figure-html/unnamed-chunk-2-1.png)
-
-Kongsfjorden from the [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package:
-
-```{r eval = F}
-basemap(limits = c(10.9, 12.65, 78.83, 79.12), 
-        bathymetry = TRUE, shapefiles = "Svalbard",
-        legends = FALSE, glaciers = TRUE)
-```
-
-![](https://mikkovihtakari.github.io/PlotSvalbard/articles/PlotSvalbard_files/figure-html/unnamed-chunk-17-1.png)
+[See a separate site on how to make detailed maps](https://mikkovihtakari.github.io/ggOceanMaps/articles/detailed-maps.html). 
 
 # Advanced use
 
@@ -408,8 +380,9 @@ reorder_layers(p) +
   geom_sf(data = graticule, color = "grey70", size = LS(0.5)) + # graticules
   coord_sf(xlim = lims[1:2], ylim = lims[3:4], # redefine limits
            crs = attributes(p)$proj) +
-  geom_sf_label( # labels on top of graticules
-    data = suppressWarnings(sf::st_centroid(ices_areas)), 
+   # labels on top of graticules
+  geom_sf_label(
+    data = suppressWarnings(sf::st_centroid(sf::st_make_valid(ices_areas))), 
     aes(label = Area_Full)
   )
 ```
@@ -467,6 +440,34 @@ p +
            crs = attributes(p)$proj) 
 ```
 
+### Add a fill scale on top of bathymetry
+
+```{r eval = FALSE}
+basemap(c(-20, 15, 50, 70), bathymetry = TRUE) + 
+  annotation_spatial(ices_areas, aes(fill = Area_Full))
+#> Error in `f()`:
+# ! Insufficient values in manual scale. 75 needed but only 9 provided.
+# Run `rlang::last_error()` to see where the error occurred.
+```
+
+This error comes because ggplot does not allow two color scales with similar mapping in one plot. The issue can be evaded by using contour bathymetry:
+
+```{r}
+basemap(c(-20, 15, 50, 70), bathymetry = TRUE, 
+        bathy.style = "contour_blues", legends = FALSE) + 
+  annotation_spatial(ices_areas, aes(fill = Area_Full), alpha = 0.4) + 
+  theme(legend.position = "none")
+```
+
+Or by using the [ggnewscale](https://github.com/eliocamp/ggnewscale) package to make the data `fill` mapping disconnected from that in `basemap`:
+
+```{r}
+basemap(limits = c(-20, 15, 50, 70), bathymetry = TRUE, 
+        bathy.style = "poly_greys") +
+  ggnewscale::new_scale_fill() +
+  annotation_spatial(ices_areas, aes(fill = Area_Full), alpha = 0.4) + 
+  theme(legend.position = "none")
+```
 
 ### Custom shapefiles
 
@@ -609,31 +610,6 @@ Note also that limiting the polar stereographic maps using decimal degree longit
 
 ```{r}
 basemap(limits = c(-180, 180, -70, -60))
-```
-
-### Cannot add a fill scale when using bathymetry
-
-```{r eval = FALSE}
-basemap(limits = raster::extent(fishingAreasNor)[1:4], bathymetry = TRUE) + 
-  annotation_spatial(fishingAreasNor, aes(fill = area))
-#> Error: Continuous value supplied to discrete scale
-```
-
-This issue is because ggplot does not allow two color scales with similar mapping in one plot. The issue can be evaded by using contour bathymetry:
-
-```{r eval = FALSE}
-basemap(limits = raster::extent(fishingAreasNor)[1:4], bathymetry = TRUE, 
-        bathy.style = "contour_blues", legends = FALSE) + 
-  annotation_spatial(fishingAreasNor, aes(fill = area), alpha = 0.4) + 
-  coord_sf(expand = FALSE)
-```
-
-If you really need the polygon bathymetries, you can use the [ggnewscale](https://github.com/eliocamp/ggnewscale) package to make the data `fill` mapping disconnected from that in `basemap`:
-
-```{r eval = FALSE}
-basemap(limits = raster::extent(fishingAreasNor)[1:4], bathymetry = TRUE) +
-  ggnewscale::new_scale_fill() +
-  annotation_spatial(fishingAreasNor, aes(fill = area))
 ```
 
 # Citations and data sources

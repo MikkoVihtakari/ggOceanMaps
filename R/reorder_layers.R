@@ -6,6 +6,18 @@
 #' @family customize shapefiles
 #' @import ggplot2
 #' @author Mikko Vihtakari
+#' @examples
+#'  \donttest{
+#'  data("ices_areas", package = "ggOceanMapsData")
+#'  p <- basemap(c(-20, 15, 50, 70)) + 
+#'    annotation_spatial(ices_areas, aes(fill = Area_Full), show.legend = FALSE)
+#'  
+#'  # Polygons on top of land
+#'  p
+#'  
+#'  # Move land on top
+#'  reorder_layers(p)
+#'  }
 #' @export
 
 reorder_layers <- function(p) {

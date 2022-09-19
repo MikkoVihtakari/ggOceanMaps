@@ -225,7 +225,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   
   if(!is.null(data) & is.null(limits)) {
     
-    if("sf" %in% class(data)) { # sf data
+    if(inherits(data, c("sf", "sfc"))) { # sf data
       
       if(sf::st_is_longlat(data)) {
         limits <- sf::st_bbox(data)

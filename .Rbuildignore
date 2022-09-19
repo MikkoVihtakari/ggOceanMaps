@@ -12,3 +12,4 @@
 ^NEWS\.md$
 ^ggOceanMapsData
 ^vignettes$
+^\.DS_Store$

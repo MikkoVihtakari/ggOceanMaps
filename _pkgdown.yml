@@ -1,6 +1,8 @@
 template:
-  params:
-    bootswatch: cerulean
+  bootstrap: 5
+  bootswatch: cerulean
+  bslib:
+    primary: "#003399"
 
 reference:
 - title: Basemap functions
@@ -41,9 +43,8 @@ reference:
   desc: >
     Custom bathymetry shapes can be added using the `raster_bathymetry` and 
     `vector_bathymetry` functions in this order. The underlying data can be 
-    retrieved from the [ETOPO1](https://doi.org/10.7289/V5C8276M),
-    [GEBCO](https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html),
-    or [IBCAO](https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/)
+    retrieved from the [ETOPO1](https://doi.org/10.7289/V5C8276M) or
+    [GEBCO](https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html)
     repositories. Already existing 
     [Geonorge](https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a)
     bathymetries can be opened and added to the `shapefiles` argument as 
@@ -84,6 +85,27 @@ reference:
 - title: Shapefiles
   desc: >
     Shapefiles used by the package are stored in the 
-    [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData) package. 
+    [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData) package
+    and the [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)
+    repository. 
     These shapefiles are automatically used by the basemap function. The 
-    `basemap` function supports custom shapefiles. 
+    `basemap` function also supports custom shapefiles. 
+
+
+navbar:
+ components:
+   intro:
+    text: User manual
+    href: articles/ggOceanMaps.html
+   articles:
+    text: Articles
+    menu:
+    - text: Customising shapefiles
+    - text: Premade shapefiles
+      href: articles/premade-shapefiles.html
+    - text: -------
+    - text: Presentations
+    - text: SI2022 poster
+      href: articles/poster.html
+    - text: AeN workshop slides
+      href: https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html

@@ -1,0 +1,157 @@
+---
+title: "SI2022 poster"
+author: "Mikko Vihtakari (Institute of Marine Research)"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{poster}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+library(knitr)
+knitr::opts_chunk$set(collapse = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      eval = FALSE,
+                      comment = "#>"
+)
+
+```
+
+On this website, you can find a ggOceanMaps poster presented at the [Sharks International Conference 2022 in Valencia, Spain](https://www.si2022.org/). This site also contains references in the poster and code used to make the figures and download the example datasets. Make sure to [visit the front page](https://mikkovihtakari.github.io/ggOceanMaps/) to learn how to **install** ggOceanMaps, the [user manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html) showing how to **use** the package and the [function reference](https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html) to see practical **examples**.
+
+## The poster
+
+<a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData/blob/master/docs/SI2022_poster.pdf"><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/SI2022_poster.png" width="800" height="1133"/></a>  
+
+Click the picture to download a pdf of the poster with embedded links. 
+
+## References
+
+The numbered references in the poster:
+
+1. Vihtakari, M. ggOceanMaps: Plot Data on Oceanographic Maps using ggplot2. R package version 1.3. (2022). https://mikkovihtakari.github.io/ggOceanMaps/
+2. R Core Team. R: A Language and Environment for Statistical Computing. Version 4.2. R Foundation for Statistical Computing, Vienna, Austria. (2022). https://www.r-project.org/
+3. Wickham, H. ggplot2: Elegant Graphics for Data Analysis. (Springer-Verlag New York, 2016). https://ggplot2.tidyverse.org/
+4. Pebesma, E. Simple Features for R: Standardized Support for Spatial Vector Data. The R Journal 10, 439 (2018). https://edzer.github.io/sp/
+5. Pebesma, E. J. & Bivand, R. S. Classes and methods for spatial data in R. R News 5, 9–13 (2005). https://r-spatial.github.io/sf/
+6. Amante, C. & Eakins, B. W. ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis. NOAA Technical Memorandum NESDIS NGDC-24. https://www.doi.org/10.7289/V5C8276M
+7. GEBCO. The GEBCO Digital Atlas published by the British Oceanographic Data Centre on behalf of IOC and IHO. (2003). https://www.gebco.net/data_and_products/gridded_bathymetry_data/
+8. Natural Earth Data. https://www.naturalearthdata.com/
+9. Dunnington, D. ggspatial: Spatial Data Framework for ggplot2. R package version 1.1.6. (2022). https://paleolimbot.github.io/ggspatial/
+
+## Data
+
+Script to download data used in the poster:
+
+```{r}
+# GBIF data
+
+library(tidyverse)
+library(ggOceanMaps)
+library(rgbif)
+
+species <- c(BlueShark = "Prionace glauca", BaskingShark = "Cetorhinus maximus")
+
+GBIF <- lapply(seq_along(species), function(i) {
+  
+  message(species[i], "...")
+  
+  key <- rgbif::name_backbone(name = species[[i]])[c("canonicalName", "speciesKey")]
+  
+  rgbif::occ_search(taxonKey = key$speciesKey, return = "data", limit = 4e5, geometry = c(-20, 30, 20, 76))
+})
+
+GBIF_blue <- GBIF[[1]]$data %>% 
+  rename("lat" = "decimalLatitude", "lon" = "decimalLongitude") %>% 
+  dplyr::select(lon, lat) %>% 
+  transform_coord(bind = TRUE) %>% 
+  dist2land()
+
+GBIF_basking <- GBIF[[2]]$data %>% 
+  rename("lat" = "decimalLatitude", "lon" = "decimalLongitude") %>% 
+  dplyr::select(lon, lat) %>% 
+  transform_coord(bind = TRUE) %>% 
+  dist2land()
+
+# Dugnad for havet data
+
+DugnadForHavet <- read_delim(
+  "data/DFH_basking_shark.csv", # from: https://dugnadforhavet.no/dataportal
+  delim = ";") %>% 
+  arrange(amount) %>% 
+  filter(!is.na(longitude), !is.na(latitude)) %>% 
+  transform_coord(bind = TRUE) %>% 
+  dist2land() %>% 
+  as_tibble()
+```
+
+## Figures
+
+```{r}
+## Background map
+
+a1_h <- 841-1 # Poster height without margins (A1)
+a1_w <- 594-1.2 # Poster width without margins (A1)
+
+asp <- a1_h/a1_w # To get correct size because aspect ratio is fixed
+lon_min <- -1.5e6 # Projected coordinates
+lon_max <- 2e6 
+lat_min <- -6.5e6
+lat_max <- lat_min + asp*diff(c(lon_min, lon_max))
+
+bm <- 
+  basemap(
+    c(lon_min, lon_max, lat_min, lat_max), 
+    shapefiles = "Arctic",
+    lon.interval = 10,
+    bathymetry = TRUE,
+    legends = FALSE) +
+  theme(axis.title = element_blank()) +
+  geom_spatial_point(
+    data = DugnadForHavet,
+    aes(x = longitude, y = latitude, size = amount),
+    color = "#FF5F68", alpha = 0.8
+  ) +
+  geom_density_2d(
+    data = DugnadForHavet, contour_var = "ndensity", size = LS(1),
+    aes(x = lon.proj, y = lat.proj, color = after_stat(level))
+  ) +
+  geom_spatial_point(
+    data = GBIF_blue %>% filter(ldist > 0), 
+    aes(x = lon, y = lat), color = "#FFC95B", alpha = 0.8, size = 3
+    ) +
+  geom_density_2d(
+    data = GBIF_blue, contour_var = "ndensity", size = LS(1),
+    aes(x = lon.proj, y = lat.proj, color = after_stat(level))
+    ) +
+  scale_size(range = c(1,10)) +
+  scale_color_distiller(palette = "Spectral", na.value = NA) +
+  theme(legend.position = "none")
+
+## Distance to land
+
+DugnadForHavet %>% 
+  mutate(species = "Basking shark") %>% 
+  dplyr::select(species, ldist) %>% 
+  bind_rows(
+    GBIF_basking %>% mutate(species = "Basking shark") %>% 
+      dplyr::select(species, ldist),
+    GBIF_blue %>% 
+      mutate(species = "Blue shark") %>% 
+      dplyr::select(species, ldist)
+  ) %>% 
+  ggplot(aes(x = ldist, after_stat(ndensity), color = species)) + 
+  geom_freqpoly(size = LS(5)) +
+  scale_color_manual(values = c("#FF5F68", "#FFC95B")) +
+  labs(x = "Standardized density", y = "Distance from land (km)", 
+       color = "Species") +
+  coord_cartesian(expand = FALSE, ylim = c(0,1.05), xlim = c(0,500)) +
+  theme_classic() +
+  theme(legend.position = c(0.7,0.9))
+```
+
