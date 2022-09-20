@@ -8,7 +8,7 @@
 #' @author Mikko Vihtakari
 #' @examples
 #'  \donttest{
-#'  data("ices_areas", package = "ggOceanMapsData")
+#'  data("ices_areas")
 #'  p <- basemap(c(-20, 15, 50, 70)) + 
 #'    annotation_spatial(ices_areas, aes(fill = Area_Full), show.legend = FALSE)
 #'  

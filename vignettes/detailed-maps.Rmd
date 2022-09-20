@@ -68,7 +68,7 @@ basemap(shapefiles = "BarentsSea", bathymetry = TRUE)
 basemap(shapefiles = "IBCAO", bathymetry = TRUE)
 ```
 
-## The Northern hemisphere (GEBCO)
+### The Northern hemisphere (GEBCO)
 
 The entire GEBCO grid from the North Pole to 10&deg;N vectorized and packed into a >60 Mb R data file. When opened, the data take >3 Gb. This is a clumsy approach and plotting maps using this option can take a long time (up to 10 minutes on a test machine) and will make your computer to beg for mercy. Use this as the last resort and do not blame the package author that you were not warned ;)
 

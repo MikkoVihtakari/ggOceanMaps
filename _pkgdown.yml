@@ -65,6 +65,17 @@ reference:
   - LS
   - FS
   
+- reference:
+- title: Datasets
+  desc: >
+    The package contains ICES and Norwegian Directorat of Fisheries areas as sf
+    objects. These shapefiles are used in examples and included here for
+    convinience because they are regurlarly needed by the package author. 
+  contents:
+  - ices_areas
+  - fdir_main_areas
+  - fdir_sub_areas
+
 - title: Internal basemap functions
   desc: >
     Internal functions dealing with data and graphics for basemap. These 

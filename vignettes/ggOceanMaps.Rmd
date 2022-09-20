@@ -206,7 +206,7 @@ The stereographic maps can be rotated to point towards north using the `rotate` 
 basemap(limits = c(-160, -80, 60, 85), rotate = TRUE)
 ```
 
-A word of warning, however: the rotation involves reprojecting all shapefiles in their entirety and is memory consuming especially for large bathymetry shapes. Make sure to limit your map correctly before you add bathymetry. The rotation is still experimental and does not work for `limit`s defined using projected coordinates or `data`. This functionality is likely to contain a whole lot of bugs. Rotation does not currently work within the `transform_coord()` function. Use the `ggspatial::geom_spatial_*` functions when adding data to rotated maps.
+A word of warning, however: the rotation involves reprojecting all shapefiles in their entirety and is memory consuming especially for large bathymetry shapes. Rotation does not currently work within the `transform_coord()` function. Use the `ggspatial::geom_spatial_*` functions when adding data to rotated maps.
 
 ## Quick map
 
@@ -313,22 +313,22 @@ Sometimes there is a need to move land, glacier, and grid layers on top of spati
 The Norwegian fishing regions are included as an example dataset in the **ggOceanMaps** package. You can download these data and use the `rgdal::readOGR` function to read the shapefile if you wish to follow the example fully. 
 
 ```{r}
-data(fishingAreasNor, package = "ggOceanMapsData")
+data(fdir_areas)
 
-basemap(fishingAreasNor) + 
-  annotation_spatial(fishingAreasNor, fill = NA) + 
+basemap(fdir_main_areas) + 
+  annotation_spatial(fdir_main_areas, fill = NA) + 
   coord_sf(expand = FALSE) # required to keep the limits
 ```
 
 The initial plot draws the polygons. Note how we had to add `coord_sf(expand = FALSE)` because `layer_spatial` and `annotation_spatial` functions from the ggspatial package seem to modify `coord_sf` when added to the plot. The `basemap` function uses `expand = FALSE` (run the script without the addition and see the difference). Note also how the polygon boundaries are partly on land. We want to eventually hide them under land. We also add region labels and color the polygons based on their area to demonstrate the capabilities of ggplot, ggspatial and ggOceanMaps: 
 
 ```{r}
-labels <- suppressWarnings(sf::st_centroid(fishingAreasNor))
-fishingAreasNor$area <- as.numeric(sf::st_area(fishingAreasNor))/1e9 # calculate area in 1000 km2
+labels <- suppressWarnings(sf::st_centroid(fdir_main_areas))
+fdir_main_areas$area <- as.numeric(sf::st_area(fdir_main_areas))/1e9 # calculate area in 1000 km2
 
-p <- basemap(fishingAreasNor) +
-  geom_sf(data = fishingAreasNor, aes(fill = area)) +
-  geom_sf_text(data = labels, aes(label = FID), size = FS(8), fontface = 2) +
+p <- basemap(fdir_main_areas) +
+  geom_sf(data = fdir_main_areas, aes(fill = area)) +
+  geom_sf_text(data = labels, aes(label = main_area), size = FS(8), fontface = 2) +
   scale_fill_distiller(name = "Area\n(1000 km2)",
                        palette = "Spectral", na.value = "white",
                        limits = c(0, 500), oob = scales::squish)
