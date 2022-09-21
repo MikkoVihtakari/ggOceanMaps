@@ -1,6 +1,6 @@
 #' @title Create a ggplot2 basemap for plotting variables
 #' @description Creates a ggplot2 basemap for further plotting of variables.
-#' @param x The limit type (\code{limits} or \code{data}) is automatically recognized from the class of this argument.
+#' @param x The limit type (\code{limits}, \code{data}, or \code{shapefiles}) is automatically recognized from the class of this argument.
 #' @param limits Map limits. One of the following:
 #' \itemize{
 #'   \item \strong{numeric vector} of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.
@@ -188,6 +188,8 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bat
       limits <- x
     } else if(any(class(x) %in% c("data.frame", "data.table", "sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons")) & is.null(limits) & is.null(data)) {
       data <- x
+    } else if(inherits(x, "character")) {
+      shapefiles <- x
     }
   }
   

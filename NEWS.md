@@ -1,14 +1,20 @@
 # ggOceanMaps 1.4 (development version)
 
+* Added shapefiles to the `x` argument shortcut in `basemap()`.
+* Added limits to premade shapefiles to make visualization easier.
+
 # ggOceanMaps 1.3
 
 * Many bug fixes
 * Removed many CRS warning from sp and rgdal
 * Added a way to control the plotting order of graticules
-* Add transparency (alpha) scaling to bathymetry fill
-* Add GEBCO bathymetry which is more detailed than the ArcticSterographic
-* Improve vignette and webpage. Add a way to control the plotting order of graticules.
-* Upgraded webpage.
+* Added transparency (alpha) scaling to bathymetry fill
+* Added GEBCO bathymetry which is more detailed than the ArcticSterographic.
+* Added EMODnet bathymetry which is more detailed than GEBCO for the Northeast Atlantic
+* Improved vignette and webpage:
+    * Added a way to control the plotting order of graticules.
+    * New design
+    * Added vignettes
 * Added ICES areas.
 
 # ggOceanMaps 1.2

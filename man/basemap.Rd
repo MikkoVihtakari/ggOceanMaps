@@ -35,7 +35,7 @@ basemap(
 )
 }
 \arguments{
-\item{x}{The limit type (\code{limits} or \code{data}) is automatically recognized from the class of this argument.}
+\item{x}{The limit type (\code{limits}, \code{data}, or \code{shapefiles}) is automatically recognized from the class of this argument.}
 
 \item{limits}{Map limits. One of the following:
 \itemize{

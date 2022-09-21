@@ -27,6 +27,10 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     if(!inherits(error_test, "try-error")) {
       shapefiles <- shapefile_list(shapefiles)
       
+      if(is.null(limits)) {
+        limits <- shapefiles$limits
+      }
+      
       if(!glaciers) shapefiles$glacier <- NULL
       if(!bathymetry) shapefiles$bathy <- NULL
       
@@ -41,7 +45,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
         tmp <- load_map_data(x = shapefiles)
         
         shapefiles <- stats::setNames(lapply(seq_along(shapefiles), function(i) {
-          test <- which(names(tmp) == shapefiles[[i]])
+          test <- which(names(tmp) %in% shapefiles[[i]])
           
           if(length(test) != 1) {
             shapefiles[[i]]
@@ -98,10 +102,10 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     if(length(limits) == 1) {
       if(!decLimits) stop("Limits of length 1 have to be given as decimal degrees.")
       
-      if(abs(limits) <= 89 & abs(limits) >= 30) {
+      if(abs(limits) <= 89 & abs(limits) >= 10) {
         polarMap <- TRUE
       } else {
-        stop("The limits argument has to be between 30 and 89 (or negative) for polar stereographic maps.")
+        stop("The limits argument has to be between 10 and 89 (or negative) for polar stereographic maps.")
       }
       
     } else if(
