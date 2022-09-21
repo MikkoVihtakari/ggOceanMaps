@@ -31,6 +31,11 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
         limits <- shapefiles$limits
       }
       
+      if(is.na(shapefiles$glacier) & glaciers) {
+        message(shapefiles$name, " does not contain glaciers. Switched to FALSE")
+        glaciers <- FALSE
+      }
+      
       if(!glaciers) shapefiles$glacier <- NULL
       if(!bathymetry) shapefiles$bathy <- NULL
       
