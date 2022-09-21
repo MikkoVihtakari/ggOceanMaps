@@ -30,10 +30,18 @@ The ggOceanMaps package for [R](https://www.r-project.org/) allows plotting data
 
 The primary aim of ggOceanMaps is to make plotting oceanographic spatial data as simple as feasible, but also flexible for custom modifications. The "as simple as feasible" part will be covered in this section, while the "flexible for custom modifications" part is covered in the [Advanced use](#advanced-use) section. The basic use section of this tutorial assumes that the user knows how to use ggplot. If you are not familiar with this package, you may read the [Data visualization](https://r4ds.had.co.nz/data-visualisation.html) section in [Hadley Wickham & Garrett Grolemund](https://r4ds.had.co.nz/). This tutorial does not describe functions in ggOceanMaps but rather focusses on how to use them. Make sure to refer to the function documentation while reading the tutorial. 
 
-The package requires the `ggOceanMapsData` package which is not available on CRAN but should be installed automatically when you load `ggOceanMaps` for the first time. If the automatic installation does not work, please use:
+The package requires the `ggOceanMapsData` package which is not available on CRAN but should be installed automatically when you load `ggOceanMaps` for the first time. If the automatic installation does not work, please use **one** of the following:
 
 ```{r eval = FALSE}
-install.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org"))
+devtools::install_github("MikkoVihtakari/ggOceanMapsData")
+
+# OR:
+
+install.packages(
+  "ggOceanMapsData", 
+  repos = c("https://mikkovihtakari.github.io/drat", 
+            "https://cloud.r-project.org")
+)
 ```
 
 Once the packages have been installed, you can load them normally:
@@ -175,7 +183,9 @@ The `basemap(...)` function works almost similarly to the `ggplot(...)` function
 
 ```{r}
 dt <- data.frame(lon = c(seq(-180, 0, 30), seq(30, 180, 30)), lat = -70)
-basemap(limits = -60, glaciers = TRUE) + geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
+
+basemap(limits = -60, glaciers = TRUE) + 
+  geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
 ```
 
 The ggplot functions can also be used, but the coordinates need to be transformed to the basemap projection first using the `transform_coord` function:
@@ -188,8 +198,13 @@ basemap(limits = -60, glaciers = TRUE) +
 Note that the maps plotted in temperate and tropical regions are not projected. Consequently, decimal degrees work for such maps directly:
 
 ```{r}
-dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
-basemap(data = dt) + geom_point(data = dt, aes(x = lon, y = lat), color = "red")
+dt <- data.frame(lon = c(-100, -80, -60), 
+                 lat = c(10, 25, 40), 
+                 var = c("a", "a", "b")
+)
+
+basemap(data = dt) + 
+  geom_point(data = dt, aes(x = lon, y = lat), color = "red")
 ```
 
 The `transform_coord` function detects the projection automatically, given that the map is limited using a similar range of coordinates. Therefore you can use the `transform_coord` as demonstrated above whenever using standard ggplot layers.
@@ -213,14 +228,18 @@ A word of warning, however: the rotation involves reprojecting all shapefiles in
 The `qmap` function is designed as a shortcut to quickly take a look at a spatial dataset similar to the ggplot's [`qplot`](https://ggplot2.tidyverse.org/reference/qplot.html) function. This function is supposed to automatically detect the type of data fed into the function and plot a map using appropriate geometries, limits, and projection. You can use the `expand.factor` argument to adjust the automatic zoom into `data`. Note that too large `expand.factor` values will lead to errors. 
 
 ```{r}
-dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
+dt <- data.frame(lon = c(-100, -80, -60), 
+                 lat = c(10, 25, 40), 
+                 var = c("a", "a", "b")
+)
+
 qmap(dt, color = I("red")) # set color
 qmap(dt, color = var, expand.factor = 1.3) # map color, zoom out
 ```
 
 ## Detailed maps
 
-[See a separate site on how to make detailed maps](https://mikkovihtakari.github.io/ggOceanMaps/articles/detailed-maps.html). 
+[See a separate site on how to make detailed maps](https://mikkovihtakari.github.io/ggOceanMaps/articles/premade-maps.html). 
 
 # Advanced use
 
@@ -238,7 +257,7 @@ The `basemap` function uses pre-transformed shapefiles for each of the projectio
 
 ## Appearance
 
-### Bathymetry styles
+## Bathymetry styles
 
 The `basemap` function contains four pre-made bathymetry styles defined using the `bathy.style` argument. Two of these alternatives (`"poly_*"`) have been mapped to `fill` using the `geom_polygon` function, while the two others (`contour_*`) have been mapped to `color`. The default style (`"poly_blues"`) has been displayed throughout this user manual. The other styles are:
 
@@ -264,7 +283,7 @@ basemap(limits = c(0, 60, 68, 80), bathymetry = TRUE, bathy.style = "contour_blu
   scale_color_hue()
 ```
 
-### Graphical parameters
+## Graphical parameters
 
 The `basemap` function uses graphical parameters that (very objectively) happen to please the eye of the author and have worked in the applications needed by the author. The default parameters may suddenly change without warning. You may want to modify the appearances of a `basemap` to your own liking. This can be done using the `*.col` (fill), `*.border.col` (line color) and `*.size` (line width) arguments:
 
@@ -283,7 +302,7 @@ basemap(limits = c(124, 148, 31, 50), grid.col = NA) +
   labs(x = NULL, y = "Only latitude for you, ...")
 ```
 
-### Add scale bar and north arrow
+## Add scale bar and north arrow
 
 Scale bar and north arrows can be added using the [**ggspatial** functions](https://paleolimbot.github.io/ggspatial/index.html) (the package is automatically loaded when you use ggOceanMaps):
 
@@ -306,7 +325,7 @@ names(attributes(p))
 
 Accessing the `attributes` allow custom modifications of maps produced by the `basemap` function. See the [Reordering layers](#reordering-layers) section as an example. 
 
-### Reordering layers
+## Reordering layers
 
 Sometimes there is a need to move land, glacier, and grid layers on top of spatial data added on a `basemap`. This can be done using the `reorder_layers` function. This example uses Norwegian fishing regions (Hovedområder f.o.m. 2018), which can be downloaded from the [Norwegian Directorate of Fisheries data portal](https://www.fiskeridir.no/) (use "ESRI shapefile" option). The example works for any spatial polygons with crs information, however.
 
@@ -345,7 +364,7 @@ p$layers <- c(p$layers[-which(tmp)], p$layers[which(tmp)])
 p
 ```
 
-### Contolling the plotting order of graticules
+## Contolling the plotting order of graticules
 
 Graticules are plotted using [`ggplot2::coord_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html) and are regarded as the *panel* element in the [`ggplot2::theme()`](https://ggplot2.tidyverse.org/reference/theme.html). Note that also background color is included in the *panel* element (see the next section). The [`ggOceanMaps::theme_map()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/theme_map.html) function, which is automatically executed together with every `basemap()` and `qmap()` command, controls the position of the graticules and they are set on top by default:
 
@@ -380,7 +399,7 @@ reorder_layers(p) +
   geom_sf(data = graticule, color = "grey70", size = LS(0.5)) + # graticules
   coord_sf(xlim = lims[1:2], ylim = lims[3:4], # redefine limits
            crs = attributes(p)$proj) +
-   # labels on top of graticules
+  # labels on top of graticules
   geom_sf_label(
     data = suppressWarnings(sf::st_centroid(sf::st_make_valid(ices_areas))), 
     aes(label = Area_Full)
@@ -407,7 +426,7 @@ basemap(60, grid.col = NA) +
     fill = "grey60", color = "black", size = 0.1)
 ```
 
-### Coloring the ocean (background)
+## Coloring the ocean (background)
 
 Similarly, the [`ggplot2::theme()`](https://ggplot2.tidyverse.org/reference/theme.html) *panel* element allows [coloring the ocean](https://stackoverflow.com/questions/67615318/how-to-colour-the-ocean):
 
@@ -440,7 +459,7 @@ p +
            crs = attributes(p)$proj) 
 ```
 
-### Add a fill scale on top of bathymetry
+## Add a fill scale on top of bathymetry
 
 ```{r eval = FALSE}
 basemap(c(-20, 15, 50, 70), bathymetry = TRUE) + 
@@ -469,7 +488,7 @@ basemap(limits = c(-20, 15, 50, 70), bathymetry = TRUE,
   theme(legend.position = "none")
 ```
 
-### Custom shapefiles
+## Custom shapefiles
 
 The **ggOceanMaps package uses vector (spatial polygon) data** to make the plotting more efficient and to produce sharp images at any resolution. For the time being, the package supports three kinds of shapefiles: 1) land shapes, 2) glacier shapes, and 3) bathymetry shapes. Each of these shapes has to be defined using the same projection. Since the shapefiles are large and generating them may require long processing time, it is most convenient to save them in a Rdata file as `sp::SpatialPolygonsDataFrames` objects and load them to the memory when used to make a map. Useful sources for spatial data are:
 
@@ -490,7 +509,7 @@ There are probably more sources which the author has not needed yet. Please send
 
 Here we go through how to plot customized shapefiles for the Barents Sea as an example. A similar procedure can be applied to any region in the world.
 
-#### Bathymetries
+### Bathymetries
 
 The [Natural Earth Data](http://www.naturalearthdata.com/downloads/10m-physical-vectors/) provides bathymetry vector data, which can be readily used in ggOceanMaps. The contours in that dataset are, however, not very practical for marine biology and fisheries in shallow seas such as the Barents Sea. Download the [ETOPO1 dataset as grid registered NetCDF gmt4](https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/data/ice_surface/grid_registered/netcdf/) to a folder in your computer. It may be beneficial to make a "GIS" or "Shapefiles" folder where you store similar datasets for later use. Whether you use ice or bed-rock surface does not matter for this example as there are no glaciers under the sea-level within the region of interest. In any case, this choice has no visual effect because land and glaciers will be plotted on top of the bathymetry, but the ice surface option will lead to smaller file size.
 
@@ -528,7 +547,7 @@ bs_bathy <- vector_bathymetry(rb)
 sp::plot(bs_bathy)
 ```
 
-#### Land shapes
+### Land shapes
 
 Land shapes could theoretically be defined from the bathymetry raster (depth = 0). Nevertheless, since the [10m Natural Earth Data](http://www.naturalearthdata.com/downloads/10m-physical-vectors/) vectors are of high resolution, there has been no need to write a function to do this. We use Natural Earth Data instead. Download the Natural Earth Data [Land and Minor Islands](http://www.naturalearthdata.com/downloads/10m-physical-vectors/) vectors to your "GIS" or "Shapefiles" folder and define folder paths under:
 
@@ -566,7 +585,7 @@ rgeos::gIsValid(bs_glacier)
 sp::plot(bs_glacier)
 ```
 
-#### Plotting the shapefiles using basemap
+### Plotting the shapefiles using basemap
 
 Now that we have the shapefiles, we can save them to a file so that we do not run the script above every time we plot a map using custom shapefiles. 
 
@@ -590,9 +609,9 @@ The list elements `land`, `glacier` and `bathy` are required, but `glacier` and 
 basemap(limits = c(10, 53, 70, 80), shapefiles = list(land = bs_land, glacier = bs_glacier, bathy = bs_bathy), bathymetry = TRUE, glaciers = TRUE)
 ```
 
-## Known issues
+# Known issues
 
-### Antimeridian (date-line) issues
+## Antimeridian (date-line) issues
 
 As any decimal degree projection, the ggOceanMaps suffers from the antimeridian issue for regions < 30 and > -30 latitude. Currently, the `basemap` function plots the entire world instead of the desired region:
 

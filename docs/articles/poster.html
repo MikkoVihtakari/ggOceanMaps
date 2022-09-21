@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6>
+    <a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a>
     <a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Presentations</h6>
@@ -83,7 +84,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">16 September, 2022</h4>
+            <h4 data-toc-skip class="date">21 September, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/poster.Rmd" class="external-link"><code>vignettes/poster.Rmd</code></a></small>
       <div class="d-none name"><code>poster.Rmd</code></div>
@@ -152,6 +153,8 @@ package version 1.1.6. (2022). <a href="https://paleolimbot.github.io/ggspatial/
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/" class="external-link">ggOceanMaps</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rgbif" class="external-link">rgbif</a></span><span class="op">)</span></span>
 <span></span>
+<span><span class="co">## Donwload example from: https://docs.ropensci.org/rgbif</span></span>
+<span></span>
 <span><span class="va">species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>BlueShark <span class="op">=</span> <span class="st">"Prionace glauca"</span>, BaskingShark <span class="op">=</span> <span class="st">"Cetorhinus maximus"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">GBIF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
@@ -160,7 +163,11 @@ package version 1.1.6. (2022). <a href="https://paleolimbot.github.io/ggspatial/
 <span>  </span>
 <span>  <span class="va">key</span> <span class="op">&lt;-</span> <span class="fu">rgbif</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rgbif/reference/name_backbone.html" class="external-link">name_backbone</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">species</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"canonicalName"</span>, <span class="st">"speciesKey"</span><span class="op">)</span><span class="op">]</span></span>
 <span>  </span>
-<span>  <span class="fu">rgbif</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rgbif/reference/occ_search.html" class="external-link">occ_search</a></span><span class="op">(</span>taxonKey <span class="op">=</span> <span class="va">key</span><span class="op">$</span><span class="va">speciesKey</span>, return <span class="op">=</span> <span class="st">"data"</span>, limit <span class="op">=</span> <span class="fl">4e5</span>, geometry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">20</span>, <span class="fl">76</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">rgbif</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rgbif/reference/occ_search.html" class="external-link">occ_search</a></span><span class="op">(</span></span>
+<span>    taxonKey <span class="op">=</span> <span class="va">key</span><span class="op">$</span><span class="va">speciesKey</span>, </span>
+<span>    return <span class="op">=</span> <span class="st">"data"</span>, </span>
+<span>    limit <span class="op">=</span> <span class="fl">4e5</span>, </span>
+<span>    geometry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">20</span>, <span class="fl">76</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">GBIF_blue</span> <span class="op">&lt;-</span> <span class="va">GBIF</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -185,11 +192,32 @@ package version 1.1.6. (2022). <a href="https://paleolimbot.github.io/ggspatial/
 <span>  <span class="fu"><a href="../reference/transform_coord.html">transform_coord</a></span><span class="op">(</span>bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/dist2land.html">dist2land</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Note that <a href="https://docs.ropensci.org/rgbif/articles/rgbif.html#get-occurrence-data-from-gbif" class="external-link">the
+correct way to do the download</a> would be something like shown under
+and on the website, but I did not have a user name when making the
+poster, and there were &lt;7000 records of these shark species in the
+Northeast Atlantic. Hence the 100k limit was not an issue. <a href="https://www.gbif.org/citation-guidelines#occDataDownload" class="external-link">Citing
+correct data sources</a>, however, is an issue and if you are planning
+to use the data in more serious applications than posters, make sure to
+find the correct DOI using <code><a href="https://docs.ropensci.org/rgbif/reference/occ_download.html" class="external-link">occ_download()</a></code> or the web
+portal.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">keys</span> <span class="op">&lt;-</span> <span class="va">species</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/rgbif/reference/name_backbone_checklist.html" class="external-link">name_backbone_checklist</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># match to backbone </span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">matchType</span> <span class="op">==</span> <span class="st">"NONE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># get matched names</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">usageKey</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://docs.ropensci.org/rgbif/reference/occ_download.html" class="external-link">occ_download</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/rgbif/reference/download_predicate_dsl.html" class="external-link">pred_in</a></span><span class="op">(</span><span class="st">"taxonKey"</span>,<span class="va">key</span><span class="op">$</span><span class="va">speciesKey</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/rgbif/reference/download_predicate_dsl.html" class="external-link">pred</a></span><span class="op">(</span><span class="st">"hasCoordinate"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/rgbif/reference/download_predicate_dsl.html" class="external-link">pred</a></span><span class="op">(</span><span class="st">"hasGeospatialIssue"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/rgbif/reference/download_predicate_dsl.html" class="external-link">pred_within</a></span><span class="op">(</span><span class="st">"POLYGON ((-20 30, 20 30, 20 80, -20 80, -20 30))"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="figures">Figures<a class="anchor" aria-label="anchor" href="#figures"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Background map</span></span>
 <span></span>
 <span><span class="va">a1_h</span> <span class="op">&lt;-</span> <span class="fl">841</span><span class="op">-</span><span class="fl">1</span> <span class="co"># Poster height without margins (A1)</span></span>
@@ -221,11 +249,11 @@ package version 1.1.6. (2022). <a href="https://paleolimbot.github.io/ggspatial/
 <span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_point</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">GBIF_blue</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ldist</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>, </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"#FFC95B"</span>, alpha <span class="op">=</span> <span class="fl">0.8</span>, size <span class="op">=</span> <span class="fl">3</span></span>
-<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density_2d.html" class="external-link">geom_density_2d</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">GBIF_blue</span>, contour_var <span class="op">=</span> <span class="st">"ndensity"</span>, size <span class="op">=</span> <span class="fu"><a href="../reference/LS.html">LS</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon.proj</span>, y <span class="op">=</span> <span class="va">lat.proj</span>, color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">level</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html" class="external-link">scale_size</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Spectral"</span>, na.value <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>

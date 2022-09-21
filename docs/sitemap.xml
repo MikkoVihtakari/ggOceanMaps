@@ -19,6 +19,9 @@
     <loc>/articles/posters-and-presentations.html</loc>
   </url>
   <url>
+    <loc>/articles/premade-maps.html</loc>
+  </url>
+  <url>
     <loc>/articles/premade-shapefiles.html</loc>
   </url>
   <url>
@@ -64,6 +67,12 @@
     <loc>/reference/dist2land.html</loc>
   </url>
   <url>
+    <loc>/reference/fdir_main_areas.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fdir_sub_areas.html</loc>
+  </url>
+  <url>
     <loc>/reference/formatterUTMkm.html</loc>
   </url>
   <url>
@@ -77,6 +86,9 @@
   </url>
   <url>
     <loc>/reference/guess_coordinate_columns.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ices_areas.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>

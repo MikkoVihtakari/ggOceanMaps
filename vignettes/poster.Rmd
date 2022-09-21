@@ -55,6 +55,8 @@ library(tidyverse)
 library(ggOceanMaps)
 library(rgbif)
 
+## Donwload example from: https://docs.ropensci.org/rgbif
+
 species <- c(BlueShark = "Prionace glauca", BaskingShark = "Cetorhinus maximus")
 
 GBIF <- lapply(seq_along(species), function(i) {
@@ -63,7 +65,11 @@ GBIF <- lapply(seq_along(species), function(i) {
   
   key <- rgbif::name_backbone(name = species[[i]])[c("canonicalName", "speciesKey")]
   
-  rgbif::occ_search(taxonKey = key$speciesKey, return = "data", limit = 4e5, geometry = c(-20, 30, 20, 76))
+  rgbif::occ_search(
+    taxonKey = key$speciesKey, 
+    return = "data", 
+    limit = 4e5, 
+    geometry = c(-20, 30, 20, 76))
 })
 
 GBIF_blue <- GBIF[[1]]$data %>% 
@@ -88,6 +94,22 @@ DugnadForHavet <- read_delim(
   transform_coord(bind = TRUE) %>% 
   dist2land() %>% 
   as_tibble()
+```
+
+Note that [the correct way to do the download](https://docs.ropensci.org/rgbif/articles/rgbif.html#get-occurrence-data-from-gbif) would be something like shown under and on the website, but I did not have a user name when making the poster, and there were <7000 records of these shark species in the Northeast Atlantic. Hence the 100k limit was not an issue. [Citing correct data sources](https://www.gbif.org/citation-guidelines#occDataDownload), however, is an issue and if you are planning to use the data in more serious applications than posters, make sure to find the correct DOI using `occ_download()` or the web portal. 
+
+```{r}
+keys <- species %>% 
+  name_backbone_checklist() %>% # match to backbone 
+  filter(!matchType == "NONE") %>% # get matched names
+  pull(usageKey)
+
+occ_download(
+  pred_in("taxonKey",key$speciesKey),
+  pred("hasCoordinate", TRUE),
+  pred("hasGeospatialIssue", FALSE),
+  pred_within("POLYGON ((-20 30, 20 30, 20 80, -20 80, -20 30))")
+)
 ```
 
 ## Figures
@@ -124,11 +146,11 @@ bm <-
   geom_spatial_point(
     data = GBIF_blue %>% filter(ldist > 0), 
     aes(x = lon, y = lat), color = "#FFC95B", alpha = 0.8, size = 3
-    ) +
+  ) +
   geom_density_2d(
     data = GBIF_blue, contour_var = "ndensity", size = LS(1),
     aes(x = lon.proj, y = lat.proj, color = after_stat(level))
-    ) +
+  ) +
   scale_size(range = c(1,10)) +
   scale_color_distiller(palette = "Spectral", na.value = NA) +
   theme(legend.position = "none")

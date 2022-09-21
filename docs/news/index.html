@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6>
+    <a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a>
     <a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Presentations</h6>
@@ -60,20 +61,25 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4" id="ggoceanmaps-14-development-version">ggOceanMaps 1.4 (development version)<a class="anchor" aria-label="anchor" href="#ggoceanmaps-14-development-version"></a></h2>
-</div>
+<ul><li>Added shapefiles to the <code>x</code> argument shortcut in <code><a href="../reference/basemap.html">basemap()</a></code>.</li>
+<li>Added limits to premade shapefiles to make visualization easier.</li>
+</ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.3" id="ggoceanmaps-13">ggOceanMaps 1.3<a class="anchor" aria-label="anchor" href="#ggoceanmaps-13"></a></h2>
-<ul><li>Many bug fixes</li>
-<li>Removed many CRS warning from sp and rgdal</li>
+<h2 class="pkg-version" data-toc-text="1.3.0" id="ggoceanmaps-130">ggOceanMaps 1.3.0<a class="anchor" aria-label="anchor" href="#ggoceanmaps-130"></a></h2><p class="text-muted">CRAN release: 2022-09-20</p>
+<ul><li>Removed many CRS warning from sp and rgdal</li>
 <li>Added a way to control the plotting order of graticules</li>
-<li>Add transparency (alpha) scaling to bathymetry fill</li>
-<li>Add GEBCO bathymetry which is more detailed than the ArcticSterographic</li>
-<li>Improve vignette and webpage. Add a way to control the plotting order of graticules.</li>
-<li>Upgraded webpage.</li>
+<li>Added transparency (alpha) scaling to bathymetry fill</li>
+<li>Added GEBCO bathymetry which is more detailed than the ArcticSterographic.</li>
+<li>Added EMODnet bathymetry which is more detailed than GEBCO for the Northeast Atlantic</li>
+<li>Improved vignette and webpage:
+<ul><li>Added a way to control the plotting order of graticules.</li>
+<li>New design</li>
+<li>Added vignettes</li>
+</ul></li>
 <li>Added ICES areas.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.2" id="ggoceanmaps-12">ggOceanMaps 1.2<a class="anchor" aria-label="anchor" href="#ggoceanmaps-12"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.2.6" id="ggoceanmaps-126">ggOceanMaps 1.2.6<a class="anchor" aria-label="anchor" href="#ggoceanmaps-126"></a></h2><p class="text-muted">CRAN release: 2022-01-08</p>
 <ul><li><a href="https://github.com/MikkoVihtakari/ggOceanMaps/issues/11" class="external-link">added <code>x</code> argument to <code>basemap()</code> and <code>qmap()</code></a></li>
 <li>Conversion from PROJ4 to PROJ6. This change will make the old ggOceanMapsData files incompatible with ggOceanMaps 1.2 and vice versa. Changed most functions.</li>
 <li>Added NEWS.md</li>
@@ -92,7 +98,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1" id="ggoceanmaps-11">ggOceanMaps 1.1<a class="anchor" aria-label="anchor" href="#ggoceanmaps-11"></a></h2><p class="text-muted">CRAN release: 2021-05-21</p>
-<ul><li>Generally bug fixes. Started replacing the <a href="https://www.earthdatascience.org/courses/use-data-open-source-python/intro-vector-data-python/spatial-data-vector-shapefiles/epsg-proj4-coordinate-reference-system-formats-python/" class="external-link">PROJ4 system by the PROJ6 wkt based system</a> by replacing “+init=epsg:NNNN” strings by “EPSG:NNNN”. Did not finish the conversion.</li>
+<ul><li>Started replacing the <a href="https://www.earthdatascience.org/courses/use-data-open-source-python/intro-vector-data-python/spatial-data-vector-shapefiles/epsg-proj4-coordinate-reference-system-formats-python/" class="external-link">PROJ4 system by the PROJ6 wkt based system</a> by replacing “+init=epsg:NNNN” strings by “EPSG:NNNN”. Did not finish the conversion.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.9" id="ggoceanmaps-109">ggOceanMaps 1.0.9<a class="anchor" aria-label="anchor" href="#ggoceanmaps-109"></a></h2><p class="text-muted">CRAN release: 2021-01-14</p>

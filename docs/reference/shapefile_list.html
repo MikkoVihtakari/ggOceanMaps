@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6>
+    <a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a>
     <a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Presentations</h6>
@@ -106,27 +107,102 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">shapefile_list</span><span class="op">(</span><span class="st">"all"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     name                            land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    ArcticStereographic    ggOceanMapsData::arctic_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 AntarcticStereographic ggOceanMapsData::antarctic_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          DecimalDegree        ggOceanMapsData::dd_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4               Svalbard                   svalbard_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5             BarentsSea                 barentssea_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  IBCAO    ggOceanMapsData::arctic_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                              glacier                            bathy   crs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    ggOceanMapsData::arctic_glacier    ggOceanMapsData::arctic_bathy  3995</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 ggOceanMapsData::antarctic_glacier ggOceanMapsData::antarctic_bathy  3031</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        ggOceanMapsData::dd_glacier        ggOceanMapsData::dd_bathy  4326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                   svalbard_glacier                   svalbard_bathy 32633</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                 barentssea_glacier                 barentssea_bathy 32636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6    ggOceanMapsData::arctic_glacier                      ibcao_bathy  3995</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                     path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/svalbard.rda</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/ibcao_bathy.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      name                            land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     ArcticStereographic    ggOceanMapsData::arctic_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  AntarcticStereographic ggOceanMapsData::antarctic_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           DecimalDegree        ggOceanMapsData::dd_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           DecimalDegree        ggOceanMapsData::dd_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           DecimalDegree        ggOceanMapsData::dd_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           DecimalDegree        ggOceanMapsData::dd_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                Svalbard                   svalbard_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                Svalbard                   svalbard_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                Svalbard                   svalbard_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10               Svalbard                   svalbard_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11             BarentsSea                 barentssea_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12             BarentsSea                 barentssea_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13             BarentsSea                 barentssea_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             BarentsSea                 barentssea_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                  IBCAO    ggOceanMapsData::arctic_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                  IBCAO    ggOceanMapsData::arctic_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                  IBCAO    ggOceanMapsData::arctic_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                  IBCAO    ggOceanMapsData::arctic_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                  GEBCO    ggOceanMapsData::arctic_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                EMODnet                    emodnet_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                EMODnet                    emodnet_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                EMODnet                    emodnet_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                EMODnet                    emodnet_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               glacier                            bathy   crs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     ggOceanMapsData::arctic_glacier    ggOceanMapsData::arctic_bathy  3995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  ggOceanMapsData::antarctic_glacier ggOceanMapsData::antarctic_bathy  3031</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         ggOceanMapsData::dd_glacier        ggOceanMapsData::dd_bathy  4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         ggOceanMapsData::dd_glacier        ggOceanMapsData::dd_bathy  4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         ggOceanMapsData::dd_glacier        ggOceanMapsData::dd_bathy  4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         ggOceanMapsData::dd_glacier        ggOceanMapsData::dd_bathy  4326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                    svalbard_glacier                   svalbard_bathy 32633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                    svalbard_glacier                   svalbard_bathy 32633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                    svalbard_glacier                   svalbard_bathy 32633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                   svalbard_glacier                   svalbard_bathy 32633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                 barentssea_glacier                 barentssea_bathy 32636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                 barentssea_glacier                 barentssea_bathy 32636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                 barentssea_glacier                 barentssea_bathy 32636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14                 barentssea_glacier                 barentssea_bathy 32636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15    ggOceanMapsData::arctic_glacier                      ibcao_bathy  3995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16    ggOceanMapsData::arctic_glacier                      ibcao_bathy  3995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17    ggOceanMapsData::arctic_glacier                      ibcao_bathy  3995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18    ggOceanMapsData::arctic_glacier                      ibcao_bathy  3995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19    ggOceanMapsData::arctic_glacier                      gebco_bathy  3995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                               &lt;NA&gt;                    emodnet_bathy  3575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                               &lt;NA&gt;                    emodnet_bathy  3575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                               &lt;NA&gt;                    emodnet_bathy  3575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                               &lt;NA&gt;                    emodnet_bathy  3575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        limits</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        30.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       -35.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      -180.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       180.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       -90.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        90.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7    402204.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    845943.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   8253526.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  8978517.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  -400000.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  1300000.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  7400000.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  9350000.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 -2879810.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  2700490.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 -2879810.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  2879810.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19       30.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  -300000.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  -100000.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 -3100000.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 -2900000.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                      path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                                                                    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                                                    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                                    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                                                                    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                                                                    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                                                    &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/svalbard.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/svalbard.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9     https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/svalbard.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/svalbard.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/ibcao_bathy.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/ibcao_bathy.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/ibcao_bathy.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/ibcao_bathy.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/gebco_bathy.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20     https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/emodnet.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21     https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/emodnet.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22     https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/emodnet.rda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23     https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/emodnet.rda</span>
 <span class="r-in"><span><span class="fu">shapefile_list</span><span class="op">(</span><span class="st">"Arctic"</span><span class="op">)</span> <span class="co"># partial matching</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ArcticStereographic"</span>
@@ -142,6 +218,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $crs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $limits</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 30</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $path</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
