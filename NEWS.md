@@ -1,10 +1,12 @@
 # ggOceanMaps 1.4 (development version)
 
+* Fixed a bug with shapefiles argument shortcut.
+* Fixed a bug in ices_data
+
+# ggOceanMaps 1.3.4
+
 * Added shapefiles to the `x` argument shortcut in `basemap()`.
 * Added limits to premade shapefiles to make visualization easier.
-
-# ggOceanMaps 1.3.0
-
 * Removed many CRS warning from sp and rgdal
 * Added a way to control the plotting order of graticules
 * Added transparency (alpha) scaling to bathymetry fill
@@ -14,7 +16,7 @@
     * Added a way to control the plotting order of graticules.
     * New design
     * Added vignettes
-* Added ICES areas.
+* Added ICES and Norwegian directorate of fisheries areas.
 
 # ggOceanMaps 1.2.6
 

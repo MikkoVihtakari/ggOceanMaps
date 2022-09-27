@@ -19,6 +19,8 @@
 #' @importFrom parallel makeCluster parLapply stopCluster mclapply
 #' @author Mikko Vihtakari
 #' @examples
+#' 
+#' if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 #' \donttest{
 #' # Simple example:
 #' dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
@@ -45,6 +47,7 @@
 #' system.time(dist2land(dt, binary = TRUE))
 #' #> user  system elapsed
 #' #> 1.624   0.041   1.680
+#' }
 #' }
 #' @export
 

@@ -133,21 +133,21 @@ Open-source GIS systems are rolling over to a new \href{https://rgdal.r-forge.r-
 # The easiest way to produce a map is to use the limits
 # argument and decimal degrees:
 
-if(requireNamespace("ggOceanMapsData")) {
+\donttest{
+if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 basemap(limits = 60)
-}
 
 # Bathymetry and glaciers can be added using the respective arguments:
-\donttest{
+
 basemap(limits = -60, bathymetry = TRUE, glaciers = TRUE)
-}
+
 # The easiest way to add data on the maps is to use the ggspatial functions:
 
 dt <- data.frame(lon = c(-150, 150), lat = c(60, 90))
-\donttest{
+
 basemap(data = dt, bathymetry = TRUE) +
 geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
-}
+
 \dontrun{
 # Note that writing out data = dt is required because there are multiple
 # underlying ggplot layers plotted already:
@@ -159,12 +159,10 @@ geom_spatial_point(dt, aes(x = lon, y = lat), color = "red")
 # If you want to use native ggplot commands, you need to transform your data
 # to the projection used by the map:
 
-if(requireNamespace("ggOceanMapsData")) {
 dt <- transform_coord(dt, bind = TRUE)
 
 basemap(data = dt) + geom_point(data = dt, aes(x = lon.proj, y = lat.proj))
-}
-\donttest{
+
 # The limits argument of length 4 plots a map anywhere in the world:
 
 basemap(limits = c(100, 160, -20, 30), bathymetry = TRUE)
@@ -216,6 +214,7 @@ theme(axis.title = element_blank(),
       axis.ticks.x = element_blank(),
       axis.ticks.y = element_blank()
       )
+}
 }
 }
 \references{

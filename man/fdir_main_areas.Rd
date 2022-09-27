@@ -17,9 +17,11 @@ fdir_main_areas
 Major fisheries areas (hovedomraade) of Norway
 }
 \examples{
+if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 \donttest{ 
 basemap(fdir_main_areas) + 
 annotation_spatial(fdir_main_areas, fill = NA)
+}
 }
 }
 \seealso{

@@ -27,7 +27,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
     if(!inherits(error_test, "try-error")) {
       shapefiles <- shapefile_list(shapefiles)
       
-      if(is.null(limits)) {
+      if(is.null(limits) & is.null(data)) {
         limits <- shapefiles$limits
       }
       

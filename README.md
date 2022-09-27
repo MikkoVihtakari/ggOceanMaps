@@ -2,7 +2,7 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-1.3.0**
+1.3.4**
 
 <!-- badges: start -->
 
@@ -47,7 +47,22 @@ install.packages("ggOceanMaps")
 
 Due to the package size limitations, ggOceanMaps requires the
 [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData)
-package which stores shapefiles used in low-resolution maps.
+package which stores shapefiles used in low-resolution maps. If the data
+package does not install automatically, you can install it from GitHub
+using devtools or remotes packages, or a drat repository on Windows and
+Mac:
+
+``` r
+devtools::install_github("MikkoVihtakari/ggOceanMapsData")
+
+# OR:
+
+install.packages(
+  "ggOceanMapsData", 
+  repos = c("https://mikkovihtakari.github.io/drat", 
+            "https://cloud.r-project.org")
+)
+```
 
 The GitHub version of ggOceanMaps can be installed using the
 [**devtools**](https://cran.r-project.org/web/packages/devtools/index.html)
@@ -93,7 +108,7 @@ basemap(data = dt, bathymetry = TRUE) +
                color = "red", fill = NA)
 ```
 
-![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
 
 See the [ggOceanMaps
 website](https://mikkovihtakari.github.io/ggOceanMaps/index.html),
@@ -192,8 +207,8 @@ citation("ggOceanMaps")
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Vihtakari M (2022). _ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'_. R package version 1.3.0,
-#>   <https://CRAN.R-project.org/package=ggOceanMaps>.
+#>   using 'ggplot2'_. R package version 1.3.4,
+#>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -201,8 +216,8 @@ citation("ggOceanMaps")
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2022},
-#>     note = {R package version 1.3.0},
-#>     url = {https://CRAN.R-project.org/package=ggOceanMaps},
+#>     note = {R package version 1.3.4},
+#>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```
 
@@ -235,7 +250,7 @@ library(ggOceanMaps)
 basemap(60)
 ```
 
-![](man/figures/README-unnamed-chunk-8-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->
 
 If the `basemap()` function complains about ggOceanMapsData package not
 being available, the drat repository may have issues (assuming you

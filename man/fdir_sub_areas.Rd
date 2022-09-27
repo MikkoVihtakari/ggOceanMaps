@@ -17,9 +17,11 @@ fdir_sub_areas
 Norwegian sub-areas (lokasjon) for commercial fishing
 }
 \examples{
+if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 \donttest{
 basemap(fdir_sub_areas) + 
 annotation_spatial(fdir_sub_areas, fill = NA)
+}
 }
 }
 \seealso{

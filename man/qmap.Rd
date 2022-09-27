@@ -93,14 +93,12 @@ Returns a \link[ggplot2]{ggplot} map, which can be assigned to an object and mod
 \code{qmap} is a shortcut similar to ggplot2's \code{\link[ggplot2]{qplot}} designed to quickly plot data with a limited range of options.
 }
 \examples{
-
+if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
 
 # Set color
 
-if(requireNamespace("ggOceanMapsData")) {
 qmap(dt, color = I("red")) 
-}
 
 # Map color
 \donttest{
@@ -119,7 +117,7 @@ dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
 \donttest{
 qmap(dt, rotate = TRUE)
 }
-
+}
 }
 \seealso{
 Other basemap functions: 

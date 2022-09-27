@@ -9,14 +9,12 @@
 #' @family basemap functions
 #' @author Mikko Vihtakari
 #' @examples 
-#' 
+#' if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 #' dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
 #' 
 #' # Set color
 #' 
-#' if(requireNamespace("ggOceanMapsData")) {
 #' qmap(dt, color = I("red")) 
-#' }
 #' 
 #' # Map color
 #' \donttest{
@@ -35,14 +33,13 @@
 #' \donttest{
 #' qmap(dt, rotate = TRUE)
 #' }
-#' 
+#' }
 #' @export
 
 # data = dt; x = NULL; y = NULL; geom = "point"; limits = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = TRUE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = FALSE
 qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE, ...) {
   
   ## Coordinate columns
-  
   
   if(!"sf" %in% class(data) & (is.null(x) | is.null(y))) {
     coordCols <- guess_coordinate_columns(data)

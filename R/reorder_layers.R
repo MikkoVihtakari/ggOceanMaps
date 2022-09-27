@@ -7,6 +7,7 @@
 #' @import ggplot2
 #' @author Mikko Vihtakari
 #' @examples
+#' if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 #'  \donttest{
 #'  data("ices_areas")
 #'  p <- basemap(c(-20, 15, 50, 70)) + 
@@ -17,6 +18,7 @@
 #'  
 #'  # Move land on top
 #'  reorder_layers(p)
+#'  }
 #'  }
 #' @export
 

@@ -48,6 +48,8 @@ The function calculates distances using projected coordinates and the \code{rgeo
 The \code{dist2land} function offers parallel processing, which speeds up the calculations for large datasets. Parallel processing has not been tested under Windows yet and may not work.
 }
 \examples{
+
+if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 \donttest{
 # Simple example:
 dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
@@ -74,6 +76,7 @@ system.time(dist2land(dt, cores = 1))
 system.time(dist2land(dt, binary = TRUE))
 #> user  system elapsed
 #> 1.624   0.041   1.680
+}
 }
 }
 \author{

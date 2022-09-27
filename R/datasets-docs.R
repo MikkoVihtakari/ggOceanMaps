@@ -7,9 +7,11 @@
 #' @source \href{https://open-data-fiskeridirektoratet-fiskeridir.hub.arcgis.com/}{Norwegian Directorate of Fisheries} and \href{https://www.nafo.int/About-us/Maps}{Northwest Atlantic Fisheries Organization}
 #' @import sf
 #' @examples
+#' if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 #' \donttest{ 
 #' basemap(fdir_main_areas) + 
 #' annotation_spatial(fdir_main_areas, fill = NA)
+#' }
 #' }
 "fdir_main_areas"
 
@@ -22,9 +24,11 @@
 #' @source \href{https://open-data-fiskeridirektoratet-fiskeridir.hub.arcgis.com/}{Norwegian Directorate of Fisheries}
 #' @import sf
 #' @examples 
+#' if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 #' \donttest{
 #' basemap(fdir_sub_areas) + 
 #' annotation_spatial(fdir_sub_areas, fill = NA)
+#' }
 #' }
 "fdir_sub_areas"
 
@@ -37,8 +41,10 @@
 #' @source \href{https://www.ices.dk/}{International Council for the Exploration of the Sea}
 #' @import sf
 #' @examples
+#' if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 #' \donttest{
 #' basemap(ices_areas) + 
 #' annotation_spatial(ices_areas, fill = NA)
+#' }
 #' }
 "ices_areas"

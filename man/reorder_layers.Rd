@@ -19,6 +19,7 @@ Moves existing land, glacier and grid layers on top of other layers. Useful for 
 This function has not been tested properly yet and is likely to contain bugs.
 }
 \examples{
+if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
  \donttest{
  data("ices_areas")
  p <- basemap(c(-20, 15, 50, 70)) + 
@@ -29,6 +30,7 @@ This function has not been tested properly yet and is likely to contain bugs.
  
  # Move land on top
  reorder_layers(p)
+ }
  }
 }
 \seealso{

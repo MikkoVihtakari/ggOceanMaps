@@ -17,9 +17,11 @@ ices_areas
 ICES Advisory Areas
 }
 \examples{
+if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 \donttest{
 basemap(ices_areas) + 
 annotation_spatial(ices_areas, fill = NA)
+}
 }
 }
 \seealso{
