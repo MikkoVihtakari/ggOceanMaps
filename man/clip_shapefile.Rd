@@ -10,7 +10,8 @@ clip_shapefile(
   proj.limits = convert_crs(4326),
   simplify = FALSE,
   tol = 60,
-  return.boundary = FALSE
+  return.boundary = FALSE,
+  sf.mode = FALSE
 )
 }
 \arguments{
@@ -24,7 +25,9 @@ clip_shapefile(
 
 \item{tol}{Numerical tolerance value to be used for simplification. See \code{?rgeos::gSimplify}.}
 
-\item{return.boundary}{logical. If \code{TRUE} returns the clip boundary together with the shapefile}
+\item{return.boundary}{logical. If \code{TRUE} returns the clip boundary together with the shapefile.}
+
+\item{sf.mode}{Logical indicating whether the function should be executed using the sf package. Developmental switch during the transfer from sp to sf.}
 }
 \value{
 Clipped \code{\link[sp]{SpatialPolygons}} object. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
