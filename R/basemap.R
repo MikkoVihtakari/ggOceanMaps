@@ -55,8 +55,8 @@
 #' Custom shapefiles have to be a named list containing at least following elements:
 #' \itemize{
 #' \item \strong{land} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing land. Required.
-#' \item \strong{glacier} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing glaciers. Use \code{NULL} if glaciers are not needed.
-#' \item \strong{bathy} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing bathymetry contours. Use \code{NULL} if bathymetry is not needed.
+#' \item \strong{glacier} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing glaciers. Not required if glaciers are not needed.
+#' \item \strong{bathy} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing bathymetry contours. Not required if bathymetry is not needed.
 #' }
 #'
 #' See Examples.
@@ -144,7 +144,7 @@
 #' 
 #' # Using custom shapefiles
 #' data(bs_shapes, package = "ggOceanMapsData")
-#' basemap(shapefiles = list(land = bs_land, glacier = NULL, bathy = bs_bathy),
+#' basemap(shapefiles = list(land = bs_land),
 #' bathymetry = TRUE)
 #' 
 #' # grid.col = NA removes grid lines, rotate = TRUE rotates northwards

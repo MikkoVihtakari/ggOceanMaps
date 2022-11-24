@@ -53,29 +53,30 @@ if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 \donttest{
 # Simple example:
 dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
-dt <- dist2land(dt, cores = 1)
+dt <- dist2land(dt, cores = 1, verbose = FALSE)
 qmap(dt, color = ldist) + scale_color_viridis_c()
 
 # No premade shapefiles for datasets covering the entire globe
-data.frame(lon = -20:20, lat = seq(-90, 90, length.out = 41))
-dist2land(dt, cores = 1) # wrong!
+dt <- data.frame(lon = -20:20, lat = seq(-90, 90, length.out = 41))
+qmap(dist2land(dt, cores = 1, verbose = FALSE), color = ldist) + 
+scale_color_viridis_c() # wrong!
 }
 \dontrun{
 dt <- data.frame(lon = seq(-179, 179, length.out = 1000), lat = rep(60, 1000))
 # The distance calculation is slow for large datasets
 system.time(dist2land(dt))
 #> user  system elapsed
-#> 0.073   0.041   5.627
+#> 0.071   0.036   9.632
 
 # The parallel processing speeds it up
 system.time(dist2land(dt, cores = 1))
 #> user  system elapsed
-#> 19.719   1.237  20.894
+#> 29.019   1.954  30.958
 
 # binary = TRUE further speeds the function up
 system.time(dist2land(dt, binary = TRUE))
 #> user  system elapsed
-#> 1.624   0.041   1.680
+#> 2.342   0.052   2.403
 }
 }
 }

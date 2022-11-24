@@ -2,7 +2,7 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-1.3.4**
+1.3.7**
 
 <!-- badges: start -->
 
@@ -160,43 +160,42 @@ important that you cite the data sources used in a map you generate with
 the package. The spatial data used by this package have been acquired
 from the following sources:
 
--   **ggOceanMapsData land polygons.** [Natural Earth
-    Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
-    1:10m Physical Vectors with the Land and Minor Island datasets
-    combined. Distributed under the [CC Public Domain
-    license](https://creativecommons.org/publicdomain/) ([terms of
-    use](https://www.naturalearthdata.com/about/terms-of-use/)).
--   **ggOceanMapsData glacier polygons.** [Natural Earth
-    Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
-    1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice
-    Shelves datasets combined. Distributed under the [CC Public Domain
-    license](https://creativecommons.org/publicdomain/) ([terms of
-    use](https://www.naturalearthdata.com/about/terms-of-use/)).
--   **ggOceanMapsData bathymetry.** [Amante, C. and B.W. Eakins, 2009.
-    ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources
-    and Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National
-    Geophysical Data Center,
-    NOAA](https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf).
-    Distributed under the [U.S. Government Work
-    license](https://www.usa.gov/government-works).
--   **Detailed shapefiles of Svalbard and the Norwegian coast in
-    [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)**
-    are from [Geonorge.no](https://www.geonorge.no/). Distributed under
-    the [CC BY 4.0
-    license](https://creativecommons.org/licenses/by/4.0/).
--   **Detailed bathymetry of the Arctic (IBCAO), Northern Hemisphere
-    (GEBCO) and the Barents Sea (BarentsSea) in
-    [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)**
-    are vectorized from the [General Bathymetric Chart of the
-    Oceans](https://www.gebco.net/data_and_products/gridded_bathymetry_data/)
-    15-arcsecond 2021 grid. [Terms of
-    use](https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/grid_terms_of_use.html)
--   **Detailed bathymetry of the Northeast Atlantic (EMODned) in
-    [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)**
-    is vectorized from the [European Marine Observation and Data
-    Network](https://www.emodnet-bathymetry.eu/data-products)
-    3.75-arcsecond grid. [Terms of
-    use](https://www.emodnet-bathymetry.eu/home/terms-of-use)
+- **ggOceanMapsData land polygons.** [Natural Earth
+  Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
+  1:10m Physical Vectors with the Land and Minor Island datasets
+  combined. Distributed under the [CC Public Domain
+  license](https://creativecommons.org/publicdomain/) ([terms of
+  use](https://www.naturalearthdata.com/about/terms-of-use/)).
+- **ggOceanMapsData glacier polygons.** [Natural Earth
+  Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
+  1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice
+  Shelves datasets combined. Distributed under the [CC Public Domain
+  license](https://creativecommons.org/publicdomain/) ([terms of
+  use](https://www.naturalearthdata.com/about/terms-of-use/)).
+- **ggOceanMapsData bathymetry.** [Amante, C. and B.W. Eakins, 2009.
+  ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and
+  Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National
+  Geophysical Data Center,
+  NOAA](https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf).
+  Distributed under the [U.S. Government Work
+  license](https://www.usa.gov/government-works).
+- **Detailed shapefiles of Svalbard and the Norwegian coast in
+  [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)**
+  are from [Geonorge.no](https://www.geonorge.no/). Distributed under
+  the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/).
+- **Detailed bathymetry of the Arctic (IBCAO), Northern Hemisphere
+  (GEBCO) and the Barents Sea (BarentsSea) in
+  [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)**
+  are vectorized from the [General Bathymetric Chart of the
+  Oceans](https://www.gebco.net/data_and_products/gridded_bathymetry_data/)
+  15-arcsecond 2021 grid. [Terms of
+  use](https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/grid_terms_of_use.html)
+- **Detailed bathymetry of the Northeast Atlantic (EMODned) in
+  [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)**
+  is vectorized from the [European Marine Observation and Data
+  Network](https://www.emodnet-bathymetry.eu/data-products)
+  3.75-arcsecond grid. [Terms of
+  use](https://www.emodnet-bathymetry.eu/home/terms-of-use)
 
 Further, please cite the package whenever maps generated by the package
 are published. For up-to-date citation information, please use:
@@ -207,7 +206,7 @@ citation("ggOceanMaps")
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Vihtakari M (2022). _ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'_. R package version 1.3.4,
+#>   using 'ggplot2'_. R package version 1.3.7,
 #>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -216,7 +215,7 @@ citation("ggOceanMaps")
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2022},
-#>     note = {R package version 1.3.4},
+#>     note = {R package version 1.3.7},
 #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```

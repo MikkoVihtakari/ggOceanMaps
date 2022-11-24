@@ -47,6 +47,8 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
            function(k) !grepl("::", k) & !is.null(k)))
       ) {
         
+        ## Predifined shapefile case
+        
         tmp <- load_map_data(x = shapefiles)
         
         shapefiles <- stats::setNames(lapply(seq_along(shapefiles), function(i) {
@@ -81,11 +83,32 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
       shapefilesDefined <- TRUE
       
     } else {
-      if(any(!c("land", "glacier", "bathy") %in% names(shapefiles))) stop("Shapefiles object must be a list and contain named elements: 'land', 'glacier', 'bathy'. See Details.")
-      customShapefiles <- sapply(shapefiles[c("land", "glacier", "bathy")], function(k) class(k))
       
-      if(any(!customShapefiles %in% c("NULL", "SpatialPolygonsDataFrame", "SpatialPolygons"))) stop("Shapefiles elements 'land', 'glacier', and 'bathy' must either be a SpatialPolygonsDataFrame, SpatialPolygons, or NULL. See Details.")
-      if(all(customShapefiles == "NULL")) stop("One of following shapefiles elements 'land', 'glacier', and 'bathy' must be a SpatialPolygonsDataFrame. See Details.")
+      ##Custom shapefile case
+      
+      # if(any(!c("land", "glacier", "bathy") %in% names(shapefiles))) stop("Shapefiles object must be a list and contain named elements: 'land', 'glacier', 'bathy'. See Details.") # Delete this once you confirm that the changes do not cause bugs
+      
+      shapefiles <- shapefiles[c("land", "glacier", "bathy")]
+      shapefiles <- shapefiles[!is.na(names(shapefiles))]
+      
+      customShapefiles <- sapply(shapefiles, function(k) class(k))
+      
+      if(any(sapply(customShapefiles, 
+                    function(k) any(k %in% c("sf", "sfc"))))) {
+        shapefiles <- lapply(seq_along(shapefiles), function(i) {
+          if(any(customShapefiles[[i]] %in% c("sf", "sfc"))) {
+            sf::as_Spatial(shapefiles[[i]])
+          } else {
+            shapefiles[[i]]
+          }
+        })
+        
+        names(shapefiles) <- names(customShapefiles)
+        customShapefiles <- sapply(shapefiles, function(k) class(k))
+      }
+      
+      if(any(sapply(customShapefiles, function(k) any(!k %in% c("NULL", "SpatialPolygonsDataFrame", "SpatialPolygons"))))) stop("Shapefiles elements 'land', 'glacier', and 'bathy' must either be a SpatialPolygonsDataFrame, SpatialPolygons, or NULL. See Details.")
+      if(all(sapply(customShapefiles, function(k) k == "NULL"))) stop("One of following shapefiles elements 'land', 'glacier', and 'bathy' must be a SpatialPolygonsDataFrame. See Details.")
       
       shapefilesDefined <- TRUE
     }
@@ -467,7 +490,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   
   if(exists("clipLimits")) {
     if(abs(clipLimits$ddLimits[4]) != 90) {
-      tmp <- sp::spTransform(clipLimits$projBound, sp::CRS(convert_crs(4326)))@bbox
+      tmp <- suppressWarnings(sp::spTransform(clipLimits$projBound, sp::CRS(convert_crs(4326)))@bbox)
       clipLimits$ddLimits <- unname(c(sort(tmp[1,]), sort(tmp[2,])))
     }
   }

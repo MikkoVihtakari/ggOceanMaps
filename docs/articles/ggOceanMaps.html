@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">27 September, 2022</h4>
+            <h4 data-toc-skip class="date">24 November, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/ggOceanMaps.Rmd" class="external-link"><code>vignettes/ggOceanMaps.Rmd</code></a></small>
       <div class="d-none name"><code>ggOceanMaps.Rmd</code></div>
@@ -515,7 +515,7 @@ The example works for any spatial polygons with crs information,
 however.</p>
 <p>The Norwegian fishing regions are included as an example dataset in
 the <strong>ggOceanMaps</strong> package. You can download these data
-and use the <code><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html" class="external-link">rgdal::readOGR</a></code> function to read the shapefile
+and use the <code><a href="http://rgdal.r-forge.r-project.org/reference/rgdal-deprecated.html" class="external-link">rgdal::readOGR</a></code> function to read the shapefile
 if you wish to follow the example fully.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fdir_areas</span><span class="op">)</span></span>
@@ -812,8 +812,8 @@ define folder paths under:</p>
 <span><span class="va">outPath</span> <span class="op">&lt;-</span> <span class="st">""</span> <span class="co"># Data output location</span></span></code></pre></div>
 <p>Once done, we go ahead and process the shapefiles:</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html" class="external-link">readOGR</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_land/ne_10m_land.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">islands</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html" class="external-link">readOGR</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_minor_islands/ne_10m_minor_islands.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/rgdal-deprecated.html" class="external-link">readOGR</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_land/ne_10m_land.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">islands</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/rgdal-deprecated.html" class="external-link">readOGR</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_minor_islands/ne_10m_minor_islands.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">islands</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">bs_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">lims</span><span class="op">)</span></span>
@@ -827,7 +827,7 @@ define folder paths under:</p>
 <p>Download the Natural Earth Data <a href="http://www.naturalearthdata.com/downloads/10m-physical-vectors/" class="external-link">Glaciated
 Areas</a> vectors to your <code>NEDPath</code>.</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html" class="external-link">readOGR</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_glaciated_areas/ne_10m_glaciated_areas.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/rgdal-deprecated.html" class="external-link">readOGR</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_glaciated_areas/ne_10m_glaciated_areas.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/pred-unary-gIsValid.html" class="external-link">gIsValid</a></span><span class="op">(</span><span class="va">glaciers</span><span class="op">)</span> <span class="co"># Needs buffering</span></span>
 <span><span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/misc-gBuffer.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">glaciers</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
@@ -911,7 +911,7 @@ published. For up-to-date citation information, please use:</p>
 <span><span class="co">#&gt; To cite package 'ggOceanMaps' in publications use:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Vihtakari M (2022). _ggOceanMaps: Plot Data on Oceanographic Maps</span></span>
-<span><span class="co">#&gt;   using 'ggplot2'_. R package version 1.3.4,</span></span>
+<span><span class="co">#&gt;   using 'ggplot2'_. R package version 1.3.7,</span></span>
 <span><span class="co">#&gt;   &lt;https://mikkovihtakari.github.io/ggOceanMaps/&gt;.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
@@ -920,7 +920,7 @@ published. For up-to-date citation information, please use:</p>
 <span><span class="co">#&gt;     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},</span></span>
 <span><span class="co">#&gt;     author = {Mikko Vihtakari},</span></span>
 <span><span class="co">#&gt;     year = {2022},</span></span>
-<span><span class="co">#&gt;     note = {R package version 1.3.4},</span></span>
+<span><span class="co">#&gt;     note = {R package version 1.3.7},</span></span>
 <span><span class="co">#&gt;     url = {https://mikkovihtakari.github.io/ggOceanMaps/},</span></span>
 <span><span class="co">#&gt;   }</span></span></code></pre></div>
 </div>

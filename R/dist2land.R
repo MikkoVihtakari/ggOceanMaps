@@ -8,7 +8,7 @@
 #' @param dist.col The name of the distance column, if \code{bind = TRUE}. Defaults to "dist".
 #' @param binary Logical indicating whether binary (TRUE = the position is in the ocean, FALSE = the position is on land) should be returned instead of distances. Speeds up the function considerably.
 #' @param cores Integer value defining how many cores should be used in the distance calculations. Parallelization speeds up the function (see \code{parallel::mclapply}), but naturally eats up computer resources during the calculation. Set to 1 to remove parallelization.
-#' @param verbose  Logical indicating whether information about the process should be returned as messages. Set to \code{FALSE} to make the function silent.
+#' @param verbose Logical indicating whether information about the process should be returned as messages. Set to \code{FALSE} to make the function silent.
 #' @details The function calculates distances using projected coordinates and the \code{rgeos::gDistance} function. These distances do not consider the curvature of the Earth unless the projection of the used land shape does so (check out geosphere::dist2Line and \href{https://stackoverflow.com/a/51842756/1082004}{this SO solution if you want exact distances}). The function is fairly slow for large datasets. If you only want to use the function to remove (wrong) observations reported on land, set the \code{binary} argument to \code{TRUE}. This speeds up the calculations considerably.
 #'
 #' The \code{dist2land} function offers parallel processing, which speeds up the calculations for large datasets. Parallel processing has not been tested under Windows yet and may not work.
@@ -24,29 +24,30 @@
 #' \donttest{
 #' # Simple example:
 #' dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
-#' dt <- dist2land(dt, cores = 1)
+#' dt <- dist2land(dt, cores = 1, verbose = FALSE)
 #' qmap(dt, color = ldist) + scale_color_viridis_c()
 #'
 #' # No premade shapefiles for datasets covering the entire globe
-#' data.frame(lon = -20:20, lat = seq(-90, 90, length.out = 41))
-#' dist2land(dt, cores = 1) # wrong!
+#' dt <- data.frame(lon = -20:20, lat = seq(-90, 90, length.out = 41))
+#' qmap(dist2land(dt, cores = 1, verbose = FALSE), color = ldist) + 
+#' scale_color_viridis_c() # wrong!
 #' }
 #' \dontrun{
 #' dt <- data.frame(lon = seq(-179, 179, length.out = 1000), lat = rep(60, 1000))
 #' # The distance calculation is slow for large datasets
 #' system.time(dist2land(dt))
 #' #> user  system elapsed
-#' #> 0.073   0.041   5.627
+#' #> 0.071   0.036   9.632
 #'
 #' # The parallel processing speeds it up
 #' system.time(dist2land(dt, cores = 1))
 #' #> user  system elapsed
-#' #> 19.719   1.237  20.894
+#' #> 29.019   1.954  30.958
 #'
 #' # binary = TRUE further speeds the function up
 #' system.time(dist2land(dt, binary = TRUE))
 #' #> user  system elapsed
-#' #> 1.624   0.041   1.680
+#' #> 2.342   0.052   2.403
 #' }
 #' }
 #' @export

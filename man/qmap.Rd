@@ -103,18 +103,17 @@ qmap(dt, color = I("red"))
 # Map color
 \donttest{
 qmap(dt, color = var) 
-}
+# 
 
 # Map text
-\donttest{
+
 qmap(dt, label = var) 
-} 
+ 
 
 # All basemap arguments work in qmap()
 
 dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
  
-\donttest{
 qmap(dt, rotate = TRUE)
 }
 }

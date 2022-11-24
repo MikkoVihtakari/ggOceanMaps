@@ -21,9 +21,9 @@
 #' @export
 
 shapefile_list <- function(name, get.data = FALSE) {
-
+  
   # List of alternatives
-
+  
   alternatives <- list(
     list(name = "ArcticStereographic", 
          land = "ggOceanMapsData::arctic_land", 
@@ -82,19 +82,25 @@ shapefile_list <- function(name, get.data = FALSE) {
          limits = c(-3e5, -1e5, -3.1e6, -2.9e6),
          path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/emodnet.rda")
   )
-
+  
   names(alternatives) <- sapply(alternatives, function(k) k$name)
-
+  
   # Return
-
+  
   if(name == "all") {
     
-    out <- do.call(rbind, lapply(alternatives, function(k) data.frame(k, stringsAsFactors = FALSE)))
+    out <- 
+      do.call(rbind, lapply(alternatives, function(k) {
+        k$limits <- paste0("c(",paste(k$limits, collapse = ", "), ")")
+        data.frame(k, stringsAsFactors = FALSE)
+      })
+      )
+    
     rownames(out) <- 1:nrow(out)
     
   } else  {
     out <- alternatives[[match.arg(name, names(alternatives))]] # Allows partial matching (typos likely in name)
-
+    
     if(get.data) {
       out[c("land", "glacier", "bathy")] <- lapply(out[c("land", "glacier", "bathy")], function(k) get(k))
     }
