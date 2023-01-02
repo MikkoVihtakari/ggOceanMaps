@@ -5,7 +5,7 @@
 #' @return A list of class \code{basemapData} containing information required for plotting a \code{\link{basemap}}.
 #' @keywords internal
 #' @export
-#' @import sp sf raster rgeos
+#' @import sp sf raster
 #' @author Mikko Vihtakari
 #' @seealso \code{\link{basemap}}
 

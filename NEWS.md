@@ -2,10 +2,10 @@
 
 * Fixed a bug with shapefiles argument shortcut.
 * Fixed a bug in ices_data
-* Add sf support for clip_shapefile
-* Add sf support for shapefiles (converts to sp, needs to be refined)
-* Fix a bug with expanded limits in decimal degree projection
-* Fix a bug where shapefile_list("all") would retunr multiple rows per shapefile name.
+* Added sf support for clip_shapefile
+* Added sf support for shapefiles (converts to sp, needs to be refined)
+* Fixed a bug with expanded limits in decimal degree projection
+* Fixed a bug where shapefile_list("all") would return multiple rows per shapefile name.
 
 # ggOceanMaps 1.3.4
 

@@ -3,6 +3,7 @@
 #' @param data Data frame to use.
 #' @param x,y,... Aesthetics passed into each layer. Longitude and latitude columns are automatically recognized using the \code{\link{guess_coordinate_columns}} function.
 #' @param geom Character argument specifying geom(s) to draw. Defaults to "point". Other alternatives are "text" and "label". The "text" option can also be triggered by simply mapping a variable to \code{label} (see Examples).
+#' @param Shapefiles Same as \code{shapefiles} in \code{\link{basemap}}. Name changed here to avoid argument partial matching to mix up the \code{shape} ggplot2 argument and the \code{shapefiles} argument.
 #' @inheritParams basemap
 #' @import ggplot2 ggspatial
 #' @return Returns a \link[ggplot2]{ggplot} map, which can be assigned to an object and modified as any ggplot object.
@@ -35,8 +36,8 @@
 #' }
 #' @export
 
-# data = dt; x = NULL; y = NULL; geom = "point"; limits = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = TRUE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = FALSE
-qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE, ...) {
+# x = NULL; y = NULL; geom = "point"; limits = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; expand.factor = 1.1; verbose = FALSE
+qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, Shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE, ...) {
   
   ## Coordinate columns
   
@@ -52,12 +53,13 @@ qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, shapef
     }
   }
   
+
   ## Base map
   
   pb <- basemap(
     limits = limits, 
     data = if("sf" %in% class(data)) {data} else {data[c(x, y)]},
-    shapefiles = shapefiles,
+    shapefiles = Shapefiles,
     bathymetry = bathymetry, glaciers = glaciers, rotate = rotate, 
     legends = legends, legend.position = legend.position, 
     lon.interval = lon.interval, lat.interval = lat.interval, 
