@@ -41,7 +41,7 @@ qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, Shapef
   
   ## Coordinate columns
   
-  if(!"sf" %in% class(data) & (is.null(x) | is.null(y))) {
+  if(!inherits(data, "sf") & (is.null(x) | is.null(y))) {
     coordCols <- guess_coordinate_columns(data)
     
     if(is.null(x)) {
@@ -53,6 +53,9 @@ qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, Shapef
     }
   }
   
+  if(inherits(data, "sf")) {
+    if(is.na(sf::st_crs(data))) stop("data does not have a coordinate reference system. Use sf::st_set_crs() to define it.")
+  }
 
   ## Base map
   
