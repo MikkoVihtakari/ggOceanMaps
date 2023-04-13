@@ -53,7 +53,7 @@ using devtools or remotes packages, or a drat repository on Windows and
 Mac:
 
 ``` r
-devtools::install_github("MikkoVihtakari/ggOceanMapsData")
+remotes::install_github("MikkoVihtakari/ggOceanMapsData")
 
 # OR:
 
@@ -69,8 +69,8 @@ The GitHub version of ggOceanMaps can be installed using the
 package.
 
 ``` r
-devtools::install_github("MikkoVihtakari/ggOceanMapsData") # required by ggOceanMaps
-devtools::install_github("MikkoVihtakari/ggOceanMaps")
+remotes::install_github("MikkoVihtakari/ggOceanMapsData") # required by ggOceanMaps
+remotes::install_github("MikkoVihtakari/ggOceanMaps")
 ```
 
 ## Usage
