@@ -50,7 +50,7 @@ install.packages("ggOceanMaps")
 Due to the package size limitations, ggOceanMaps requires the [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData) package which stores shapefiles used in low-resolution maps. If the data package does not install automatically, you can install it from GitHub using devtools or remotes packages, or a drat repository on Windows and Mac:
 
 ```{r eval = FALSE}
-devtools::install_github("MikkoVihtakari/ggOceanMapsData")
+remotes::install_github("MikkoVihtakari/ggOceanMapsData")
 
 # OR:
 
@@ -64,8 +64,8 @@ install.packages(
 The GitHub version of ggOceanMaps can be installed using the [**devtools**](https://cran.r-project.org/web/packages/devtools/index.html) package. 
 
 ```{r eval = FALSE}
-devtools::install_github("MikkoVihtakari/ggOceanMapsData") # required by ggOceanMaps
-devtools::install_github("MikkoVihtakari/ggOceanMaps")
+remotes::install_github("MikkoVihtakari/ggOceanMapsData") # required by ggOceanMaps
+remotes::install_github("MikkoVihtakari/ggOceanMaps")
 ```
 
 ## Usage
