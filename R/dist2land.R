@@ -151,6 +151,7 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = 
         cl <- parallel::makeCluster(cores, rscript_args = c("--no-init-file", "--no-site-file", "--no-environ"))
         out <- parallel::parLapply(cl, 1:length(x), function(i) suppressWarnings(rgeos::gDistance(x[i], land)/1000))
         parallel::stopCluster(cl)
+        tmp <- unlist(out)
       }
       else {
         tmp <- unlist(parallel::mclapply(1:length(x), function(i) {
