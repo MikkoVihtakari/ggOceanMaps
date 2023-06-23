@@ -56,7 +56,7 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
 \item{glaciers}{Logical indicating whether glaciers and ice-sheets should be added to the map.}
 
-\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. Experimental.}
+\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit.}
 
 \item{legends}{Logical indicating whether the legend for bathymetry should be shown.}
 

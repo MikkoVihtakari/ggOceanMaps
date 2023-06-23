@@ -1,8 +1,8 @@
 Package: ggOceanMaps
 Type: Package
 Title: Plot Data on Oceanographic Maps using 'ggplot2'
-Version: 1.3.8
-Date: 2022-11-24
+Version: 1.4.0
+Date: 2023-06-25
 Authors@R: c(person("Mikko", "Vihtakari", email = "mikko.vihtakari@hi.no",
                   role = c("aut", "cre"), 
                   comment = c(affiliation = "Institute of Marine Research", 
@@ -25,11 +25,11 @@ Description: Allows plotting data on bathymetric maps using 'ggplot2'. Plotting
   geospatial packages for R to manipulate, and the 'ggspatial' package to help 
   to plot these shapefiles. High-resolution shapefiles for detailed maps are 
   stored on GitHub and downloaded automatically when needed. 
-Depends: R (>= 3.5.0), ggplot2, ggspatial
+Depends: R (>= 3.5.0), ggplot2
 Imports: sp, raster, sf, methods, utils, stars, smoothr, units, dplyr, parallel
-Suggests: ggOceanMapsData, cowplot, knitr, rmarkdown, scales, ggnewscale
+Suggests: ggOceanMapsData, ggspatial, cowplot, knitr, rmarkdown, scales, ggnewscale
 Additional_repositories: https://mikkovihtakari.github.io/drat
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 LazyData: true

@@ -107,3 +107,88 @@ getCores <- function() {
     return(cores)
   }
 }
+
+#' @title Rotate CRS
+#' @description Rotates a CRS such that North is in the middle of two meridians
+#' @param crs The CRS to be rotated in \code{\link[sf]{st_crs}} format
+#' @param meridians A numeric vector giving the two meridians which should be used in the rotation
+#' @return Rotated CRS in \code{\link[sf]{st_crs}} format
+#' @keywords internal
+#' @author Mikko Vihtakari
+#' @export
+
+rotate_crs <- function(crs, meridians) {
+  
+  tmp <- dd_to_deg(meridians)
+  
+  if(tmp[1] > tmp[2]) {
+    lonDiff <- 360 - tmp[1] + tmp[2]
+  } else {
+    lonDiff <- tmp[2] - tmp[1]
+  }
+  
+  midLon <- tmp[1] + lonDiff/2
+  midLon <- deg_to_dd(midLon)  
+  
+  sf::st_crs(gsub("lon_0=0", paste0("lon_0=", midLon), crs$proj4string))
+}
+
+#' @title Create clip boundary from decimal degree limits
+#' @description Creates a clip boundary for map cropping from decimal degree limits 
+#' counter-clockwise following parallels
+#' @inheritParams auto_limits
+#' @param limits Numeric vector of length 4 giving the map limits in decimal degrees. See \link{basemap}.
+#' @param crs Coordinate reference system in \code{\link[sf]{st_crs}} format.
+#' @keywords internal
+#' @author Mikko Vihtakari
+#' @export
+
+dd_clip_boundary <- function(limits, crs, expand.factor = NULL) {
+
+  
+  tmp <- dd_to_deg(limits[1:2])
+
+  if(!is.null(expand.factor)) {
+    
+    lon.rdiff <- diff(tmp[1:2])
+    lon.shift <- ((lon.rdiff*expand.factor) - lon.rdiff)/2
+    tmp[1] <- tmp[1] - lon.shift
+    tmp[2] <- tmp[2] + lon.shift
+    
+    lat.rdiff <- diff(limits[3:4])
+    lat.shift <- ((lat.rdiff*expand.factor) - lat.rdiff)/2
+    limits[3] <- limits[3] - lat.shift
+    limits[4] <- limits[4] + lat.shift
+    
+    # Correct >= 180/90 limits for expanded decimal degree coordinates
+    
+    if(any(tmp < 0)) tmp[tmp < 0] <- 0
+    if(any(tmp > 360)) tmp[tmp > 360] <- 360
+    if(any(limits[3:4] < -90)) limits[3:4][limits[3:4] < -90] <- -90
+    if(any(limits[3:4] > 90)) limits[3:4][limits[3:4] > 90] <- 90
+  }
+    
+  if(tmp[1] > tmp[2]) {
+    lonDiff <- 360 - tmp[1] + tmp[2]
+  } else {
+    lonDiff <- tmp[2] - tmp[1]
+  }
+  
+  midLon <- tmp[1] + lonDiff/2
+  
+  tmp <- deg_to_dd(c(tmp[1], midLon, tmp[2]))
+  
+  coords <- data.frame(
+    lon = c(tmp, rev(tmp), tmp[1]), 
+    lat = c(rep(limits[3], 3), rep(limits[4], 3), limits[3])
+  )
+  
+  sf::st_as_sfc(
+    sf::st_bbox(
+      sf::st_transform(
+        sf::st_sfc(sf::st_polygon(list(as.matrix(coords))), crs = 4326),
+        sf::st_crs(crs)
+      )
+    )
+  )
+}

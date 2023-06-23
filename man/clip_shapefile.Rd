@@ -2,41 +2,41 @@
 % Please edit documentation in R/clip_shapefile.R
 \name{clip_shapefile}
 \alias{clip_shapefile}
-\title{Clip a shapefile (SpatialPolygon) using a bounding area}
+\title{Clip a shapefile using a bounding area}
 \usage{
 clip_shapefile(
   x,
   limits,
-  proj.limits = convert_crs(4326),
+  proj.limits = 4326,
   simplify = FALSE,
   tol = 60,
   return.boundary = FALSE,
-  sf.mode = FALSE
+  output.sf = TRUE
 )
 }
 \arguments{
-\item{x}{Original shape file to be clipped as a an \link[sp]{sp} or \link[sf]{sf} polygons object. Required. Must contain \code{\link[sp:is.projected]{CRS}} information.}
+\item{x}{Original shapefile to be clipped as a an \link[sf]{sf} or \code{sp} polygons object. Required. Must contain \code{\link[sf:st_crs]{CRS}} information.}
 
-\item{limits}{The constraining area used to clip \code{x}. Required. Either a numeric vector of length 4 or a \link[sp]{SpatialPolygons} object. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. The \link[sp]{SpatialPolygons} object must contain \code{\link[sp:is.projected]{CRS}} information. See details.}
+\item{limits}{The constraining area used to clip \code{x}. Required. Either a numeric vector of length 4 or a spatial object from the sf or sp packages. The first element of the numeric vector defines the minimum longitude, second element the maximum longitude, third element the minimum latitude and fourth element the maximum latitude of the bounding box. If a spatial object, it must contain \code{\link[sf:st_crs]{CRS}} information. See details.}
 
-\item{proj.limits}{The \code{\link[sp:is.projected]{CRS}} projection attributes for \code{limits} as character string (will be passed to \code{\link[sp]{CRS}}). Use the PROJ6 format. Defaults to decimal degrees (see Usage).}
+\item{proj.limits}{The \code{\link[sf:st_crs]{CRS}} projection attributes for \code{limits}. Hence format accepted by \code{\link[sf]{st_crs}} will suffice but integers are the easiest. Defaults to decimal degrees.}
 
-\item{simplify}{Should the \code{x} geometry be simplified before clipping? Useful to make the function faster for large shape files. Uses \code{rgeos::gSimplify} function.}
+\item{simplify}{Should the \code{x} geometry be simplified before clipping? Useful to make the function faster for large shape files. Uses \code{\link[sf]{st_simplify}} function.}
 
-\item{tol}{Numerical tolerance value to be used for simplification. See \code{?rgeos::gSimplify}.}
+\item{tol}{Numerical tolerance value to be used for simplification. See \code{?sf::st_simplfy}.}
 
-\item{return.boundary}{logical. If \code{TRUE} returns the clip boundary together with the shapefile.}
+\item{return.boundary}{Logical. If \code{TRUE} returns the clip boundary together with the shapefile.}
 
-\item{sf.mode}{Logical indicating whether the function should be executed using the sf package. Developmental switch during the transfer from sp to sf.}
+\item{output.sf}{Logical indicating return the results in \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or sp (\code{FALSE}) format.}
 }
 \value{
-Clipped \code{\link[sp]{SpatialPolygons}} object. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
+Clipped spatial object. The class is depending on the \code{output.sf} argument. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
 }
 \description{
-Clips an area from a larger shape file (\link[sp]{SpatialPolygons}).
+Clips an area from a larger shapefile provided in sf or sp formats.
 }
 \details{
-The function uses the \code{rgeos::gIntersection} function to clip smaller \link[sp]{SpatialPolygons} from larger ones. The clip area is constrained by either a numeric vector or \link[sp]{SpatialPolygons} object in the \code{limits} argument. One of these arguments must be given. Defining \code{limits} by a \link[sp]{SpatialPolygons} object gives greater freedom for the clip area as the area does not have to be rectangular.
+The function uses the \code{\link[sf]{st_intersection}} function to clip smaller polygons from larger ones. The clip area is constrained by either a numeric vector or a spatial object in the \code{limits} argument. Defining \code{limits} by a \code{\link[sf:st_sf]{sf}} object gives greater freedom for the clip area as the area does not have to be rectangular.
 }
 \seealso{
 Other create shapefiles: 

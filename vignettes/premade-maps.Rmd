@@ -51,7 +51,7 @@ Standard maps requiring the ggOceanMapsData package are selected automatically b
 ## Arctic Stereographic
 
 ```{r eval = F}
-basemap("ArcticStereographic", bathymetry = TRUE)
+basemap("ArcticStereographic", bathymetry = TRUE, glaciers = TRUE)
 ```
 
 ![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/ArcticStereographic.png)
@@ -59,7 +59,7 @@ basemap("ArcticStereographic", bathymetry = TRUE)
 ## Antarctic Stereographic
 
 ```{r eval = F}
-basemap("AntarcticStereographic", bathymetry = TRUE)
+basemap("AntarcticStereographic", bathymetry = TRUE, glaciers = TRUE)
 ```
 
 ![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/AntarcticStereographic.png)
@@ -67,7 +67,7 @@ basemap("AntarcticStereographic", bathymetry = TRUE)
 ## Decimal degree
 
 ```{r eval = F}
-basemap("DecimalDegree", bathymetry = TRUE)
+basemap("DecimalDegree", bathymetry = TRUE, glaciers = TRUE)
 ```
 
 ![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png)
@@ -80,7 +80,7 @@ The detailed shapefiles for time being are:
 The Barents Sea and surroundings vectorized from [the GEBCO grid](https://www.gebco.net/data_and_products/gridded_bathymetry_data/). A subset of IBCAO and GEBCO datasets. Use this one for speed when you can. Replace by IBCAO when your ROI is exceeding the limits of this one. 
 
 ```{r eval = F}
-basemap("BarentsSea", bathymetry = TRUE)
+basemap("BarentsSea", bathymetry = TRUE, glaciers = TRUE)
 ```
 
 ![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/BarentsSea.png)
@@ -90,7 +90,7 @@ basemap("BarentsSea", bathymetry = TRUE)
 [The IBCAO grid (by GEBCO)](https://www.gebco.net/about_us/committees_and_groups/scrum/ibcao/) vectorized from the North Pole to approximately 60-65&deg;N. A subset of the GEBCO dataset under. Definitely use this one over the GEBCO alternative whenever you can. It is about ten times faster. 
 
 ```{r eval = F}
-basemap("IBCAO", bathymetry = TRUE)
+basemap("IBCAO", bathymetry = TRUE, glaciers = TRUE)
 ```
 
 ![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/IBCAO.png)
@@ -100,7 +100,7 @@ basemap("IBCAO", bathymetry = TRUE)
 The entire GEBCO grid from the North Pole to 10&deg;N vectorized and packed into a >60 Mb R data file. When opened, the data take >3 Gb. This is a clumsy approach and plotting maps using this option can take a long time (up to 10 minutes on a test machine) and will make your computer to beg for mercy. Use this as the last resort and do not blame the package author that you were not warned ;)
 
 ```{r eval = F}
-basemap("GEBCO", bathymetry = TRUE)
+basemap("GEBCO", bathymetry = TRUE, glaciers = TRUE)
 ```
 
 ![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/GEBCO.png)
@@ -112,7 +112,7 @@ basemap("GEBCO", bathymetry = TRUE)
 The Svalbard map from the [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package:
 
 ```{r eval = F}
-basemap("Svalbard", glaciers = TRUE)
+basemap("Svalbard", bathymetry = TRUE, glaciers = TRUE)
 ```
 
 ![The PlotSvalbard maps can also be generated using ggOceanMaps with the ggOceanMapsLargeData extension. The function asks to download the data when you use it for the first time.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png)

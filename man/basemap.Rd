@@ -44,7 +44,7 @@ basemap(
 }
 Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
-\item{data}{A data frame, \link[sp]{SpatialPolygons}, or \link[sf]{sf} shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.}
+\item{data}{A data frame, sp, or \link[sf]{sf} shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.}
 
 \item{shapefiles}{Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.}
 
@@ -52,7 +52,7 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
 \item{glaciers}{Logical indicating whether glaciers and ice-sheets should be added to the map.}
 
-\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. Experimental.}
+\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit.}
 
 \item{legends}{Logical indicating whether the legend for bathymetry should be shown.}
 
@@ -88,10 +88,10 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 Returns a \link[ggplot2]{ggplot} map, which can be assigned to an object and modified as any ggplot object.
 }
 \description{
-Creates a ggplot2 basemap for further plotting of variables.
+Creates a ggplot2 basemap for further plotting of data.
 }
 \details{
-The function uses \link[ggplot2:ggplot2-package]{ggplot2}, \link[ggspatial:ggspatial-package]{ggspatial}, GIS packages of R, and shapefiles to plot maps of the world's oceans. 
+The function uses \link[ggplot2:ggplot2-package]{ggplot2}, \link[sf:sf]{sf}, and shapefiles to plot maps of the world's oceans. 
 
 \strong{Projections}
 
@@ -124,10 +124,6 @@ See Examples.
 \strong{Line width and font size}
  
 The line size aesthetics in \link[ggplot2:ggplot2-package]{ggplot2} generates approximately 2.13 wider lines measured in pt than the given values. If you want a specific line width in pt, use the internal function \code{\link{LS}} to convert the desired line width to ggplot2 equivalent. A similar function is also available for font sizes (\code{\link{FS}}).
-
-\strong{CRS warnings}
-
-Open-source GIS systems are rolling over to a new \href{https://rgdal.r-forge.r-project.org/articles/CRS_projections_transformations.html}{to a new projection definition system}. The changes to underlying systems appear to sometimes trigger warnings the user can ignore as long as the resulting map looks OK. Bug reports regarding these warnings are appreciated.
 }
 \examples{
 # The easiest way to produce a map is to use the limits
@@ -138,66 +134,62 @@ if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 basemap(limits = 60)
 
 # Bathymetry and glaciers can be added using the respective arguments:
-
 basemap(limits = -60, bathymetry = TRUE, glaciers = TRUE)
 
 # The easiest way to add data on the maps is to use the ggspatial functions:
-
 dt <- data.frame(lon = c(-150, 150), lat = c(60, 90))
 
 basemap(data = dt, bathymetry = TRUE) +
-geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
+ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
 
 \dontrun{
 # Note that writing out data = dt is required because there are multiple
 # underlying ggplot layers plotted already:
 basemap(data = dt) +
-geom_spatial_point(dt, aes(x = lon, y = lat), color = "red")
+ggspatial::geom_spatial_point(dt, aes(x = lon, y = lat), color = "red")
 #> Error: `mapping` must be created by `aes()`
 }
 
 # If you want to use native ggplot commands, you need to transform your data
 # to the projection used by the map:
-
 dt <- transform_coord(dt, bind = TRUE)
 
-basemap(data = dt) + geom_point(data = dt, aes(x = lon.proj, y = lat.proj))
+basemap(data = dt) + 
+geom_point(data = dt, aes(x = lon.proj, y = lat.proj), color = "red")
 
 # The limits argument of length 4 plots a map anywhere in the world:
-
 basemap(limits = c(100, 160, -20, 30), bathymetry = TRUE)
-
-# The argument leads to expanded maps towards poles:
-
-dt <- data.frame(lon = c(-160, 160, 160, -160), lat = c(80, 80, 60, 60))
-
-basemap(limits = c(160, -160, 60, 80)) +
-geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
-fill = NA, color = "red")
 
 # The limits are further expanded when using the data argument:
 
+dt <- data.frame(lon = c(-160, 160, 160, -160), lat = c(80, 80, 60, 60))
+
 basemap(data = dt) +
-geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
+ggspatial::geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
 fill = NA, color = "red")
 
-# Rotate:
-
+# Rotate:#' 
 basemap(data = dt, rotate = TRUE) +
-geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
+ggspatial::geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
                     fill = NA, color = "red")
+
+# Alternative:
+basemap(data = dt, rotate = TRUE) +
+geom_polygon(data = transform_coord(dt, rotate = TRUE), 
+aes(x = lon, y = lat), fill = NA, color = "red")
 
 ## To find UTM coordinates to limit a polar map:
 basemap(limits = 60, projection.grid = TRUE)
 basemap(limits = c(2.5e4, -2.5e6, 2e6, -2.5e5), shapefiles = "Arctic")
 
-# Using custom shapefiles
+# Using custom shapefiles:
 data(bs_shapes, package = "ggOceanMapsData")
-basemap(shapefiles = list(land = bs_land),
-bathymetry = TRUE)
+basemap(shapefiles = list(land = bs_land))
 
-# grid.col = NA removes grid lines, rotate = TRUE rotates northwards
+# Premade shapefiles from ggOceanMapsLargeData (requires download):
+basemap("BarentsSea", bathymetry = TRUE)
 
+# grid.col = NA removes grid lines, rotate = TRUE rotates northwards: 
 basemap(limits = c(-180, -140, 50, 70), grid.col = NA, rotate = TRUE)
 
 # Rename axis labels

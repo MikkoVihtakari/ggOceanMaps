@@ -1,6 +1,6 @@
 #' @title Automatic limits for basemap
 #' @description Find limits for a \code{\link{basemap}} from a data frame.
-#' @param data Data frame containing data for which the limits should be calculated.
+#' @param data Data frame or a spatial object containing data for which the limits should be calculated.
 #' @param proj.in Original \code{\link[sf:st_crs]{CRS}} projection. Must be defined as character argument.
 #' @param proj.out Resulting map projection. See \code{\link{transform_coord}}.
 #' @param lon,lat Names of longitude and latitude columns in \code{data} as character or integer index. If \code{NULL}, the column names are \link[=guess_coordinate_columns]{guessed}.
@@ -20,29 +20,14 @@
 #' }
 #' @export
 
-# data = expand.grid(lon = c(-120, 180, 120), lat = c(60, 60, 80)); lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; expand.factor = NULL; verbose = FALSE; output.sf = FALSE
-auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out = NULL, expand.factor = NULL, verbose = FALSE, output.sf = FALSE) {
+# lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; expand.factor = NULL; verbose = FALSE; output.sf = FALSE
+auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out = NULL, expand.factor = NULL, verbose = FALSE, output.sf = TRUE) {
   
-  # Get limits from spatial polygons ####
+  # Get coordinates from spatial objects
   
-  if(any(inherits(data, c("SpatialPolygonsDataFrame", "SpatialPolygons")))) {
-    proj.in <- raster::crs(data)
-    
-    # if(!sf::st_is_longlat(proj.in)) {
-    #   data <- sp::spTransform(data, sp::CRS(convert_crs(4326)))
-    #   proj.in <- convert_crs(4326)
-    #   message("The data argument is a spatial polygons object, which is not given as decimal degrees. Converted to decimal degrees.")
-    # }
-    
-    data <- suppressMessages(ggplot2::fortify(data)[c("long", "lat")])
-    names(data) <- c("lon", "lat")
-  }
-  
-  # Get limits from sf objects
-  
-  if(any(inherits(data, "sf"))) {
+  if(any(inherits(data, c("sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons")))) {
     proj.in <- sf::st_crs(data)
-   
+    
     tmp <- sf::st_bbox(data)
     
     data <- expand.grid(data.frame(
@@ -136,7 +121,11 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out =
   # projBoundNodes <- sp::SpatialPoints(expand.grid(lon = tmp$x, lat = tmp$y), 
   #                                     proj4string = if(class(proj.crs) == "CRS") {proj.crs} else {sp::CRS(convert_crs(proj.crs))})
   
-  projBound <- sf::st_polygon(list(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4], projLims[2], projLims[4], projLims[2], projLims[3], projLims[1], projLims[3]), ncol = 2, byrow = TRUE)))
+  projBound <- sf::st_polygon(
+    list(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4], projLims[2], 
+                  projLims[4], projLims[2], projLims[3], projLims[1], projLims[3]), 
+                ncol = 2, byrow = TRUE)))
+  
   projBound <- sf::st_sfc(projBound, crs = sf::st_crs(proj.crs))
   
   tmp <- sf::st_bbox(projBound)
@@ -151,17 +140,19 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out =
   # decBoundNodes <- sp::spTransform(projBoundNodes, sp::CRS(convert_crs(4326))) # proj.in
   
   if(!identical(sign(projLims[3]), sign(projLims[4]))) { # Spans across the pole
-    decLims <- unname(sf::st_bbox(decBoundNodes)[c(1,3,2,4)]) # old: c(raster::extent(decBoundNodes)[1:3], 90)
+    decLims <- c(unname(sf::st_bbox(decBoundNodes)[c(1,3,2)]), 90) # old: c(raster::extent(decBoundNodes)[1:3], 90)
     decLims <- c(decLims[1:3], sign(decLims[4]) * 90)
   } else if(sign(decLims[1]) != sign(decLims[2]) & decLims[1] < decLims[2]) { # Antimeridian correction
     decLims <-  unname(sf::st_bbox(decBoundNodes)[c(1,3,2,4)]) # old: c(raster::extent(decBoundNodes)[1:4])
   }
   
+  names(decLims) <- c("xmin", "xmax", "ymin", "ymax")
+  
   # Return
   
-  if(output.sf) {
-    list(ddLimits = decLims, projLimits = projLims, projBound = projBound, proj.in = attributes(x)$proj.in, proj.out = proj.out)
-  } else {
-    list(ddLimits = decLims, projLimits = projLims, projBound = sf::as_Spatial(projBound), proj.in = attributes(x)$proj.in, proj.out = proj.out)
-  }
+  if(!output.sf) projBound <- sf::as_Spatial(projBound)
+  
+  list(ddLimits = decLims, projLimits = projLims, projBound = projBound, 
+       proj.in = attributes(x)$proj.in, proj.out = proj.out)
+  
 }

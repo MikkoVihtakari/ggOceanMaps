@@ -12,11 +12,11 @@ auto_limits(
   proj.out = NULL,
   expand.factor = NULL,
   verbose = FALSE,
-  output.sf = FALSE
+  output.sf = TRUE
 )
 }
 \arguments{
-\item{data}{Data frame containing data for which the limits should be calculated.}
+\item{data}{Data frame or a spatial object containing data for which the limits should be calculated.}
 
 \item{lon, lat}{Names of longitude and latitude columns in \code{data} as character or integer index. If \code{NULL}, the column names are \link[=guess_coordinate_columns]{guessed}.}
 
