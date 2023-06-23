@@ -88,17 +88,60 @@ qmap <- function(data, ..., x = NULL, y = NULL, geom = "point", limits = NULL, s
     pb + geom_sf(data = data, aes(...))
   } else if(geom == "point" && !methods::hasArg(label)) {
     
-    geom_arguments <- list(
-      ...,
-      x = ggplot2::sym(x_proj), 
-      y = ggplot2::sym(y_proj),
-      color = I("red"),
-      shape = I(21)
-    )
-
-    geom_arguments <- geom_arguments[!duplicated(names(geom_arguments))]
+    mf <- match.call()
     
-    pb + ggplot2::geom_point(data = data, do.call("aes", geom_arguments))
+    
+    if(any(grepl("colour|color", names(mf)))) {
+      pb + 
+        ggplot2::geom_point(
+          data = data, 
+          ggplot2::aes(x = .data[[x_proj]], y = .data[[y_proj]], ...))
+    } else {
+      pb + 
+        ggplot2::geom_point(
+          data = data, 
+          ggplot2::aes(x = .data[[x_proj]], y = .data[[y_proj]], 
+                       color = I("red"), ...))
+    }
+    
+    # if(any(grepl("colour|color", names(mf))) & any(grepl("shape", names(mf)))) {
+    #   pb + 
+    #     ggplot2::geom_point(
+    #       data = data, 
+    #       ggplot2::aes(x = .data[[x_proj]], y = .data[[y_proj]], ...))
+    # } else if(any(grepl("colour|color", names(mf)))) {
+    #   pb + 
+    #     ggplot2::geom_point(
+    #       data = data, 
+    #       ggplot2::aes(x = .data[[x_proj]], y = .data[[y_proj]], 
+    #                    shape = I(21), ...))
+    # } else if(any(grepl("shape", names(mf)))) {
+    #   pb + 
+    #     ggplot2::geom_point(
+    #       data = data, 
+    #       ggplot2::aes(x = .data[[x_proj]], y = .data[[y_proj]], 
+    #                    color = I("red"), ...))
+    # } else {
+    #   pb + 
+    #     ggplot2::geom_point(
+    #       data = data, 
+    #       ggplot2::aes(x = .data[[x_proj]], y = .data[[y_proj]], 
+    #                    color = I("red"), shape = I(21), ...))
+    # }
+    
+    # geom_arguments <- list(...)
+    # 
+    # geom_arguments <- list(
+    #   ...,
+    #   x = ggplot2::sym(x_proj), 
+    #   y = ggplot2::sym(y_proj),
+    #   color = I("red"),
+    #   shape = I(21)
+    # )
+    # 
+    # geom_arguments <- geom_arguments[!duplicated(names(geom_arguments))]
+    # 
+    # pb + ggplot2::geom_point(data = data, do.call("aes", geom_arguments))
     
     # pb + ggspatial::geom_spatial_point(data = data, aes(x = get(x), y = get(y), ...), crs = 4326)
   } else if(geom == "label") {
