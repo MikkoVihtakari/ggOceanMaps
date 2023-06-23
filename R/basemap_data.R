@@ -342,9 +342,8 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     
     if(case == "data_sp") data <- sf::st_as_sf(data)
     
-    tmp <- auto_limits(data, expand.factor = 1.1, verbose = verbose)
-    
     if(is.null(shapefiles)) {
+      tmp <- auto_limits(data, expand.factor = 1.1, verbose = verbose)
       shapefiles <- shapefile_list(define_shapefiles(tmp$ddLimits)$shapefile.name)
       crs <- sf::st_crs(shapefiles$crs)
       clip_shape <- tmp$projBound
@@ -358,6 +357,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
         crs <- suppressWarnings(sf::st_crs(eval(parse(text = shapefiles$land))))
       }
       
+      tmp <- auto_limits(data, proj.out = crs, expand.factor = 1.1, verbose = verbose)
       clip_shape <- sf::st_transform(tmp$projBound, crs)
     }
     
