@@ -6,11 +6,12 @@
 \usage{
 qmap(
   data,
+  ...,
   x = NULL,
   y = NULL,
   geom = "point",
   limits = NULL,
-  Shapefiles = NULL,
+  shapefiles = NULL,
   bathymetry = FALSE,
   glaciers = FALSE,
   rotate = FALSE,
@@ -32,8 +33,7 @@ qmap(
   base_size = 11,
   projection.grid = FALSE,
   expand.factor = 1.1,
-  verbose = FALSE,
-  ...
+  verbose = FALSE
 )
 }
 \arguments{
@@ -50,7 +50,7 @@ qmap(
 }
 Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
-\item{Shapefiles}{Same as \code{shapefiles} in \code{\link{basemap}}. Name changed here to avoid argument partial matching to mix up the \code{shape} ggplot2 argument and the \code{shapefiles} argument.}
+\item{shapefiles}{Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.}
 
 \item{bathymetry}{Logical indicating whether bathymetry should be added to the map.}
 

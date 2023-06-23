@@ -3,7 +3,6 @@
 #' @param data Data frame to use.
 #' @param x,y,... Aesthetics passed into each layer. Longitude and latitude columns are automatically recognized using the \code{\link{guess_coordinate_columns}} function.
 #' @param geom Character argument specifying geom(s) to draw. Defaults to "point". Other alternatives are "text" and "label". The "text" option can also be triggered by simply mapping a variable to \code{label} (see Examples).
-#' @param Shapefiles Same as \code{shapefiles} in \code{\link{basemap}}. Name changed here to avoid argument partial matching to mix up the \code{shape} ggplot2 argument and the \code{shapefiles} argument.
 #' @inheritParams basemap
 #' @import ggplot2 ggspatial
 #' @return Returns a \link[ggplot2]{ggplot} map, which can be assigned to an object and modified as any ggplot object.
@@ -37,7 +36,7 @@
 #' @export
 
 # x = NULL; y = NULL; geom = "point"; limits = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; expand.factor = 1.1; verbose = FALSE
-qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, Shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE, ...) {
+qmap <- function(data, ..., x = NULL, y = NULL, geom = "point", limits = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE) {
   
   ## Coordinate columns
   
@@ -55,14 +54,14 @@ qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, Shapef
   
   if(inherits(data, "sf")) {
     if(is.na(sf::st_crs(data))) stop("data does not have a coordinate reference system. Use sf::st_set_crs() to define it.")
-  }
-
+  } 
+  
   ## Base map
   
   pb <- basemap(
     limits = limits, 
     data = if("sf" %in% class(data)) {data} else {data[c(x, y)]},
-    shapefiles = Shapefiles,
+    shapefiles = shapefiles,
     bathymetry = bathymetry, glaciers = glaciers, rotate = rotate, 
     legends = legends, legend.position = legend.position, 
     lon.interval = lon.interval, lat.interval = lat.interval, 
@@ -75,26 +74,41 @@ qmap <- function(data, x = NULL, y = NULL, geom = "point", limits = NULL, Shapef
     expand.factor = expand.factor, verbose = verbose
   )
   
-  ## Geoms
+  ## Transform data
   
-  # geom_arguments <- list(
-  #   ...,
-  #   color = "red",
-  #   shape = 21
-  # )
-  #
-  # geom_arguments <- geom_arguments[!duplicated(names(geom_arguments))]
+  if(!inherits(data, "sf")) {
+    data <- transform_coord(data, lon = x, lat = y, rotate = rotate, proj.out = attributes(pb)$crs, bind = TRUE)
+    x_proj <- "lon.proj"
+    y_proj <- "lat.proj"
+  }
+  
+  ## Geoms
   
   if("sf" %in% class(data)) {
     pb + geom_sf(data = data, aes(...))
   } else if(geom == "point" && !methods::hasArg(label)) {
-    pb + ggspatial::geom_spatial_point(data = data, aes(x = get(x), y = get(y), ...), crs = 4326)
-  } else if(geom == "text" | methods::hasArg("label")) {
-    pb + ggspatial::geom_spatial_text(data = data, aes(x = get(x), y = get(y), ...), crs = 4326)
+    
+    geom_arguments <- list(
+      ...,
+      x = ggplot2::sym(x_proj), 
+      y = ggplot2::sym(y_proj),
+      color = I("red"),
+      shape = I(21)
+    )
+
+    geom_arguments <- geom_arguments[!duplicated(names(geom_arguments))]
+    
+    pb + ggplot2::geom_point(data = data, do.call("aes", geom_arguments))
+    
+    # pb + ggspatial::geom_spatial_point(data = data, aes(x = get(x), y = get(y), ...), crs = 4326)
   } else if(geom == "label") {
-    pb + ggspatial::geom_spatial_label(data = data, aes(x = get(x), y = get(y), ...), crs = 4326)
+    pb + ggplot2::geom_label(data = data, ggplot2::aes(x = get(x_proj), y = get(y_proj), ...))
+    # pb + ggspatial::geom_spatial_label(data = data, aes(x = get(x), y = get(y), ...), crs = 4326)
+  } else if(geom == "text" | methods::hasArg("label")) {
+    pb + ggplot2::geom_text(data = data, ggplot2::aes(x = get(x_proj), y = get(y_proj), ...))
+    #pb + ggspatial::geom_spatial_text(data = data, aes(x = get(x), y = get(y), ...), crs = 4326)
   } else {
-    stop("Other geom than point have not been implemented yet.")
+    stop("Other geom than point, label and text have not been implemented yet.")
   }
   
 }

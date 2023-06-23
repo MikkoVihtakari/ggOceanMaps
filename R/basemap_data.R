@@ -312,7 +312,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     
   } else if(case %in% c("limits_dec")) { 
     ### limits_dec ####
-   
+    
     # Shapefile definitions
     
     if(is.null(shapefiles)) {
@@ -344,9 +344,22 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     
     tmp <- auto_limits(data, expand.factor = 1.1, verbose = verbose)
     
-    shapefiles <- shapefile_list(define_shapefiles(tmp$ddLimits)$shapefile.name)
-    clip_shape <- tmp$projBound
-    crs <- sf::st_crs(shapefiles$crs)
+    if(is.null(shapefiles)) {
+      shapefiles <- shapefile_list(define_shapefiles(tmp$ddLimits)$shapefile.name)
+      crs <- sf::st_crs(shapefiles$crs)
+      clip_shape <- tmp$projBound
+    } else {
+      if(inherits(shapefiles$land, c("sf", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+        if(inherits(shapefiles$land, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+          shapefiles$land <- sf::st_as_sf(shapefiles$land)
+        }
+        crs <- suppressWarnings(sf::st_crs(shapefiles$land))
+      } else {
+        crs <- suppressWarnings(sf::st_crs(eval(parse(text = shapefiles$land))))
+      }
+      
+      clip_shape <- sf::st_transform(tmp$projBound, crs)
+    }
     
     limits <- tmp$ddLimits
     
@@ -484,10 +497,10 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE) {
       limits = sf::st_transform(x$clip_limits, crs = x$crs),
       return.boundary = TRUE
     )
-
+    
     x$shapefiles$land <- landBoundary$shapefile
     x$clip_limits <- landBoundary$boundary
-
+    
   } else {
     
     landBoundary <- clip_shapefile(
