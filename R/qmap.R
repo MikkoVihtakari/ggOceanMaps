@@ -4,7 +4,7 @@
 #' @param x,y,... Aesthetics passed into each layer. Longitude and latitude columns are automatically recognized using the \code{\link{guess_coordinate_columns}} function.
 #' @param geom Character argument specifying geom(s) to draw. Defaults to "point". Other alternatives are "text" and "label". The "text" option can also be triggered by simply mapping a variable to \code{label} (see Examples).
 #' @inheritParams basemap
-#' @import ggplot2 ggspatial
+#' @import ggplot2
 #' @return Returns a \link[ggplot2]{ggplot} map, which can be assigned to an object and modified as any ggplot object.
 #' @family basemap functions
 #' @author Mikko Vihtakari
@@ -77,7 +77,12 @@ qmap <- function(data, ..., x = NULL, y = NULL, geom = "point", limits = NULL, s
   ## Transform data
   
   if(!inherits(data, "sf")) {
-    data <- transform_coord(data, lon = x, lat = y, rotate = rotate, proj.out = attributes(pb)$crs, bind = TRUE)
+    if(rotate) {
+      data <- transform_coord(data, lon = x, lat = y, rotate = TRUE, bind = TRUE)
+    } else {
+      data <- transform_coord(data, lon = x, lat = y, proj.out = attributes(pb)$crs, bind = TRUE)
+    }
+    
     x_proj <- "lon.proj"
     y_proj <- "lat.proj"
   }
@@ -100,8 +105,7 @@ qmap <- function(data, ..., x = NULL, y = NULL, geom = "point", limits = NULL, s
       pb + 
         ggplot2::geom_point(
           data = data, 
-          ggplot2::aes(x = .data[[x_proj]], y = .data[[y_proj]], 
-                       color = I("red"), ...))
+          ggplot2::aes(x = .data[[x_proj]], y = .data[[y_proj]], ...), color = "red")
     }
     
     # if(any(grepl("colour|color", names(mf))) & any(grepl("shape", names(mf)))) {

@@ -1,5 +1,8 @@
 # ggOceanMaps 1.4 (development version)
 
+* Full [sf](https://r-spatial.github.io/sf/) integration. Old GIS packages for R and ggspatial dependencies removed. Since this change required rewriting of most functions, new bugs have almost certainly been introduced.
+* Decimal degree maps can now be plotted across the antimeridian.
+* `dist2land()` now uses great circle distances on a spherical Earth ([s2](https://r-spatial.github.io/s2/)) by default and should be able to calculate distances to land anywhere around the globe.
 * Fixed a bug with shapefiles argument shortcut.
 * Fixed a bug in ices_data
 * Added sf support for clip_shapefile

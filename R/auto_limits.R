@@ -20,19 +20,17 @@
 #' }
 #' @export
 
-# lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; expand.factor = NULL; verbose = FALSE; output.sf = FALSE
+# lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; expand.factor = NULL; verbose = FALSE; output.sf = TRUE
 auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out = NULL, expand.factor = NULL, verbose = FALSE, output.sf = TRUE) {
   
   # Get coordinates from spatial objects
   
   if(any(inherits(data, c("sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons")))) {
-    proj.in <- sf::st_crs(data)
-    
-    tmp <- sf::st_bbox(data)
+    tmp <- sf::st_bbox(sf::st_transform(sf::st_as_sfc(sf::st_bbox(data)), proj.in))
     
     data <- expand.grid(data.frame(
-      lon = tmp[c(1,3)],
-      lat = tmp[c(2,4)])
+      lon = tmp[c("xmin", "xmax")],
+      lat = tmp[c("ymin", "ymax")])
     )
   }
   
@@ -112,15 +110,6 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out =
   
   # Projected boundaries
   
-  
-  ## Old sp way, to be removed when the sf way is tested
-  # projBound <- sp::Polygon(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4], projLims[2], projLims[4], projLims[2], projLims[3], projLims[1], projLims[3]), ncol = 2, byrow = TRUE))
-  # projBound <- sp::SpatialPolygons(list(sp::Polygons(list(projBound), ID = "clip_boundary")),
-  #                                   proj4string = if(class(proj.crs) == "CRS") {proj.crs} else {sp::CRS(proj.crs)})
-  # tmp <- as.data.frame(t(sp::bbox(projBound)))
-  # projBoundNodes <- sp::SpatialPoints(expand.grid(lon = tmp$x, lat = tmp$y), 
-  #                                     proj4string = if(class(proj.crs) == "CRS") {proj.crs} else {sp::CRS(convert_crs(proj.crs))})
-  
   projBound <- sf::st_polygon(
     list(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4], projLims[2], 
                   projLims[4], projLims[2], projLims[3], projLims[1], projLims[3]), 
@@ -136,8 +125,6 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out =
   # Decimal degree limits
   
   decBoundNodes <- sf::st_transform(projBoundNodes, 4326)
-  
-  # decBoundNodes <- sp::spTransform(projBoundNodes, sp::CRS(convert_crs(4326))) # proj.in
   
   if(!identical(sign(projLims[3]), sign(projLims[4]))) { # Spans across the pole
     decLims <- c(unname(sf::st_bbox(decBoundNodes)[c(1,3,2)]), 90) # old: c(raster::extent(decBoundNodes)[1:3], 90)

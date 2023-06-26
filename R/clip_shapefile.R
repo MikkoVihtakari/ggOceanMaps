@@ -11,8 +11,6 @@
 #' @return Clipped spatial object. The class is depending on the \code{output.sf} argument. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
 #' @keywords internal
 #' @family create shapefiles
-#' @import sp
-#' @importFrom rgeos gIntersection gIntersects gSimplify
 #' @importFrom methods slot slot<-
 #' @importFrom grDevices chull
 #' @author Mikko Vihtakari with a solution from \href{https://stackoverflow.com/questions/15881455/how-to-clip-worldmap-with-polygon-in-r}{Simon O'Hanlon, Roger Bivand/SO community}

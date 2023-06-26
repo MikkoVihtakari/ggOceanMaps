@@ -87,7 +87,7 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy, bounda
   utils::setTxtProgressBar(pb, 2)
   
   if(missing(proj.bathy)) {
-    proj.bathy <- convert_crs(4326)
+    proj.bathy <- sf::st_crs(4326)
   }
   
   if(is.na(sf::st_crs(ras))) {

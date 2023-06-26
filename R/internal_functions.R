@@ -79,7 +79,7 @@ dd_to_deg <- function(x) {
 
 deg_to_dd <- function(x) {
   x <- x - ifelse(x/360 > 1, floor(x/360), 0)*360
-  ifelse(x > 0 & x <= 180, x, ifelse(x > 180, -1*(360 - x), NA))
+  ifelse(x >= 0 & x <= 180, x, ifelse(x > 180, -1*(360 - x), NA))
 }
 
 #' @title Pick a suitable number of cores

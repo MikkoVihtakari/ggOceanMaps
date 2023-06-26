@@ -54,9 +54,9 @@
 #' 
 #' Custom shapefiles have to be a named list containing at least following elements:
 #' \itemize{
-#' \item \strong{land} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing land. Required.
-#' \item \strong{glacier} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing glaciers. Not required if glaciers are not needed.
-#' \item \strong{bathy} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing bathymetry contours. Not required if bathymetry is not needed.
+#' \item \strong{land} Object name of the \link[sf:st_sf]{spatial polygon} containing land. Required.
+#' \item \strong{glacier} Object name of the \link[sf:st_sf]{spatial polygon} containing glaciers. Not required if glaciers are not needed.
+#' \item \strong{bathy} Object name of the \link[sf:st_sf]{spatial polygon} containing bathymetry contours. Not required if bathymetry is not needed.
 #' }
 #'
 #' See Examples.
@@ -138,7 +138,9 @@
 #' basemap(shapefiles = list(land = bs_land))
 #' 
 #' # Premade shapefiles from ggOceanMapsLargeData (requires download):
+#' \dontrun{
 #' basemap("BarentsSea", bathymetry = TRUE)
+#' }
 #' 
 #' # grid.col = NA removes grid lines, rotate = TRUE rotates northwards: 
 #' basemap(limits = c(-180, -140, 50, 70), grid.col = NA, rotate = TRUE)

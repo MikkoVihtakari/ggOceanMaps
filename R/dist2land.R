@@ -1,65 +1,54 @@
 #' @title Calculate distance to the closest land for coordinates in a data frame
 #' @description Calculates the closest distance to land for coordinates in a data frame
-#' @param data Data.frame containing geographic coordinates
+#' @param data Data frame containing geographic coordinates.
 #' @param lon,lat Either the names of the longitude and latitude columns in \code{data} or \code{NULL} to \link[=guess_coordinate_columns]{guess the longitude and/or latitude columns} in \code{data}.
 #' @param proj.in \code{\link[sf:st_crs]{coordinate reference system}} of \code{data}.
-#' @param shapefile Land shape to which distances should be calculated. Either a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}, a single\link[sf]{sf} or \code{sp} polygons object object or \code{NULL} to enable automatic definition of the land shapes based on \code{data}.
+#' @param shapefile Land shape to which distances should be calculated. Either a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}, a single \link[sf]{sf} or \code{sp} polygons object object or \code{NULL} to enable automatic definition of the land shapes based on \code{data}. Set to \code{"DecimalDegree"} by default which enables great circle distances using \link[sf]{s2} features assuming a spherical Earth (as a contrast to earlier versions of the function which used flat Earth).
 #' @param bind Logical indicating whether \code{x} should be returned with the distances (\code{TRUE}, default) or should the distances be returned as vector (\code{FALSE}).
-#' @param dist.col The name of the distance column, if \code{bind = TRUE}. Defaults to "dist".
+#' @param dist.col The name of the distance column, if \code{bind = TRUE}. Defaults to "ldist".
 #' @param binary Logical indicating whether binary (TRUE = the position is in the ocean, FALSE = the position is on land) should be returned instead of distances. Speeds up the function considerably.
-#' @param cores Integer value defining how many cores should be used in the distance calculations. Parallelization speeds up the function (see \code{parallel::mclapply}), but naturally eats up computer resources during the calculation. Set to 1 to remove parallelization.
 #' @param verbose Logical indicating whether information about the process should be returned as messages. Set to \code{FALSE} to make the function silent.
-#' @details The function calculates distances using projected coordinates and the \code{rgeos::gDistance} function. These distances do not consider the curvature of the Earth unless the projection of the used land shape does so (check out geosphere::dist2Line and \href{https://stackoverflow.com/a/51842756/1082004}{this SO solution if you want exact distances}). The function is fairly slow for large datasets. If you only want to use the function to remove (wrong) observations reported on land, set the \code{binary} argument to \code{TRUE}. This speeds up the calculations considerably.
-#'
-#' The \code{dist2land} function offers parallel processing, which speeds up the calculations for large datasets. Parallel processing has not been tested under Windows yet and may not work.
+#' @details The function calculates great circle spherical distances using the \code{\link[sf]{st_distance}} function by default. The function can be slow for large datasets. If you only want to use the function to remove (wrong) observations reported on land, set the \code{binary} argument to \code{TRUE}. This speeds up the calculations by a factor of ten.
 #' @return Returns a vector if \code{bind = FALSE}, otherwise a data frame. The distances are given in a new column defined by the \code{dist.col} argument. The distances are \strong{kilometers} if \code{binary = FALSE}, otherwise logical (TRUE = the position is in the ocean, FALSE = the position is on land).
-#' @import sp
-#' @importFrom utils txtProgressBar setTxtProgressBar
-#' @importFrom parallel makeCluster parLapply stopCluster mclapply
 #' @author Mikko Vihtakari
 #' @examples
 #' 
-#' if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 #' \donttest{
 #' # Simple example:
 #' dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
-#' dt <- dist2land(dt, cores = 1, verbose = FALSE)
+#' dt <- dist2land(dt, verbose = FALSE)
 #' qmap(dt, color = ldist) + scale_color_viridis_c()
 #'
-#' # No premade shapefiles for datasets covering the entire globe
-#' dt <- data.frame(lon = -20:20, lat = seq(-90, 90, length.out = 41))
-#' qmap(dist2land(dt, cores = 1, verbose = FALSE), color = ldist) + 
-#' scale_color_viridis_c() # wrong!
+#' # Datasets covering the entire Earth seem to work now, except 0,0 lon/lat point
+#' lon = deg_to_dd(seq(0,360,30)); lat = c(80,50,20,0,-20,-50,-80)
+#'
+#' dt <- data.frame(
+#'  lon = rep(lon, length(lat)), lat = rep(lat, each = length(lon)))
+#'
+#' qmap(dist2land(dt, verbose = FALSE), color = ldist) +
+#'  scale_color_viridis_c()
 #' }
 #' \dontrun{
-#' dt <- data.frame(lon = seq(-179, 179, length.out = 1000), lat = rep(60, 1000))
+#' dt <- data.frame(
+#'   lon = deg_to_dd(seq(0,360,length.out = 1e3)), 
+#'   lat = rep(60, 1000))
+#'   
 #' # The distance calculation is slow for large datasets
 #' system.time(dist2land(dt))
-#' #> user  system elapsed
-#' #> 0.071   0.036   9.632
+#' user  system elapsed 
+#' 12.677   0.146  12.849 
 #'
-#' # The parallel processing speeds it up
-#' system.time(dist2land(dt, cores = 1))
-#' #> user  system elapsed
-#' #> 29.019   1.954  30.958
-#'
-#' # binary = TRUE further speeds the function up
+#' # binary = TRUE speeds the function up
 #' system.time(dist2land(dt, binary = TRUE))
-#' #> user  system elapsed
-#' #> 2.342   0.052   2.403
-#' }
+#' user  system elapsed 
+#' 1.239   0.120   1.369 
 #' }
 #' @export
 
 ## Test parameters
 # lon = NULL; lat = NULL; shapefile = NULL; proj.in = 4326; bind = TRUE; dist.col = "ldist"; binary = FALSE; geodesic.distances = FALSE; verbose = TRUE; cores = getCores()
 
-dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = 4326, bind = TRUE, dist.col = "ldist", binary = FALSE, cores = getCores(), verbose = TRUE) {
-  
-  ## Turn of s2
-  # s2_mode <- sf::sf_use_s2()
-  # suppressMessages(sf::sf_use_s2(FALSE))
-  # on.exit({suppressMessages(sf::sf_use_s2(s2_mode))})
+dist2land <- function(data, lon = NULL, lat = NULL, shapefile = "DecimalDegree", proj.in = 4326, bind = TRUE, dist.col = "ldist", binary = FALSE, verbose = TRUE) {
   
   ## Case for defined x and undefined lon or/and lat ####
   
@@ -120,58 +109,29 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = NULL, proj.in = 
     land <- eval(parse(text = shapefile$land))
   }
   
-  # land <- rgeos::createSPComment(land)
-  
   ## Coordinate points ###
   
   x <- sf::st_as_sf(x, coords = c("lon", "lat"), crs = sf::st_crs(proj.in))
   x <- sf::st_transform(x, sf::st_crs(land))
-  
-  # sp::coordinates(x) <- c("lon", "lat")
-  # sp::proj4string(x) <- sp::CRS(proj.in)
-  # x <- suppressWarnings(sp::spTransform(x, sp::CRS(suppressWarnings(sp::proj4string(land)))))
-  # if(!suppressWarnings(sp::identicalCRS(land, x))) stop("Cannot convert projections correctly.")
  
   ############################
   ## Distance calculation ####
   
-  if(binary) {## Binary positions
+  if(binary) { ## Binary positions
     
     if(verbose) message("Calculating binary positions...")
-    sf::st_filter(x,land)
-    sf::st_intersection(x,land)
-    tmp <- !is.na(as.integer(suppressMessages(sf::st_intersects(x, land))))
-    # tmp <- suppressWarnings(unname(is.na(sp::over(x, land)[1])))
+    tmp <- is.na(as.integer(suppressMessages(sf::st_intersects(x, land))))
+    if(verbose) message("Returning binary positions: TRUE in the ocean, FALSE on land.")
     
-  } else { ## gDistance
+  } else { ## Distance
     
-    if(cores == 1) {
-      if(verbose) message("Calculating distances without parallel processing...")
-      pb <- utils::txtProgressBar(min = 0, max = length(x), style = 3)
-      tmp <- sapply(1:length(x), function(i)  {
-        utils::setTxtProgressBar(pb, i)
-        return(suppressWarnings(rgeos::gDistance(x[i], land)/1000))
-      })
-    }
-    # Run in parallel on Windows and other platforms:
-    else {
-      # Do not use more cores than the number of files:
-      cores <- min(length(x), cores)
-      
-      if(verbose) message("Calculating distances with parallel processing...")
-      
-      # On Windows run special args to speed up:
-      if(.Platform$OS.type == "windows") {
-        cl <- parallel::makeCluster(cores, rscript_args = c("--no-init-file", "--no-site-file", "--no-environ"))
-        out <- parallel::parLapply(cl, 1:length(x), function(i) suppressWarnings(rgeos::gDistance(x[i], land)/1000))
-        parallel::stopCluster(cl)
-        tmp <- unlist(out)
-      }
-      else {
-        tmp <- unlist(parallel::mclapply(1:length(x), function(i) {
-          suppressWarnings(rgeos::gDistance(x[i], land)/1000)
-        }, mc.cores = cores))
-      }
+    if(verbose) message("Calculating distances...")
+    tmp <- apply(sf::st_distance(x, land), 1, min)/1e3 # km
+    
+    if(sf::st_is_longlat(x)) {
+      if(verbose) message("Returning great circle spherical distances from land as kilometers.")
+    } else {
+      if(verbose) message("Returning Euclidean distances from land as kilometers.")
     }
   }
   

@@ -5,7 +5,7 @@
 \alias{ices_areas}
 \title{ICES Advisory Areas}
 \format{
-\code{\link[sf:st_sf]{sf object}} in decimal degrees (EPSG:4326) containing ICES Advisory Areas.
+\code{\link[sf:st_sf]{sf object}} containing ICES Advisory Areas.
 }
 \source{
 \href{https://www.ices.dk/}{International Council for the Exploration of the Sea}
@@ -17,10 +17,10 @@ ices_areas
 ICES Advisory Areas
 }
 \examples{
-if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
+if(requireNamespace("ggspatial")) {
 \donttest{
 basemap(ices_areas) + 
-annotation_spatial(ices_areas, fill = NA)
+ggspatial::annotation_spatial(ices_areas, fill = NA)
 }
 }
 }

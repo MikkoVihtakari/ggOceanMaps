@@ -79,8 +79,7 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
     }
     
     pol <- sf::st_simplify(pol, preserveTopology = TRUE)
-    # x <- rgeos::gSimplify(pol, tol = 500, topologyPreserve = TRUE)
-    # pol <- SpatialPolygonsDataFrame(x, pol@data)
+    
   }
 
   utils::setTxtProgressBar(pb, 6)

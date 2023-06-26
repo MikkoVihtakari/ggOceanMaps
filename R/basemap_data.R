@@ -5,7 +5,7 @@
 #' @return A list of class \code{basemapData} containing information required for plotting a \code{\link{basemap}}.
 #' @keywords internal
 #' @export
-#' @import sp sf raster
+#' @import sf
 #' @author Mikko Vihtakari
 #' @seealso \code{\link{basemap}}
 
@@ -30,8 +30,9 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   # 1. Define the shapefiles ####
   
   x <- basemap_data_define_shapefiles(
-    limits = limits, data = data, shapefiles = shapefiles, bathymetry = bathymetry,
-    glaciers = glaciers, rotate = rotate, expand.factor = expand.factor, verbose = FALSE
+    limits = limits, data = data, shapefiles = shapefiles, bathymetry = 
+      bathymetry, glaciers = glaciers, rotate = rotate, expand.factor = 
+      expand.factor, verbose = FALSE
   )
   
   # 2. Crop and rotate shapefiles if needed ####
@@ -252,7 +253,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       
       
       if(length(clip_shape) == 4) {
-        limits <- setNames(clip_shape, c("xmin", "xmax", "ymin", "ymax"))
+        limits <- stats::setNames(clip_shape, c("xmin", "xmax", "ymin", "ymax"))
         
         if(!sf::st_is_longlat(crs)){
           clip_shape <- sf::st_as_sfc(
@@ -338,9 +339,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     clip_shape <- dd_clip_boundary(limits, crs)
     
     
-  } else if(case %in% c("data_dec", "data_sf", "data_sp")) { ### data ####
-    
-    if(case == "data_sp") data <- sf::st_as_sf(data)
+  } else if(case %in% c("data_dec")) { ### data frames ####
     
     if(is.null(shapefiles)) {
       tmp <- auto_limits(data, expand.factor = 1.1, verbose = verbose)
@@ -362,6 +361,46 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     }
     
     limits <- tmp$ddLimits
+    
+    if(rotate) {
+      crs <- rotate_crs(crs, limits[1:2])
+      clip_shape <- dd_clip_boundary(limits, crs, expand.factor = 1.1)
+    }
+    
+  } else if(case %in% c("data_sf", "data_sp")) { ### spatial data ####
+    
+    if(case == "data_sp") data <- sf::st_as_sf(data)
+    
+    if(is.null(shapefiles)) {
+      
+      if(!sf::st_is_longlat(data)) {
+        limits <- sf::st_bbox(sf::st_transform(data, 4326))[c("xmin", "xmax", "ymin", "ymax")] 
+      } else {
+        limits <- sf::st_bbox(data)[c("xmin", "xmax", "ymin", "ymax")] 
+      }
+      
+      shapefiles <- shapefile_list(define_shapefiles(limits)$shapefile.name)
+      crs <- sf::st_crs(shapefiles$crs)
+      
+      if(sf::st_crs(data) == crs) {
+        clip_shape <- sf::st_as_sfc(sf::st_bbox(data)) 
+      } else {
+        clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
+      }
+      
+    } else {
+      if(inherits(shapefiles$land, c("sf", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+        if(inherits(shapefiles$land, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+          shapefiles$land <- sf::st_as_sf(shapefiles$land)
+        }
+        crs <- suppressWarnings(sf::st_crs(shapefiles$land))
+      } else {
+        crs <- suppressWarnings(sf::st_crs(eval(parse(text = shapefiles$land))))
+      }
+      
+      clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
+      limits <- sf::st_bbox(sf::st_transform(data, 4326))[c("xmin", "xmax", "ymin", "ymax")]
+    }
     
     if(rotate) {
       crs <- rotate_crs(crs, limits[1:2])

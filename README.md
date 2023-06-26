@@ -2,7 +2,7 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-1.3.7**
+1.4.0**
 
 <!-- badges: start -->
 
@@ -12,6 +12,14 @@
 <!-- badges: end -->
 
 <!-- [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml) -->
+
+**Breaking news** (pun intended) **: ggOceanMaps goes
+[sf](https://r-spatial.github.io/sf/)!** New bugs have likely been
+introduced. If things do not work as expected, delete all files in
+ggOceanMapsLargeData, remove ggOceanMapsData and reinstall ggOceanMaps.
+See the
+[changelog](https://mikkovihtakari.github.io/ggOceanMaps/news/index.html)
+for detailed information on changes and new features.
 
 ## Overview
 
@@ -53,7 +61,7 @@ using devtools or remotes packages, or a drat repository on Windows and
 Mac:
 
 ``` r
-devtools::install_github("MikkoVihtakari/ggOceanMapsData")
+remotes::install_github("MikkoVihtakari/ggOceanMapsData")
 
 # OR:
 
@@ -65,12 +73,11 @@ install.packages(
 ```
 
 The GitHub version of ggOceanMaps can be installed using the
-[**devtools**](https://cran.r-project.org/web/packages/devtools/index.html)
-package.
+[**remotes**](https://CRAN.R-project.org/package=remotes) package.
 
 ``` r
-devtools::install_github("MikkoVihtakari/ggOceanMapsData") # required by ggOceanMaps
-devtools::install_github("MikkoVihtakari/ggOceanMaps")
+remotes::install_github("MikkoVihtakari/ggOceanMapsData") # required by ggOceanMaps
+remotes::install_github("MikkoVihtakari/ggOceanMaps")
 ```
 
 ## Usage
@@ -202,11 +209,10 @@ are published. For up-to-date citation information, please use:
 
 ``` r
 citation("ggOceanMaps")
-#> 
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
-#>   Vihtakari M (2022). _ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'_. R package version 1.3.7,
+#>   Vihtakari M (2023). _ggOceanMaps: Plot Data on Oceanographic Maps
+#>   using 'ggplot2'_. R package version 1.4.0,
 #>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -214,8 +220,8 @@ citation("ggOceanMaps")
 #>   @Manual{,
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
-#>     year = {2022},
-#>     note = {R package version 1.3.7},
+#>     year = {2023},
+#>     note = {R package version 1.4.0},
 #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```

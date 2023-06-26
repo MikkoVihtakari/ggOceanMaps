@@ -5,7 +5,7 @@
 \alias{fdir_sub_areas}
 \title{Norwegian sub-areas (lokasjon) for commercial fishing}
 \format{
-\code{\link[sf:st_sf]{sf object}} in decimal degrees (EPSG:4326) containing major fishing zones defined by the Norwegian Directorate of Fisheries.
+\code{\link[sf:st_sf]{sf object}} containing major fishing zones defined by the Norwegian Directorate of Fisheries.
 }
 \source{
 \href{https://open-data-fiskeridirektoratet-fiskeridir.hub.arcgis.com/}{Norwegian Directorate of Fisheries}
@@ -17,10 +17,10 @@ fdir_sub_areas
 Norwegian sub-areas (lokasjon) for commercial fishing
 }
 \examples{
-if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
+if(requireNamespace("ggspatial")) {
 \donttest{
 basemap(fdir_sub_areas) + 
-annotation_spatial(fdir_sub_areas, fill = NA)
+ggspatial::annotation_spatial(fdir_sub_areas, fill = NA)
 }
 }
 }

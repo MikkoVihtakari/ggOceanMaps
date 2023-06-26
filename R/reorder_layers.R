@@ -7,11 +7,11 @@
 #' @import ggplot2
 #' @author Mikko Vihtakari
 #' @examples
-#' if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
+#' if(requireNamespace("ggspatial", quietly = TRUE)) {
 #' \donttest{
 #'  data("ices_areas")
 #'  p <- basemap(c(-20, 15, 50, 70)) + 
-#'    annotation_spatial(ices_areas, aes(fill = Area_Full), show.legend = FALSE)
+#'    ggspatial::annotation_spatial(ices_areas, aes(fill = Area_Full), show.legend = FALSE)
 #'  
 #'  # Polygons on top of land
 #'  p
