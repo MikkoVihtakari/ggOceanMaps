@@ -119,6 +119,8 @@ getCores <- function() {
 
 rotate_crs <- function(crs, meridians) {
   
+  ## Mid-longitude
+  
   tmp <- dd_to_deg(meridians)
   
   if(tmp[1] > tmp[2]) {
@@ -130,7 +132,20 @@ rotate_crs <- function(crs, meridians) {
   midLon <- tmp[1] + lonDiff/2
   midLon <- deg_to_dd(midLon)  
   
-  sf::st_crs(gsub("lon_0=0", paste0("lon_0=", midLon), crs$proj4string))
+  ## CRS rotation
+  
+  tmp <- unlist(strsplit(sf::st_crs(crs)$proj4string, " "))
+  
+  if(any(grepl("lon_0=", tmp))) {
+    tmp[grepl("lon_0=", tmp)] <- paste0("lon_0=", midLon)
+  } else {
+    tmp <- c(tmp[-length(tmp)], paste0("lon_0=", midLon), tmp[length(tmp)])
+  }
+  
+  sf::st_crs(paste(tmp, collapse = " "))
+  
+  
+  
 }
 
 #' @title Create clip boundary from decimal degree limits
@@ -145,7 +160,6 @@ rotate_crs <- function(crs, meridians) {
 
 dd_clip_boundary <- function(limits, crs, expand.factor = NULL) {
 
-  
   tmp <- dd_to_deg(limits[1:2])
 
   if(!is.null(expand.factor)) {

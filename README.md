@@ -133,7 +133,7 @@ useful.
 While ggOceanMaps allows plotting any custom-made shapefiles, the
 package contains a shortcut to plot higher resolution maps for [certain
 areas needed by the
-author](https://github.com/MikkoVihtakari/ggOceanMapsLargeData/tree/master/data)
+author](https://mikkovihtakari.github.io/ggOceanMaps/articles/premade-maps.html)
 without the need of generating the shapefiles manually. These
 high-resolution shapefiles are downloaded from the
 [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)
@@ -230,8 +230,11 @@ citation("ggOceanMaps")
 
 If your problem does not involve bugs in ggOceanMaps, the quickest way
 of getting help is posting your problem to [Stack
-Overflow](https://stackoverflow.com/questions/tagged/r). Please remember
-to include a reproducible example that illustrates your problem.
+Overflow](https://stackoverflow.com/questions/tagged/r). Alternatively,
+use the [issues
+section](https://github.com/MikkoVihtakari/ggOceanMaps/issues) on
+GitHub. Please remember to include a reproducible example that
+illustrates your problem and to add links to potential cross-posts.
 
 ## Contributions
 

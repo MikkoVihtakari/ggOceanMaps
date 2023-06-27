@@ -17,7 +17,7 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
 
   # Progress bar ####
 
-  pb <- utils::txtProgressBar(min = 0, max = 6, initial = 0, style = 3)
+  pb <- utils::txtProgressBar(min = 0, max = 7, initial = 0, style = 3)
 
   ## General checks ####
 
@@ -71,8 +71,6 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
   if(smooth) {
     
     pol <- smoothr::smooth(pol, method = "ksmooth")
-    # smoothr::smooth_ksmooth(pol, smoothness = 2, wrap = TRUE, n = 2L)
-    # pol <- ksmooth_polys(x = pol, k = 2, N = 2L)
     
     if(!all(sf::st_is_valid(pol))) {
       pol <- sf::st_make_valid(pol)
@@ -90,12 +88,6 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
   
   tmp <- pol$depth
 
-  # if(!any(grepl("depth", names(tmp), ignore.case = TRUE))) {
-  #   names(tmp)[1] <- "depth"
-  # } else {
-  #   names(tmp)[grepl("depth", names(tmp), ignore.case = TRUE)] <- "depth"
-  # }
-
   tmp <- factor(tmp, levels = sort(unique(tmp)))
 
   level_key <- bathy$depth.invervals$interval[c(-nrow(bathy$depth.invervals))]
@@ -108,13 +100,13 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
 
   ## Final validation
 
-  # if(!suppressMessages(suppressWarnings(rgeos::gIsValid(pol)))) {
-  #   pol <- suppressMessages(suppressWarnings(rgeos::gBuffer(pol, byid = TRUE, width = 0)))
-  #
-  #   if(!rgeos::gIsValid(pol)) stop("The final geometry validation did not work. Adjust something.")
-  # }
-
-  # setTxtProgressBar(pb, 7)
+  if(!all(sf::st_is_valid(pol))) {
+    pol <- sf::st_make_valid(pol)
+  }
+  
+  if(!all(sf::st_is_valid(pol))) stop("The final geometry validation did not work. Adjust something.")
+  
+  utils::setTxtProgressBar(pb, 7)
 
   ## Return
 
@@ -125,39 +117,3 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
   }
   
 }
-
-# @title Wrapper to \code{\link[smoothr]{smooth_ksmooth}} SpatialPolygonsDataFrames
-# @param x SpatialPolygonsDataFrame
-# @param k The \code{smoothness} parameter in \code{\link[smoothr]{smooth_ksmooth}}
-# @param N The \code{n} parameter in \code{\link[smoothr]{smooth_ksmooth}}
-# @return Smoothed \code{SpatialPolygonsDataFrame}
-# @keywords internal
-# @import smoothr
-# @export
-
-# ksmooth_polys <- function(x, k, N) {
-# 
-#   total <- length(st_geometry(x))
-#   # pb <- txtProgressBar(min = 1, max = total, style = 3)
-# 
-#   tp <- lapply(1:total, function(i) {
-#     # setTxtProgressBar(pb, i)
-# 
-#     for(j in 1:length(x@polygons[[i]]@Polygons)) {
-#       x@polygons[[i]]@Polygons[[j]]@coords <- 
-#         st_polygon(stats::na.omit(
-#           list(smoothr::smooth_ksmooth(st_coordinates(x[1,])[,1:2], 
-#                                   smoothness = k, wrap = TRUE, n = N)
-#           )))
-#     }
-# 
-#     x@polygons[[i]]
-# 
-#   })
-# 
-#   out <- sp::SpatialPolygons(tp)
-#   suppressWarnings(sp::proj4string(out) <- sp::proj4string(x))
-#   
-#   sp::SpatialPolygonsDataFrame(out, x@data)
-# }
-# 

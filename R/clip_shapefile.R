@@ -79,12 +79,17 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
     clip_boundary <- sf::st_transform(clip_boundary, x_proj)
   }
   
-  ## Temporarily turn off s2 while handing decimal degree shapes
+  ## Temporarily turn off s2 while handing decimal degree shapes (anti-meridian as exception)
   
   if(suppressWarnings(sf::st_is_longlat(x))) {
-    s2_mode <- sf::sf_use_s2()
-    suppressMessages(sf::sf_use_s2(FALSE))
-    on.exit({suppressMessages(sf::sf_use_s2(s2_mode))})
+    if(!(suppressWarnings(sf::st_is_longlat(clip_boundary)) &
+         diff(unname(sign(sf::st_bbox(clip_boundary)[c("xmin", "xmax")]))) != 0)) {
+      s2_mode <- sf::sf_use_s2()
+      suppressMessages(sf::sf_use_s2(FALSE))
+      on.exit({suppressMessages(sf::sf_use_s2(s2_mode))})
+    } else {
+      x <- sf::st_make_valid(x)
+    }
   }
   
   ## Simplify bathymetry

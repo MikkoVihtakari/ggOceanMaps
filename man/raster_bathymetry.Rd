@@ -8,40 +8,37 @@ raster_bathymetry(
   bathy,
   depths,
   proj.out = NULL,
-  proj.bathy,
+  proj.bathy = NULL,
   boundary = NULL,
-  file.name = NULL,
-  aggregation.factor = NA,
+  downsample = NULL,
   verbose = TRUE
 )
 }
 \arguments{
-\item{bathy}{A \link[raster]{raster} object or a string giving the path to a bathymetry NetCDF or grd file}
+\item{bathy}{A \link[stars:read_stars]{stars} object or a string giving the path to a bathymetry NetCDF or grd file}
 
-\item{depths}{Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}).}
+\item{depths}{Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}). Use 0 as first depth if you want to vectorise land from \code{bathy} during the \code{\link{vector_bathymetry}} step.}
 
-\item{proj.out}{A character string specifying the PROJ6 projection argument for the output. See \code{\link[sf]{st_crs}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy}. If \code{proj.out == proj.bathy}, the output will not be reprojected.}
+\item{proj.out}{A character string specifying the \link[sf:st_crs]{coordinate reference system} (CRS)  argument for the output. See \code{\link[sf]{st_crs}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy} and the output will not be reprojected saving processing time (since \code{proj.out} and \code{proj.bathy} would match.}
 
-\item{proj.bathy}{A character string specifying the \code{\link[sf:st_crs]{CRS}} projection arguments for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information. If missing, \code{"EPSG:4326"} is assumed.}
+\item{proj.bathy}{A character string specifying the \code{\link[sf:st_crs]{CRS}} for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information. If \code{NULL}, \code{"EPSG:4326"} is assumed.}
 
-\item{boundary}{A \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. Use \code{NULL} not to cut \code{bathy}.}
+\item{boundary}{A \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, \link[sf:st_bbox]{bounding box}, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If unnamed numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. You can also use the sf bounding box format as named vector. Use \code{NULL} not to cut \code{bathy}.}
 
-\item{file.name}{A character string specifying the file path \strong{without extension} where the output should be saved. If \code{NULL} a temporary file will be used. See \code{\link[raster]{writeRaster}}.}
-
-\item{aggregation.factor}{An integer defining the \code{fact} argument from the \code{\link[raster]{aggregate}} function. Set to \code{NA} to ignore aggregation.}
+\item{downsample}{An integer defining how many rows in \code{bathy} should be skipped to reduce the size (and resolution). 1 skips every second row, 2 every second and third. See \code{\link[stars]{st_downsample}}. Set to \code{NULL} (default) to skip downsampling.}
 
 \item{verbose}{Logical indicating whether information about guessed projection should be returned as message. Set to \code{FALSE} to make the function silent.}
 }
 \value{
-A list with a \link[raster]{raster} object the containing projected bathymetry defined by the \code{proj.out} argument and a data frame of depth intervals.
+A list with a \link[stars:read_stars]{stars} object the containing projected bathymetry defined by the \code{proj.out} argument and a data frame of depth intervals.
 }
 \description{
 Simplifies bathymetry raster ready for the \code{\link{vector_bathymetry}} function. Warning: processing may take a long time if the bathymetry raster is large.
 }
 \details{
-You can use \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/}{GEBCO}, \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/}{IBCAO}, \href{https://www.ngdc.noaa.gov/mgg/global/}{ETOPO1} bathymetry grids downloaded from respective sources as the \code{bathy} argument. The bathymetry grids read from files must be in NetCDF/grd format. Alternatively use the \code{marmap::getNOAA.bathy} function to download ETOPO1 bathymetry and convert it to a raster object using the \code{marmap::as.raster} function.
+You can use \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/}{GEBCO}, \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/}{IBCAO}, \href{https://www.ngdc.noaa.gov/mgg/global/}{ETOPO1} bathymetry grids downloaded from respective sources as the \code{bathy} argument. The bathymetry grids read from files must be in any format read by \code{\link[stars]{read_stars}}. Alternatively use the \code{marmap::getNOAA.bathy} function to download ETOPO1 bathymetry and convert it to a raster object using the \code{marmap::as.raster} function.
 
-Note that the size of the output is heavily influenced by the number of depth contours (\code{depths}) as well as the resolution of \code{bathy} and choice of \code{aggregation.factor}. To make the \code{\link{vector_bathymetry}} function and consequent plotting faster, limiting the details of the bathymetry raster may be desirable.
+Note that the size of the output is heavily influenced by the number of depth contours (\code{depths}) as well as the resolution of \code{bathy} and choice of \code{downsample}. To make the \code{\link{vector_bathymetry}} function and consequent plotting faster, limiting the details of the bathymetry raster may be desirable.
 }
 \references{
 GEBCO Compilation Group (2019) GEBCO 2019 15-arcsecond grid (doi:10.5285/836f016a-33be-6ddc-e053-6c86abc0788e). URL: \url{https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html}.
