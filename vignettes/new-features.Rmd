@@ -1,0 +1,30 @@
+---
+title: "New features in ggOceanMaps version 2"
+author: "Mikko Vihtakari (Institute of Marine Research)"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  rmarkdown::html_vignette:
+    toc_depth: 6
+vignette: >
+  %\VignetteIndexEntry{new-features}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+library(knitr)
+knitr::opts_chunk$set(collapse = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      eval = FALSE,
+                      comment = "#>"
+)
+
+```
+
+```{r setup, eval = TRUE, include = FALSE}
+library(ggOceanMaps)
+```
+

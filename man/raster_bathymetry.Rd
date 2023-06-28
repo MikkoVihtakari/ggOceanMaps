@@ -10,20 +10,23 @@ raster_bathymetry(
   proj.out = NULL,
   proj.bathy = NULL,
   boundary = NULL,
+  estimate.land = FALSE,
   downsample = NULL,
-  verbose = TRUE
+  verbose = FALSE
 )
 }
 \arguments{
 \item{bathy}{A \link[stars:read_stars]{stars} object or a string giving the path to a bathymetry NetCDF or grd file}
 
-\item{depths}{Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}). Use 0 as first depth if you want to vectorise land from \code{bathy} during the \code{\link{vector_bathymetry}} step.}
+\item{depths}{Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}). If \code{NULL}, no depth aggregation will be made. This option is suitable for raster bathymetries passed directly to \code{basemap}.}
 
 \item{proj.out}{A character string specifying the \link[sf:st_crs]{coordinate reference system} (CRS)  argument for the output. See \code{\link[sf]{st_crs}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy} and the output will not be reprojected saving processing time (since \code{proj.out} and \code{proj.bathy} would match.}
 
 \item{proj.bathy}{A character string specifying the \code{\link[sf:st_crs]{CRS}} for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information. If \code{NULL}, \code{"EPSG:4326"} is assumed.}
 
 \item{boundary}{A \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, \link[sf:st_bbox]{bounding box}, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If unnamed numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. You can also use the sf bounding box format as named vector. Use \code{NULL} not to cut \code{bathy}.}
+
+\item{estimate.land}{Logical indicating whether to include land to the output. Can be used in the following \code{\link{vector_bathymetry}} step to estimate land polygons.}
 
 \item{downsample}{An integer defining how many rows in \code{bathy} should be skipped to reduce the size (and resolution). 1 skips every second row, 2 every second and third. See \code{\link[stars]{st_downsample}}. Set to \code{NULL} (default) to skip downsampling.}
 

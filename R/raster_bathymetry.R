@@ -1,10 +1,11 @@
 #' @title Simplify a bathymetry raster ready for vectorization
 #' @description Simplifies bathymetry raster ready for the \code{\link{vector_bathymetry}} function. Warning: processing may take a long time if the bathymetry raster is large.
 #' @param bathy A \link[stars:read_stars]{stars} object or a string giving the path to a bathymetry NetCDF or grd file
-#' @param depths Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}). Use 0 as first depth if you want to vectorise land from \code{bathy} during the \code{\link{vector_bathymetry}} step.
+#' @param depths Numeric vector giving the cut points for depth contours (see \code{\link[base]{cut}}). If \code{NULL}, no depth aggregation will be made. This option is suitable for raster bathymetries passed directly to \code{basemap}.
 #' @param proj.out A character string specifying the \link[sf:st_crs]{coordinate reference system} (CRS)  argument for the output. See \code{\link[sf]{st_crs}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy} and the output will not be reprojected saving processing time (since \code{proj.out} and \code{proj.bathy} would match. 
 #' @param proj.bathy A character string specifying the \code{\link[sf:st_crs]{CRS}} for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information. If \code{NULL}, \code{"EPSG:4326"} is assumed.
 #' @param boundary A \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, \link[sf:st_bbox]{bounding box}, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If unnamed numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. You can also use the sf bounding box format as named vector. Use \code{NULL} not to cut \code{bathy}.
+#' @param estimate.land Logical indicating whether to include land to the output. Can be used in the following \code{\link{vector_bathymetry}} step to estimate land polygons. 
 #' @param downsample An integer defining how many rows in \code{bathy} should be skipped to reduce the size (and resolution). 1 skips every second row, 2 every second and third. See \code{\link[stars]{st_downsample}}. Set to \code{NULL} (default) to skip downsampling.
 #' @param verbose Logical indicating whether information about guessed projection should be returned as message. Set to \code{FALSE} to make the function silent.
 #' @details You can use \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/}{GEBCO}, \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/}{IBCAO}, \href{https://www.ngdc.noaa.gov/mgg/global/}{ETOPO1} bathymetry grids downloaded from respective sources as the \code{bathy} argument. The bathymetry grids read from files must be in any format read by \code{\link[stars]{read_stars}}. Alternatively use the \code{marmap::getNOAA.bathy} function to download ETOPO1 bathymetry and convert it to a raster object using the \code{marmap::as.raster} function.
@@ -22,8 +23,8 @@
 # proj.out = shapefile_list("Barents")$crs
 # bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(0, 50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = convert_crs("3996"); proj.bathy = convert_crs("3996"), file.name = NULL; boundary = c(-180.0083, 180.0083, -90, 90); aggregation.factor = 6
 # bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = arcticCRS; boundary = c(-180.0083, 180.0083, 30, 90); aggregation.factor = 2; file.name = NULL; verbose = TRUE
-# proj.out = NULL; proj.bathy = NULL; boundary = NULL; downsample = NULL; verbose = TRUE
-raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL, boundary = NULL, downsample = NULL, verbose = TRUE) {
+# proj.out = NULL; proj.bathy = NULL; boundary = NULL; estimate.land = FALSE; downsample = NULL; verbose = FALSE
+raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL, boundary = NULL, estimate.land = FALSE, downsample = NULL, verbose = FALSE) {
   
   # Progress bar ####
   
@@ -33,14 +34,16 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
   
   ### Bathy argument
   
-  if(!inherits(bathy, "RasterLayer")) {
+  if(!inherits(bathy, c("RasterLayer", "stars", "stars_proxy"))) {
     if(!file.exists(bathy)) stop("Bathy raster file not found. Check the path in the bathy argument.")
   }
   
   ### The depths argument
   
-  if(!(is.vector(depths) & inherits(depths, c("numeric", "integer")))) {
-    stop("The depths parameter has to be a numeric or integer vector.")
+  if(!is.null(depths)) {
+    if(!(is.vector(depths) & inherits(depths, c("numeric", "integer")))) {
+      stop("The depths parameter has to be a numeric or integer vector.")
+    }
   }
   
   ### The boundary argument
@@ -160,32 +163,54 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
   
   ## Reclassify raster ####
   
-  if(all(depths >= 0)) depths <- sort(-1 * depths)
-  
-  depths <- sort(unique(c(-Inf, depths, 0, Inf)))
-  
-  cut_int <- paste(abs(depths[-1]), abs(depths[-length(depths)]), sep = "-")
-  
-  cut_df <- data.frame(
-    from = depths[-length(depths)],
-    to = depths[-1],
-    average = sapply(strsplit(cut_int, "-"), function(k) mean(as.numeric(k))),
-    interval = cut_int,
-    stringsAsFactors = FALSE
-  )
-  
-  cut_df[nrow(cut_df), "average"] <- NA
-  
-  # cut_matrix <- as.matrix(cut_df[-ncol(cut_df)])
-  
-  r <- cut(ras, c(cut_df$from, Inf), labels = cut_df$interval)
-  
-  # r <- raster::reclassify(
-  #   ras, 
-  #   rcl = cut_matrix,
-  #   right = NA, 
-  #   filename = ifelse(is.null(file.name), '', paste0(file.name, ".grd"))
-  # )
+  if(!is.null(depths)) {
+    ## Raster for vector_bathymetry
+    
+    if(all(depths >= 0)) depths <- sort(-1 * depths)
+    
+    depths <- sort(unique(c(-Inf, depths, 0, Inf)))
+    
+    cut_int <- paste(abs(depths[-1]), abs(depths[-length(depths)]), sep = "-")
+    
+    cut_df <- data.frame(
+      from = depths[-length(depths)],
+      to = depths[-1],
+      average = sapply(strsplit(cut_int, "-"), function(k) mean(as.numeric(k))),
+      interval = cut_int,
+      stringsAsFactors = FALSE
+    )
+    
+    ## Remove land 
+    
+    if(estimate.land) {
+      cut_df$interval[grepl("Inf-0", cut_df$interval)] <- "land"
+    } else {
+      cut_df$interval[grepl("Inf-0", cut_df$interval)] <- NA
+      # bathy$raster <- stars::st_as_stars(bathy$raster)
+      # levels(bathy$raster[[1]])[levels(bathy$raster[[1]]) == "land"] <- NA
+    }
+    
+    r <- cut(ras, c(cut_df$from, Inf), labels = cut_df$interval)
+    
+    r[[1]] <- factor(r[[1]], levels = rev(levels(r[[1]]))) # reverse the order
+    
+  } else {
+    ## Raster for basemap
+    
+    if(inherits(ras[[1]], "units")) {
+      r <- units::drop_units(ras)
+    } else {
+      r <- ras
+    }
+    
+    # Remove land and turn depths to positive values
+    r[[1]][r[[1]] > 0] <- NA
+    r[[1]] <- -1*r[[1]]
+    
+    # Depth intervals
+    
+    cut_df <- range(r[[1]], na.rm = TRUE)
+  }
   
   utils::setTxtProgressBar(pb, 7)
   

@@ -9,7 +9,7 @@ vector_bathymetry(
   drop.crumbs = NULL,
   remove.holes = NULL,
   smooth = FALSE,
-  output.sf = FALSE
+  output.sf = TRUE
 )
 }
 \arguments{
@@ -17,7 +17,7 @@ vector_bathymetry(
 
 \item{drop.crumbs}{Single numeric value specifying a threshold (area in km2) for disconnected polygons which should be removed. Set to \code{NULL} to bypass the removal. Uses the \link[smoothr]{drop_crumbs} function.}
 
-\item{remove.holes}{Single numeric value specifying a threshold (area in km2) for holes which should be removed. Set to \code{NULL} to bypass the removal. Uses the \link[smoothr]{fill_holes} function.}
+\item{remove.holes}{Single numeric value specifying a threshold (area in km2) for holes which should be removed. Set to \code{NULL} to bypass the removal. Uses the \link[smoothr]{fill_holes} function. Currently VERY slow.}
 
 \item{smooth}{Logical indicating whether the pixelated contours should be smoothed. Uses the \link[smoothr]{smooth_ksmooth} function.}
 

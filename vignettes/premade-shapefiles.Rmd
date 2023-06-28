@@ -24,11 +24,6 @@ knitr::opts_chunk$set(collapse = TRUE,
 
 ```{r setup, eval = TRUE}
 library(ggOceanMaps); library(sf)
-
-# Natural Eart Data require s2 turned off.
-s2_mode <- sf::sf_use_s2()
-suppressMessages(sf::sf_use_s2(FALSE))
-on.exit({suppressMessages(sf::sf_use_s2(s2_mode))})
 ```
 
 Shapefiles used by this package are stored in two places: 1) the low-resolution shapefiles used frequently are stored in the [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData) package which should be installed automatically together with ggOceanMaps. 2) High-resolution shapefiles of selected locations are stored in the [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData) repository and downloaded automatically as needed. This document describes how each of the shapefiles is created. The maps are shown in the [Premade maps document](https://mikkovihtakari.github.io/ggOceanMaps/articles/premade-maps.html).
@@ -57,6 +52,7 @@ ddCRS <- sf::st_crs(shapefile_list("Decimal")$crs)
 Bathymetry:
 
 ```{r}
+# Vector bathymetry
 rb <- raster_bathymetry(
   bathy = file.path(etopoPath, "ETOPO_2022_v1_60s_N90W180_surface.nc"),
   depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000), 
@@ -64,8 +60,15 @@ rb <- raster_bathymetry(
   downsample = 1
 )
 
-dd_bathy <- vector_bathymetry(rb, drop.crumbs = 50, remove.holes = 50)
-dd_rbathy <- rb
+dd_bathy <- vector_bathymetry(rb, drop.crumbs = 50) 
+
+# Raster bathymetry
+dd_rbathy <- raster_bathymetry(
+  bathy = file.path(etopoPath, "ETOPO_2022_v1_60s_N90W180_surface.nc"),
+  depths = NULL, 
+  proj.out = ddCRS,
+  downsample = 1
+)
 
 save(dd_bathy, file = file.path(outPath, "ggOceanMapsData/dd_bathy.rda"), compress = "xz")
 save(dd_rbathy, file = file.path(outPath, "ggOceanMapsData/dd_rbathy.rda"), compress = "xz")
@@ -74,6 +77,11 @@ save(dd_rbathy, file = file.path(outPath, "ggOceanMapsData/dd_rbathy.rda"), comp
 Land:
 
 ```{r}
+# Natural Earth Data require s2 turned off.
+s2_mode <- sf::sf_use_s2()
+suppressMessages(sf::sf_use_s2(FALSE))
+on.exit({suppressMessages(sf::sf_use_s2(s2_mode))})
+
 world <- sf::st_read(file.path(NEDPath, "ne_10m_land/ne_10m_land.shp"))
 islands <- sf::st_read(file.path(NEDPath, "ne_10m_minor_islands/ne_10m_minor_islands.shp"))
 

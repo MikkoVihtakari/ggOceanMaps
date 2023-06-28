@@ -553,17 +553,33 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE) {
   }
   
   if(glaciers) {
-    x$shapefiles$glacier <- clip_shapefile(
-      x$shapefiles$glacier, 
-      limits = x$clip_limits
-    )
+    if(x$rotate) {
+      x$shapefiles$glacier <- clip_shapefile(
+        sf::st_transform(x$shapefiles$glacier, crs = x$crs),
+        limits = x$clip_limits
+      )
+    } else {
+      x$shapefiles$glacier <- clip_shapefile(
+        x$shapefiles$glacier, 
+        limits = x$clip_limits
+      )
+    }
   }
   
   if(bathymetry) {
-    x$shapefiles$bathy <- clip_shapefile(
-      x$shapefiles$bathy, 
-      limits = x$clip_limits
-    )
+    if(x$rotate) {
+      x$shapefiles$bathy <- clip_shapefile(
+        sf::st_transform(x$shapefiles$bathy, crs = x$crs),
+        limits = x$clip_limits
+      )
+    } else {
+      x$shapefiles$bathy <- clip_shapefile(
+        x$shapefiles$bathy, 
+        limits = x$clip_limits
+      )
+    }
+    
+    x$shapefiles$bathy$depth <- droplevels(x$shapefiles$bathy$depth)
   }
   
   if(!x$rotate) {
