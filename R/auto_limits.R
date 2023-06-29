@@ -108,6 +108,8 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out =
     
   }
   
+  projLims <- stats::setNames(projLims, c("xmin", "xmax", "ymin", "ymax"))
+  
   # Projected boundaries
   
   projBound <- sf::st_polygon(

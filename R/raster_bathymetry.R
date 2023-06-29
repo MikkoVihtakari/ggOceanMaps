@@ -5,6 +5,7 @@
 #' @param proj.out A character string specifying the \link[sf:st_crs]{coordinate reference system} (CRS)  argument for the output. See \code{\link[sf]{st_crs}} and \href{https://proj.org/}{proj.org}. If \code{NULL}, the projection is retrieved from \code{bathy} and the output will not be reprojected saving processing time (since \code{proj.out} and \code{proj.bathy} would match. 
 #' @param proj.bathy A character string specifying the \code{\link[sf:st_crs]{CRS}} for the input (\code{bathy}). Only required if \code{bathy} lacks CRS information. If \code{NULL}, \code{"EPSG:4326"} is assumed.
 #' @param boundary A \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, \link[sf:st_bbox]{bounding box}, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If unnamed numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. You can also use the sf bounding box format as named vector. Use \code{NULL} not to cut \code{bathy}.
+#' @param warp Logical indicating whether the resulting grid should be resampled to a new CRS if \code{proj.out} != code{proj.bathy} using the \code{\link[stars]{st_warp}} function. A time-consuming operation, but necessary when CRS changes in raster bathymetries. Not required if the next step is to vectorise the bathymetry. 
 #' @param estimate.land Logical indicating whether to include land to the output. Can be used in the following \code{\link{vector_bathymetry}} step to estimate land polygons. 
 #' @param downsample An integer defining how many rows in \code{bathy} should be skipped to reduce the size (and resolution). 1 skips every second row, 2 every second and third. See \code{\link[stars]{st_downsample}}. Set to \code{NULL} (default) to skip downsampling.
 #' @param verbose Logical indicating whether information about guessed projection should be returned as message. Set to \code{FALSE} to make the function silent.
@@ -24,11 +25,11 @@
 # bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(0, 50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = convert_crs("3996"); proj.bathy = convert_crs("3996"), file.name = NULL; boundary = c(-180.0083, 180.0083, -90, 90); aggregation.factor = 6
 # bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = arcticCRS; boundary = c(-180.0083, 180.0083, 30, 90); aggregation.factor = 2; file.name = NULL; verbose = TRUE
 # proj.out = NULL; proj.bathy = NULL; boundary = NULL; estimate.land = FALSE; downsample = NULL; verbose = FALSE
-raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL, boundary = NULL, estimate.land = FALSE, downsample = NULL, verbose = FALSE) {
+raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL, boundary = NULL, warp = FALSE, estimate.land = FALSE, downsample = NULL, verbose = FALSE) {
   
   # Progress bar ####
   
-  pb <- utils::txtProgressBar(min = 0, max = 7, initial = 0, style = 3)
+  pb <- utils::txtProgressBar(min = 0, max = 8, initial = 0, style = 3)
   
   ## General checks ####
   
@@ -114,6 +115,17 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
   
   if(!is.null(boundary)) {
     
+    if(sf::st_crs(ras) != sf::st_crs(boundary)) {
+      boundary <- sf::st_bbox(
+        sf::st_transform(
+          sf::st_as_sfc(
+            sf::st_bbox(boundary)
+          ), 
+          sf::st_crs(ras)
+        )
+      )
+    }
+    
     if(inherits(boundary, c("sf", "sfc", "bbox"))) {
       ras <- ras[sf::st_bbox(boundary)]
       # ras <- raster::crop(ras, raster::extent(boundary))
@@ -146,9 +158,14 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
   ## Project the raster ####
   
   if(sf::st_crs(ras) != sf::st_crs(proj.out)) {
+    
     ras <- sf::st_transform(ras, sf::st_crs(proj.out))
+    
+    # ras <- sf::st_transform(ras, sf::st_crs(proj.out)) 
     # ras <- raster::projectRaster(from = ras, crs = raster::crs(proj.out))
     # ras <- terra::project(ras, sf::st_crs(proj.out)$input)
+  } else {
+    warp <- FALSE
   }
   
   utils::setTxtProgressBar(pb, 5)
@@ -212,7 +229,29 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     cut_df <- range(r[[1]], na.rm = TRUE)
   }
   
+  ## Warp to new grid
+  
   utils::setTxtProgressBar(pb, 7)
+  
+  if(warp) {
+    
+    newgrid <- 
+      stars::st_as_stars(
+        sf::st_bbox(
+          sf::st_transform(
+            sf::st_as_sfc(
+              sf::st_bbox(boundary)
+            ), 
+            sf::st_crs(proj.out)
+          )
+        )
+      )
+    
+    r <- stars::st_warp(r, newgrid)
+  }
+  
+  
+  utils::setTxtProgressBar(pb, 8)
   
   ## Return
   
