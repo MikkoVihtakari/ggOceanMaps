@@ -10,7 +10,7 @@ raster_bathymetry(
   proj.out = NULL,
   proj.bathy = NULL,
   boundary = NULL,
-  warp = TRUE,
+  warp = FALSE,
   estimate.land = FALSE,
   downsample = NULL,
   verbose = FALSE
