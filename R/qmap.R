@@ -33,8 +33,8 @@
 #' }
 #' @export
 
-# x = NULL; y = NULL; geom = "point"; limits = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; expand.factor = 1.1; verbose = FALSE
-qmap <- function(data, ..., x = NULL, y = NULL, geom = "point", limits = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE) {
+# x = NULL; y = NULL; geom = "point"; limits = NULL; shapefiles = NULL; crs = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; ifelse(!is.null(getOption("ggOceanMaps.bathy.style")), getOption("ggOceanMaps.bathy.style"), "raster_binned_blues"); bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; expand.factor = 1.1; verbose = FALSE
+qmap <- function(data, ..., x = NULL, y = NULL, geom = "point", limits = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = ifelse(!is.null(getOption("ggOceanMaps.bathy.style")), getOption("ggOceanMaps.bathy.style"), "raster_binned_blues"), bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE) {
   
   ## Coordinate columns
   
@@ -59,7 +59,7 @@ qmap <- function(data, ..., x = NULL, y = NULL, geom = "point", limits = NULL, s
   pb <- basemap(
     limits = limits, 
     data = if("sf" %in% class(data)) {data} else {data[c(x, y)]},
-    shapefiles = shapefiles,
+    shapefiles = shapefiles, crs = crs,
     bathymetry = bathymetry, glaciers = glaciers, rotate = rotate, 
     legends = legends, legend.position = legend.position, 
     lon.interval = lon.interval, lat.interval = lat.interval, 
@@ -75,7 +75,9 @@ qmap <- function(data, ..., x = NULL, y = NULL, geom = "point", limits = NULL, s
   ## Transform data
   
   if(!inherits(data, "sf")) {
-    if(rotate) {
+    if(!is.null(crs)) {
+      data <- transform_coord(data, lon = x, lat = y, proj.out = sf::st_crs(crs), bind = TRUE)
+    } else if(rotate) {
       data <- transform_coord(data, lon = x, lat = y, rotate = TRUE, bind = TRUE)
     } else {
       data <- transform_coord(data, lon = x, lat = y, proj.out = attributes(pb)$crs, bind = TRUE)

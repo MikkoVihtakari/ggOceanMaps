@@ -9,7 +9,7 @@
 #' Can be omitted if \code{data} or \code{shapefiles} are defined.
 #' @param data A data frame, sp, or \link[sf]{sf} shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.
 #' @param shapefiles Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.
-#' @param crs \link[sf:st_crs]{Coordinate reference system} (CRS) for the map. If \code{NULL} (default), the CRS is selected automatically based on \code{limits}, \code{data} or \code{shapefiles}. Passed to \code{\link[sf]{st_crs}}. Typically integers giving the EPGS code are the easiest. 
+#' @param crs \link[sf:st_crs]{Coordinate reference system} (CRS) for the map. If \code{NULL} (default), the CRS is selected automatically based on \code{limits}, \code{data} or \code{shapefiles}. Passed to \code{\link[sf]{st_crs}}. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with \code{rotate}.
 #' @param bathymetry Logical indicating whether bathymetry should be added to the map.
 #' @param glaciers Logical indicating whether glaciers and ice-sheets should be added to the map.
 #' @param rotate Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. 
@@ -197,10 +197,36 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs
   bathy.type <- gsub("_blues$|_greys$", "", names(bathy_cmd))
   bathy.type <- ifelse(grepl("raster_binned|raster_continuous", bathy.type), bathy.type, "vector")
   
+  if(bathymetry & !is.null(shapefiles) & inherits(shapefiles, "list")) {
+    if(!is.null(shapefiles$bathy)) {
+      if(grepl("raster", bathy.type) & !inherits(shapefiles$bathy, c("stars", "stars_proxy"))) {
+        if(inherits(shapefiles$bathy, c("sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+          msg <- paste0("Detecting vector bathymetry. Code written for <2.0 perhaps? Changing bathy.style to 'poly_blues'.")
+          
+          message(paste(strwrap(msg), collapse= "\n"))
+          bathy.style <- "poly_blues"
+          
+          bathy_cmd <- define_bathy_style(bathy.style)
+          bathy.type <- gsub("_blues$|_greys$", "", names(bathy_cmd))
+          bathy.type <- ifelse(grepl("raster_binned|raster_continuous", bathy.type), bathy.type, "vector")
+        } else {
+         stop("Unsupported bathy class.") 
+        }
+      }
+    } else {
+      stop("shapefiles = list(..., bathy) is required when using custom shapefiles with bathymetry = TRUE")
+    }
+  }
+  
+  
   # Checks ####
   
   if(is.null(data) & is.null(limits) & is.null(shapefiles)) stop("One or several of the arguments limits, data and shapefiles is required.")
   if(!is.logical(legends) | !length(legends) %in% 1:2) stop("'legends' argument has to be a logical vector of length 1 or 2. Read the explantion for the argument in ?basemap")
+  if(!is.null(crs) & rotate) {
+    rotate <- FALSE
+    message("The rotate argument cannot be used with custom crs. Turning rotate to FALSE.")
+  }
   
   ###########
   # Data ####
@@ -265,8 +291,7 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs
   attributes(out)$limits <- X$map.limits
   attributes(out)$polarmap <- X$polar.map
   attributes(out)$map.grid <- X$map.grid
-  attributes(out)$crs <- X$shapefiles$crs
-  attributes(out)$proj <- X$proj
+  attributes(out)$crs <- X$proj
   
   out
   

@@ -134,6 +134,25 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = "DecimalDegree",
       if(verbose) message("Returning Euclidean distances from land as kilometers.")
     }
   }
+
+  ## Splitting x to number of available cores and running the distance calculus parallel would be possible but not implemented due to focus on other tasks in 2.0
+  ## Saving the parallelization code from 1.3.7 ggOceanMaps version so that it can be implemented later when there's time.
+  # cores <- min(length(x), cores)
+  # 
+  # if(verbose) message("Calculating distances with parallel processing...")
+  # 
+  # # On Windows run special args to speed up:
+  # if(.Platform$OS.type == "windows") {
+  #   cl <- parallel::makeCluster(cores, rscript_args = c("--no-init-file", "--no-site-file", "--no-environ"))
+  #   out <- parallel::parLapply(cl, 1:length(x), function(i) suppressWarnings(gDistance(x[i], land)/1000))
+  #   parallel::stopCluster(cl)
+  #   tmp <- unlist(out)
+  # }
+  # else {
+  #   tmp <- unlist(parallel::mclapply(1:length(x), function(i) {
+  #     suppressWarnings(gDistance(x[i], land)/1000)
+  #   }, mc.cores = cores))
+  # }
   
   ## Return
   
