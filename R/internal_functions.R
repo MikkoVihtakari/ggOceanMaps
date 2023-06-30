@@ -221,6 +221,8 @@ define_bathy_style <- function(x) {
     out <- "raster_binned_blues"
   } else if(tolower(x) == "rcb") {
     out <- "raster_continuous_blues"
+  } else if(tolower(x) == "rbg") {
+    out <- "raster_binned_greys"
   } else if(tolower(x) == "pb") {
     out <- "poly_blues"
   } else if(tolower(x) == "pg") {
@@ -232,15 +234,16 @@ define_bathy_style <- function(x) {
   } else {
     out <- match.arg(
       x,
-      c("raster_binned_blues", "raster_continuous_blues", "poly_blues", 
-        "poly_greys", "contour_blues", "contour_grey")
+      c("raster_binned_blues", "raster_continuous_blues", "raster_binned_greys",
+        "poly_blues", "poly_greys", "contour_blues", "contour_grey")
     )
   }
   
   alternatives <- 
     c("raster_binned_blues" = "bathy_rbb", "raster_continuous_blues" = "bathy_rcb",
-      "poly_blues" = "bathy_pb", "poly_greys" = "bathy_pg", 
-      "contour_blues" = "bathy_cb", "contour_grey" = "bathy_cg")
+      "raster_binned_greys" = "bathy_rbg", "poly_blues" = "bathy_pb", 
+      "poly_greys" = "bathy_pg", "contour_blues" = "bathy_cb", 
+      "contour_grey" = "bathy_cg")
   
   alternatives[names(alternatives) == out]
 }

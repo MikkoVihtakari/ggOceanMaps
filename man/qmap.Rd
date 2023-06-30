@@ -68,10 +68,10 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
 \item{lon.interval, lat.interval}{Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.}
 
-\item{bathy.style}{Character defining the style for bathymetry contours. Partially matched and can be abbreviated. Alternatives:
+\item{bathy.style}{Character defining the bathymetry style. Partially matched and can be abbreviated. Alternatives:
 \itemize{
 \item \code{"raster_binned_blues"} or \code{"rbb"} (default) plots binned raster bathymetry filled with different shades of blue. Does not require a download.
-\item \code{"raster_continuous_blues"} or \code{"rcb"} plots continuous raster bathymetry filled with different shades of blue. Visually more appealing than the binned bathymetry. Requires a download. 
+\item \code{"raster_continuous_blues"} or \code{"rcb"} plots continuous raster bathymetry filled with different shades of blue. More detailed and visually more appealing than the binned bathymetry. Recommended. Requires a download. 
 \item \code{"poly_blues"} or \code{"pb"} plots polygon bathymetry filled with different shades of blue. Default in the versions older than 2.0 of ggOceanMaps. Requires a download. 
 \item \code{"poly_greys"} or \code{"pg"} plots polygon bathymetry filled with different shades of gray. Requires a download.
 \item \code{"contour_blues"} or \code{"cb"} contour lines with different shades of blue. Requires a download.
@@ -101,24 +101,23 @@ Returns a \link[ggplot2]{ggplot} map, which can be assigned to an object and mod
 \examples{
 dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
 
+# Quickly see position of data
+qmap(dt)
+
 # Set color
+qmap(dt, color = I("blue")) 
 
-qmap(dt, color = I("red")) 
-
-# Map color
 \donttest{
+# Map color to a variable
 qmap(dt, color = var) 
 # 
 
-# Map text
-
+# Map text to a variable 
 qmap(dt, label = var) 
  
 
 # All basemap arguments work in qmap()
-
 dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
- 
 qmap(dt, rotate = TRUE)
 }
 }

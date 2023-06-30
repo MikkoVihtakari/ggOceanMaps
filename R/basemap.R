@@ -13,10 +13,10 @@
 #' @param bathymetry Logical indicating whether bathymetry should be added to the map.
 #' @param glaciers Logical indicating whether glaciers and ice-sheets should be added to the map.
 #' @param rotate Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. 
-#' @param bathy.style Character defining the style for bathymetry contours. Partially matched and can be abbreviated. Alternatives:
+#' @param bathy.style Character defining the bathymetry style. Partially matched and can be abbreviated. Alternatives:
 #' \itemize{
 #' \item \code{"raster_binned_blues"} or \code{"rbb"} (default) plots binned raster bathymetry filled with different shades of blue. Does not require a download.
-#' \item \code{"raster_continuous_blues"} or \code{"rcb"} plots continuous raster bathymetry filled with different shades of blue. Visually more appealing than the binned bathymetry. Requires a download. 
+#' \item \code{"raster_continuous_blues"} or \code{"rcb"} plots continuous raster bathymetry filled with different shades of blue. More detailed and visually more appealing than the binned bathymetry. Recommended. Requires a download. 
 #' \item \code{"poly_blues"} or \code{"pb"} plots polygon bathymetry filled with different shades of blue. Default in the versions older than 2.0 of ggOceanMaps. Requires a download. 
 #' \item \code{"poly_greys"} or \code{"pg"} plots polygon bathymetry filled with different shades of gray. Requires a download.
 #' \item \code{"contour_blues"} or \code{"cb"} contour lines with different shades of blue. Requires a download.
@@ -95,11 +95,11 @@
 #' 
 #' # The easiest way to add data on the maps is to use the ggspatial functions:
 #' dt <- data.frame(lon = c(-150, 150), lat = c(60, 90))
-#' 
+#' if(requireNamespace("ggspatial", quietly = TRUE)) {
 #' basemap(data = dt, bathymetry = TRUE) +
 #'   ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat), 
 #'     color = "red")
-#' 
+#' }
 #' \dontrun{
 #' # Note that writing out data = dt is required because there are multiple
 #' # underlying ggplot layers plotted already:
@@ -122,6 +122,7 @@
 #' 
 #' dt <- data.frame(lon = c(-160, 160, 160, -160), lat = c(80, 80, 60, 60))
 #'
+#' if(requireNamespace("ggspatial", quietly = TRUE)) {
 #' basemap(data = dt) +
 #'   ggspatial::geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
 #'     fill = NA, color = "red")
@@ -130,6 +131,7 @@
 #' basemap(data = dt, rotate = TRUE) +
 #'   ggspatial::geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
 #'     fill = NA, color = "red")
+#' }
 #' 
 #' # Alternative:
 #' basemap(data = dt, rotate = TRUE) +

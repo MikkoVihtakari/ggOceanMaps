@@ -73,22 +73,33 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
     clip_boundary <- sf::st_make_valid(clip_boundary)
   }
   
+  ### Validate x
+  
+  if(!all(sf::st_is_valid(x))) {
+    x <- sf::st_make_valid(x)
+  }
+  
   ## Check that the projections match
   
   if(sf::st_crs(clip_boundary) != sf::st_crs(x_proj)) {
     clip_boundary <- sf::st_transform(clip_boundary, x_proj)
   }
   
-  ## Temporarily turn off s2 while handing decimal degree shapes (anti-meridian as exception)
+  ## Temporarily turn off s2 while handing decimal degree shapes (anti-meridian as exception, rotated maps. This is some dodgy stuff)
   
   if(suppressWarnings(sf::st_is_longlat(x))) {
-    if(!(suppressWarnings(sf::st_is_longlat(clip_boundary)) &
-         diff(unname(sign(sf::st_bbox(clip_boundary)[c("xmin", "xmax")]))) != 0)) {
+    
+    tmp <- sf::st_bbox(clip_boundary)[c("xmin", "xmax")]
+
+    if((sign(tmp[1]) != sign(tmp[2]) && 
+        sf::st_crs(x)$proj4string == sf::st_crs(4326)$proj4string)) {
       s2_mode <- sf::sf_use_s2()
       suppressMessages(sf::sf_use_s2(FALSE))
       on.exit({suppressMessages(sf::sf_use_s2(s2_mode))})
     } else {
-      x <- sf::st_make_valid(x)
+      if(!all(sf::st_is_valid(x))) {
+        x <- sf::st_make_valid(x)
+      }
     }
   }
   
@@ -102,6 +113,12 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
   ## Cropping
   
   shapefile <- suppressMessages(suppressWarnings(sf::st_intersection(x, clip_boundary)))
+  
+  ### Validate shapefile (these make basemap slower, consider removing some in the future)
+  
+  if(!all(sf::st_is_valid(shapefile))) {
+    shapefile <- sf::st_make_valid(shapefile)
+  }
   
   ## Convert to sp (if asked)
   

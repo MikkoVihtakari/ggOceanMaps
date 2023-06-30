@@ -354,7 +354,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       }
     }
     
-    if(sf::st_is_longlat(crs) && sign(limits[1]) != sign(limits[2])) {
+    if(sf::st_is_longlat(crs) && sign(limits[1]) != sign(limits[2]) & !rotate) {
       msg <- paste0("Detecting antimeridian crossing on decimal degree map. Plotting only 
               works with rotate = TRUE. Turning rotate on. Adjust limits if this
               is not desired.")
@@ -410,7 +410,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     limits <- tmp$ddLimits
     # limits <- sf::st_bbox(sf::st_transform(sf::st_as_sfc(sf::st_bbox(clip_shape)), crs = 4326))[c("xmin", "xmax", "ymin", "ymax")]
     
-    if(sf::st_is_longlat(crs) && sign(limits[1]) != sign(limits[2])) {
+    if(sf::st_is_longlat(crs) && sign(limits[1]) != sign(limits[2]) && diff(limits[1:2]) < 180 & !rotate) {
       msg <- paste0("Detecting antimeridian crossing on decimal degree map. Plotting only 
               works with rotate = TRUE. Turning rotate on. Adjust limits if this
               is not desired.")

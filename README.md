@@ -13,13 +13,13 @@
 
 <!-- [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml) -->
 
-**Breaking news** (pun intended) **: ggOceanMaps goes
-[sf](https://r-spatial.github.io/sf/)!** The upgrade involved rewriting
-most of ggOceanMaps code. There are plenty of new features in 2.0 (see
-[here]() and the
+**Breaking news (pun intended): ggOceanMaps goes
+[sf](https://r-spatial.github.io/sf/)!** Most of ggOceanMaps code has
+been rewritten. There are plenty of new features in 2.0 (see [here]()
+and the
 [changelog](https://mikkovihtakari.github.io/ggOceanMaps/news/index.html)),
-but likely also many new bugs. Please [report any bugs on
-Github](#contributions).
+but likely also many new bugs. Please [report them
+here](https://github.com/MikkoVihtakari/ggOceanMaps/issues).
 
 ## Overview
 
@@ -134,7 +134,7 @@ computer by modifying your .Rprofile file
 ```
 
 It is smart to use a directory R has writing access to. For example
-`normalizePath("~/Documents/ggOceanMapsLargeData")"` would work for most
+`normalizePath("~/Documents/ggOceanMapsLargeData")` would work for most
 operating systems.
 
 You will need to set up the data path to your .Rprofile file only once

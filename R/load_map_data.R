@@ -90,8 +90,11 @@ load_map_data <- function(x, force = FALSE) {
       if(file.exists(k) & !force) {
         mget(load(k))[[1]]
       } else {
-        download.file(paste(x$path, k), getOption("ggOceanMaps.datapath"))
-        mget(load(getOption("ggOceanMaps.datapath")))
+        tmp <- unlist(strsplit(k, "/"))
+        dest_path <- file.path(normalizePath(getOption("ggOceanMaps.datapath")),tmp[length(tmp)])
+        
+        download.file(paste0(x$path, tmp[length(tmp)]), dest_path)
+        mget(load(dest_path))[[1]]
       }
     } else {
       eval(parse(text = k))

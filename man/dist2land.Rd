@@ -43,13 +43,12 @@ Calculates the closest distance to land for coordinates in a data frame
 The function calculates great circle spherical distances using the \code{\link[sf]{st_distance}} function by default. The function can be slow for large datasets. If you only want to use the function to remove (wrong) observations reported on land, set the \code{binary} argument to \code{TRUE}. This speeds up the calculations by a factor of ten.
 }
 \examples{
-
-\donttest{
 # Simple example:
 dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
 dt <- dist2land(dt, verbose = FALSE)
 qmap(dt, color = ldist) + scale_color_viridis_c()
 
+\donttest{
 # Datasets covering the entire Earth seem to work now, except 0,0 lon/lat point
 lon = deg_to_dd(seq(0,360,30)); lat = c(80,50,20,0,-20,-50,-80)
 

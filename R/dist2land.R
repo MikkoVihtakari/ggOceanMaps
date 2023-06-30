@@ -12,13 +12,12 @@
 #' @return Returns a vector if \code{bind = FALSE}, otherwise a data frame. The distances are given in a new column defined by the \code{dist.col} argument. The distances are \strong{kilometers} if \code{binary = FALSE}, otherwise logical (TRUE = the position is in the ocean, FALSE = the position is on land).
 #' @author Mikko Vihtakari
 #' @examples
-#' 
-#' \donttest{
 #' # Simple example:
 #' dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
 #' dt <- dist2land(dt, verbose = FALSE)
 #' qmap(dt, color = ldist) + scale_color_viridis_c()
-#'
+#' 
+#' \donttest{
 #' # Datasets covering the entire Earth seem to work now, except 0,0 lon/lat point
 #' lon = deg_to_dd(seq(0,360,30)); lat = c(80,50,20,0,-20,-50,-80)
 #'

@@ -11,24 +11,23 @@
 #' @examples 
 #' dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
 #' 
+#' # Quickly see position of data
+#' qmap(dt)
+#' 
 #' # Set color
+#' qmap(dt, color = I("blue")) 
 #' 
-#' qmap(dt, color = I("red")) 
-#' 
-#' # Map color
 #' \donttest{
+#' # Map color to a variable
 #' qmap(dt, color = var) 
 #' # 
 #' 
-#' # Map text
-#' 
+#' # Map text to a variable 
 #' qmap(dt, label = var) 
 #'  
 #' 
 #' # All basemap arguments work in qmap()
-#' 
 #' dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
-#'  
 #' qmap(dt, rotate = TRUE)
 #' }
 #' @export
