@@ -46,7 +46,7 @@ The package is available on [CRAN](https://CRAN.R-project.org/package=ggOceanMap
 Installation of the GitHub version:
 
 ```{r eval = FALSE}
-remotes::install_github("MikkoVihtakari/ggOceanMapsData")
+remotes::install_github("MikkoVihtakari/ggOceanMaps", ref = "sf-version")
 ```
 
 Installation of the CRAN version:
@@ -92,7 +92,7 @@ The data used by the package are not the property of the Institute of Marine Res
 
 - **ggOceanMapsData land polygons.** [Natural Earth Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/) 1:10m Physical Vectors with the Land and Minor Island datasets combined. Distributed under the [CC Public Domain license](https://creativecommons.org/publicdomain/) ([terms of use](https://www.naturalearthdata.com/about/terms-of-use/)).
 - **ggOceanMapsData glacier polygons.** [Natural Earth Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/) 1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice Shelves datasets combined. Distributed under the [CC Public Domain license](https://creativecommons.org/publicdomain/) ([terms of use](https://www.naturalearthdata.com/about/terms-of-use/)).
-- **ggOceanMapsData bathymetry.** [NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. NOAA National Centers for Environmental Information. DOI: 10.25921/fd45-gt74](https://doi.org/10.25921/fd45-gt74). Distributed under the [U.S. Government Work license](https://www.usa.gov/government-works).
+- **ggOceanMapsData bathymetry.** [NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. NOAA National Centers for Environmental Information. DOI: 10.25921/fd45-gt74](https://www.ncei.noaa.gov/products/etopo-global-relief-model). Distributed under the [U.S. Government Work license](https://www.usa.gov/government-works).
 - **Detailed shapefiles of Svalbard and the Norwegian coast in [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)** are from [Geonorge.no](https://www.geonorge.no/). Distributed under the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/).
 - **Detailed bathymetry of the Arctic (IBCAO), Northern Hemisphere (GEBCO) and the Barents Sea (BarentsSea) in [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)** are vectorized from the [General Bathymetric Chart of the Oceans](https://www.gebco.net/data_and_products/gridded_bathymetry_data/) 15-arcsecond 2023 grid. [Terms of use](https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/grid_terms_of_use.html)
 - **Detailed bathymetry of the Northeast Atlantic (EMODned) in [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)** is vectorized from the [European Marine Observation and Data Network](https://www.emodnet-bathymetry.eu/data-products) 3.75-arcsecond grid. [Terms of use](https://www.emodnet-bathymetry.eu/home/terms-of-use)
@@ -105,7 +105,7 @@ citation("ggOceanMaps")
 
 ## Getting help
 
-If your problem does not involve bugs in ggOceanMaps, the quickest way of getting help can be posting your problem to [Stack Overflow](https://stackoverflow.com/questions/tagged/r). Alternatively, you are welcome to use the [issues section](https://github.com/MikkoVihtakari/ggOceanMaps/issues) on GitHub. Please remember to include a reproducible example that illustrates your problem and to add links to potential cross-posts. 
+If your problem does not involve bugs in ggOceanMaps, the quickest way of getting help can be posting your problem to [Stack Overflow](https://stackoverflow.com/search?q=ggoceanmaps). Alternatively, you are welcome to use the [issues section](https://github.com/MikkoVihtakari/ggOceanMaps/issues) on GitHub. Please remember to include a reproducible example that illustrates your problem and to add links to potential cross-posts. 
 
 ## Contributions
 

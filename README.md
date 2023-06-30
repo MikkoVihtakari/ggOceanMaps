@@ -50,7 +50,7 @@ updated more frequently than the CRAN version.
 Installation of the GitHub version:
 
 ``` r
-remotes::install_github("MikkoVihtakari/ggOceanMapsData")
+remotes::install_github("MikkoVihtakari/ggOceanMaps", ref = "sf-version")
 ```
 
 Installation of the CRAN version:
@@ -165,7 +165,8 @@ from the following sources:
 - **ggOceanMapsData bathymetry.** [NOAA National Centers for
   Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global
   Relief Model. NOAA National Centers for Environmental Information.
-  DOI: 10.25921/fd45-gt74](https://doi.org/10.25921/fd45-gt74).
+  DOI:
+  10.25921/fd45-gt74](https://www.ncei.noaa.gov/products/etopo-global-relief-model).
   Distributed under the [U.S. Government Work
   license](https://www.usa.gov/government-works).
 - **Detailed shapefiles of Svalbard and the Norwegian coast in
@@ -212,8 +213,8 @@ citation("ggOceanMaps")
 
 If your problem does not involve bugs in ggOceanMaps, the quickest way
 of getting help can be posting your problem to [Stack
-Overflow](https://stackoverflow.com/questions/tagged/r). Alternatively,
-you are welcome to use the [issues
+Overflow](https://stackoverflow.com/search?q=ggoceanmaps).
+Alternatively, you are welcome to use the [issues
 section](https://github.com/MikkoVihtakari/ggOceanMaps/issues) on
 GitHub. Please remember to include a reproducible example that
 illustrates your problem and to add links to potential cross-posts.
