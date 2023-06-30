@@ -9,15 +9,18 @@
 #' Can be omitted if \code{data} or \code{shapefiles} are defined.
 #' @param data A data frame, sp, or \link[sf]{sf} shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.
 #' @param shapefiles Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.
+#' @param crs \link[sf:st_crs]{Coordinate reference system} (CRS) for the map. If \code{NULL} (default), the CRS is selected automatically based on \code{limits}, \code{data} or \code{shapefiles}. Passed to \code{\link[sf]{st_crs}}. Typically integers giving the EPGS code are the easiest. 
 #' @param bathymetry Logical indicating whether bathymetry should be added to the map.
 #' @param glaciers Logical indicating whether glaciers and ice-sheets should be added to the map.
 #' @param rotate Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. 
-#' @param bathy.style Character defining the style for bathymetry contours. Alternatives:
+#' @param bathy.style Character defining the style for bathymetry contours. Partially matched and can be abbreviated. Alternatives:
 #' \itemize{
-#' \item \code{"poly_blues"} plots polygons filled with different shades of blue.
-#' \item \code{"poly_greys"} plots polygons filled with different shades of gray.
-#' \item \code{"contour_blues"} contour lines with different shades of blue.
-#' \item \code{"contour_grey"} plots gray contour lines.
+#' \item \code{"raster_binned_blues"} or \code{"rbb"} (default) plots binned raster bathymetry filled with different shades of blue. Does not require a download.
+#' \item \code{"raster_continuous_blues"} or \code{"rcb"} plots continuous raster bathymetry filled with different shades of blue. Visually more appealing than the binned bathymetry. Requires a download. 
+#' \item \code{"poly_blues"} or \code{"pb"} plots polygon bathymetry filled with different shades of blue. Default in the versions older than 2.0 of ggOceanMaps. Requires a download. 
+#' \item \code{"poly_greys"} or \code{"pg"} plots polygon bathymetry filled with different shades of gray. Requires a download.
+#' \item \code{"contour_blues"} or \code{"cb"} contour lines with different shades of blue. Requires a download.
+#' \item \code{"contour_grey"} or \code{"cg"} plots gray contour lines. Requires a download. 
 #' }
 #' @param legends Logical indicating whether the legend for bathymetry should be shown.
 #' @param legend.position The position for ggplot2 legend. See the argument with the same name in \link[ggplot2]{theme}.
@@ -80,18 +83,22 @@
 #' # The easiest way to produce a map is to use the limits
 #' # argument and decimal degrees:
 #' 
+#' basemap(limits = 60) # synonym to basemap(60)
 #' \donttest{
-#' if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
-#' basemap(limits = 60)
+#' # Bathymetry can be added using the respective argument:
+#' basemap(limits = -60, bathymetry = TRUE)
 #' 
-#' # Bathymetry and glaciers can be added using the respective arguments:
-#' basemap(limits = -60, bathymetry = TRUE, glaciers = TRUE)
+#' \dontrun{
+#' # Glaciers require a download in the new version:
+#' basemap(limits = -60, glaciers = TRUE, shapefiles = "Arctic")
+#' }
 #' 
 #' # The easiest way to add data on the maps is to use the ggspatial functions:
 #' dt <- data.frame(lon = c(-150, 150), lat = c(60, 90))
 #' 
 #' basemap(data = dt, bathymetry = TRUE) +
-#' ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
+#'   ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat), 
+#'     color = "red")
 #' 
 #' \dontrun{
 #' # Note that writing out data = dt is required because there are multiple
@@ -106,7 +113,7 @@
 #' dt <- transform_coord(dt, bind = TRUE)
 #'
 #' basemap(data = dt) + 
-#' geom_point(data = dt, aes(x = lon.proj, y = lat.proj), color = "red")
+#'   geom_point(data = dt, aes(x = lon.proj, y = lat.proj), color = "red")
 #'
 #' # The limits argument of length 4 plots a map anywhere in the world:
 #' basemap(limits = c(100, 160, -20, 30), bathymetry = TRUE)
@@ -116,29 +123,31 @@
 #' dt <- data.frame(lon = c(-160, 160, 160, -160), lat = c(80, 80, 60, 60))
 #'
 #' basemap(data = dt) +
-#' ggspatial::geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
-#' fill = NA, color = "red")
+#'   ggspatial::geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
+#'     fill = NA, color = "red")
 #' 
-#' # Rotate:#' 
+#' # Rotate:
 #' basemap(data = dt, rotate = TRUE) +
-#' ggspatial::geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
-#'                     fill = NA, color = "red")
+#'   ggspatial::geom_spatial_polygon(data = dt, aes(x = lon, y = lat),
+#'     fill = NA, color = "red")
 #' 
 #' # Alternative:
 #' basemap(data = dt, rotate = TRUE) +
-#' geom_polygon(data = transform_coord(dt, rotate = TRUE), 
-#' aes(x = lon, y = lat), fill = NA, color = "red")
+#'   geom_polygon(data = transform_coord(dt, rotate = TRUE), 
+#'     aes(x = lon, y = lat), fill = NA, color = "red")
 #' 
 #' ## To find UTM coordinates to limit a polar map:
 #' basemap(limits = 60, projection.grid = TRUE)
+#' 
+#' \dontrun{
+#' # (Arctic shapes require a download in 2.0)
 #' basemap(limits = c(2.5e4, -2.5e6, 2e6, -2.5e5), shapefiles = "Arctic")
 #' 
-#' # Using custom shapefiles:
+#' # Using custom shapefiles (requires download):
 #' data(bs_shapes, package = "ggOceanMapsData")
-#' basemap(shapefiles = list(land = bs_land))
+#' basemap(shapefiles = list(land = bs_land))#' 
 #' 
 #' # Premade shapefiles from ggOceanMapsLargeData (requires download):
-#' \dontrun{
 #' basemap("BarentsSea", bathymetry = TRUE)
 #' }
 #' 
@@ -160,19 +169,15 @@
 #'       axis.ticks.y = element_blank()
 #'       )
 #' }
-#' }
 #' @import ggplot2 sf
 #' @export
 
 ## Test parameters
-# x = NULL; limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "poly_blues"; bathy.border.col = NA; bathy.size = 0.1; bathy.alpha = 1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = TRUE
 
-basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = "poly_blues", bathy.border.col = NA, bathy.size = 0.1, bathy.alpha = 1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE) {
-  
-  # Install ggOceanMapsData if not installed
-  # if (!requireNamespace("ggOceanMapsData", quietly = TRUE)) {
-  #   stop('The ggOceanMapsData package needs to be installed for ggOceanMaps to function.\nInstall the data package by running\ninstall.packages("ggOceanMapsData", repos = c("https://mikkovihtakari.github.io/drat", "https://cloud.r-project.org"))\nOR\ndevtools::install_github("MikkoVihtakari/ggOceanMapsData")')
-  # }
+# limits = c(160, -160, 60, 80); bathymetry = TRUE
+# x = NULL; limits = NULL; data = NULL; shapefiles = NULL; crs = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; bathy.style = "raster_binned_blues"; bathy.border.col = NA; bathy.size = 0.1; bathy.alpha = 1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; verbose = TRUE
+
+basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = ifelse(!is.null(getOption("ggOceanMaps.bathy.style")), getOption("ggOceanMaps.bathy.style"), "raster_binned_blues"), bathy.border.col = NA, bathy.size = 0.1, bathy.alpha = 1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE) {
   
   # The x argument to limits or data
   
@@ -186,6 +191,12 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bat
     }
   }
   
+  # Bathymetry style
+  
+  bathy_cmd <- define_bathy_style(bathy.style)
+  bathy.type <- gsub("_blues$|_greys$", "", names(bathy_cmd))
+  bathy.type <- ifelse(grepl("raster_binned|raster_continuous", bathy.type), bathy.type, "vector")
+  
   # Checks ####
   
   if(is.null(data) & is.null(limits) & is.null(shapefiles)) stop("One or several of the arguments limits, data and shapefiles is required.")
@@ -194,7 +205,7 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bat
   ###########
   # Data ####
   
-  X <- basemap_data(limits = limits, data = data, shapefiles = shapefiles, bathymetry = bathymetry, glaciers = glaciers, lon.interval = lon.interval, lat.interval = lat.interval, rotate = rotate, expand.factor = expand.factor, verbose = verbose)
+  X <- basemap_data(limits = limits, data = data, shapefiles = shapefiles, crs = crs, bathymetry = bathymetry, bathy.type = bathy.type, glaciers = glaciers, lon.interval = lon.interval, lat.interval = lat.interval, rotate = rotate, expand.factor = expand.factor, verbose = verbose)
   
   ###########
   # Plot ####
@@ -202,14 +213,6 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, bat
   ## Bathymetry data
   
   if(bathymetry & !is.null(X$shapefiles$bathy)) {
-    
-    bathy_cmd <- switch(bathy.style,
-                        poly_blues = "bathy_pb",
-                        poly_greys = "bathy_pg",
-                        contour_blues = "bathy_cb",
-                        contour_grey = "bathy_cg",
-                        stop(paste("bathy.style not found"))
-    )
     
     bathy.legend <- ifelse(length(legends) == 1, legends, legends[1])
     

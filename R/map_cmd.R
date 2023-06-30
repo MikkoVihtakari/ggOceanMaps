@@ -18,6 +18,27 @@ map_cmd <- function(command, alternative = FALSE) {
     base = '
       ggplot2::ggplot()
     ',
+    bathy_rbb = 
+      'stars::geom_stars(data = X$shapefiles$bathy$raster, na.action = na.omit) +
+      ggplot2::scale_fill_manual(
+        name = "Depth (m)", 
+        values = colorRampPalette(c("#F7FBFF", "#DEEBF7", "#9ECAE1", "#4292C6", "#08306B"))(nlevels(X$shapefiles$bathy$raster[[1]])),
+        guide =
+          if(bathy.legend) {
+            guide_legend(order = 1, override.aes = list(colour = NA))
+          } else {
+            "none"
+          })
+    ',
+    bathy_rcb = 
+      'stars::geom_stars(data = X$shapefiles$bathy$raster) +
+      ggplot2::scale_fill_gradientn(
+        name = "Depth (m)", limits = c(0,NA), 
+        values = c(0,0.01,0.05,0.25,0.75,1),
+        colors = colorRampPalette(c("#F7FBFF", "#DEEBF7", "#9ECAE1", "#4292C6", "#08306B"))(10),
+        na.value = "white"
+        )
+    ',
     bathy_pb = '
       ggplot2::geom_sf(data = X$shapefiles$bathy, ggplot2::aes(fill = depth), 
       show.legend = bathy.legend, color = bathy.border.col, 

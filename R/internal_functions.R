@@ -206,3 +206,41 @@ dd_clip_boundary <- function(limits, crs, expand.factor = NULL) {
     )
   )
 }
+
+#' @title Define bathymetry style for \code{\link{basemap}}
+#' @description Defines bathymetry style to be used in \code{\link{basemap}}
+#' @param x Character argument giving the input bathymetry style. Partially matched and can be abbreviated. See \code{bathy.style} in \code{\link{basemap}}.
+#' @return Returns a named character vector with the name pointing to the bathymetry style and value to internal map element command for \code{\link{basemap}} (see \code{\link{map_cmd}}).
+#' @keywords internal
+#' @author Mikko Vihtakari
+#' @export
+
+define_bathy_style <- function(x) {
+  
+  if(tolower(x) == "rbb") {
+    out <- "raster_binned_blues"
+  } else if(tolower(x) == "rcb") {
+    out <- "raster_continuous_blues"
+  } else if(tolower(x) == "pb") {
+    out <- "poly_blues"
+  } else if(tolower(x) == "pg") {
+    out <- "poly_greys"
+  } else if(tolower(x) == "cb") {
+    out <- "contour_blues"
+  } else if(tolower(x) == "cg") {
+    out <- "contour_grey"
+  } else {
+    out <- match.arg(
+      x,
+      c("raster_binned_blues", "raster_continuous_blues", "poly_blues", 
+        "poly_greys", "contour_blues", "contour_grey")
+    )
+  }
+  
+  alternatives <- 
+    c("raster_binned_blues" = "bathy_rbb", "raster_continuous_blues" = "bathy_rcb",
+      "poly_blues" = "bathy_pb", "poly_greys" = "bathy_pg", 
+      "contour_blues" = "bathy_cb", "contour_grey" = "bathy_cg")
+  
+  alternatives[names(alternatives) == out]
+}

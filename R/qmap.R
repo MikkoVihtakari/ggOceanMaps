@@ -9,7 +9,6 @@
 #' @family basemap functions
 #' @author Mikko Vihtakari
 #' @examples 
-#' if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
 #' dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a", "b"))
 #' 
 #' # Set color
@@ -31,7 +30,6 @@
 #' dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
 #'  
 #' qmap(dt, rotate = TRUE)
-#' }
 #' }
 #' @export
 

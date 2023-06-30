@@ -14,10 +14,8 @@
 #' @author Mikko Vihtakari
 #' @family customize shapefiles
 #' @examples
-#' if(requireNamespace("ggOceanMapsData")) {
 #' auto_limits(data = expand.grid(lon = c(-120, 180, 120),
 #'    lat = c(60, 60, 80)))
-#' }
 #' @export
 
 # lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; expand.factor = NULL; verbose = FALSE; output.sf = TRUE

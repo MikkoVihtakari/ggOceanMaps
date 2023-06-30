@@ -11,7 +11,7 @@
 
 # Test paramters
 # limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE; verbose = TRUE
-basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = FALSE) {
+basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, bathy.type = NULL, glaciers = FALSE, lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = FALSE) {
   
   ## For code-readability and debugging, the function has been cut to compartments.
   ## The internal functions can be found at the end of this script.
@@ -30,14 +30,14 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymet
   # 1. Define the shapefiles ####
   
   x <- basemap_data_define_shapefiles(
-    limits = limits, data = data, shapefiles = shapefiles, bathymetry = 
-      bathymetry, glaciers = glaciers, rotate = rotate, expand.factor = 
-      expand.factor, verbose = FALSE
+    limits = limits, data = data, shapefiles = shapefiles, crs = crs, 
+    bathymetry = bathymetry, bathy.type = bathy.type, glaciers = glaciers, 
+    rotate = rotate, expand.factor = expand.factor, verbose = FALSE
   )
   
   # 2. Crop and rotate shapefiles if needed ####
   
-  x <- basemap_data_crop(x = x, bathymetry = bathymetry, glaciers = glaciers)
+  x <- basemap_data_crop(x = x, bathymetry = bathymetry, glaciers = glaciers, crs = crs)
   
   # 3. Define the grid lines ####
   
@@ -124,7 +124,7 @@ basemap_data_detect_case <- function(limits = NULL, data = NULL, shapefiles = NU
 
 
 ## Define shapefiles ####
-basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefiles = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, expand.factor = 1.1, verbose = FALSE) {
+basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, bathy.type = NULL, glaciers = FALSE, rotate = FALSE, expand.factor = 1.1, verbose = FALSE) {
   
   # Switches and checks ####
   
@@ -156,48 +156,54 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       }
       
       if(!glaciers) shapefiles$glacier <- NULL
-      if(!bathymetry) shapefiles$bathy <- NULL
+      if(!bathymetry) {
+        shapefiles$bathy <- NULL
+      } else {
+        shapefiles$bathy <- shapefiles$bathy[bathy.type]
+      }
       
       ## Load the shapefiles if download required
       
-      if(!is.na(shapefiles$path) & 
-         any(sapply(
-           shapefiles[names(shapefiles) %in% c("land", "glacier", "bathy")], 
-           function(k) !grepl("::", k) & !is.null(k)))
-      ) {
-        
-        ## Predifined shapefile case
-        
-        tmp <- load_map_data(x = shapefiles)
-        
-        shapefiles <- stats::setNames(lapply(seq_along(shapefiles), function(i) {
-          test <- which(names(tmp) %in% shapefiles[[i]])
-          
-          if(length(test) != 1) {
-            shapefiles[[i]]
-          } else {
-            if(names(shapefiles)[i] == "glacier" & !glaciers) {
-              NULL
-            } else if(names(shapefiles)[i] == "bathy" & !bathymetry) {
-              NULL
-            } else {
-              tmp[[test]]
-            }
-          }
-        }), names(shapefiles))
-      }
+      shapefiles <- load_map_data(shapefiles)
       
-      if(is.character(shapefiles$land)) {
-        shapefiles$land <- eval(parse(text = shapefiles$land))
-      }
+      # if(!is.na(shapefiles$path) & 
+      #    any(sapply(
+      #      shapefiles[names(shapefiles) %in% c("land", "glacier", "bathy")], 
+      #      function(k) !grepl("::", k) & !is.null(k)))
+      # ) {
+      #   
+      #   ## Predifined shapefile case
+      #   
+      #   tmp <- load_map_data(x = shapefiles)
+      #   
+      #   shapefiles <- stats::setNames(lapply(seq_along(shapefiles), function(i) {
+      #     test <- which(names(tmp) %in% shapefiles[[i]])
+      #     
+      #     if(length(test) != 1) {
+      #       shapefiles[[i]]
+      #     } else {
+      #       if(names(shapefiles)[i] == "glacier" & !glaciers) {
+      #         NULL
+      #       } else if(names(shapefiles)[i] == "bathy" & !bathymetry) {
+      #         NULL
+      #       } else {
+      #         tmp[[test]]
+      #       }
+      #     }
+      #   }), names(shapefiles))
+      # }
       
-      if(is.character(shapefiles$glacier)) {
-        shapefiles$glacier <- eval(parse(text = shapefiles$glacier))
-      }
-      
-      if(is.character(shapefiles$bathy)) {
-        shapefiles$bathy <- eval(parse(text = shapefiles$bathy))
-      }
+      # if(is.character(shapefiles$land)) {
+      #   shapefiles$land <- eval(parse(text = shapefiles$land))
+      # }
+      # 
+      # if(is.character(shapefiles$glacier)) {
+      #   shapefiles$glacier <- eval(parse(text = shapefiles$glacier))
+      # }
+      # 
+      # if(is.character(shapefiles$bathy)) {
+      #   shapefiles$bathy <- eval(parse(text = shapefiles$bathy))
+      # }
       
       if(any(sapply(shapefiles, function(k) 
         inherits(k, c("SpatialPolygons", "SpatialPolygonsDataFrame"))))) {
@@ -288,7 +294,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
   } else if(case %in% c("limits_polar", "limits_polar_adjust")) {
     
     if(case %in% c("limits_polar_adjust")) {
-      tmp <- define_shapefiles(limits)
+      tmp <- define_shapefiles(limits, force_dd = TRUE)
       
       if(grepl("antarcticstereographic", tmp$shapefile.name, ignore.case = TRUE) & tmp$decimal.degree.limits) {
         
@@ -306,10 +312,25 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     }
     
     polarMap <- TRUE
-    shapefiles <- shapefile_list(define_shapefiles(limits)$shapefile.name)
     clip_shape <- limits
-    crs <- sf::st_crs(shapefiles$crs)
-    rotate <- FALSE
+    
+    if(is.null(shapefiles)) {
+      shapefile.def <- define_shapefiles(limits, force_dd = TRUE)
+      if(!is.null(crs)) message("Polar maps have a defined crs. Cannot provide a custom one.")
+      crs <- sf::st_crs(shapefile.def$crs)
+      shapefile.name <- shapefile.def$shapefile.name
+      shapefiles <- shapefile_list(shapefile.name)
+      
+    } else {
+      if(inherits(shapefiles$land, c("sf", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+        if(inherits(shapefiles$land, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+          shapefiles$land <- sf::st_as_sf(shapefiles$land)
+        }
+        crs <- suppressWarnings(sf::st_crs(shapefiles$land))
+      } else {
+        crs <- suppressWarnings(sf::st_crs(eval(parse(text = shapefiles$land))))
+      }
+    }
     
   } else if(case %in% c("limits_dec")) { 
     ### limits_dec ####
@@ -317,10 +338,11 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     # Shapefile definitions
     
     if(is.null(shapefiles)) {
-      shapefile.def <- define_shapefiles(limits)
+      shapefile.def <- define_shapefiles(limits, force_dd = TRUE)
+      if(is.null(crs)) {crs <- sf::st_crs(shapefile.def$crs)}
       shapefile.name <- shapefile.def$shapefile.name
       shapefiles <- shapefile_list(shapefile.name)
-      crs <- sf::st_crs(shapefiles$crs)
+      
     } else {
       if(inherits(shapefiles$land, c("sf", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
         if(inherits(shapefiles$land, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
@@ -343,8 +365,10 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     
     if(is.null(shapefiles)) {
       tmp <- auto_limits(data, expand.factor = 1.1, verbose = verbose)
-      shapefiles <- shapefile_list(define_shapefiles(tmp$ddLimits)$shapefile.name)
-      crs <- sf::st_crs(shapefiles$crs)
+      shapefile.def <- define_shapefiles(tmp$ddLimits, force_dd = TRUE)
+      if(is.null(crs)) {crs <- sf::st_crs(shapefile.def$crs)}
+      shapefile.name <- shapefile.def$shapefile.name
+      shapefiles <- shapefile_list(shapefile.name)
       clip_shape <- tmp$projBound
     } else {
       if(inherits(shapefiles$land, c("sf", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
@@ -379,8 +403,10 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
         limits <- sf::st_bbox(data)[c("xmin", "xmax", "ymin", "ymax")] 
       }
       
-      shapefiles <- shapefile_list(define_shapefiles(limits)$shapefile.name)
-      crs <- sf::st_crs(shapefiles$crs)
+      shapefile.def <- define_shapefiles(limits, force_dd = TRUE)
+      if(is.null(crs)) {crs <- sf::st_crs(shapefile.def$crs)}
+      shapefile.name <- shapefile.def$shapefile.name
+      shapefiles <- shapefile_list(shapefile.name)
       
       if(sf::st_crs(data) == crs) {
         clip_shape <- sf::st_as_sfc(sf::st_bbox(data)) 
@@ -430,23 +456,11 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     if(is.null(shapefiles) & !is.null(data)) { # Define shapefiles with help of data
       tmp <- data[unname(guess_coordinate_columns(data))]
       ddLimits <- c(range(data[[1]], na.rm = TRUE), range(data[[2]], na.rm = TRUE))
-      shapefile.def <- define_shapefiles(ddLimits)
+      
+      shapefile.def <- define_shapefiles(ddLimits, force_dd = TRUE)
+      if(is.null(crs)) {crs <- sf::st_crs(shapefile.def$crs)}
       shapefile.name <- shapefile.def$shapefile.name
       shapefiles <- shapefile_list(shapefile.name)
-      crs <- sf::st_crs(shapefiles$crs)
-      
-      # if(rotate) {
-      #   tmp <- dd_to_deg(ddLimits[1:2])
-      #   
-      #   if(tmp[1] > tmp[2]) {
-      #     lonDiff <- 360 - tmp[1] + tmp[2]
-      #   } else {
-      #     lonDiff <- tmp[2] - tmp[1]
-      #   }
-      #   
-      #   midLon <- tmp[1] + lonDiff/2
-      #   midLon <- deg_to_dd(midLon)
-      # }
       
     } else if(!is.null(shapefiles)) {
       
@@ -492,24 +506,14 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     
     if(exists("shapefile.name") & is.null(shapefiles)) shapefiles <- shapefile_list(shapefile.name)
     
-    shapefiles$land <- eval(parse(text = shapefiles$land))
-    
-    if(glaciers) {
-      shapefiles$glacier <- eval(parse(text = shapefiles$glacier))
-    } else {
-      shapefiles$glacier <- NULL
-    }
-    
-    if(bathymetry) {
-      shapefiles$bathy <- eval(parse(text = shapefiles$bathy))
-    } else {
-      shapefiles$bathy <- NULL
-    }
-    
-  } else {
-    
     if(!glaciers) shapefiles$glacier <- NULL
-    if(!bathymetry) shapefiles$bathy <- NULL
+    if(!bathymetry) {
+      shapefiles$bathy <- NULL
+    } else {
+      shapefiles$bathy <- shapefiles$bathy[bathy.type]
+    }
+    
+    shapefiles <- load_map_data(shapefiles)
     
   }
   
@@ -526,210 +530,236 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
 ##################### #
 ## Crop shapefiles ####
 
-basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE) {
+basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NULL) {
   
   # 1. Clip shapefiles ####
   
-  if(x$rotate) {
+  if(x$polarMap) {
     landBoundary <- clip_shapefile(
       sf::st_transform(x$shapefiles$land, crs = x$crs),
-      limits = sf::st_transform(x$clip_limits, crs = x$crs),
+      limits = x$clip_limits,
       return.boundary = TRUE
     )
-    
-    x$shapefiles$land <- landBoundary$shapefile
-    x$clip_limits <- landBoundary$boundary
-    
   } else {
-    
-    landBoundary <- clip_shapefile(
-      x$shapefiles$land, 
-      limits = x$clip_limits, 
-      return.boundary = TRUE
-    )
-    
-    x$shapefiles$land <- landBoundary$shapefile
-    
+    if(!is.null(crs)) { # this hack is required for custom crs. Couldn't come up with a better solution
+      landBoundary <- clip_shapefile(
+        x$shapefiles$land,
+        limits = x$clip_limits,
+        return.boundary = TRUE
+      )
+      
+      landBoundary <- lapply(landBoundary, function(k) {
+        sf::st_transform(k, crs)
+      })
+    } else {
+      landBoundary <- clip_shapefile(
+        sf::st_transform(x$shapefiles$land, crs = x$crs),
+        limits = sf::st_transform(x$clip_limits, crs = x$crs),
+        return.boundary = TRUE
+      )
+    }
   }
   
+  x$shapefiles$land <- landBoundary$shapefile
+  x$clip_limits <- landBoundary$boundary
+  
+  # if(x$rotate) {
+  #   landBoundary <- clip_shapefile(
+  #     sf::st_transform(x$shapefiles$land, crs = x$crs),
+  #     limits = sf::st_transform(x$clip_limits, crs = x$crs),
+  #     return.boundary = TRUE
+  #   )
+  #   
+  #   x$shapefiles$land <- landBoundary$shapefile
+  #   x$clip_limits <- landBoundary$boundary
+  #   
+  # } else {
+  #   
+  #   landBoundary <- clip_shapefile(
+  #     x$shapefiles$land, 
+  #     limits = x$clip_limits, 
+  #     return.boundary = TRUE
+  #   )
+  #   
+  #   x$shapefiles$land <- landBoundary$shapefile
+  #   
+  # }
+  # 
   if(glaciers) {
-    if(x$rotate) {
+    if(!is.null(crs)) { # this hack is required for custom crs. Couldn't come up with a better solution
+      x$shapefiles$glacier <- 
+        sf::st_transform(
+          clip_shapefile(
+            x$shapefiles$glacier,
+            limits = sf::st_transform(x$clip_limits, crs = 4326)
+          ),
+          crs = crs
+        )
+    } else {
       x$shapefiles$glacier <- clip_shapefile(
         sf::st_transform(x$shapefiles$glacier, crs = x$crs),
         limits = x$clip_limits
       )
-    } else {
-      x$shapefiles$glacier <- clip_shapefile(
-        x$shapefiles$glacier, 
-        limits = x$clip_limits
-      )
     }
   }
-  
-  if(bathymetry) {
-    if(x$rotate) {
-      x$shapefiles$bathy <- clip_shapefile(
-        sf::st_transform(x$shapefiles$bathy, crs = x$crs),
-        limits = x$clip_limits
-      )
-    } else {
-      x$shapefiles$bathy <- clip_shapefile(
-        x$shapefiles$bathy, 
-        limits = x$clip_limits
-      )
-    }
-    
-    x$shapefiles$bathy$depth <- droplevels(x$shapefiles$bathy$depth)
-  }
-  
-  if(!x$rotate) {
-    x$clip_limits <- landBoundary$boundary
-  }
-  
-  # 2. Rotate the rest if needed
-  
-  if(x$rotate) {
-    
-    if(glaciers) {
-      x$shapefiles$glacier <- 
-        sf::st_transform(sf::st_as_sf(x$shapefiles$glacier), x$crs)
-    }
     
     if(bathymetry) {
-      x$shapefiles$bathy <- 
-        sf::st_transform(sf::st_as_sf(x$shapefiles$bathy), x$crs)
-    }
-    
-    x$limits <- 
-      sf::st_bbox(sf::st_transform(sf::st_as_sf(x$clip_limits), 4236))[c("xmin", "xmax", "ymin", "ymax")]
-  }
-  
-  map_limits <- sf::st_bbox(x$clip_limits)[c("xmin", "xmax", "ymin", "ymax")]
-  
-  # Return ####
-  
-  list(shapefiles = x$shapefiles, polarMap = x$polarMap, decLimits = x$limits, limit_shape = x$clip_limits, map_limits = map_limits, crs = x$crs)
-  
-}
-
-####################### #
-## Define grid lines ####
-
-basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NULL) {
-  
-  ## A quick fix. Improve later
-  
-  # if(!is.null(x$clipLimits)) {
-  #   if(abs(x$clipLimits$ddLimits[4]) != 90) {
-  #     tmp <- sf::st_bbox(sf::st_transform(x$clipLimits$projBound, 4326))
-  #     x$clipLimits$ddLimits <- tmp[c("xmin", "xmax", "ymin", "ymax")]
-  #   }
-  # }
-  
-  ## Define intervals if not specified
-  
-  if(is.null(lat.interval)) {
-    
-    if(x$polarMap) {
-      latDist <- 90 - abs(x$decLimits)
-    } else {
-      latDist <- abs(diff(round(x$decLimits)[3:4]))
-    }
-    lat.interval <- 
-      ifelse(latDist >= 30, 10, 
-             ifelse(latDist >= 15, 5, 
-                    ifelse(latDist >= 10, 4, 
-                           ifelse(latDist >= 6, 3, 
-                                  ifelse(latDist > 4, 2, 1)
-                           ))))
-  }
-  
-  if(is.null(lon.interval)) {
-    
-    if(x$polarMap) {
-      lon.interval <- 45
-    } else {
-      if(diff(x$decLimits[1:2]) == 360) {
-        lonDist <- 360
-      } else {
-        tmp <- dd_to_deg(round(x$decLimits)[1:2])
-        
-        if(tmp[1] > tmp[2]) {
-          lonDist <- 360 - tmp[1] + tmp[2]
-        } else {
-          lonDist <- tmp[2] - tmp[1]
-        }
-      }
       
-      lon.interval <- 
-        ifelse(lonDist > 180, 45, 
-               ifelse(lonDist > 90, 30, 
-                      ifelse(lonDist >= 40, 10, 
-                             ifelse(lonDist > 10, 5, 
-                                    ifelse(lonDist > 4, 2, 1)
+      if(inherits(x$shapefiles$bathy, "bathyRaster")) {
+        # raster bathymetries
+        newgrid <- stars::st_as_stars(sf::st_bbox(x$clip_limits))
+        x$shapefiles$bathy$raster <- stars::st_warp(x$shapefiles$bathy$raster, newgrid)
+        
+        if(x$polarMap) {
+          x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[x$clip_limits]
+        }
+        
+        if(inherits(x$shapefiles$bathy$raster[[1]], "factor")) {
+          x$shapefiles$bathy$raster <- droplevels(x$shapefiles$bathy$raster)
+        }
+      } else {
+        # vector bathymetries
+        x$shapefiles$bathy <- clip_shapefile(
+          sf::st_transform(x$shapefiles$bathy, crs = x$crs),
+          limits = x$clip_limits
+        )
+        
+        x$shapefiles$bathy$depth <- droplevels(x$shapefiles$bathy$depth)
+      }
+    }
+    
+    if(!x$polarMap) {
+      x$limits <- 
+        sf::st_bbox(sf::st_transform(sf::st_as_sf(x$clip_limits), 4236))[c("xmin", "xmax", "ymin", "ymax")]
+    }
+    
+    map_limits <- sf::st_bbox(x$clip_limits)[c("xmin", "xmax", "ymin", "ymax")]
+    
+    # Return ####
+    
+    list(shapefiles = x$shapefiles, polarMap = x$polarMap, decLimits = x$limits, limit_shape = x$clip_limits, map_limits = map_limits, crs = x$crs)
+    
+  }
+  
+  ####################### #
+  ## Define grid lines ####
+  
+  basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NULL) {
+    
+    ## A quick fix. Improve later
+    
+    # if(!is.null(x$clipLimits)) {
+    #   if(abs(x$clipLimits$ddLimits[4]) != 90) {
+    #     tmp <- sf::st_bbox(sf::st_transform(x$clipLimits$projBound, 4326))
+    #     x$clipLimits$ddLimits <- tmp[c("xmin", "xmax", "ymin", "ymax")]
+    #   }
+    # }
+    
+    ## Define intervals if not specified
+    
+    if(is.null(lat.interval)) {
+      
+      if(x$polarMap) {
+        latDist <- 90 - abs(x$decLimits)
+      } else {
+        latDist <- abs(diff(round(x$decLimits)[3:4]))
+      }
+      lat.interval <- 
+        ifelse(latDist >= 30, 10, 
+               ifelse(latDist >= 15, 5, 
+                      ifelse(latDist >= 10, 4, 
+                             ifelse(latDist >= 6, 3, 
+                                    ifelse(latDist > 4, 2, 1)
                              ))))
     }
-  }
-  
-  ## Define the grid lines based on intervals
-  
-  if(x$polarMap) {
     
-    poleLat <- ifelse(x$decLimits > 0, 90, -90)
+    if(is.null(lon.interval)) {
+      
+      if(x$polarMap) {
+        lon.interval <- 45
+      } else {
+        if(diff(x$decLimits[1:2]) == 360) {
+          lonDist <- 360
+        } else {
+          tmp <- dd_to_deg(round(x$decLimits)[1:2])
+          
+          if(tmp[1] > tmp[2]) {
+            lonDist <- 360 - tmp[1] + tmp[2]
+          } else {
+            lonDist <- tmp[2] - tmp[1]
+          }
+        }
+        
+        lon.interval <- 
+          ifelse(lonDist > 180, 45, 
+                 ifelse(lonDist > 90, 30, 
+                        ifelse(lonDist >= 40, 10, 
+                               ifelse(lonDist > 10, 5, 
+                                      ifelse(lonDist > 4, 2, 1)
+                               ))))
+      }
+    }
     
-    LonGridLines <- data.frame(
-      id = rep(1:(360/lon.interval), each = 2),
-      lon = rep(seq(-135, 180, lon.interval), each = 2), 
-      lat = rep(c(poleLat, x$decLimits), 360/lon.interval))
+    ## Define the grid lines based on intervals
     
-    LonGridLines <- 
-      sf::st_sfc(sf::st_multilinestring(
-        x = lapply(unique(LonGridLines$id), function(i) {
-          sf::st_linestring(as.matrix(LonGridLines[LonGridLines$id == i, 2:3]))
+    if(x$polarMap) {
+      
+      poleLat <- ifelse(x$decLimits > 0, 90, -90)
+      
+      LonGridLines <- data.frame(
+        id = rep(1:(360/lon.interval), each = 2),
+        lon = rep(seq(-135, 180, lon.interval), each = 2), 
+        lat = rep(c(poleLat, x$decLimits), 360/lon.interval))
+      
+      LonGridLines <- 
+        sf::st_sfc(sf::st_multilinestring(
+          x = lapply(unique(LonGridLines$id), function(i) {
+            sf::st_linestring(as.matrix(LonGridLines[LonGridLines$id == i, 2:3]))
+          })
+        ), crs = 4326)
+      
+      LatLimitLine <- data.frame(lon = seq(-180, 180, 1), lat = x$decLimits)
+      
+      LatGridLines <- 
+        sign(x$decLimits) * seq(from = round(abs(x$decLimits)) + lat.interval, 
+                                to = abs(poleLat) - lat.interval, by = lat.interval)
+      LatGridLines <- LatGridLines[LatGridLines != x$decLimits]
+      LatGridLines <- 
+        data.frame(lon = rep(seq(-180, 180, 1), length(LatGridLines)), 
+                   lat = rep(LatGridLines, each = nrow(LatLimitLine)))
+      
+      LatGridLines <- sf::st_sfc(sf::st_multilinestring(
+        lapply(unique(LatGridLines$lat), function(k) {
+          sf::st_linestring(as.matrix(LatGridLines[LatGridLines$lat == k,]))
         })
       ), crs = 4326)
+      
+      LatLimitLine <- 
+        sf::st_sfc(
+          sf::st_linestring(
+            as.matrix(LatLimitLine)
+          ), crs = 4326)
+      
+      mapGrid <- list(lon.grid.lines = LonGridLines, lat.grid.lines = LatGridLines, lat.limit.line = LatLimitLine)
+      
+    } else {
+      
+      minLat <- min(x$decLimits[3:4])
+      maxLat <- max(x$decLimits[3:4])
+      
+      minLat <- ifelse(minLat < 0, -90, round_any(minLat, 10, floor))
+      maxLat <- ifelse(maxLat > 0, 90, round_any(maxLat, 10, ceiling))
+      
+      lat.breaks <- seq(minLat, maxLat, lat.interval)
+      lon.breaks <- unique(c(seq(0, 180, lon.interval), seq(-180, 0, lon.interval)))
+      mapGrid <- list(lon.breaks = lon.breaks, lat.breaks = lat.breaks)
+    }
     
-    LatLimitLine <- data.frame(lon = seq(-180, 180, 1), lat = x$decLimits)
+    # Return ####
     
-    LatGridLines <- 
-      sign(x$decLimits) * seq(from = round(abs(x$decLimits)) + lat.interval, 
-                              to = abs(poleLat) - lat.interval, by = lat.interval)
-    LatGridLines <- LatGridLines[LatGridLines != x$decLimits]
-    LatGridLines <- 
-      data.frame(lon = rep(seq(-180, 180, 1), length(LatGridLines)), 
-                 lat = rep(LatGridLines, each = nrow(LatLimitLine)))
+    list(shapefiles = x$shapefiles, polarMap = x$polarMap, decLimits = x$decLimits, 
+         limit_shape = x$limit_shape, map_limits = x$map_limits, 
+         crs = x$crs, mapGrid = mapGrid)
     
-    LatGridLines <- sf::st_sfc(sf::st_multilinestring(
-      lapply(unique(LatGridLines$lat), function(k) {
-        sf::st_linestring(as.matrix(LatGridLines[LatGridLines$lat == k,]))
-      })
-    ), crs = 4326)
-    
-    LatLimitLine <- 
-      sf::st_sfc(
-        sf::st_linestring(
-          as.matrix(LatLimitLine)
-        ), crs = 4326)
-    
-    mapGrid <- list(lon.grid.lines = LonGridLines, lat.grid.lines = LatGridLines, lat.limit.line = LatLimitLine)
-    
-  } else {
-    
-    minLat <- min(x$decLimits[3:4])
-    maxLat <- max(x$decLimits[3:4])
-    
-    minLat <- ifelse(minLat < 0, -90, round_any(minLat, 10, floor))
-    maxLat <- ifelse(maxLat > 0, 90, round_any(maxLat, 10, ceiling))
-    
-    lat.breaks <- seq(minLat, maxLat, lat.interval)
-    lon.breaks <- unique(c(seq(0, 180, lon.interval), seq(-180, 0, lon.interval)))
-    mapGrid <- list(lon.breaks = lon.breaks, lat.breaks = lat.breaks)
   }
   
-  # Return ####
-  
-  list(shapefiles = x$shapefiles, polarMap = x$polarMap, decLimits = x$decLimits, 
-       limit_shape = x$limit_shape, map_limits = x$map_limits, 
-       crs = x$crs, mapGrid = mapGrid)
-  
-}

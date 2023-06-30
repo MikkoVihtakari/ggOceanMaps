@@ -28,3 +28,45 @@ knitr::opts_chunk$set(collapse = TRUE,
 library(ggOceanMaps)
 ```
 
+```{r}
+library(sf); library(stars)
+
+limits <- c(100, 160, -20, 30)
+names(limits) <- c("xmin", "xmax", "ymin", "ymax")
+
+bm <- basemap(limits) 
+
+p <- bm +
+  stars::geom_stars(data = dd_rbathy$raster[sf::st_bbox(limits, crs = 4326)]) +
+  ggplot2::scale_fill_gradientn(name = "Depth (m)", colors = colorRampPalette(c("#F7FBFF", "#DEEBF7", "#9ECAE1", "#4292C6", "#08306B"))(8))
+ggplot2::scale_fill_manual(name = "Depth (m)", values = colorRampPalette(c("#F7FBFF", "#DEEBF7", "#9ECAE1", "#4292C6", "#08306B"))(length(dd_rbathy$depth.invervals$interval)))
+
+reorder_layers(p)
+```
+
+
+Marmap
+
+```{r}
+library(marmap)
+
+dt <- data.frame(lon = c(-125, -125, -111, -111), lat = c(28, 37, 37, 28))
+bm <- basemap(data = dt)
+
+limits <- auto_limits(dt, expand.factor = 1.1)$projLimits
+
+mar_bathy <- marmap::getNOAA.bathy(lon1 = limits["xmin"], lon2 = limits["xmax"], lat1 = limits["ymin"], lat2 = limits["ymax"])
+bathy <- raster_bathymetry(stars::st_as_stars(marmap::as.raster(mar_bathy)), depths = NULL)
+
+p <- bm + 
+  stars::geom_stars(data = bathy$raster) +
+  ggplot2::scale_fill_gradientn(
+    name = "Depth (m)", breaks = seq(0,5e3,1e3), limits = c(0,NA), 
+    colors = colorRampPalette(c("#F7FBFF", "#DEEBF7", "#9ECAE1", "#4292C6", "#08306B"))(8)
+  )
+
+reorder_layers(p)
+```
+
+
+

@@ -20,12 +20,12 @@ Lists available pre-made shapefiles for plotting in the \code{\link{basemap}} fu
 \details{
 Custom shapefiles for \code{\link{basemap}} should be defined as lists with (at least) following names (everything should be provided as characters):
 \itemize{
-\item \strong{land} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing land. Required.
-\item \strong{glacier} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing glaciers. Use \code{NULL} if glaciers are not needed.
-\item \strong{bathy} Object name of the \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} containing bathymetry contours. Use \code{NULL} if bathymetry is not needed.
+\item \strong{land} Name of the object containing land polygons. Required.
+\item \strong{glacier} Name of the object containing glacier polygons. Use \code{NULL} if glaciers are not needed.
+\item \strong{bathy} Name of the object containing land polygons. Use \code{NULL} if bathymetry is not needed.
 }
 
-All linked spatial data objects must be in same projection. Pre-made shapefiles contain additional elements that are used in the \code{\link{basemap}} function, but not required for custom shapefile datasets.
+All linked spatial data objects must be in same projection. High-resolution pre-made data are still under development and may not be available. Pre-made shapefiles contain additional elements that are used in the \code{\link{basemap}} function, but not required for custom shapefile datasets.
 }
 \examples{
 shapefile_list("all")

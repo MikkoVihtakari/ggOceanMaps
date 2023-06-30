@@ -42,10 +42,8 @@ Find limits for a \code{\link{basemap}} from a data frame.
 This is an internal function, which is automatically run by the \code{\link{basemap}} function.
 }
 \examples{
-if(requireNamespace("ggOceanMapsData")) {
 auto_limits(data = expand.grid(lon = c(-120, 180, 120),
    lat = c(60, 60, 80)))
-}
 }
 \seealso{
 Other customize shapefiles: 

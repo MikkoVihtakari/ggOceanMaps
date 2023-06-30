@@ -28,9 +28,9 @@ Description: Allows plotting data on bathymetric maps using 'ggplot2'. Plotting
   stored on GitHub and downloaded automatically when needed. 
 Depends: R (>= 3.5.0), ggplot2
 Imports: sf, stars, methods, utils, smoothr, units
-Suggests: ggOceanMapsData, ggspatial, cowplot, knitr, rmarkdown, scales, ggnewscale
-Additional_repositories: https://mikkovihtakari.github.io/drat
+Suggests: ggspatial, cowplot, knitr, rmarkdown, scales, ggnewscale
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 LazyData: true
+LazyDataCompression: xz

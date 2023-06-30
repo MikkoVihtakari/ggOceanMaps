@@ -3,7 +3,7 @@
 #' @param x An object from \code{\link{shapefile_list}}.
 #' @param force Logical indicating whether to download the file even though it exists. Useful when files in the \href{https://github.com/MikkoVihtakari/ggOceanMapsLargeData}{Github repository have been changed}. Overwrites the old file. 
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function. Common users do not need to worry about these details.
-#' @return A list of \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrames}}
+#' @return A list of spatial objects
 #' @keywords internal
 #' @export
 #' @importFrom utils menu download.file
@@ -31,29 +31,75 @@ load_map_data <- function(x, force = FALSE) {
     }
   }
   
+  # Create file paths
+  
+  x[c("land", "glacier", "bathy")] <- 
+    lapply(x[c("land", "glacier", "bathy")], function(k) {
+    
+    if(is.null(k)) {
+      NULL
+    } else if(grepl("/", k)) {
+      if(!grepl(".rda", k)) {
+        paste0(k, ".rda")
+      } else {
+        k
+      }
+    } else {
+      k
+      #paste(getOption("ggOceanMaps.datapath"), paste0(tolower(x$name), ".rda"), sep = "/")
+    }
+  })
+  
   # Check whether the data has already been downloaded
   
-  filepath <- paste(getOption("ggOceanMaps.datapath"), paste0(tolower(x$name), ".rda"), sep = "/")
+  exist_list <- lapply(x[c("land", "glacier", "bathy")], function(k) {
+    if(is.null(k)) {
+      NULL
+    } else if(grepl("/", k)) {
+      if(file.exists(k) & !force) {
+        TRUE
+      } else {
+        FALSE
+      }
+    } else {
+      TRUE
+    }
+  })
   
-  if(file.exists(filepath) & !force) {
-    return(mget(load(filepath)))
-  } 
+  exist_list[sapply(exist_list, is.null)] <- NULL
   
-  # Download the file, if it does not exist
+  # Download missing files, if they do not exist
   
-  if(!file.exists(filepath) | force) {
-    
-    msg <- paste0("You are trying to create a ", x$name, " map.", " Cannot find the required shapefiles from ", getOption("ggOceanMaps.datapath"), ". Do you want download them now?")
-    
+  if(any(!unlist(exist_list))) {
+    missing_files <- paste(sapply(names(exist_list)[!unlist(exist_list)], function(k) x[[k]]), collapse = ", ")
+    msg <- paste0("Cannot find files: ", missing_files, ". Do you want download them now?") 
     message(paste(strwrap(msg), collapse= "\n"))
     ret.val <- utils::menu(c("Yes", "No"), "")
     
     if(ret.val != 1) {
-      msg <- paste0(x$name, " shapefiles required to plot the map. Download the file or change the shapefiles argument.")
+      msg <- paste0(missing_files, " shapefiles required to plot the map. Download the file(s) or change the shapefiles argument.")
       stop(paste(strwrap(msg), collapse= "\n"))
-    } else {
-    download.file(x$path, filepath)
-    return(mget(load(filepath)))
     }
   }
+  
+  x[c("land", "glacier", "bathy")] <-
+    lapply(x[c("land", "glacier", "bathy")], function(k) {
+    if(is.null(k)) {
+      NULL
+    } else if(grepl("/", k)) {
+      if(file.exists(k) & !force) {
+        mget(load(k))[[1]]
+      } else {
+        download.file(paste(x$path, k), getOption("ggOceanMaps.datapath"))
+        mget(load(getOption("ggOceanMaps.datapath")))
+      }
+    } else {
+      eval(parse(text = k))
+    }
+  })
+  
+  # Return
+  x[sapply(x, is.null)] <- NULL
+  
+  return(x)
 }
