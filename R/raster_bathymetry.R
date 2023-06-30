@@ -9,12 +9,12 @@
 #' @param estimate.land Logical indicating whether to include land to the output. Can be used in the following \code{\link{vector_bathymetry}} step to estimate land polygons. 
 #' @param downsample An integer defining how many rows in \code{bathy} should be skipped to reduce the size (and resolution). 1 skips every second row, 2 every second and third. See \code{\link[stars]{st_downsample}}. Set to \code{NULL} (default) to skip downsampling.
 #' @param verbose Logical indicating whether information about guessed projection should be returned as message. Set to \code{FALSE} to make the function silent.
-#' @details You can use \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/}{GEBCO}, \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/}{IBCAO}, \href{https://www.ngdc.noaa.gov/mgg/global/}{ETOPO1} bathymetry grids downloaded from respective sources as the \code{bathy} argument. The bathymetry grids read from files must be in any format read by \code{\link[stars]{read_stars}}. Alternatively use the \code{marmap::getNOAA.bathy} function to download ETOPO1 bathymetry and convert it to a raster object using the \code{marmap::as.raster} function.
+#' @details You can use \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/}{GEBCO}, \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/}{IBCAO}, \href{https://www.ncei.noaa.gov/products/etopo-global-relief-model}{ETOPO} bathymetry grids downloaded from respective sources as the \code{bathy} argument. The bathymetry grids read from files must be in any format read by \code{\link[stars]{read_stars}}. Alternatively use the \code{marmap::getNOAA.bathy} function to download ETOPO1 bathymetry and convert it to a raster object using the \code{marmap::as.raster} function.
 #'
 #' Note that the size of the output is heavily influenced by the number of depth contours (\code{depths}) as well as the resolution of \code{bathy} and choice of \code{downsample}. To make the \code{\link{vector_bathymetry}} function and consequent plotting faster, limiting the details of the bathymetry raster may be desirable.
 #' @return A list with a \link[stars:read_stars]{stars} object the containing projected bathymetry defined by the \code{proj.out} argument and a data frame of depth intervals.
 #' @references GEBCO Compilation Group (2019) GEBCO 2019 15-arcsecond grid (doi:10.5285/836f016a-33be-6ddc-e053-6c86abc0788e). URL: \url{https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html}.
-#' ETOPO1 1 Arc-Minute Global Relief Model. URL: \url{https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf}.
+#' NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. NOAA National Centers for Environmental Information. \doi{10.25921/fd45-gt74}.
 #' @author Mikko Vihtakari
 #' @family create shapefiles
 #' @export

@@ -294,7 +294,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
   } else if(case %in% c("limits_polar", "limits_polar_adjust")) {
     
     if(case %in% c("limits_polar_adjust")) {
-      tmp <- define_shapefiles(limits, force_dd = TRUE)
+      tmp <- define_shapefiles(limits)
       
       if(grepl("antarcticstereographic", tmp$shapefile.name, ignore.case = TRUE) & tmp$decimal.degree.limits) {
         

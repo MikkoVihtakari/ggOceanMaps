@@ -225,9 +225,9 @@ theme(axis.title = element_blank(),
 \references{
 Note that if you use this function to generate maps for a publication, it is advised to cite the underlying data. The spatial data used by this function have been acquired from following sources:
 \itemize{
-\item \strong{Land polygons.} \href{http://www.naturalearthdata.com/downloads/10m-physical-vectors/}{Natural Earth Data} 1:10m Physical Vectors with the Land and Minor Island datasets combined. Distributed under the \href{https://creativecommons.org/publicdomain/}{CC Public Domain license} (\href{http://www.naturalearthdata.com/about/terms-of-use/}{terms of use}).
-\item \strong{Glacier polygons.} \href{http://www.naturalearthdata.com/downloads/10m-physical-vectors/}{Natural Earth Data} 1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice Shelves datasets combined. Distributed under the \href{https://creativecommons.org/publicdomain/}{CC Public Domain license} (\href{http://www.naturalearthdata.com/about/terms-of-use/}{terms of use})
-\item \strong{Bathymetry.} \href{https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf}{Amante, C. and B.W. Eakins, 2009. ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National Geophysical Data Center, NOAA}. Distributed under the \href{https://www.usa.gov/government-works}{U.S. Government Work license}.
+\item \strong{Land polygons.} \href{https://www.naturalearthdata.com/downloads/10m-physical-vectors/}{Natural Earth Data} 1:10m Physical Vectors with the Land and Minor Island datasets combined. Distributed under the \href{https://creativecommons.org/publicdomain/}{CC Public Domain license} (\href{https://www.naturalearthdata.com/about/terms-of-use/}{terms of use}).
+\item \strong{Glacier polygons.} \href{https://www.naturalearthdata.com/downloads/10m-physical-vectors/}{Natural Earth Data} 1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice Shelves datasets combined. Distributed under the \href{https://creativecommons.org/publicdomain/}{CC Public Domain license} (\href{https://www.naturalearthdata.com/about/terms-of-use/}{terms of use})
+\item \strong{Bathymetry.} \href{https://www.ncei.noaa.gov/products/etopo-global-relief-model}{NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. NOAA National Centers for Environmental Information.} \doi{10.25921/fd45-gt74}. Distributed under the \href{https://www.usa.gov/government-works}{U.S. Government Work license}.
 }
 }
 \seealso{
