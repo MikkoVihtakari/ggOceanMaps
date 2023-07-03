@@ -31,6 +31,16 @@ load_map_data <- function(x, force = FALSE) {
     }
   }
   
+  # Detect load-case for bathy
+  
+  bathy_user_defined <- FALSE
+  
+  if(!is.null(x$bathy)) {
+    if(grepl("user", names(x$bathy))) {
+      bathy_user_defined <- TRUE
+    } 
+  }
+  
   # Create file paths
   
   x[c("land", "glacier", "bathy")] <- 
@@ -39,13 +49,13 @@ load_map_data <- function(x, force = FALSE) {
     if(is.null(k)) {
       NULL
     } else if(grepl("/", k)) {
-      if(!grepl(".rda", k)) {
-        paste0(k, ".rda")
+      if(!grepl("\\.", k)) {
+        normalizePath(paste0(k, ".rda"), mustWork = FALSE)
       } else {
-        k
+        normalizePath(k, mustWork = TRUE)
       }
     } else {
-      k
+      unname(k)
       #paste(getOption("ggOceanMaps.datapath"), paste0(tolower(x$name), ".rda"), sep = "/")
     }
   })
@@ -82,8 +92,8 @@ load_map_data <- function(x, force = FALSE) {
     }
   }
   
-  x[c("land", "glacier", "bathy")] <-
-    lapply(x[c("land", "glacier", "bathy")], function(k) {
+  x[c("land", "glacier")] <-
+    lapply(x[c("land", "glacier")], function(k) {
     if(is.null(k)) {
       NULL
     } else if(grepl("/", k)) {
@@ -100,6 +110,28 @@ load_map_data <- function(x, force = FALSE) {
       eval(parse(text = k))
     }
   })
+  
+  if(!is.null(x$bathy)) {
+    k <- x[["bathy"]]
+    
+    if(bathy_user_defined) {
+      x[["bathy"]] <- stars::read_stars(k)
+    } else {
+      if(grepl("/", k)) {
+        if(file.exists(k) & !force) {
+          x[["bathy"]] <- mget(load(k))[[1]]
+        } else {
+          tmp <- unlist(strsplit(k, "/"))
+          dest_path <- file.path(normalizePath(getOption("ggOceanMaps.datapath")),tmp[length(tmp)])
+          
+          download.file(paste0(x$path, tmp[length(tmp)]), dest_path)
+          x[["bathy"]] <- mget(load(dest_path))[[1]]
+        }
+      } else {
+        x[["bathy"]] <- eval(parse(text = k))
+      }
+    }
+  }
   
   # Return
   x[sapply(x, is.null)] <- NULL

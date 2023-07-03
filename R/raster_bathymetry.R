@@ -8,7 +8,7 @@
 #' @param warp Logical indicating whether the resulting grid should be resampled to a new CRS if \code{proj.out} != code{proj.bathy} using the \code{\link[stars]{st_warp}} function. A time-consuming operation, but necessary when CRS changes in raster bathymetries. Not required if the next step is to vectorise the bathymetry. 
 #' @param estimate.land Logical indicating whether to include land to the output. Can be used in the following \code{\link{vector_bathymetry}} step to estimate land polygons. 
 #' @param downsample An integer defining how many rows in \code{bathy} should be skipped to reduce the size (and resolution). 1 skips every second row, 2 every second and third. See \code{\link[stars]{st_downsample}}. Set to \code{NULL} (default) to skip downsampling.
-#' @param verbose Logical indicating whether information about guessed projection should be returned as message. Set to \code{FALSE} to make the function silent.
+#' @param verbose Logical indicating whether information about progress and guessed projection should be returned. Set to \code{FALSE} to make the function silent.
 #' @details You can use \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/}{GEBCO}, \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/arctic_ocean/}{IBCAO}, \href{https://www.ncei.noaa.gov/products/etopo-global-relief-model}{ETOPO} bathymetry grids downloaded from respective sources as the \code{bathy} argument. The bathymetry grids read from files must be in any format read by \code{\link[stars]{read_stars}}. Alternatively use the \code{marmap::getNOAA.bathy} function to download ETOPO1 bathymetry and convert it to a raster object using the \code{marmap::as.raster} function.
 #'
 #' Note that the size of the output is heavily influenced by the number of depth contours (\code{depths}) as well as the resolution of \code{bathy} and choice of \code{downsample}. To make the \code{\link{vector_bathymetry}} function and consequent plotting faster, limiting the details of the bathymetry raster may be desirable.
@@ -25,11 +25,11 @@
 # bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(0, 50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = convert_crs("3996"); proj.bathy = convert_crs("3996"), file.name = NULL; boundary = c(-180.0083, 180.0083, -90, 90); aggregation.factor = 6
 # bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = arcticCRS; boundary = c(-180.0083, 180.0083, 30, 90); aggregation.factor = 2; file.name = NULL; verbose = TRUE
 # proj.out = NULL; proj.bathy = NULL; boundary = NULL; estimate.land = FALSE; downsample = NULL; verbose = FALSE
-raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL, boundary = NULL, warp = FALSE, estimate.land = FALSE, downsample = NULL, verbose = FALSE) {
+raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL, boundary = NULL, warp = FALSE, estimate.land = FALSE, downsample = NULL, verbose = TRUE) {
   
   # Progress bar ####
   
-  pb <- utils::txtProgressBar(min = 0, max = 8, initial = 0, style = 3)
+  if(verbose) pb <- utils::txtProgressBar(min = 0, max = 8, initial = 0, style = 3)
   
   ## General checks ####
   
@@ -76,17 +76,22 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
         stop("boundary has to be defined as decimal degrees")
       }
       
+      #### If numeric vector
     } else if(!(is.vector(boundary) & inherits(boundary, c("numeric", "integer")) &
                 length(boundary) == 4)) {
       stop("The boundary parameter has to be a numeric/integer vector of length 4 giving the decimal degree longitude and latitude limits for the strata region OR a character argument giving the location of the shapefile polygon.")
     } else if(length(boundary) == 4 & inherits(boundary, c("numeric", "integer"))) {
       if(is.null(names(boundary))) names(boundary) <- c("xmin", "xmax", "ymin", "ymax")
       
-      boundary <- sf::st_bbox(boundary, crs = 4326)
+      boundary <- dd_clip_boundary(boundary, 4326)
+      
+      if(!is.null(proj.out)) {
+        boundary <- sf::st_transform(sf::st_as_sfc(sf::st_bbox(sf::st_transform(boundary, sf::st_crs(proj.out)))), 4326)
+      }
     }
   }
   
-  utils::setTxtProgressBar(pb, 1)
+  if(verbose) utils::setTxtProgressBar(pb, 1)
   
   ## Open raster ###
   
@@ -98,7 +103,7 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     # ras <- raster::raster(bathy)
   }
   
-  utils::setTxtProgressBar(pb, 2)
+  if(verbose) utils::setTxtProgressBar(pb, 2)
   
   if(is.null(proj.bathy)) {
     if(is.na(sf::st_crs(ras))) {
@@ -135,7 +140,7 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     }
   }
   
-  utils::setTxtProgressBar(pb, 3)
+  if(verbose) utils::setTxtProgressBar(pb, 3)
   
   ## Set proj.out (if not set)
   
@@ -153,7 +158,7 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     }
   }
   
-  utils::setTxtProgressBar(pb, 4)
+  if(verbose) utils::setTxtProgressBar(pb, 4)
   
   ## Project the raster ####
   
@@ -168,7 +173,7 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     warp <- FALSE
   }
   
-  utils::setTxtProgressBar(pb, 5)
+  if(verbose) utils::setTxtProgressBar(pb, 5)
   
   ## Read to memory if not done already
   
@@ -176,7 +181,7 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     ras <- stars::st_as_stars(ras)
   }
   
-  utils::setTxtProgressBar(pb, 6)
+  if(verbose) utils::setTxtProgressBar(pb, 6)
   
   ## Reclassify raster ####
   
@@ -231,7 +236,7 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
   
   ## Warp to new grid
   
-  utils::setTxtProgressBar(pb, 7)
+  if(verbose) utils::setTxtProgressBar(pb, 7)
   
   if(warp) {
     
@@ -251,7 +256,7 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
   }
   
   
-  utils::setTxtProgressBar(pb, 8)
+  if(verbose) utils::setTxtProgressBar(pb, 8)
   
   ## Return
   

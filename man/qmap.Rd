@@ -20,8 +20,7 @@ qmap(
   legend.position = "right",
   lon.interval = NULL,
   lat.interval = NULL,
-  bathy.style = ifelse(!is.null(getOption("ggOceanMaps.bathy.style")),
-    getOption("ggOceanMaps.bathy.style"), "raster_binned_blues"),
+  bathy.style = NULL,
   bathy.border.col = NA,
   bathy.size = 0.1,
   land.col = "grey60",
@@ -47,20 +46,20 @@ qmap(
 
 \item{limits}{Map limits. One of the following:
 \itemize{
-  \item \strong{numeric vector} of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.
+  \item \strong{numeric vector} of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude, and the fourth element the maximum latitude of the bounding box. Also accepts \code{\link[sf:st_bbox]{sf::st_bbox}} type named vectors with limits in any order. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.
   \item \strong{single integer} between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.
 }
 Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
-\item{shapefiles}{Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.}
+\item{shapefiles}{Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} is defined as decimal degrees.}
 
-\item{crs}{\link[sf:st_crs]{Coordinate reference system} (CRS) for the map. If \code{NULL} (default), the CRS is selected automatically based on \code{limits}, \code{data} or \code{shapefiles}. Passed to \code{\link[sf]{st_crs}}. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with \code{rotate}.}
+\item{crs}{\link[sf:st_crs]{Coordinate reference system} (CRS) for the map. If \code{NULL} (default), the CRS is selected automatically based on \code{limits}, \code{data}, or \code{shapefiles}. Passed to \code{\link[sf]{st_crs}}. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with \code{rotate}.}
 
-\item{bathymetry}{Logical indicating whether bathymetry should be added to the map.}
+\item{bathymetry}{Logical indicating whether bathymetry should be added to the map. Functions together with \code{bathy.style}. See Details.}
 
-\item{glaciers}{Logical indicating whether glaciers and ice-sheets should be added to the map.}
+\item{glaciers}{Logical indicating whether glaciers and ice sheets should be added to the map.}
 
-\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit.}
+\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to the mid-longitude limit.}
 
 \item{legends}{Logical indicating whether the legend for bathymetry should be shown.}
 
@@ -68,17 +67,9 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
 \item{lon.interval, lat.interval}{Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.}
 
-\item{bathy.style}{Character defining the bathymetry style. Partially matched and can be abbreviated. Alternatives:
-\itemize{
-\item \code{"raster_binned_blues"} or \code{"rbb"} (default) plots binned raster bathymetry filled with different shades of blue. Does not require a download.
-\item \code{"raster_continuous_blues"} or \code{"rcb"} plots continuous raster bathymetry filled with different shades of blue. More detailed and visually more appealing than the binned bathymetry. Recommended. Requires a download. 
-\item \code{"poly_blues"} or \code{"pb"} plots polygon bathymetry filled with different shades of blue. Default in the versions older than 2.0 of ggOceanMaps. Requires a download. 
-\item \code{"poly_greys"} or \code{"pg"} plots polygon bathymetry filled with different shades of gray. Requires a download.
-\item \code{"contour_blues"} or \code{"cb"} contour lines with different shades of blue. Requires a download.
-\item \code{"contour_grey"} or \code{"cg"} plots gray contour lines. Requires a download. 
-}}
+\item{bathy.style}{Character (plots bathymetry; list of alternatives in Details) or \code{NULL} ("raster_binned_blues" if \code{bathymetry = TRUE}) defining the bathymetry style. Partially matched, can be abbreviated, and used to control bathymetry plotting together with \code{bathymetry}. See Details.}
 
-\item{land.col, gla.col, grid.col}{Character code specifying the color of land, glaciers and grid lines, respectively. Use \code{NA} to remove the grid lines.}
+\item{land.col, gla.col, grid.col}{Character code specifying the color of land, glaciers, and grid lines, respectively. Use \code{NA} to remove the grid lines.}
 
 \item{land.border.col, gla.border.col, bathy.border.col}{Character code specifying the color of the border line for land, glacier, and bathymetry shapes.}
 
@@ -90,7 +81,7 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
 \item{expand.factor}{Expansion factor for map limits with the \code{data} argument. Can be used to zoom in and out automatically limited maps. Defaults to 1.1. Set to \code{NULL} to ignore.}
 
-\item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.}
+\item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as messages. Set to \code{FALSE} to make the function silent.}
 }
 \value{
 Returns a \link[ggplot2]{ggplot} map, which can be assigned to an object and modified as any ggplot object.
@@ -104,17 +95,15 @@ dt <- data.frame(lon = c(-100, -80, -60), lat = c(10, 25, 40), var = c("a", "a",
 # Quickly see position of data
 qmap(dt)
 
+\donttest{
 # Set color
 qmap(dt, color = I("blue")) 
 
-\donttest{
 # Map color to a variable
 qmap(dt, color = var) 
-# 
-
+ 
 # Map text to a variable 
 qmap(dt, label = var) 
- 
 
 # All basemap arguments work in qmap()
 dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))

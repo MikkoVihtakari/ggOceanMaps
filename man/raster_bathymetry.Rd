@@ -13,7 +13,7 @@ raster_bathymetry(
   warp = FALSE,
   estimate.land = FALSE,
   downsample = NULL,
-  verbose = FALSE
+  verbose = TRUE
 )
 }
 \arguments{
@@ -33,7 +33,7 @@ raster_bathymetry(
 
 \item{downsample}{An integer defining how many rows in \code{bathy} should be skipped to reduce the size (and resolution). 1 skips every second row, 2 every second and third. See \code{\link[stars]{st_downsample}}. Set to \code{NULL} (default) to skip downsampling.}
 
-\item{verbose}{Logical indicating whether information about guessed projection should be returned as message. Set to \code{FALSE} to make the function silent.}
+\item{verbose}{Logical indicating whether information about progress and guessed projection should be returned. Set to \code{FALSE} to make the function silent.}
 }
 \value{
 A list with a \link[stars:read_stars]{stars} object the containing projected bathymetry defined by the \code{proj.out} argument and a data frame of depth intervals.

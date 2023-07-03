@@ -31,6 +31,7 @@ shapefile_list <- function(name, get.data = FALSE) {
          bathy = c(
            "raster_binned" = "dd_rbathy",
            "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "dd_rbathy_cont"),
+           "raster_user" = getOption("ggOceanMaps.userpath"),
            "vector" = file.path(options("ggOceanMaps.datapath"), "arctic_bathy")),
          crs = 3995,
          limits = 30,
@@ -43,6 +44,7 @@ shapefile_list <- function(name, get.data = FALSE) {
          bathy = c(
            "raster_binned" = "dd_rbathy",
            "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "dd_rbathy_cont"),
+           "raster_user" = getOption("ggOceanMaps.userpath"),
            "vector" = file.path(options("ggOceanMaps.datapath"), "antarctic_bathy")),
          crs = 3031,
          limits = -35,
@@ -55,6 +57,7 @@ shapefile_list <- function(name, get.data = FALSE) {
          bathy = c(
            "raster_binned" = "dd_rbathy",
            "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "dd_rbathy_cont"),
+           "raster_user" = getOption("ggOceanMaps.userpath"),
            "vector" = file.path(options("ggOceanMaps.datapath"), "dd_bathy")),
          crs = 4326,
          limits = c(-180, 180, -90, 90),
@@ -67,6 +70,7 @@ shapefile_list <- function(name, get.data = FALSE) {
          bathy = c(
            "raster_binned" = "dd_rbathy",
            "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "dd_rbathy_cont"),
+           "raster_user" = getOption("ggOceanMaps.userpath"),
            "vector" = file.path(options("ggOceanMaps.datapath"), "svalbard_bathy")),
          crs = 32633,
          limits = c(402204.7, 845943.9, 8253526.1, 8978517.5),
@@ -79,44 +83,48 @@ shapefile_list <- function(name, get.data = FALSE) {
          bathy = c(
            "raster_binned" = "barentssea_rbathy",
            "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "dd_rbathy_cont"),
+           "raster_user" = getOption("ggOceanMaps.userpath"),
            "vector" = file.path(options("ggOceanMaps.datapath"), "barentssea_bathy")),
          crs = 32636,
          limits = c(-400000, 1300000, 7400000, 9350000),
          path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda"
-    ),
-    list(name = "IBCAO",
-         land = file.path(options("ggOceanMaps.datapath"), "ibcao_land"), 
-         glacier = file.path(options("ggOceanMaps.datapath"), "ibcao_glacier"),
-         bathy = c(
-           "raster_binned" = "ibcao_rbathy",
-           "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "ibcao_rbathy_cont"),
-           "vector" = file.path(options("ggOceanMaps.datapath"), "ibcao_bathy")),
-         crs = 3995,
-         limits = c(-2879810, 2700490, -2879810, 2879810),
-         path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/ibcao_bathy.rda"
-    ),
-    list(name = "GEBCO",
-         land = file.path(options("ggOceanMaps.datapath"), "gebco_land"), 
-         glacier = file.path(options("ggOceanMaps.datapath"), "gebco_glacier"),
-         bathy = c(
-           "raster_binned" = "ibcao_rbathy",
-           "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "gebco_rbathy_cont"),
-           "vector" = file.path(options("ggOceanMaps.datapath"), "gebco_bathy")),
-         crs = 3995,
-         limits = 30,
-         path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/gebco_bathy.rda"
-    ),
-    list(name = "EMODnet",
-         land = file.path(options("ggOceanMaps.datapath"), "emodnet_land"), 
-         glacier = NA,
-         bathy = c(
-           "raster_binned" = "emodnet_rbathy",
-           "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "emodnet_rbathy_cont"),
-           "vector" = file.path(options("ggOceanMaps.datapath"), "emodnet_bathy")),
-         crs = 3575,
-         limits = c(-3e5, -1e5, -3.1e6, -2.9e6),
-         path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/emodnet.rda"
-    )
+    )#,
+    # list(name = "IBCAO",
+    #      land = file.path(options("ggOceanMaps.datapath"), "ibcao_land"), 
+    #      glacier = file.path(options("ggOceanMaps.datapath"), "ibcao_glacier"),
+    #      bathy = c(
+    #        "raster_binned" = "ibcao_rbathy",
+    #        "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "ibcao_rbathy_cont"),
+    #        "raster_user" = getOption("ggOceanMaps.userpath"),
+    #        "vector" = file.path(options("ggOceanMaps.datapath"), "ibcao_bathy")),
+    #      crs = 3995,
+    #      limits = c(-2879810, 2700490, -2879810, 2879810),
+    #      path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/ibcao_bathy.rda"
+    # ),
+    # list(name = "GEBCO",
+    #      land = file.path(options("ggOceanMaps.datapath"), "gebco_land"), 
+    #      glacier = file.path(options("ggOceanMaps.datapath"), "gebco_glacier"),
+    #      bathy = c(
+    #        "raster_binned" = "ibcao_rbathy",
+    #        "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "gebco_rbathy_cont"),
+    #        "raster_user" = getOption("ggOceanMaps.userpath"),
+    #        "vector" = file.path(options("ggOceanMaps.datapath"), "gebco_bathy")),
+    #      crs = 3995,
+    #      limits = 30,
+    #      path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/gebco_bathy.rda"
+    # ),
+    # list(name = "EMODnet",
+    #      land = file.path(options("ggOceanMaps.datapath"), "emodnet_land"), 
+    #      glacier = NA,
+    #      bathy = c(
+    #        "raster_binned" = "emodnet_rbathy",
+    #        "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "emodnet_rbathy_cont"),
+    #        "raster_user" = getOption("ggOceanMaps.userpath"),
+    #        "vector" = file.path(options("ggOceanMaps.datapath"), "emodnet_bathy")),
+    #      crs = 3575,
+    #      limits = c(-3e5, -1e5, -3.1e6, -2.9e6),
+    #      path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/emodnet.rda"
+    # )
   )
   
   names(alternatives) <- sapply(alternatives, function(k) k$name)

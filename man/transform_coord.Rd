@@ -24,7 +24,7 @@ transform_coord(
 
 \item{new.names}{Character vector of length 2 specifying the names of transformed longitude and latitude columns, respectively. Alternatively \code{NULL}, which returns column names from \code{x} or "auto", which uses \code{NULL} if \code{bind = FALSE} and \code{c("lon.proj", "lat.proj")} if \code{bind = TRUE}.}
 
-\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit.}
+\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to the mid-longitude limit.}
 
 \item{proj.in}{The original \code{\link[sf:st_crs]{CRS}}. If \code{NULL}, the projection is taken from \code{x}. \code{x} must be a \link[sf:st]{spatial} object in that case.}
 

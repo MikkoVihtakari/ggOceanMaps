@@ -14,17 +14,15 @@
 #' # Quickly see position of data
 #' qmap(dt)
 #' 
+#' \donttest{
 #' # Set color
 #' qmap(dt, color = I("blue")) 
 #' 
-#' \donttest{
 #' # Map color to a variable
 #' qmap(dt, color = var) 
-#' # 
-#' 
+#'  
 #' # Map text to a variable 
 #' qmap(dt, label = var) 
-#'  
 #' 
 #' # All basemap arguments work in qmap()
 #' dt <- data.frame(lon = c(-80, -80, -50, -50), lat = c(65, 80, 80, 65))
@@ -33,7 +31,7 @@
 #' @export
 
 # x = NULL; y = NULL; geom = "point"; limits = NULL; shapefiles = NULL; crs = NULL; bathymetry = FALSE; glaciers = FALSE; rotate = FALSE; legends = TRUE; legend.position = "right"; lon.interval = NULL; lat.interval = NULL; ifelse(!is.null(getOption("ggOceanMaps.bathy.style")), getOption("ggOceanMaps.bathy.style"), "raster_binned_blues"); bathy.border.col = NA; bathy.size = 0.1; land.col = "grey60"; land.border.col = "black"; land.size = 0.1; gla.col = "grey95"; gla.border.col = "black"; gla.size = 0.1; grid.col = "grey70"; grid.size = 0.1; base_size = 11; projection.grid = FALSE; expand.factor = 1.1; verbose = FALSE
-qmap <- function(data, ..., x = NULL, y = NULL, geom = "point", limits = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = ifelse(!is.null(getOption("ggOceanMaps.bathy.style")), getOption("ggOceanMaps.bathy.style"), "raster_binned_blues"), bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE) {
+qmap <- function(data, ..., x = NULL, y = NULL, geom = "point", limits = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, glaciers = FALSE, rotate = FALSE, legends = TRUE, legend.position = "right", lon.interval = NULL, lat.interval = NULL, bathy.style = NULL, bathy.border.col = NA, bathy.size = 0.1, land.col = "grey60", land.border.col = "black", land.size = 0.1, gla.col = "grey95", gla.border.col = "black", gla.size = 0.1, grid.col = "grey70", grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, verbose = FALSE) {
   
   ## Coordinate columns
   

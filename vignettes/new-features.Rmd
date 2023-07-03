@@ -28,6 +28,12 @@ knitr::opts_chunk$set(collapse = TRUE,
 library(ggOceanMaps)
 ```
 
+The old GIS packages for R (`sp`, `raster` and `rgeos`) as the engine for ggOceanMaps have been replaced by newer ones, `sf` handling vector data and `stars` handling rasters. This allowed more efficient use of the geospatial data while plotting maps and led to multiple improvements.
+
+# ggOceanMapsData is no longer needed
+
+# New bathymetry system
+
 ```{r}
 library(sf); library(stars)
 
@@ -69,4 +75,6 @@ reorder_layers(p)
 ```
 
 
+# Future
 
+Future updates to package do not only include bug fixes, but improve the land and bathymetry options. Also the documentation will to be revised.

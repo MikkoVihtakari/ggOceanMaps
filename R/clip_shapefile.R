@@ -6,6 +6,7 @@
 #' @param simplify Should the \code{x} geometry be simplified before clipping? Useful to make the function faster for large shape files. Uses \code{\link[sf]{st_simplify}} function.
 #' @param tol Numerical tolerance value to be used for simplification. See \code{?sf::st_simplfy}.
 #' @param return.boundary Logical. If \code{TRUE} returns the clip boundary together with the shapefile.
+#' @param extra.validate Logical indicating whether \code{x} should be run through extra validation. Slows down the function but is necessary in some cases involving anti-meridian. 
 #' @param output.sf Logical indicating return the results in \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or sp (\code{FALSE}) format. 
 #' @details The function uses the \code{\link[sf]{st_intersection}} function to clip smaller polygons from larger ones. The clip area is constrained by either a numeric vector or a spatial object in the \code{limits} argument. Defining \code{limits} by a \code{\link[sf:st_sf]{sf}} object gives greater freedom for the clip area as the area does not have to be rectangular.
 #' @return Clipped spatial object. The class is depending on the \code{output.sf} argument. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
@@ -18,7 +19,7 @@
 
 # Test parameters
 # proj.limits = 4326; simplify = FALSE; tol = 60; return.boundary = FALSE; output.sf = TRUE
-clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol = 60, return.boundary = FALSE, output.sf = TRUE) {
+clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol = 60, return.boundary = FALSE, extra.validate = FALSE, output.sf = TRUE) {
   
   ## Checks
   
@@ -75,9 +76,12 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
   
   ### Validate x
   
-  if(!all(sf::st_is_valid(x))) {
-    x <- sf::st_make_valid(x)
+  if(extra.validate) {
+    if(!all(sf::st_is_valid(x))) {
+      x <- sf::st_make_valid(x)
+    }
   }
+  
   
   ## Check that the projections match
   
@@ -114,10 +118,12 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
   
   shapefile <- suppressMessages(suppressWarnings(sf::st_intersection(x, clip_boundary)))
   
-  ### Validate shapefile (these make basemap slower, consider removing some in the future)
+  ### Validate shapefile
   
-  if(!all(sf::st_is_valid(shapefile))) {
-    shapefile <- sf::st_make_valid(shapefile)
+  if(extra.validate) {
+    if(!all(sf::st_is_valid(shapefile))) {
+      shapefile <- sf::st_make_valid(shapefile)
+    }
   }
   
   ## Convert to sp (if asked)

@@ -543,6 +543,11 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     if(!bathymetry) {
       shapefiles$bathy <- NULL
     } else {
+      if(bathy.type == "raster_user" && is.na(shapefiles$bathy[bathy.type])) {
+        msg <- "Define path to the user defined bathymetry raster using options(ggOceanMaps.userpath = 'PATH_TO_THE_FILE'))"
+        stop(paste(strwrap(msg), collapse= "\n"))
+      }
+      
       shapefiles$bathy <- shapefiles$bathy[bathy.type]
     }
     
@@ -650,6 +655,22 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
       if(inherits(x$shapefiles$bathy$raster[[1]], "factor")) {
         x$shapefiles$bathy$raster <- droplevels(x$shapefiles$bathy$raster)
       }
+    } else if(inherits(x$shapefiles$bathy, c("stars", "stars_proxy"))) {
+      
+      x$shapefiles$bathy <- raster_bathymetry(
+        x$shapefiles$bathy,
+        depths = NULL,
+        boundary = sf::st_transform(smoothr::densify(x$clip_limits, n = 10), crs = 4326),
+        verbose = FALSE
+      )
+      
+      newgrid <- stars::st_as_stars(sf::st_bbox(x$clip_limits))
+      x$shapefiles$bathy$raster <- stars::st_warp(x$shapefiles$bathy$raster, newgrid)
+      
+      if(x$polarMap) {
+        x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[x$clip_limits]
+      }
+      
     } else {
       # vector bathymetries
       x$shapefiles$bathy <- clip_shapefile(

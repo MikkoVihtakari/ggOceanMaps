@@ -11,6 +11,7 @@ clip_shapefile(
   simplify = FALSE,
   tol = 60,
   return.boundary = FALSE,
+  extra.validate = FALSE,
   output.sf = TRUE
 )
 }
@@ -26,6 +27,8 @@ clip_shapefile(
 \item{tol}{Numerical tolerance value to be used for simplification. See \code{?sf::st_simplfy}.}
 
 \item{return.boundary}{Logical. If \code{TRUE} returns the clip boundary together with the shapefile.}
+
+\item{extra.validate}{Logical indicating whether \code{x} should be run through extra validation. Slows down the function but is necessary in some cases involving anti-meridian.}
 
 \item{output.sf}{Logical indicating return the results in \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or sp (\code{FALSE}) format.}
 }

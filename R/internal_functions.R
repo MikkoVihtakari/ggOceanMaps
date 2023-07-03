@@ -219,31 +219,44 @@ define_bathy_style <- function(x) {
   
   if(tolower(x) == "rbb") {
     out <- "raster_binned_blues"
+  } else if(tolower(x) %in% c("rbg", "raster_binned_greys")) {
+    out <- "raster_binned_grays"
   } else if(tolower(x) == "rcb") {
     out <- "raster_continuous_blues"
-  } else if(tolower(x) == "rbg") {
-    out <- "raster_binned_greys"
+  } else if(tolower(x) %in% c("rcg", "raster_continuous_greys")) {
+    out <- "raster_continuous_grays"
+  } else if(tolower(x) %in% c("rub")) {
+    out <- "raster_user_blues"
+  } else if(tolower(x) %in% c("rug", "raster_user_greys")) {
+    out <- "raster_user_grays"
   } else if(tolower(x) == "pb") {
     out <- "poly_blues"
-  } else if(tolower(x) == "pg") {
-    out <- "poly_greys"
+  } else if(tolower(x) %in% c("pg", "poly_greys")) {
+    out <- "poly_grays"
   } else if(tolower(x) == "cb") {
     out <- "contour_blues"
-  } else if(tolower(x) == "cg") {
-    out <- "contour_grey"
+  } else if(tolower(x) %in% c("cg", "contour_grey", "contour_greys", "contour_grays")) {
+    out <- "contour_gray"
   } else {
     out <- match.arg(
       x,
-      c("raster_binned_blues", "raster_continuous_blues", "raster_binned_greys",
-        "poly_blues", "poly_greys", "contour_blues", "contour_grey")
+      c("raster_binned_blues", "raster_binned_grays", "raster_continuous_blues", 
+        "raster_continuous_grays", "raster_user_blues", "raster_user_grays",
+        "poly_blues", "poly_grays", "contour_blues", "contour_gray")
     )
   }
   
   alternatives <- 
-    c("raster_binned_blues" = "bathy_rbb", "raster_continuous_blues" = "bathy_rcb",
-      "raster_binned_greys" = "bathy_rbg", "poly_blues" = "bathy_pb", 
-      "poly_greys" = "bathy_pg", "contour_blues" = "bathy_cb", 
-      "contour_grey" = "bathy_cg")
+    c("raster_binned_blues" = "bathy_rb", 
+      "raster_binned_grays" = "bathy_rb", 
+      "raster_continuous_blues" = "bathy_rc",
+      "raster_continuous_grays" = "bathy_rc",
+      "raster_user_blues" = "bathy_rc",
+      "raster_user_grays" = "bathy_rc",
+      "poly_blues" = "bathy_pb", 
+      "poly_grays" = "bathy_pg", 
+      "contour_blues" = "bathy_cb", 
+      "contour_gray" = "bathy_cg")
   
   alternatives[names(alternatives) == out]
 }
