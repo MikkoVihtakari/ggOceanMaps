@@ -4,7 +4,7 @@
 #' @param layer Character string defining the layer containing depth information. If \code{NULL} assumed to be "dybdeareal".
 #' @param verbose Logical indicating whether information the reading process should be returned.
 #' @details You can download the bathymetry polygon shapefiles from \href{https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a}{Geonorge}. Download the file in \code{GLM} format. 
-#' @return An \link[sf:st_polygon]{sf} or \code{sp} object containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sf:st_crs]{CRS}}).
+#' @return An \link[sf:st_polygon]{sf} object containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sf:st_crs]{CRS}}).
 #' @author Mikko Vihtakari
 #' @family create shapefiles
 #' @export

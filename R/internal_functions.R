@@ -233,7 +233,7 @@ define_bathy_style <- function(x) {
     out <- "poly_blues"
   } else if(tolower(x) %in% c("pg", "poly_greys")) {
     out <- "poly_grays"
-  } else if(tolower(x) == "cb") {
+  } else if(tolower(x) %in% c("cb", "cbb")) {
     out <- "contour_blues"
   } else if(tolower(x) %in% c("cg", "contour_grey", "contour_greys", "contour_grays")) {
     out <- "contour_gray"

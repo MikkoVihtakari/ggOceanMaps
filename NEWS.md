@@ -1,3 +1,7 @@
+# ggOceanMaps 2.1 (development version on GitHub)
+
+* Fix a bug in bathy.style wording.
+
 # ggOceanMaps 2.0 
 
 * Full [sf](https://r-spatial.github.io/sf/) integration. Old GIS packages for R and ggspatial dependencies removed. Since this change required rewriting of most functions, new bugs have almost certainly been introduced.

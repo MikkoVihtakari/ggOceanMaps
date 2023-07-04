@@ -12,14 +12,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-#library(knitr)
-#knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = "#>")
-#knit_hooks$set(optipng = hook_optipng)
-#knit_hooks$set(pngquant = hook_pngquant)
-```
-
-
 # ggOceanMaps
 **Plot data on oceanographic maps using ggplot2. R package version `r packageVersion("ggOceanMaps")`**
 
