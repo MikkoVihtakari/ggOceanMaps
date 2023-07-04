@@ -86,12 +86,18 @@ qmap <- function(data, ..., x = NULL, y = NULL, geom = "point", limits = NULL, s
   
   ## Geoms
   
+  mf <- match.call()
+  
   if("sf" %in% class(data)) {
-    pb + geom_sf(data = data, aes(...))
+    # pb + geom_sf(data = data, aes(...), color = "red")
+    
+    if(any(grepl("colour|color", names(mf)))) {
+      pb + ggplot2::geom_sf(data = data, ggplot2::aes(...))
+    } else {
+      pb + ggplot2::geom_sf(data = data, ggplot2::aes(...), color = "red")
+    }
+    
   } else if(geom == "point" && !methods::hasArg(label)) {
-    
-    mf <- match.call()
-    
     
     if(any(grepl("colour|color", names(mf)))) {
       pb + 

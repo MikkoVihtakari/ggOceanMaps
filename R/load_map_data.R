@@ -1,5 +1,6 @@
 #' @title Load large shapefile objects
 #' @description Internal function to load large shapefile objects. Downloads the files if they are not found \code{getOption("ggOceanMaps.datapath")}
+#' @inheritParams basemap
 #' @param x An object from \code{\link{shapefile_list}}.
 #' @param force Logical indicating whether to download the file even though it exists. Useful when files in the \href{https://github.com/MikkoVihtakari/ggOceanMapsLargeData}{Github repository have been changed}. Overwrites the old file. 
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function. Common users do not need to worry about these details.
@@ -10,7 +11,7 @@
 #' @author Mikko Vihtakari
 #' @seealso \code{\link{basemap}}
 
-load_map_data <- function(x, force = FALSE) {
+load_map_data <- function(x, force = FALSE, downsample = 0) {
   
   # Create the data download folder if it does not exist
   
@@ -115,7 +116,7 @@ load_map_data <- function(x, force = FALSE) {
     k <- x[["bathy"]]
     
     if(bathy_user_defined) {
-      x[["bathy"]] <- stars::read_stars(k)
+      x[["bathy"]] <- stars::read_stars(k, downsample = downsample)
     } else {
       if(grepl("/", k)) {
         if(file.exists(k) & !force) {

@@ -224,8 +224,8 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs
   
   if(bathymetry & !is.null(shapefiles) & inherits(shapefiles, "list")) {
     if(!is.null(shapefiles$bathy)) {
-      if(grepl("raster", bathy.type) & !inherits(shapefiles$bathy, c("stars", "stars_proxy"))) {
-        if(inherits(shapefiles$bathy, c("sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+      if(grepl("raster", bathy.type) & !inherits(shapefiles$bathy$raster, c("stars", "stars_proxy"))) {
+        if(inherits(shapefiles$bathy$raster, c("sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
           msg <- paste0("Detecting vector bathymetry. Code written for <2.0 perhaps? Changing bathy.style to 'poly_blues'.")
           
           message(paste(strwrap(msg), collapse= "\n"))
@@ -234,9 +234,7 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs
           bathy_cmd <- define_bathy_style(bathy.style)
           bathy.type <- gsub("_blues$|_grays$", "", names(bathy_cmd))
           bathy.type <- ifelse(grepl("raster_binned|raster_continuous", bathy.type), bathy.type, "vector")
-        } else {
-          stop("Unsupported bathy class.") 
-        }
+        } 
       }
     } else {
       stop("shapefiles = list(..., bathy) is required when using custom shapefiles with bathymetry = TRUE")
@@ -256,7 +254,7 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs
   ###########
   # Data ####
   
-  X <- basemap_data(limits = limits, data = data, shapefiles = shapefiles, crs = crs, bathymetry = bathymetry, bathy.type = bathy.type, glaciers = glaciers, lon.interval = lon.interval, lat.interval = lat.interval, rotate = rotate, expand.factor = expand.factor, verbose = verbose)
+  X <- basemap_data(limits = limits, data = data, shapefiles = shapefiles, crs = crs, bathymetry = bathymetry, bathy.type = bathy.type, downsample = downsample, glaciers = glaciers, lon.interval = lon.interval, lat.interval = lat.interval, rotate = rotate, expand.factor = expand.factor, verbose = verbose)
   
   ###########
   # Plot ####

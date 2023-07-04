@@ -10,7 +10,7 @@
 
 # Test paramters
 # limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE; verbose = TRUE
-basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, bathy.type = NULL, glaciers = FALSE, lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = FALSE) {
+basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, bathy.type = NULL, downsample = 0, glaciers = FALSE, lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = FALSE) {
   
   ## For code-readability and debugging, the function has been cut to compartments.
   ## The internal functions can be found at the end of this script.
@@ -30,7 +30,7 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NU
   
   x <- basemap_data_define_shapefiles(
     limits = limits, data = data, shapefiles = shapefiles, crs = crs, 
-    bathymetry = bathymetry, bathy.type = bathy.type, glaciers = glaciers, 
+    bathymetry = bathymetry, bathy.type = bathy.type, downsample = downsample, glaciers = glaciers, 
     rotate = rotate, expand.factor = expand.factor, verbose = FALSE
   )
   
@@ -123,7 +123,7 @@ basemap_data_detect_case <- function(limits = NULL, data = NULL, shapefiles = NU
 
 
 ## Define shapefiles ####
-basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, bathy.type = NULL, glaciers = FALSE, rotate = FALSE, expand.factor = 1.1, verbose = FALSE) {
+basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, bathy.type = NULL, downsample = 0, glaciers = FALSE, rotate = FALSE, expand.factor = 1.1, verbose = FALSE) {
   
   # Switches and checks ####
   
@@ -369,82 +369,108 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     clip_shape <- dd_clip_boundary(limits, crs)
     
     
-  } else if(case %in% c("data_dec")) { ### data frames ####
-    
-    if(is.null(shapefiles)) {
-      if(rotate){
-        tmp <- auto_limits(data, verbose = verbose)
-        
-        tmp2 <- guess_coordinate_columns(data)
-        tmp$ddLimits <- stats::setNames(
-          c(deg_to_dd(range(dd_to_deg(data[[tmp2[names(tmp2) == "lon"]]]))),
-            range(data[[tmp2[names(tmp2) == "lat"]]])
-            ), 
-          c("xmin", "xmax", "ymin", "ymax")
-        )
-      } else {
-        tmp <- auto_limits(data, expand.factor = 1.1, verbose = verbose)
-      }
-      
-      shapefile.def <- define_shapefiles(tmp$ddLimits, force_dd = TRUE)
-      if(is.null(crs)) {crs <- sf::st_crs(shapefile.def$crs)}
-      shapefile.name <- shapefile.def$shapefile.name
-      shapefiles <- shapefile_list(shapefile.name)
-      clip_shape <- tmp$projBound
-      
-    } else {
-      if(inherits(shapefiles$land, c("sf", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
-        if(inherits(shapefiles$land, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
-          shapefiles$land <- sf::st_as_sf(shapefiles$land)
-        }
-        crs <- suppressWarnings(sf::st_crs(shapefiles$land))
-      } else {
-        crs <- suppressWarnings(sf::st_crs(eval(parse(text = shapefiles$land))))
-      }
-      
-      tmp <- auto_limits(data, proj.out = crs, expand.factor = 1.1, verbose = verbose)
-      clip_shape <- sf::st_transform(tmp$projBound, crs)
-    }
-    
-    limits <- tmp$ddLimits
-    # limits <- sf::st_bbox(sf::st_transform(sf::st_as_sfc(sf::st_bbox(clip_shape)), crs = 4326))[c("xmin", "xmax", "ymin", "ymax")]
-    
-    if(sf::st_is_longlat(crs) && sign(limits[1]) != sign(limits[2]) && diff(limits[1:2]) < 180 & !rotate) {
-      msg <- paste0("Detecting antimeridian crossing on decimal degree map. Plotting only 
-              works with rotate = TRUE. Turning rotate on. Adjust limits if this
-              is not desired.")
-      
-      message(paste(strwrap(msg), collapse= "\n"))
-      rotate <- TRUE
-    }
-    
-    if(rotate) {
-      crs <- rotate_crs(crs, limits[1:2])
-      clip_shape <- dd_clip_boundary(limits, crs, expand.factor = 1.1)
-    }
-    
-  } else if(case %in% c("data_sf", "data_sp")) { ### spatial data ####
+    # } else if(case %in% c("data_dec")) { ### data frames ###
+    #   
+    #   if(is.null(shapefiles)) {
+    #     
+    #     
+    #     
+    #     
+    #     
+    #     if(rotate){
+    #       tmp <- auto_limits(data, verbose = verbose)
+    # 
+    #       tmp2 <- guess_coordinate_columns(data)
+    #       tmp$ddLimits <- stats::setNames(
+    #         c(deg_to_dd(range(dd_to_deg(data[[tmp2[names(tmp2) == "lon"]]]))),
+    #           range(data[[tmp2[names(tmp2) == "lat"]]])
+    #           ),
+    #         c("xmin", "xmax", "ymin", "ymax")
+    #       )
+    #     } else {
+    #       tmp <- auto_limits(data, expand.factor = 1.1, verbose = verbose)
+    #     }
+    #     
+    #     shapefile.def <- define_shapefiles(tmp$ddLimits, force_dd = TRUE)
+    #     if(is.null(crs)) {crs <- sf::st_crs(shapefile.def$crs)}
+    #     shapefile.name <- shapefile.def$shapefile.name
+    #     shapefiles <- shapefile_list(shapefile.name)
+    #     # clip_shape <- tmp$projBound
+    #     # 
+    #   } else {
+    #     if(inherits(shapefiles$land, c("sf", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+    #       if(inherits(shapefiles$land, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+    #         shapefiles$land <- sf::st_as_sf(shapefiles$land)
+    #       }
+    #       crs <- suppressWarnings(sf::st_crs(shapefiles$land))
+    #     } else {
+    #       crs <- suppressWarnings(sf::st_crs(eval(parse(text = shapefiles$land))))
+    #     }
+    #     
+    #     tmp <- auto_limits(data, proj.out = crs, expand.factor = 1.1, verbose = verbose)
+    #     clip_shape <- sf::st_transform(tmp$projBound, crs)
+    #   }
+    #   
+    #   
+    #   # if(rotate) {
+    #   #   limits <- tmp$ddLimits
+    #   # } else {
+    #     limits <- sf::st_bbox(sf::st_transform(tmp$projBound, crs = 4326))[c("xmin", "xmax", "ymin", "ymax")]
+    #     
+    #     if(rotate) {
+    #       crs <- rotate_crs(crs, limits[1:2])
+    #     }
+    #     
+    #     clip_shape <- dd_clip_boundary(limits, crs)
+    #   # }
+    #   
+    #   #limits <- tmp$ddLimits
+    #   # limits <- sf::st_bbox(sf::st_transform(sf::st_as_sfc(sf::st_bbox(clip_shape)), crs = 4326))[c("xmin", "xmax", "ymin", "ymax")]
+    #   
+    #   if(sf::st_is_longlat(crs) && sign(limits[1]) != sign(limits[2]) && diff(limits[1:2]) < 180 & !rotate) {
+    #     msg <- paste0("Detecting antimeridian crossing on decimal degree map. Plotting only 
+    #             works with rotate = TRUE. Turning rotate on. Adjust limits if this
+    #             is not desired.")
+    #     
+    #     message(paste(strwrap(msg), collapse= "\n"))
+    #     rotate <- TRUE
+    #   }
+    #   
+    #   if(rotate) {
+    #     crs <- rotate_crs(crs, limits[1:2])
+    #     clip_shape <- dd_clip_boundary(limits, crs, expand.factor = 1.1)
+    #   } else {
+    #     clip_shape <- dd_clip_boundary(limits, crs)
+    #   }
+    #   
+  } else if(case %in% c("data_sf", "data_sp", "data_dec")) { ### data ####
     
     if(case == "data_sp") data <- sf::st_as_sf(data)
     
+    if(case == "data_dec") {
+      tmp <- guess_coordinate_columns(data)
+      data <- sf::st_as_sf(data, coords = tmp, crs = 4326)
+    }
+    
     if(is.null(shapefiles)) {
       
-      if(!sf::st_is_longlat(data)) {
+      if(rotate) {
+        tmp <- sf::st_coordinates(sf::st_transform(data, 4326))
+        
+        limits <- stats::setNames(
+          c(deg_to_dd(range(dd_to_deg(tmp[,1]))), range(tmp[,2])),
+          c("xmin", "xmax", "ymin", "ymax"))
+        
+      } else if(!sf::st_is_longlat(data)) {
         limits <- sf::st_bbox(sf::st_transform(data, 4326))[c("xmin", "xmax", "ymin", "ymax")] 
       } else {
         limits <- sf::st_bbox(data)[c("xmin", "xmax", "ymin", "ymax")] 
       }
       
       shapefile.def <- define_shapefiles(limits, force_dd = TRUE)
-      if(is.null(crs)) {crs <- sf::st_crs(shapefile.def$crs)}
+      if(is.null(crs)) crs <- sf::st_crs(shapefile.def$crs)
       shapefile.name <- shapefile.def$shapefile.name
       shapefiles <- shapefile_list(shapefile.name)
-      
-      if(sf::st_crs(data) == crs) {
-        clip_shape <- sf::st_as_sfc(sf::st_bbox(data)) 
-      } else {
-        clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
-      }
       
     } else {
       if(inherits(shapefiles$land, c("sf", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
@@ -456,13 +482,21 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
         crs <- suppressWarnings(sf::st_crs(eval(parse(text = shapefiles$land))))
       }
       
-      clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
+      # clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
       limits <- sf::st_bbox(sf::st_transform(data, 4326))[c("xmin", "xmax", "ymin", "ymax")]
     }
     
     if(rotate) {
       crs <- rotate_crs(crs, limits[1:2])
       clip_shape <- dd_clip_boundary(limits, crs, expand.factor = 1.1)
+    } else {
+      if(sf::st_crs(data) == crs) {
+        clip_shape <- sf::st_as_sfc(sf::st_bbox(data))
+        clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_buffer(clip_shape, dist = 0.01*sqrt(sf::st_area(clip_shape)))))
+      } else {
+        clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
+        clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_buffer(clip_shape, dist = 0.01*sqrt(sf::st_area(clip_shape)))))
+      }
     }
     
   } else if(case %in% c("limits_proj", "data_proj")) { ## Projected limits/data ####
@@ -550,7 +584,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       shapefiles$bathy <- shapefiles$bathy[bathy.type]
     }
     
-    shapefiles <- load_map_data(shapefiles)
+    shapefiles <- load_map_data(shapefiles, downsample = downsample)
     
   }
   
@@ -716,7 +750,9 @@ basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NUL
     if(x$polarMap) {
       latDist <- 90 - abs(x$decLimits)
     } else {
-      latDist <- abs(diff(round(x$decLimits)[3:4]))
+      limits <- sf::st_bbox(sf::st_transform(x$limit_shape, 4326))[c("xmin", "xmax", "ymin", "ymax")]
+      
+      latDist <- abs(diff(round(limits)[3:4]))
     }
     lat.interval <- 
       ifelse(latDist >= 30, 10, 
@@ -732,7 +768,9 @@ basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NUL
     if(x$polarMap) {
       lon.interval <- 45
     } else {
-      if(diff(x$decLimits[1:2]) == 360) {
+      limits <- sf::st_bbox(sf::st_transform(x$limit_shape, 4326))[c("xmin", "xmax", "ymin", "ymax")]
+      
+      if(diff(limits[1:2]) == 360) {
         lonDist <- 360
       } else {
         tmp <- dd_to_deg(round(x$decLimits)[1:2])
@@ -798,8 +836,10 @@ basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NUL
     
   } else {
     
-    minLat <- min(x$decLimits[3:4])
-    maxLat <- max(x$decLimits[3:4])
+    limits <- sf::st_bbox(sf::st_transform(x$limit_shape, 4326))[c("xmin", "xmax", "ymin", "ymax")]
+    
+    minLat <- min(limits[3:4])
+    maxLat <- max(limits[3:4])
     
     minLat <- ifelse(minLat < 0, -90, round_any(minLat, 10, floor))
     maxLat <- ifelse(maxLat > 0, 90, round_any(maxLat, 10, ceiling))

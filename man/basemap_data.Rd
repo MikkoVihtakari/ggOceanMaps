@@ -11,6 +11,7 @@ basemap_data(
   crs = NULL,
   bathymetry = FALSE,
   bathy.type = NULL,
+  downsample = 0,
   glaciers = FALSE,
   lon.interval = NULL,
   lat.interval = NULL,
@@ -34,6 +35,8 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 \item{crs}{\link[sf:st_crs]{Coordinate reference system} (CRS) for the map. If \code{NULL} (default), the CRS is selected automatically based on \code{limits}, \code{data}, or \code{shapefiles}. Passed to \code{\link[sf]{st_crs}}. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with \code{rotate}.}
 
 \item{bathymetry}{Logical indicating whether bathymetry should be added to the map. Functions together with \code{bathy.style}. See Details.}
+
+\item{downsample}{Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See \code{\link[stars]{geom_stars}}}
 
 \item{glaciers}{Logical indicating whether glaciers and ice sheets should be added to the map.}
 

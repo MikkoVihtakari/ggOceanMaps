@@ -17,7 +17,7 @@
 #' @export
 
 # Test parameters
-# proj.limits = 4326; simplify = FALSE; tol = 60; return.boundary = FALSE
+# proj.limits = 4326; simplify = FALSE; tol = 60; return.boundary = FALSE; extra.validate = FALSE
 clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol = 60, return.boundary = FALSE, extra.validate = FALSE) {
   
   ## Checks
@@ -97,16 +97,17 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
     
     tmp <- sf::st_bbox(clip_boundary)[c("xmin", "xmax")]
 
-    if((sign(tmp[1]) != sign(tmp[2]) && 
+    if((#sign(tmp[1]) != sign(tmp[2]) &&
         sf::st_crs(x)$proj4string == sf::st_crs(4326)$proj4string)) {
       s2_mode <- sf::sf_use_s2()
       suppressMessages(sf::sf_use_s2(FALSE))
       on.exit({suppressMessages(sf::sf_use_s2(s2_mode))})
-    } else {
-      if(!all(sf::st_is_valid(x))) {
-        x <- sf::st_make_valid(x)
-      }
-    }
+    } 
+    #else {
+    #   if(!all(sf::st_is_valid(x))) {
+    #     x <- sf::st_make_valid(x)
+    #   }
+    # }
   }
   
   ## Simplify bathymetry
@@ -116,9 +117,13 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
     x <- sf::st_simplify(x, dTolerance = tol)
   }
   
-  ## Cropping
+  ## Cropping (st_intersection for round shapes)
   
-  shapefile <- suppressMessages(suppressWarnings(sf::st_intersection(x, clip_boundary)))
+  if(nrow(sf::st_coordinates(clip_boundary)) > 100) {
+    shapefile <- suppressMessages(suppressWarnings(sf::st_intersection(x, clip_boundary)))
+  } else {
+    shapefile <- suppressWarnings(suppressMessages(sf::st_crop(x, clip_boundary)))
+  }
   
   ### Validate shapefile
   
