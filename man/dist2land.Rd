@@ -8,31 +8,28 @@ dist2land(
   data,
   lon = NULL,
   lat = NULL,
-  shapefile = NULL,
-  proj.in = convert_crs(4326),
+  shapefile = "DecimalDegree",
+  proj.in = 4326,
   bind = TRUE,
   dist.col = "ldist",
   binary = FALSE,
-  cores = getCores(),
   verbose = TRUE
 )
 }
 \arguments{
-\item{data}{Data.frame containing geographic coordinates}
+\item{data}{Data frame containing geographic coordinates.}
 
 \item{lon, lat}{Either the names of the longitude and latitude columns in \code{data} or \code{NULL} to \link[=guess_coordinate_columns]{guess the longitude and/or latitude columns} in \code{data}.}
 
-\item{shapefile}{Land shape to which distances should be calculated. Either a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}, a single \link[sp]{SpatialPolygons} object or \code{NULL} to enable automatic definition of the land shapes based on \code{data}.}
+\item{shapefile}{Land shape to which distances should be calculated. Either a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}, a single \link[sf]{sf} or \code{sp} polygons object object or \code{NULL} to enable automatic definition of the land shapes based on \code{data}. Set to \code{"DecimalDegree"} by default which enables great circle distances using \link[sf]{s2} features assuming a spherical Earth (as a contrast to earlier versions of the function which used flat Earth).}
 
-\item{proj.in}{\code{\link[sp:is.projected]{proj4string}} projection argument for the coordinates in \code{data}.}
+\item{proj.in}{\code{\link[sf:st_crs]{coordinate reference system}} of \code{data}.}
 
 \item{bind}{Logical indicating whether \code{x} should be returned with the distances (\code{TRUE}, default) or should the distances be returned as vector (\code{FALSE}).}
 
-\item{dist.col}{The name of the distance column, if \code{bind = TRUE}. Defaults to "dist".}
+\item{dist.col}{The name of the distance column, if \code{bind = TRUE}. Defaults to "ldist".}
 
 \item{binary}{Logical indicating whether binary (TRUE = the position is in the ocean, FALSE = the position is on land) should be returned instead of distances. Speeds up the function considerably.}
-
-\item{cores}{Integer value defining how many cores should be used in the distance calculations. Parallelization speeds up the function (see \code{parallel::mclapply}), but naturally eats up computer resources during the calculation. Set to 1 to remove parallelization.}
 
 \item{verbose}{Logical indicating whether information about the process should be returned as messages. Set to \code{FALSE} to make the function silent.}
 }
@@ -43,41 +40,38 @@ Returns a vector if \code{bind = FALSE}, otherwise a data frame. The distances a
 Calculates the closest distance to land for coordinates in a data frame
 }
 \details{
-The function calculates distances using projected coordinates and the \code{rgeos::gDistance} function. These distances do not consider the curvature of the Earth unless the projection of the used land shape does so (check out geosphere::dist2Line and \href{https://stackoverflow.com/a/51842756/1082004}{this SO solution if you want exact distances}). The function is fairly slow for large datasets. If you only want to use the function to remove (wrong) observations reported on land, set the \code{binary} argument to \code{TRUE}. This speeds up the calculations considerably.
-
-The \code{dist2land} function offers parallel processing, which speeds up the calculations for large datasets. Parallel processing has not been tested under Windows yet and may not work.
+The function calculates great circle spherical distances using the \code{\link[sf]{st_distance}} function by default. The function can be slow for large datasets. If you only want to use the function to remove (wrong) observations reported on land, set the \code{binary} argument to \code{TRUE}. This speeds up the calculations by a factor of ten.
 }
 \examples{
-
-if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
-\donttest{
 # Simple example:
 dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
-dt <- dist2land(dt, cores = 1, verbose = FALSE)
+dt <- dist2land(dt, verbose = FALSE)
+\donttest{
 qmap(dt, color = ldist) + scale_color_viridis_c()
 
-# No premade shapefiles for datasets covering the entire globe
-dt <- data.frame(lon = -20:20, lat = seq(-90, 90, length.out = 41))
-qmap(dist2land(dt, cores = 1, verbose = FALSE), color = ldist) + 
-scale_color_viridis_c() # wrong!
+# Datasets covering the entire Earth seem to work now, except 0,0 lon/lat point
+lon = deg_to_dd(seq(0,360,30)); lat = c(80,50,20,0,-20,-50,-80)
+
+dt <- data.frame(
+ lon = rep(lon, length(lat)), lat = rep(lat, each = length(lon)))
+
+qmap(dist2land(dt, verbose = FALSE), color = ldist) +
+ scale_color_viridis_c()
 }
 \dontrun{
-dt <- data.frame(lon = seq(-179, 179, length.out = 1000), lat = rep(60, 1000))
+dt <- data.frame(
+  lon = deg_to_dd(seq(0,360,length.out = 1e3)), 
+  lat = rep(60, 1000))
+  
 # The distance calculation is slow for large datasets
 system.time(dist2land(dt))
-#> user  system elapsed
-#> 0.071   0.036   9.632
+# user  system elapsed 
+# 12.677   0.146  12.849 
 
-# The parallel processing speeds it up
-system.time(dist2land(dt, cores = 1))
-#> user  system elapsed
-#> 29.019   1.954  30.958
-
-# binary = TRUE further speeds the function up
+# binary = TRUE speeds the function up
 system.time(dist2land(dt, binary = TRUE))
-#> user  system elapsed
-#> 2.342   0.052   2.403
-}
+# user  system elapsed 
+# 1.239   0.120   1.369 
 }
 }
 \author{

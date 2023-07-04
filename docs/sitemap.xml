@@ -13,6 +13,9 @@
     <loc>/articles/index.html</loc>
   </url>
   <url>
+    <loc>/articles/new-features.html</loc>
+  </url>
+  <url>
     <loc>/articles/poster.html</loc>
   </url>
   <url>
@@ -52,10 +55,19 @@
     <loc>/reference/clip_shapefile.html</loc>
   </url>
   <url>
-    <loc>/reference/convert_crs.html</loc>
+    <loc>/reference/dd_clip_boundary.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dd_land.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dd_rbathy.html</loc>
   </url>
   <url>
     <loc>/reference/dd_to_deg.html</loc>
+  </url>
+  <url>
+    <loc>/reference/define_bathy_style.html</loc>
   </url>
   <url>
     <loc>/reference/define_shapefiles.html</loc>
@@ -119,6 +131,9 @@
   </url>
   <url>
     <loc>/reference/reorder_layers.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rotate_crs.html</loc>
   </url>
   <url>
     <loc>/reference/round_any.html</loc>

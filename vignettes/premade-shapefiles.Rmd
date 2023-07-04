@@ -23,7 +23,7 @@ knitr::opts_chunk$set(collapse = TRUE,
 ```
 
 ```{r setup, eval = TRUE}
-library(ggOceanMaps)
+library(ggOceanMaps); library(sf); library(stars)
 ```
 
 Shapefiles used by this package are stored in two places: 1) the low-resolution shapefiles used frequently are stored in the [ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData) package which should be installed automatically together with ggOceanMaps. 2) High-resolution shapefiles of selected locations are stored in the [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData) repository and downloaded automatically as needed. This document describes how each of the shapefiles is created. The maps are shown in the [Premade maps document](https://mikkovihtakari.github.io/ggOceanMaps/articles/premade-maps.html).
@@ -42,9 +42,9 @@ outPath <- ""
 Define the the [coordinate reference systems](https://mgimond.github.io/Spatial/coordinate-systems-in-r.html).
 
 ```{r}
-arcticCRS <- paste0("EPSG:", shapefile_list("Arctic")$crs)
-antarcticCRS <- paste0("EPSG:", shapefile_list("Antarctic")$crs)
-ddCRS <- paste0("EPSG:", shapefile_list("Decimal")$crs)
+arcticCRS <- sf::st_crs(shapefile_list("Arctic")$crs)
+antarcticCRS <- sf::st_crs(shapefile_list("Antarctic")$crs)
+ddCRS <- sf::st_crs(shapefile_list("Decimal")$crs)
 ```
 
 ## Decimal degrees
@@ -52,27 +52,46 @@ ddCRS <- paste0("EPSG:", shapefile_list("Decimal")$crs)
 Bathymetry:
 
 ```{r}
-rb <- raster_bathymetry(
-  bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"),
+# Binned raster bathymetry
+dd_rbathy <- raster_bathymetry(
+  bathy = file.path(etopoPath, "ETOPO_2022_v1_60s_N90W180_surface.nc"),
   depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000), 
-  proj.out = ddCRS, 
-  boundary = c(-180.0083, 180.0083, -90, 90), 
-  aggregation.factor = 6
+  proj.out = 4326,
+  downsample = 1
 )
 
-dd_bathy <- vector_bathymetry(rb, drop.crumbs = 50, remove.holes = 50)
+save(dd_rbathy, file = file.path(outPath, "ggOceanMapsData/dd_rbathy.rda"), compress = "bzip2")
 
+# Vector bathymetry
+dd_bathy <- vector_bathymetry(dd_rbathy, drop.crumbs = 50) 
 save(dd_bathy, file = file.path(outPath, "ggOceanMapsData/dd_bathy.rda"), compress = "xz")
+
+# Continuous raster bathymetry
+dd_rbathy_cont <- raster_bathymetry(
+  bathy = file.path(etopoPath, "ETOPO_2022_v1_60s_N90W180_surface.nc"),
+  depths = NULL, 
+  proj.out = 4326,
+  downsample = 1
+)
+
+save(dd_rbathy_cont, file = file.path(outPath, "ggOceanMapsData/dd_rbathy_cont.rda"), compress = "bzip2")
 ```
 
 Land:
 
 ```{r}
+# Natural Earth Data require s2 turned off.
+s2_mode <- sf::sf_use_s2()
+suppressMessages(sf::sf_use_s2(FALSE))
+on.exit({suppressMessages(sf::sf_use_s2(s2_mode))})
+
 world <- sf::st_read(file.path(NEDPath, "ne_10m_land/ne_10m_land.shp"))
 islands <- sf::st_read(file.path(NEDPath, "ne_10m_minor_islands/ne_10m_minor_islands.shp"))
-world <- rbind(world, islands)
 
+world <- rbind(world, islands)
+world <- sf::st_make_valid(world)
 dd_land <- clip_shapefile(world, c(-180, 180, -90, 90))
+all(sf::st_is_valid(dd_land))
 
 save(dd_land, file = file.path(outPath, "ggOceanMapsData/dd_land.rda"), compress = "xz")
 ```
@@ -83,12 +102,10 @@ Glaciers:
 glaciers <- sf::st_read(file.path(NEDPath, "ne_10m_glaciated_areas/ne_10m_glaciated_areas.shp"))
 iceshelves <- sf::st_read(file.path(NEDPath, "ne_10m_antarctic_ice_shelves_polys/ne_10m_antarctic_ice_shelves_polys.shp"))
 
-glaciers <- sf::as_Spatial(rbind(glaciers, iceshelves))
-glaciers <- rgeos::gBuffer(glaciers, byid = TRUE, width = 0)
-
+glaciers <- rbind(glaciers, iceshelves)
+glaciers <- sf::st_make_valid(glaciers)
 dd_glacier <- clip_shapefile(glaciers, c(-180, 180, -90, 90))
-dd_glacier <- rgeos::gBuffer(dd_glacier, byid = FALSE, width = 0.1)
-dd_glacier <- rgeos::gBuffer(dd_glacier, byid = FALSE, width = -0.1)
+all(sf::st_is_valid(dd_glacier))
 
 save(dd_glacier, file = file.path(outPath, "ggOceanMapsData/dd_glacier.rda"), compress = "xz")
 ```
@@ -98,8 +115,31 @@ save(dd_glacier, file = file.path(outPath, "ggOceanMapsData/dd_glacier.rda"), co
 Bathymetry:
 
 ```{r}
+# Vector bathymetry
 rb <- raster_bathymetry(
-  bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"), 
+  bathy = file.path(etopoPath, "ETOPO_2022_v1_60s_N90W180_surface.nc"),
+  depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000), 
+  proj.out = arcticCRS,
+  boundary = c(-180, 180, 1, 90),
+  downsample = 1
+)
+
+arctic_bathy <- vector_bathymetry(rb)
+save(arctic_bathy, file = file.path(outPath, "ggOceanMapsData/arctic_bathy.rda"), compress = "xz")
+
+# Raster bathymetry
+dd_rbathy <- raster_bathymetry(
+  bathy = file.path(etopoPath, "ETOPO_2022_v1_60s_N90W180_surface.nc"),
+  depths = NULL, 
+  proj.out = ddCRS,
+  downsample = 1
+)
+
+# save(rb, file = file.path(outPath, "ggOceanMapsData/dd_rbathy_agg.rda"), compress = "xz")
+save(dd_rbathy, file = file.path(outPath, "ggOceanMapsData/dd_rbathy.rda"), compress = "xz")
+
+rb <- raster_bathymetry(
+  bathy = file.path(etopoPath, "ETOPO_2022_v1_60s_N90W180_surface.nc"), 
   depths = c(50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000), 
   proj.out = arcticCRS, 
   boundary = c(-180.0083, 180.0083, 1, 90), 
@@ -107,7 +147,6 @@ rb <- raster_bathymetry(
 )
 
 arctic_bathy <- vector_bathymetry(rb)
-
 save(arctic_bathy, file = file.path(outPath, "ggOceanMapsData/arctic_bathy.rda"), compress = "xz")
 ```
 
@@ -189,6 +228,23 @@ rb <- raster_bathymetry(
 )
 
 barentssea_bathy <- vector_bathymetry(rb)
+
+# Raster bathymetry
+Sys.time()
+
+barentssea_rbathy <- raster_bathymetry(
+  bathy = file.path(gebcoPath, "GEBCO_2021.nc"), 
+  depths = NULL, 
+  proj.out = paste0("EPSG:", shapefile_list("Barents")$crs),
+  boundary = bound.limits,
+  warp = TRUE
+)
+
+Sys.time()
+
+# save(rb, file = file.path(outPath, "ggOceanMapsData/dd_rbathy_agg.rda"), compress = "xz")
+save(barentssea_rbathy, file = file.path(outPath, "ggOceanMapsData/barentssea_rbathy.rda"), compress = "xz")
+
 ```
 
 Land:

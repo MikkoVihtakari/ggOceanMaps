@@ -9,6 +9,7 @@ transform_coord(
   lon = NULL,
   lat = NULL,
   new.names = "auto",
+  rotate = FALSE,
   proj.in = 4326,
   proj.out = NULL,
   verbose = FALSE,
@@ -22,6 +23,8 @@ transform_coord(
 \item{lon, lat}{Either a name of the longitude and latitude columns in \code{x} or a numeric vector containing longitude and latitude coordinates. Use \code{NULL} to \link[=guess_coordinate_columns]{guess the longitude and/or latitude columns} in \code{x}.}
 
 \item{new.names}{Character vector of length 2 specifying the names of transformed longitude and latitude columns, respectively. Alternatively \code{NULL}, which returns column names from \code{x} or "auto", which uses \code{NULL} if \code{bind = FALSE} and \code{c("lon.proj", "lat.proj")} if \code{bind = TRUE}.}
+
+\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to the mid-longitude limit.}
 
 \item{proj.in}{The original \code{\link[sf:st_crs]{CRS}}. If \code{NULL}, the projection is taken from \code{x}. \code{x} must be a \link[sf:st]{spatial} object in that case.}
 

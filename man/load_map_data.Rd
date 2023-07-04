@@ -4,15 +4,17 @@
 \alias{load_map_data}
 \title{Load large shapefile objects}
 \usage{
-load_map_data(x, force = FALSE)
+load_map_data(x, force = FALSE, downsample = 0)
 }
 \arguments{
 \item{x}{An object from \code{\link{shapefile_list}}.}
 
 \item{force}{Logical indicating whether to download the file even though it exists. Useful when files in the \href{https://github.com/MikkoVihtakari/ggOceanMapsLargeData}{Github repository have been changed}. Overwrites the old file.}
+
+\item{downsample}{Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See \code{\link[stars]{geom_stars}}}
 }
 \value{
-A list of \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrames}}
+A list of spatial objects
 }
 \description{
 Internal function to load large shapefile objects. Downloads the files if they are not found \code{getOption("ggOceanMaps.datapath")}

@@ -3,7 +3,6 @@
 #' @param filepath Character string defining the path to the \code{.gml} file. Must contain the file extension.
 #' @param layer Character string defining the layer containing depth information. If \code{NULL} assumed to be "dybdeareal".
 #' @param verbose Logical indicating whether information the reading process should be returned.
-#' @param output.sf Logical indicating whether an \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or \code{sp} polygon should be returned.
 #' @details You can download the bathymetry polygon shapefiles from \href{https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a}{Geonorge}. Download the file in \code{GLM} format. 
 #' @return An \link[sf:st_polygon]{sf} or \code{sp} object containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sf:st_crs]{CRS}}).
 #' @author Mikko Vihtakari
@@ -12,8 +11,8 @@
 
 # "https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a"
 # add proj.out
-# filepath <- "~/Downloads/Basisdata_21_Svalbard_25833_Dybdedata_GML.gml"; layer = NULL; verbose = TRUE; output.sf = TRUE
-geonorge_bathymetry <- function(filepath, layer = NULL, verbose = FALSE, output.sf = FALSE) {
+# filepath <- "~/Downloads/Basisdata_21_Svalbard_25833_Dybdedata_GML.gml"; layer = NULL; verbose = TRUE
+geonorge_bathymetry <- function(filepath, layer = NULL, verbose = FALSE) {
   
   ## Define the layer
   
@@ -37,16 +36,10 @@ geonorge_bathymetry <- function(filepath, layer = NULL, verbose = FALSE, output.
   x$depth <- factor(x$depth, levels = sort(unique(x$depth)))
   
   ## Return
-  
-  if(output.sf) {
-    return(x)
-  } else {
-    sf::as_Spatial(x)
-  }
-  
+  return(x)
 }
 
-# x <- geonorge_bathymetry("~/Downloads/Basisdata_21_Svalbard_25833_Dybdedata_GML.gml", output.sf = FALSE)
+# x <- geonorge_bathymetry("~/Downloads/Basisdata_21_Svalbard_25833_Dybdedata_GML.gml")
 # bla <- load_map_data(shapefile_list("Svalbard"))
 # 
 # basemap(limits = c(10.9, 12.65, 78.83, 79.12), shapefiles = list(land = bla$svalbard_land, glacier = NULL, bathy = x), bathymetry = TRUE)

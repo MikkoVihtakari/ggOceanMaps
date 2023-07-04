@@ -2,7 +2,7 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-1.3.7**
+2.0.0**
 
 <!-- badges: start -->
 
@@ -12,6 +12,13 @@
 <!-- badges: end -->
 
 <!-- [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml) -->
+
+**Breaking news (pun intended): ggOceanMaps goes
+[sf](https://r-spatial.github.io/sf/)!** Most of ggOceanMaps code has
+been rewritten. There are plenty of new features in 2.0 (see
+[this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.html)),
+but likely also many new bugs. Please [report them
+here](https://github.com/MikkoVihtakari/ggOceanMaps/issues).
 
 ## Overview
 
@@ -39,51 +46,33 @@ The package is available on
 version](https://github.com/MikkoVihtakari/ggOceanMaps), which is
 updated more frequently than the CRAN version.
 
+Installation of the GitHub version:
+
+``` r
+remotes::install_github("MikkoVihtakari/ggOceanMaps")
+```
+
 Installation of the CRAN version:
 
 ``` r
 install.packages("ggOceanMaps")
 ```
 
-Due to the package size limitations, ggOceanMaps requires the
-[ggOceanMapsData](https://github.com/MikkoVihtakari/ggOceanMapsData)
-package which stores shapefiles used in low-resolution maps. If the data
-package does not install automatically, you can install it from GitHub
-using devtools or remotes packages, or a drat repository on Windows and
-Mac:
-
-``` r
-remotes::install_github("MikkoVihtakari/ggOceanMapsData")
-
-# OR:
-
-install.packages(
-  "ggOceanMapsData", 
-  repos = c("https://mikkovihtakari.github.io/drat", 
-            "https://cloud.r-project.org")
-)
-```
-
-The GitHub version of ggOceanMaps can be installed using the
-[**devtools**](https://cran.r-project.org/web/packages/devtools/index.html)
-package.
-
-``` r
-remotes::install_github("MikkoVihtakari/ggOceanMapsData") # required by ggOceanMaps
-remotes::install_github("MikkoVihtakari/ggOceanMaps")
-```
+The new 2.0 version of ggOceanMaps does not require the ggOceanMapsData
+package any longer. Detailed map data are downloaded when needed from
+the [ggOceanMapsLargeData](#data-path) repository.
 
 ## Usage
 
 **ggOceanMaps** extends on
 [**ggplot2**](http://ggplot2.tidyverse.org/reference/). The package uses
-spatial shapefiles, [GIS packages for
+spatial ([**sf**](https://r-spatial.github.io/sf/)) shape- (e.g. vector)
+and ([**stars**](https://r-spatial.github.io/stars/)) raster files,
+[geospatial packages for
 R](https://cran.r-project.org/web/views/Spatial.html) to manipulate, and
-the
-[**ggspatial**](https://cran.r-project.org/web/packages/ggspatial/index.html)
-package to help to plot these shapefiles. The shapefile plotting is
-conducted internally in the `basemap` function and uses [ggplot’s sf
-object plotting
+ggplot2 to plot these data. The vector and raster plotting is conducted
+internally in the `basemap` function, which uses [ggplot’s sf object
+plotting
 capabilities](https://ggplot2.tidyverse.org/reference/ggsf.html). Maps
 are plotted using the `basemap()` or `qmap()` functions that work almost
 similarly to [`ggplot()` as a
@@ -108,7 +97,7 @@ basemap(data = dt, bathymetry = TRUE) +
                color = "red", fill = NA)
 ```
 
-![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
 
 See the [ggOceanMaps
 website](https://mikkovihtakari.github.io/ggOceanMaps/index.html),
@@ -126,7 +115,7 @@ useful.
 While ggOceanMaps allows plotting any custom-made shapefiles, the
 package contains a shortcut to plot higher resolution maps for [certain
 areas needed by the
-author](https://github.com/MikkoVihtakari/ggOceanMapsLargeData/tree/master/data)
+author](https://mikkovihtakari.github.io/ggOceanMaps/articles/premade-maps.html)
 without the need of generating the shapefiles manually. These
 high-resolution shapefiles are downloaded from the
 [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)
@@ -144,8 +133,8 @@ computer by modifying your .Rprofile file
 ```
 
 It is smart to use a directory R has writing access to. For example
-`"~/Documents/ggOceanMapsLargeData"` would work for most operating
-systems.
+`normalizePath("~/Documents/ggOceanMapsLargeData")` would work for most
+operating systems.
 
 You will need to set up the data path to your .Rprofile file only once
 and ggOceanMaps will find the path even though you updated your R or
@@ -172,11 +161,11 @@ from the following sources:
   Shelves datasets combined. Distributed under the [CC Public Domain
   license](https://creativecommons.org/publicdomain/) ([terms of
   use](https://www.naturalearthdata.com/about/terms-of-use/)).
-- **ggOceanMapsData bathymetry.** [Amante, C. and B.W. Eakins, 2009.
-  ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and
-  Analysis. NOAA Technical Memorandum NESDIS NGDC-24. National
-  Geophysical Data Center,
-  NOAA](https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf).
+- **ggOceanMapsData bathymetry.** [NOAA National Centers for
+  Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global
+  Relief Model. NOAA National Centers for Environmental Information.
+  DOI:
+  10.25921/fd45-gt74](https://www.ncei.noaa.gov/products/etopo-global-relief-model).
   Distributed under the [U.S. Government Work
   license](https://www.usa.gov/government-works).
 - **Detailed shapefiles of Svalbard and the Norwegian coast in
@@ -188,7 +177,7 @@ from the following sources:
   [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)**
   are vectorized from the [General Bathymetric Chart of the
   Oceans](https://www.gebco.net/data_and_products/gridded_bathymetry_data/)
-  15-arcsecond 2021 grid. [Terms of
+  15-arcsecond 2023 grid. [Terms of
   use](https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/grid_terms_of_use.html)
 - **Detailed bathymetry of the Northeast Atlantic (EMODned) in
   [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)**
@@ -202,11 +191,10 @@ are published. For up-to-date citation information, please use:
 
 ``` r
 citation("ggOceanMaps")
-#> 
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
-#>   Vihtakari M (2022). _ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'_. R package version 1.3.7,
+#>   Vihtakari M (2023). _ggOceanMaps: Plot Data on Oceanographic Maps
+#>   using 'ggplot2'_. R package version 2.0.0,
 #>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -214,8 +202,8 @@ citation("ggOceanMaps")
 #>   @Manual{,
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
-#>     year = {2022},
-#>     note = {R package version 1.3.7},
+#>     year = {2023},
+#>     note = {R package version 2.0.0},
 #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```
@@ -223,9 +211,12 @@ citation("ggOceanMaps")
 ## Getting help
 
 If your problem does not involve bugs in ggOceanMaps, the quickest way
-of getting help is posting your problem to [Stack
-Overflow](https://stackoverflow.com/questions/tagged/r). Please remember
-to include a reproducible example that illustrates your problem.
+of getting help can be posting your problem to [Stack
+Overflow](https://stackoverflow.com/search?q=ggoceanmaps).
+Alternatively, you are welcome to use the [issues
+section](https://github.com/MikkoVihtakari/ggOceanMaps/issues) on
+GitHub. Please remember to include a reproducible example that
+illustrates your problem and to add links to potential cross-posts.
 
 ## Contributions
 
@@ -238,37 +229,3 @@ include a [minimal reproducible
 example](https://en.wikipedia.org/wiki/Minimal_working_example).
 Considerable contributions to the package development will be credited
 with authorship.
-
-## Debugging installation
-
-After a successful installation, the following code should return a plot
-shown under
-
-``` r
-library(ggOceanMaps)
-basemap(60)
-```
-
-![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->
-
-If the `basemap()` function complains about ggOceanMapsData package not
-being available, the drat repository may have issues (assuming you
-followed the installation instructions above). Try installing the
-ggOceanMapsData package using the devtools/remotes package. The data
-package does not contain any C++ code and should compile easily.
-
-If you encounter problems during the devtools installation, you may set
-the `upgrade` argument to `"never"` and try the following steps:
-
-1.  Manually update all R packages you have installed (Packages -\>
-    Update -\> Select all -\> Install updates in R Studio). If an update
-    of a package fails, try installing that package again using the
-    `install.packages` function or the R Studio menu.
-2.  Run
-    `devtools::install_github("MikkoVihtakari/ggOceanMaps", upgrade = "never")`.
-3.  If the installation of a dependency fails, try installing that
-    package manually and repeat step 2.
-4.  Since R has lately been updated to 4.0, you may have to update your
-    R to the latest major version for all dependencies to work (`stars`,
-    `rgdal` and `sf` have been reported to cause trouble during the
-    installation).

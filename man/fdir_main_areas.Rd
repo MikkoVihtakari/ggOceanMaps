@@ -5,7 +5,7 @@
 \alias{fdir_main_areas}
 \title{Major fisheries areas (hovedomraade) of Norway}
 \format{
-\code{\link[sf:st_sf]{sf object}} in decimal degrees (EPSG:4326) containing major fishing zones defined by the Norwegian Directorate of Fisheries. Contains also Northwest Atlantic Fisheries Organization's divisions where Norwegian vessels tend to fish.
+\code{\link[sf:st_sf]{sf object}} containing major fishing zones defined by the Norwegian Directorate of Fisheries. Contains also Northwest Atlantic Fisheries Organization's divisions where Norwegian vessels tend to fish.
 }
 \source{
 \href{https://open-data-fiskeridirektoratet-fiskeridir.hub.arcgis.com/}{Norwegian Directorate of Fisheries} and \href{https://www.nafo.int/About-us/Maps}{Northwest Atlantic Fisheries Organization}
@@ -17,10 +17,10 @@ fdir_main_areas
 Major fisheries areas (hovedomraade) of Norway
 }
 \examples{
-if(requireNamespace("ggOceanMapsData", quietly = TRUE)) {
+if(requireNamespace("ggspatial")) {
 \donttest{ 
 basemap(fdir_main_areas) + 
-annotation_spatial(fdir_main_areas, fill = NA)
+ggspatial::annotation_spatial(fdir_main_areas, fill = NA)
 }
 }
 }

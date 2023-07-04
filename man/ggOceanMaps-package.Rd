@@ -33,10 +33,11 @@ Useful links:
 
 Other contributors:
 \itemize{
+  \item Roger Bivand [contributor]
+  \item Hadley Wickham [contributor]
   \item Yves Reecht (\href{https://orcid.org/0000-0003-3583-1843}{ORCID}) (Institute of Marine Research) [contributor]
   \item Hadley Wickham [contributor]
   \item Simon O'Hanlon [contributor]
-  \item Roger Bivand [contributor]
 }
 
 }

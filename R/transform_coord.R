@@ -1,5 +1,6 @@
 #' @title Transform spatial coordinates to another projection
 #' @description Transforms spatial coordinates from original projection (decimal degrees assumed) to another projection.
+#' @inheritParams basemap
 #' @param x Data frame to be transformed. Can be omitted if numeric vectors are assigned to \code{lon} and \code{lat}.
 #' @param lon,lat Either a name of the longitude and latitude columns in \code{x} or a numeric vector containing longitude and latitude coordinates. Use \code{NULL} to \link[=guess_coordinate_columns]{guess the longitude and/or latitude columns} in \code{x}.
 #' @param new.names Character vector of length 2 specifying the names of transformed longitude and latitude columns, respectively. Alternatively \code{NULL}, which returns column names from \code{x} or "auto", which uses \code{NULL} if \code{bind = FALSE} and \code{c("lon.proj", "lat.proj")} if \code{bind = TRUE}.
@@ -24,10 +25,9 @@
 #' @export
 
 ## Debug parameters
-# x = NULL; lon = NULL; lat = NULL; new.names = "auto"; proj.in = 4326; proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
-# x = data; bind = TRUE; new.names = "auto"; na = "ignore"
+# lon = NULL; lat = NULL; new.names = "auto";  rotate = FALSE; proj.in = 4326; proj.out = NULL; verbose = FALSE; bind = FALSE; na = "ignore"
 
-transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", proj.in = 4326, proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
+transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto", rotate = FALSE, proj.in = 4326, proj.out = NULL, verbose = FALSE, bind = FALSE, na = "ignore") {
   
   # Checks ----
   
@@ -59,10 +59,8 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   if(is.null(proj.in)) {
     if(is.null(x)) stop("a spatial object as x is required when proj.in = NULL")
     
-    if("sf" %in% class(x)) {
+    if(inherits(x, c("data.frame", "data.table", "sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons", "SpatialPoints", "SpatialPointsDataFrame"))) {
       proj.in <- sf::st_crs(x) 
-    } else if("sp" %in% class(x)) {
-      proj.in <- raster::crs(x)
     } else stop("a spatial object of class sf or sp as x is required when proj.in = NULL")
   }
   
@@ -134,31 +132,55 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   ## Output projection if not defined ---
   
   if(is.null(proj.out)) {
-    limits <- c(range(y[[lon]]), range(y[[lat]]))
-    shapefile.def <- define_shapefiles(limits)
+    # limits <- sf::st_bbox(sf::st_as_sf(y, coords = c(lon, lat), crs = proj.in))[c("xmin", "xmax", "ymin", "ymax")] # does not work for antimeridian
+    # limits <- c(range(y[[lon]]), range(y[[lat]])) # can't do this because lon coordinates won't get ordered correctly
+    # limits <- auto_limits(y)$ddLimits # note: can't do this because auto_limits uses transform_coord()
+    
+    shapefile.def <- define_shapefiles(c(range(y[[lon]]), range(y[[lat]])))
     proj.out <- sf::st_crs(shapefile_list(shapefile.def$shapefile.name)$crs)
+    
+    if(sf::st_is_longlat(proj.in)) {
+      limits <- c(deg_to_dd(range(dd_to_deg(y[[lon]]))), range(y[[lat]]))
+      names(limits) <- c("xmin", "xmax", "ymin", "ymax")
+    } else {
+      limits <- sf::st_bbox(
+        sf::st_transform(
+          sf::st_as_sfc(
+            sf::st_bbox(
+              sf::st_as_sf(y, coords = c(lon, lat), crs = proj.in)
+              )
+            ), 
+          4326)
+      )[c("xmin", "xmax", "ymin", "ymax")]
+    }
   }
   
   ## Fix the CRS
   
   if(!inherits(proj.in, "crs")) {
     error_test <- quiet(try(sf::st_crs(proj.in), silent = TRUE))
-    
+
     if(inherits(error_test, "try-error")) {
       stop("Failed to convert the argument proj.in to sf::st_crs object in the transform_coord function. This is likely a bug. If so, please file a bug report on GitHub.")
     } else {
       proj.in <- error_test
     }
   }
-  
+
   if(!inherits(proj.out, "crs")) {
     error_test <- quiet(try(sf::st_crs(proj.out), silent = TRUE))
-    
+
     if(inherits(error_test, "try-error")) {
       stop("Failed to convert the argument proj.out to sf::st_crs object in the transform_coord function. This is likely a bug. If so, please file a bug report on GitHub.")
     } else {
       proj.out <- error_test
     }
+  }
+
+  ## Rotate
+  
+  if(rotate) {
+    proj.out <- rotate_crs(proj.out, limits[1:2])
   }
   
   ## Coordinate transformation ---
@@ -169,23 +191,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
       c(lon, lat)),
     id = y$id)
   
-  # lon = sample(-30:60, 1e2, replace = TRUE); lat = sample(45:80, 1e2, replace = TRUE); y = data.frame(lon, lat); lon = "lon"; lat = "lat" # <- Debugging code
-  
-  ## sf version
-  # y <- sf::st_as_sf(y, coords = c(lon, lat), 
-  #                   crs = as.integer(gsub("\\D", "", proj.in)))
-  # 
-  # y <- sf::st_coordinates(sf::st_transform(y, proj.out))
-  # 
-  # colnames(y)[colnames(y) == "X"] <- lon
-  # colnames(y)[colnames(y) == "Y"] <- lat
-  
-  ## sp version 
-  # sp::coordinates(y) <- c(lon, lat)
-  # sp::proj4string(y) <- if(class(proj.in) == "CRS") {proj.in} else {sp::CRS(proj.in)}
-  # 
-  # y <- sp::spTransform(y, if(class(proj.out) == "CRS") {proj.out} else {sp::CRS(proj.out)})
-  # y <- data.frame(sp::coordinates(y))
+  # sf::st_transform(sf::st_as_sf(y, coords = c(lon, lat), crs = proj.in), proj.out)
   
   ## ----
   

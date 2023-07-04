@@ -8,7 +8,10 @@ basemap_data(
   limits = NULL,
   data = NULL,
   shapefiles = NULL,
+  crs = NULL,
   bathymetry = FALSE,
+  bathy.type = NULL,
+  downsample = 0,
   glaciers = FALSE,
   lon.interval = NULL,
   lat.interval = NULL,
@@ -20,26 +23,30 @@ basemap_data(
 \arguments{
 \item{limits}{Map limits. One of the following:
 \itemize{
-  \item \strong{numeric vector} of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.
+  \item \strong{numeric vector} of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude, and the fourth element the maximum latitude of the bounding box. Also accepts \code{\link[sf:st_bbox]{sf::st_bbox}} type named vectors with limits in any order. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.
   \item \strong{single integer} between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.
 }
 Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
-\item{data}{A data frame, \link[sp]{SpatialPolygons}, or \link[sf]{sf} shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.}
+\item{data}{A data frame, sp, or \link[sf]{sf} shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produce a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to \link[=guess_coordinate_columns]{guess the correct columns} and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if \code{limits} or \code{shapefiles} are defined.}
 
-\item{shapefiles}{Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} are defined as decimal degrees.}
+\item{shapefiles}{Either a \link[=shapefile_list]{list containing shapefile information} or a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}. This name is partially matched. Can be omitted if \code{limits} or \code{data} is defined as decimal degrees.}
 
-\item{bathymetry}{Logical indicating whether bathymetry should be added to the map.}
+\item{crs}{\link[sf:st_crs]{Coordinate reference system} (CRS) for the map. If \code{NULL} (default), the CRS is selected automatically based on \code{limits}, \code{data}, or \code{shapefiles}. Passed to \code{\link[sf]{st_crs}}. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with \code{rotate}.}
 
-\item{glaciers}{Logical indicating whether glaciers and ice-sheets should be added to the map.}
+\item{bathymetry}{Logical indicating whether bathymetry should be added to the map. Functions together with \code{bathy.style}. See Details.}
+
+\item{downsample}{Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See \code{\link[stars]{geom_stars}}}
+
+\item{glaciers}{Logical indicating whether glaciers and ice sheets should be added to the map.}
 
 \item{lon.interval, lat.interval}{Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.}
 
 \item{expand.factor}{Expansion factor for map limits with the \code{data} argument. Can be used to zoom in and out automatically limited maps. Defaults to 1.1. Set to \code{NULL} to ignore.}
 
-\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit. Experimental.}
+\item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to the mid-longitude limit.}
 
-\item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.}
+\item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as messages. Set to \code{FALSE} to make the function silent.}
 }
 \value{
 A list of class \code{basemapData} containing information required for plotting a \code{\link{basemap}}.

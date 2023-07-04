@@ -1,14 +1,15 @@
 #' @title Define a shapefile to use in plotting from the limits argument
 #' @description An internal function to make \code{\link{basemap}} code more readable
 #' @param limits A numeric vector of length 4: The first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box.
+#' @param force_dd Logical indicating whether the shapefile should be forced to DecimalDegree. Required for transforming dd_* shapefile objects to other projections.
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function.
-#' @return A list containing the correct shapefile and a logical statement whether the limits were supplied as decimal degrees. 
+#' @return A list containing the correct shapefile, a logical statement whether the limits were supplied as decimal degrees and coordinate reference system. 
 #' @keywords internal
 #' @author Mikko Vihtakari
 #' @seealso \code{\link{basemap}}
 #' @export
 
-define_shapefiles <- function(limits) {
+define_shapefiles <- function(limits, force_dd = FALSE) {
 
   if(length(limits) == 1) {
 
@@ -21,6 +22,10 @@ define_shapefiles <- function(limits) {
     } else {
       stop("limits argument has to be between 30 and 89 or -30 and -89 when numeric and length == 1 (polar stereographic maps).")
     }
+    
+    crs <- shapefile_list(shapefiles)$crs
+    if(force_dd) shapefiles <- "DecimalDegree"
+    
   } else if(length(limits) == 4) {
 
     if(is_decimal_limit(limits)) {
@@ -49,12 +54,16 @@ define_shapefiles <- function(limits) {
         shapefiles <- "DecimalDegree"
       }
      
+      crs <- shapefile_list(shapefiles)$crs
+      if(force_dd) shapefiles <- "DecimalDegree"
+      
     } else {
       decLimits <- FALSE
       shapefiles <- NA
+      crs <- NA
     }
 
   }
 
-  list(shapefile.name = shapefiles, decimal.degree.limits = decLimits)
+  list(shapefile.name = shapefiles, decimal.degree.limits = decLimits, crs = crs)
 }

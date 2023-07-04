@@ -1,53 +1,33 @@
 #' @title Automatic limits for basemap
 #' @description Find limits for a \code{\link{basemap}} from a data frame.
-#' @param data Data frame containing data for which the limits should be calculated.
+#' @param data Data frame or a spatial object containing data for which the limits should be calculated.
 #' @param proj.in Original \code{\link[sf:st_crs]{CRS}} projection. Must be defined as character argument.
 #' @param proj.out Resulting map projection. See \code{\link{transform_coord}}.
 #' @param lon,lat Names of longitude and latitude columns in \code{data} as character or integer index. If \code{NULL}, the column names are \link[=guess_coordinate_columns]{guessed}.
 #' @param expand.factor Expansion factor for map limits. Set to \code{NULL} to ignore.
 #' @param rotate Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.
 #' @param verbose Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.
-#' @param output.sf Logical indicating whether an \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or \code{sp} (\code{FALSE}) polygon should be returned.
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function.
 #' @return A list of limits and projections in \code{proj.in} and \code{proj.out} formats.
 #' @keywords internal
 #' @author Mikko Vihtakari
 #' @family customize shapefiles
 #' @examples
-#' if(requireNamespace("ggOceanMapsData")) {
 #' auto_limits(data = expand.grid(lon = c(-120, 180, 120),
 #'    lat = c(60, 60, 80)))
-#' }
 #' @export
 
-# data = expand.grid(lon = c(-120, 180, 120), lat = c(60, 60, 80)); lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; expand.factor = NULL; verbose = FALSE; output.sf = FALSE
-auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out = NULL, expand.factor = NULL, verbose = FALSE, output.sf = FALSE) {
+# lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; expand.factor = NULL; verbose = FALSE
+auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out = NULL, expand.factor = NULL, verbose = FALSE) {
   
-  # Get limits from spatial polygons ####
+  # Get coordinates from spatial objects
   
-  if(any(inherits(data, c("SpatialPolygonsDataFrame", "SpatialPolygons")))) {
-    proj.in <- raster::crs(data)
-    
-    # if(!sf::st_is_longlat(proj.in)) {
-    #   data <- sp::spTransform(data, sp::CRS(convert_crs(4326)))
-    #   proj.in <- convert_crs(4326)
-    #   message("The data argument is a spatial polygons object, which is not given as decimal degrees. Converted to decimal degrees.")
-    # }
-    
-    data <- suppressMessages(ggplot2::fortify(data)[c("long", "lat")])
-    names(data) <- c("lon", "lat")
-  }
-  
-  # Get limits from sf objects
-  
-  if(any(inherits(data, "sf"))) {
-    proj.in <- sf::st_crs(data)
-   
-    tmp <- sf::st_bbox(data)
+  if(any(inherits(data, c("sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons")))) {
+    tmp <- sf::st_bbox(sf::st_transform(sf::st_as_sfc(sf::st_bbox(data)), proj.in))
     
     data <- expand.grid(data.frame(
-      lon = tmp[c(1,3)],
-      lat = tmp[c(2,4)])
+      lon = tmp[c("xmin", "xmax")],
+      lat = tmp[c("ymin", "ymax")])
     )
   }
   
@@ -125,18 +105,15 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out =
     
   }
   
+  projLims <- stats::setNames(projLims, c("xmin", "xmax", "ymin", "ymax"))
+  
   # Projected boundaries
   
+  projBound <- sf::st_polygon(
+    list(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4], projLims[2], 
+                  projLims[4], projLims[2], projLims[3], projLims[1], projLims[3]), 
+                ncol = 2, byrow = TRUE)))
   
-  ## Old sp way, to be removed when the sf way is tested
-  # projBound <- sp::Polygon(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4], projLims[2], projLims[4], projLims[2], projLims[3], projLims[1], projLims[3]), ncol = 2, byrow = TRUE))
-  # projBound <- sp::SpatialPolygons(list(sp::Polygons(list(projBound), ID = "clip_boundary")),
-  #                                   proj4string = if(class(proj.crs) == "CRS") {proj.crs} else {sp::CRS(proj.crs)})
-  # tmp <- as.data.frame(t(sp::bbox(projBound)))
-  # projBoundNodes <- sp::SpatialPoints(expand.grid(lon = tmp$x, lat = tmp$y), 
-  #                                     proj4string = if(class(proj.crs) == "CRS") {proj.crs} else {sp::CRS(convert_crs(proj.crs))})
-  
-  projBound <- sf::st_polygon(list(matrix(c(projLims[1], projLims[3], projLims[1], projLims[4], projLims[2], projLims[4], projLims[2], projLims[3], projLims[1], projLims[3]), ncol = 2, byrow = TRUE)))
   projBound <- sf::st_sfc(projBound, crs = sf::st_crs(proj.crs))
   
   tmp <- sf::st_bbox(projBound)
@@ -148,20 +125,18 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out =
   
   decBoundNodes <- sf::st_transform(projBoundNodes, 4326)
   
-  # decBoundNodes <- sp::spTransform(projBoundNodes, sp::CRS(convert_crs(4326))) # proj.in
-  
   if(!identical(sign(projLims[3]), sign(projLims[4]))) { # Spans across the pole
-    decLims <- unname(sf::st_bbox(decBoundNodes)[c(1,3,2,4)]) # old: c(raster::extent(decBoundNodes)[1:3], 90)
+    decLims <- c(unname(sf::st_bbox(decBoundNodes)[c(1,3,2)]), 90) # old: c(raster::extent(decBoundNodes)[1:3], 90)
     decLims <- c(decLims[1:3], sign(decLims[4]) * 90)
   } else if(sign(decLims[1]) != sign(decLims[2]) & decLims[1] < decLims[2]) { # Antimeridian correction
     decLims <-  unname(sf::st_bbox(decBoundNodes)[c(1,3,2,4)]) # old: c(raster::extent(decBoundNodes)[1:4])
   }
   
+  names(decLims) <- c("xmin", "xmax", "ymin", "ymax")
+  
   # Return
   
-  if(output.sf) {
-    list(ddLimits = decLims, projLimits = projLims, projBound = projBound, proj.in = attributes(x)$proj.in, proj.out = proj.out)
-  } else {
-    list(ddLimits = decLims, projLimits = projLims, projBound = sf::as_Spatial(projBound), proj.in = attributes(x)$proj.in, proj.out = proj.out)
-  }
+  list(ddLimits = decLims, projLimits = projLims, projBound = projBound, 
+       proj.in = attributes(x)$proj.in, proj.out = proj.out)
+  
 }

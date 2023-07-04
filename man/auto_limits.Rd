@@ -11,12 +11,11 @@ auto_limits(
   proj.in = 4326,
   proj.out = NULL,
   expand.factor = NULL,
-  verbose = FALSE,
-  output.sf = FALSE
+  verbose = FALSE
 )
 }
 \arguments{
-\item{data}{Data frame containing data for which the limits should be calculated.}
+\item{data}{Data frame or a spatial object containing data for which the limits should be calculated.}
 
 \item{lon, lat}{Names of longitude and latitude columns in \code{data} as character or integer index. If \code{NULL}, the column names are \link[=guess_coordinate_columns]{guessed}.}
 
@@ -27,8 +26,6 @@ auto_limits(
 \item{expand.factor}{Expansion factor for map limits. Set to \code{NULL} to ignore.}
 
 \item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.}
-
-\item{output.sf}{Logical indicating whether an \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or \code{sp} (\code{FALSE}) polygon should be returned.}
 
 \item{rotate}{Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.}
 }
@@ -42,10 +39,8 @@ Find limits for a \code{\link{basemap}} from a data frame.
 This is an internal function, which is automatically run by the \code{\link{basemap}} function.
 }
 \examples{
-if(requireNamespace("ggOceanMapsData")) {
 auto_limits(data = expand.grid(lon = c(-120, 180, 120),
    lat = c(60, 60, 80)))
-}
 }
 \seealso{
 Other customize shapefiles: 

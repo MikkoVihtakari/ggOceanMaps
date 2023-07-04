@@ -12,7 +12,7 @@ theme_map <- function(..., grid.col, grid.size) {
     theme_bw(...) %+replace%
       theme(panel.background = element_blank(),
       panel.border = element_rect(fill = NA, colour = "black", size = 0.2),
-      panel.grid = element_line(colour = grid.col, size = grid.size),
+      panel.grid = element_line(colour = grid.col, linewidth = grid.size),
       plot.background = element_blank(),
       axis.ticks.x = element_line(colour = "black", size = 0.2),
       axis.ticks.y = element_line(colour = "black", size = 0.2),

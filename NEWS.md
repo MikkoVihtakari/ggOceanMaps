@@ -1,11 +1,17 @@
-# ggOceanMaps 1.4 (development version)
+# ggOceanMaps 2.0 
 
+* Full [sf](https://r-spatial.github.io/sf/) integration. Old GIS packages for R and ggspatial dependencies removed. Since this change required rewriting of most functions, new bugs have almost certainly been introduced.
+* Bathymetry system redesigned (see [this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.html))
+* Decimal degree maps can now be plotted across the antimeridian.
+* Added spatial data to ggOceanMaps making the ggOceanMapsData package not needed any longer.
+* `dist2land()` now uses great circle distances on a spherical Earth ([s2](https://r-spatial.github.io/s2/)) by default and should be able to calculate distances to land anywhere around the globe.
+* qmap points turned red. Addressed a long-standing issue with `shapefiles` and `shape` getting mixed. 
 * Fixed a bug with shapefiles argument shortcut.
 * Fixed a bug in ices_data
-* Add sf support for clip_shapefile
-* Add sf support for shapefiles (converts to sp, needs to be refined)
-* Fix a bug with expanded limits in decimal degree projection
-* Fix a bug where shapefile_list("all") would retunr multiple rows per shapefile name.
+* Added sf support for clip_shapefile
+* Added sf support for shapefiles (converts to sp, needs to be refined)
+* Fixed a bug with expanded limits in decimal degree projection
+* Fixed a bug where shapefile_list("all") would return multiple rows per shapefile name.
 
 # ggOceanMaps 1.3.4
 
