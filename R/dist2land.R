@@ -119,6 +119,7 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = "DecimalDegree",
   if(binary) { ## Binary positions
     
     if(verbose) message("Calculating binary positions...")
+
     tmp <- is.na(as.integer(suppressMessages(sf::st_intersects(x, land))))
     if(verbose) message("Returning binary positions: TRUE in the ocean, FALSE on land.")
     
@@ -131,6 +132,7 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = "DecimalDegree",
       if(verbose) message("Returning great circle spherical distances from land as kilometers.")
     } else {
       if(verbose) message("Returning Euclidean distances from land as kilometers.")
+
     }
   }
 
