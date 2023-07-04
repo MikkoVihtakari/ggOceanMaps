@@ -27,9 +27,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6>
-    <a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a>
-    <a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a>
+    <h6 class="dropdown-header" data-toc-skip>News</h6>
+    <a class="dropdown-item" href="../articles/new-features.html">New features in version 2.0</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Presentations</h6>
     <a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a>
@@ -73,7 +72,7 @@
 <span>  simplify <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  tol <span class="op">=</span> <span class="fl">60</span>,</span>
 <span>  return.boundary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  output.sf <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  extra.validate <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -103,15 +102,15 @@
 <dd><p>Logical. If <code>TRUE</code> returns the clip boundary together with the shapefile.</p></dd>
 
 
-<dt>output.sf</dt>
-<dd><p>Logical indicating return the results in <code><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">sf</a></code> (<code>TRUE</code>) or sp (<code>FALSE</code>) format.</p></dd>
+<dt>extra.validate</dt>
+<dd><p>Logical indicating whether <code>x</code> should be run through extra validation. Slows down the function but is necessary in some cases involving anti-meridian.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Clipped spatial object. The class is depending on the <code>output.sf</code> argument. If <code>return.boundary = TRUE</code>, a list containing the shapefile together with the clip boundary.</p>
+<p>Clipped spatial object. If <code>return.boundary = TRUE</code>, a list containing the shapefile together with the clip boundary.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -126,7 +125,7 @@
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
-    <p>Mikko Vihtakari with a solution from <a href="https://stackoverflow.com/questions/15881455/how-to-clip-worldmap-with-polygon-in-r" class="external-link">Simon O'Hanlon, Roger Bivand/SO community</a></p>
+    <p>Mikko Vihtakari</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

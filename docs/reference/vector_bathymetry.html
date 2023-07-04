@@ -27,9 +27,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6>
-    <a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a>
-    <a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a>
+    <h6 class="dropdown-header" data-toc-skip>News</h6>
+    <a class="dropdown-item" href="../articles/new-features.html">New features in version 2.0</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Presentations</h6>
     <a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a>
@@ -70,8 +69,7 @@
 <span>  <span class="va">bathy</span>,</span>
 <span>  drop.crumbs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  remove.holes <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  smooth <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  output.sf <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  smooth <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -92,16 +90,12 @@
 <dt>smooth</dt>
 <dd><p>Logical indicating whether the pixelated contours should be smoothed. Uses the <a href="https://strimas.com/smoothr/reference/smooth_ksmooth.html" class="external-link">smooth_ksmooth</a> function.</p></dd>
 
-
-<dt>output.sf</dt>
-<dd><p>Logical indicating whether an <code><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">sf</a></code> (<code>TRUE</code>) or <code>sp</code> (<code>FALSE</code>) polygon should be returned.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>An <a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">sf</a> or <code>sp</code> object containing the depth polygons. Uses same projection than <code>bathy</code> (see <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">CRS</a></code>).</p>
+<p>An <a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">sf</a> object containing the depth polygons. Uses same projection than <code>bathy</code> (see <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">CRS</a></code>).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

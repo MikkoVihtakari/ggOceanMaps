@@ -30,10 +30,6 @@
     <h6 class="dropdown-header" data-toc-skip>News</h6>
     <a class="dropdown-item" href="../articles/new-features.html">New features in version 2.0</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6>
-    <a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a>
-    <a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a>
-    <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Presentations</h6>
     <a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a>
     <a class="external-link dropdown-item" href="https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html">AeN workshop slides</a>
@@ -82,8 +78,8 @@
 <span>  legend.position <span class="op">=</span> <span class="st">"right"</span>,</span>
 <span>  lon.interval <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lat.interval <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  bathy.style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ggOceanMaps.bathy.style"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ggOceanMaps.bathy.style"</span><span class="op">)</span>, <span class="st">"raster_binned_blues"</span><span class="op">)</span>,</span>
+<span>  bathy.style <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  downsample <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  bathy.border.col <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  bathy.size <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  bathy.alpha <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -109,33 +105,33 @@
 
 
 <dt>limits</dt>
-<dd><p>Map limits. One of the following:</p><ul><li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
+<dd><p>Map limits. One of the following:</p><ul><li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude, and the fourth element the maximum latitude of the bounding box. Also accepts <code><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">sf::st_bbox</a></code> type named vectors with limits in any order. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
 <li><p><strong>single integer</strong> between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.</p></li>
 </ul><p>Can be omitted if <code>data</code> or <code>shapefiles</code> are defined.</p></dd>
 
 
 <dt>data</dt>
-<dd><p>A data frame, sp, or <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a> shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to <a href="guess_coordinate_columns.html">guess the correct columns</a> and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if <code>limits</code> or <code>shapefiles</code> are defined.</p></dd>
+<dd><p>A data frame, sp, or <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a> shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produce a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to <a href="guess_coordinate_columns.html">guess the correct columns</a> and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if <code>limits</code> or <code>shapefiles</code> are defined.</p></dd>
 
 
 <dt>shapefiles</dt>
-<dd><p>Either a <a href="shapefile_list.html">list containing shapefile information</a> or a character argument referring to a name of pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code>. This name is partially matched. Can be omitted if <code>limits</code> or <code>data</code> are defined as decimal degrees.</p></dd>
+<dd><p>Either a <a href="shapefile_list.html">list containing shapefile information</a> or a character argument referring to a name of pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code>. This name is partially matched. Can be omitted if <code>limits</code> or <code>data</code> is defined as decimal degrees.</p></dd>
 
 
 <dt>crs</dt>
-<dd><p><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">Coordinate reference system</a> (CRS) for the map. If <code>NULL</code> (default), the CRS is selected automatically based on <code>limits</code>, <code>data</code> or <code>shapefiles</code>. Passed to <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></code>. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with <code>rotate</code>.</p></dd>
+<dd><p><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">Coordinate reference system</a> (CRS) for the map. If <code>NULL</code> (default), the CRS is selected automatically based on <code>limits</code>, <code>data</code>, or <code>shapefiles</code>. Passed to <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></code>. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with <code>rotate</code>.</p></dd>
 
 
 <dt>bathymetry</dt>
-<dd><p>Logical indicating whether bathymetry should be added to the map.</p></dd>
+<dd><p>Logical indicating whether bathymetry should be added to the map. Functions together with <code>bathy.style</code>. See Details.</p></dd>
 
 
 <dt>glaciers</dt>
-<dd><p>Logical indicating whether glaciers and ice-sheets should be added to the map.</p></dd>
+<dd><p>Logical indicating whether glaciers and ice sheets should be added to the map.</p></dd>
 
 
 <dt>rotate</dt>
-<dd><p>Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit.</p></dd>
+<dd><p>Logical indicating whether the projected maps should be rotated to point towards the pole relative to the mid-longitude limit.</p></dd>
 
 
 <dt>legends</dt>
@@ -151,21 +147,19 @@
 
 
 <dt>bathy.style</dt>
-<dd><p>Character defining the bathymetry style. Partially matched and can be abbreviated. Alternatives:</p><ul><li><p><code>"raster_binned_blues"</code> or <code>"rbb"</code> (default) plots binned raster bathymetry filled with different shades of blue. Does not require a download.</p></li>
-<li><p><code>"raster_continuous_blues"</code> or <code>"rcb"</code> plots continuous raster bathymetry filled with different shades of blue. More detailed and visually more appealing than the binned bathymetry. Recommended. Requires a download.</p></li>
-<li><p><code>"poly_blues"</code> or <code>"pb"</code> plots polygon bathymetry filled with different shades of blue. Default in the versions older than 2.0 of ggOceanMaps. Requires a download.</p></li>
-<li><p><code>"poly_greys"</code> or <code>"pg"</code> plots polygon bathymetry filled with different shades of gray. Requires a download.</p></li>
-<li><p><code>"contour_blues"</code> or <code>"cb"</code> contour lines with different shades of blue. Requires a download.</p></li>
-<li><p><code>"contour_grey"</code> or <code>"cg"</code> plots gray contour lines. Requires a download.</p></li>
-</ul></dd>
+<dd><p>Character (plots bathymetry; list of alternatives in Details) or <code>NULL</code> ("raster_binned_blues" if <code>bathymetry = TRUE</code>) defining the bathymetry style. Partially matched, can be abbreviated, and used to control bathymetry plotting together with <code>bathymetry</code>. See Details.</p></dd>
+
+
+<dt>downsample</dt>
+<dd><p>Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See <code><a href="https://r-spatial.github.io/stars/reference/geom_stars.html" class="external-link">geom_stars</a></code></p></dd>
 
 
 <dt>bathy.alpha</dt>
-<dd><p>Transparency parameter for bathymetry fill color. See <a href="https://ggplot2.tidyverse.org/reference/scale_alpha.html" class="external-link">scale_alpha</a>.</p></dd>
+<dd><p>Transparency parameter for the bathymetry fill color. See <a href="https://ggplot2.tidyverse.org/reference/scale_alpha.html" class="external-link">scale_alpha</a>.</p></dd>
 
 
 <dt>land.col, gla.col, grid.col</dt>
-<dd><p>Character code specifying the color of land, glaciers and grid lines, respectively. Use <code>NA</code> to remove the grid lines.</p></dd>
+<dd><p>Character code specifying the color of land, glaciers, and grid lines, respectively. Use <code>NA</code> to remove the grid lines.</p></dd>
 
 
 <dt>land.border.col, gla.border.col, bathy.border.col</dt>
@@ -189,7 +183,7 @@
 
 
 <dt>verbose</dt>
-<dd><p>Logical indicating whether information about the projection and guessed column names should be returned as message. Set to <code>FALSE</code> to make the function silent.</p></dd>
+<dd><p>Logical indicating whether information about the projection and guessed column names should be returned as messages. Set to <code>FALSE</code> to make the function silent.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -200,26 +194,41 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The function uses <a href="https://ggplot2.tidyverse.org/reference/ggplot2-package.html" class="external-link">ggplot2</a>, <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a>, and shapefiles to plot maps of the world's oceans.</p>
+    <p>The function uses <a href="https://ggplot2.tidyverse.org/reference/ggplot2-package.html" class="external-link">ggplot2</a>, <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a>, <a href="https://r-spatial.github.io/stars/reference/st_as_stars.html" class="external-link">stars</a> and spatial files to plot maps of the world's oceans.</p>
+<p><strong>Limits</strong></p>
+<p>If the limits are in decimal degrees, the longitude limits (<code>[1:2]</code>) specify the start and end segments of corresponding angular lines that should reside inside the map area. The longitude limits are defined <strong>counter-clockwise</strong>. The latitude limits <code>[3:4]</code> define the parallels that should reside inside the limited region given the longitude segments. Note that the actual limited region becomes wider than the polygon defined by the coordinates (shown in Examples). Using <code>data</code> to limit the map expands the map all around the data points to make them fit into the map. If the limits are given as projected coordinates or as decimal degrees for maps with -60 &lt; latitude &lt; 60, limit elements represent lines encompassing the map area in cartesian space.</p>
 <p><strong>Projections</strong></p>
 <p>If the <code>shapefiles</code> are not specified, the function uses either the <code>limits</code> or <code>data</code> arguments to decide which projection to use. Up-to-date conditions are defined in <code><a href="define_shapefiles.html">define_shapefiles</a></code> and <code><a href="shapefile_list.html">shapefile_list</a></code> functions. At the time of writing, the function uses three different projections (given as <a href="https://epsg.io/" class="external-link">EPSG codes</a>)</p><ul><li><p><strong>3995</strong> WGS 84 / Arctic Polar Stereographic. Called "ArcticStereographic". For max latitude (<code>limits[4]</code>) &gt;= 60 (if min latitude (<code>limits[3]</code>) &gt;= 30), and single integer latitudes &gt;= 30 and &lt;= 89.</p></li>
 <li><p><strong>3031</strong> WGS 84 / Antarctic Polar Stereographic. Called "AntarcticStereographic". For max latitude (<code>limits[4]</code>) &lt;= -60 (if min latitude (<code>limits[3]</code>) &lt;= -30), and single integer latitudes &lt;= -30 and &gt;= -89.</p></li>
 <li><p><strong>4326</strong> WGS 84 / World Geodetic System 1984, used in GPS. Called "DecimalDegree". For min latitude (<code>limits[3]</code>) &lt; 30 or &gt; -30, max latitude (<code>limits[4]</code>) &lt; 60 or &gt; -60, and single integer latitudes &lt; 30 and &gt; -30.</p></li>
-</ul><p><strong>Limits</strong></p>
-<p>If the limits are in decimal degrees, the longitude limits (<code>[1:2]</code>) specify the start and end segments of corresponding angular lines that should reside inside the map area. The longitude limits are defined <strong>counter-clockwise</strong>. The latitude limits <code>[3:4]</code> define the parallels that should reside inside the limited region given the longitude segments. Note that the actual limited region becomes wider than the polygon defined by the coordinates (shown in Examples). Using <code>data</code> to limit the map expands the map all around the data points to make them fit into the map. If the limits are given as projected coordinates or as decimal degrees for maps with -60 &lt; latitude &lt; 60, limits elements represent lines encompassing the map area in cartesian space.</p>
+</ul><p>The <code>rotate</code> argument changes the pre-defined projection such that mid-longitude point in the map points northward.</p>
+<p>The <code>crs</code> argument can be used to define the projection, which can be useful when plotting, for instance, model data that are difficult to transform into another projection.</p>
+<p><strong>Bathymetry</strong></p>
+<p>Bathymetry can be plotted by simply specifying <code>bathymetry = TRUE</code> or <code>bathy.style</code> (you won't need to specify both any longer). The former uses a low-resolution raster file shipped with ggOceanMaps. The package contains an option to plot higher resolution bathymetries than the default binned blue alternative (<code>bathy.style = "raster_binned_blues"</code>). These bathymetries can be accessed by specifying the <code>bathy.style</code> argument and require a download from <a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData" class="external-link">ggOceanMapsLargeData</a> or other online repositories. The <code>bathy.style</code> character argument consists of three parts separated by a <code>_</code>. The first part gives the type: raster, poly(gon), or contour. The two latter ones use vector data. The second part gives the resolution: binned, continuous or user. The continuous and user options cannot be used for vector data. The user option accepts any raster file that can be opened using <a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a>. The path to the file has to be stored in <code>ggOceanMaps.userpath</code> <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> (e.g. <code>options(ggOceanMaps.userpath = "PATH_TO_THE_FILE")</code>) (you can set this in .Rprofile to avoid having to type it every time). The last part defines the color: blues or grays. These options can be abbreviated by specifying the first letter of each part. Gray contour lines are an exception to the rule above and can be plotted using <code>bathy.style = "contour_gray"</code>. Future versions may contain a combination of raster and gray contours, but these have not been implemented yet. Currently implemented <code>bathy.style</code> alternatives are:</p><ul><li><p><code>NULL</code> (<strong>default</strong>). Bathymetry style is searched from <code>getOption("ggOceanMaps.bathy.style")</code>. If not found, <code>"raster_binned_blues"</code> is used.</p></li>
+<li><p><code>"raster_binned_blues"</code> or <code>"rbb"</code> plots binned raster bathymetry filled with different shades of blue. Does not require a download.</p></li>
+<li><p><code>"raster_binned_grays"</code> or <code>"rbg"</code> the same than above but uses different shades of gray.</p></li>
+<li><p><code>"raster_continuous_blues"</code> or <code>"rcb"</code> plots continuous raster bathymetry filled with different shades of blue. More detailed and visually more appealing than the binned bathymetry. Recommended. Requires a download.</p></li>
+<li><p><code>"raster_continuous_grays"</code> or <code>"rcg"</code> the same than above but uses different shades of gray.</p></li>
+<li><p><code>"raster_user_blues"</code> or <code>"rub"</code> plots continuous raster bathymetry filled with different shades of blue from <code>getOption("ggOceanMaps.user.path")</code>. Any file supported by <a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a> should work. The file has to be placed into the location specified by the path. Experimental feature. Has been tested using <a href="https://www.ncei.noaa.gov/products/etopo-global-relief-model" class="external-link">ETOPO 60 arc-second</a> and <a href="https://www.gebco.net/data_and_products/gridded_bathymetry_data/" class="external-link">GEBCO 15 arc-second</a> grids. Please report any bugs you find.</p></li>
+<li><p><code>"raster_user_grays"</code> or <code>"rug"</code> the same than above but uses different shades of gray.</p></li>
+<li><p><code>"poly_binned_blues"</code>, <code>"poly_blues"</code>, <code>"pbb"</code> or <code>"pb"</code> plots polygon bathymetry filled with different shades of blue. Default in the versions older than 2.0 of ggOceanMaps. Requires a download.</p></li>
+<li><p><code>"poly_binned_grays"</code>, <code>"poly_grays"</code>, <code>"pbg"</code> or <code>"pg"</code> same than above but uses different shades of gray.</p></li>
+<li><p><code>"contour_binned_blues"</code>, <code>"contour_blues"</code>, <code>"cbb"</code> or <code>"cb"</code> contour lines with different shades of blue. Requires a download.</p></li>
+<li><p><code>"contour_gray"</code>, <code>"contour_gray"</code> or <code>"cg"</code> plots gray contour lines. Requires a download.</p></li>
+</ul><p>The default can be changed by setting the <code>ggOceanMaps.bathy.style</code> option. <code>options(ggOceanMaps.bathy.style = "poly_blues")</code> would make the style similar to older pre-2.0 versions of ggOceanMaps.</p>
 <p><strong>Pre-made shapefiles</strong></p>
-<p>If the limits are not defined as decimal degrees (any longitude outside range [-180, 180] or latitude [-90, 90]), the function will ask to specify <code>shapefiles</code>. The <code>shapefiles</code> can be defined by partially matching the names of the pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code> (e.g. "Ar" would be enough for "ArcticStereographic") or by specifying custom shapefiles.</p>
+<p>If the limits are not defined as decimal degrees (any longitude outside the range [-180, 180] or latitude [-90, 90]), the function will ask to specify <code>shapefiles</code>. The <code>shapefiles</code> can be defined by partially matching the names of the pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code> (e.g. "Ar" would be enough for "ArcticStereographic") or by specifying custom shapefiles.</p>
 <p><strong>Custom shapefiles</strong></p>
-<p>Custom shapefiles have to be a named list containing at least following elements:</p><ul><li><p><strong>land</strong> Object name of the <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">spatial polygon</a> containing land. Required.</p></li>
+<p>Custom shapefiles have to be a named list containing at least the following elements:</p><ul><li><p><strong>land</strong> Object name of the <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">spatial polygon</a> containing land. Required.</p></li>
 <li><p><strong>glacier</strong> Object name of the <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">spatial polygon</a> containing glaciers. Not required if glaciers are not needed.</p></li>
-<li><p><strong>bathy</strong> Object name of the <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">spatial polygon</a> containing bathymetry contours. Not required if bathymetry is not needed.</p></li>
+<li><p><strong>bathy</strong> Object name of the <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">spatial polygon</a> or <a href="https://r-spatial.github.io/stars/reference/st_as_stars.html" class="external-link">raster</a> containing bathymetry data. Not required if bathymetry is not needed.</p></li>
 </ul><p>See Examples.</p>
 <p><strong>Line width and font size</strong></p> 
-<p>The line size aesthetics in <a href="https://ggplot2.tidyverse.org/reference/ggplot2-package.html" class="external-link">ggplot2</a> generates approximately 2.13 wider lines measured in pt than the given values. If you want a specific line width in pt, use the internal function <code><a href="LS.html">LS</a></code> to convert the desired line width to ggplot2 equivalent. A similar function is also available for font sizes (<code><a href="FS.html">FS</a></code>).</p>
+<p>The line size aesthetics in <a href="https://ggplot2.tidyverse.org/reference/ggplot2-package.html" class="external-link">ggplot2</a> generates approximately 2.13 wider lines measured in pt than the given values. If you want a specific line width in pt, use the internal function <code><a href="LS.html">LS</a></code> to convert the desired line width to the ggplot2 equivalent. A similar function is also available for font sizes (<code><a href="FS.html">FS</a></code>).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Note that if you use this function to generate maps for a publication, it is advised to cite the underlying data. The spatial data used by this function have been acquired from following sources:</p><ul><li><p><strong>Land polygons.</strong> <a href="https://www.naturalearthdata.com/downloads/10m-physical-vectors/" class="external-link">Natural Earth Data</a> 1:10m Physical Vectors with the Land and Minor Island datasets combined. Distributed under the <a href="https://creativecommons.org/publicdomain/" class="external-link">CC Public Domain license</a> (<a href="https://www.naturalearthdata.com/about/terms-of-use/" class="external-link">terms of use</a>).</p></li>
+    <p>Note that if you use this function to generate maps for a publication, it is advised to cite the underlying data. The spatial data used by this function have been acquired from the following sources:</p><ul><li><p><strong>Land polygons.</strong> <a href="https://www.naturalearthdata.com/downloads/10m-physical-vectors/" class="external-link">Natural Earth Data</a> 1:10m Physical Vectors with the Land and Minor Island datasets combined. Distributed under the <a href="https://creativecommons.org/publicdomain/" class="external-link">CC Public Domain license</a> (<a href="https://www.naturalearthdata.com/about/terms-of-use/" class="external-link">terms of use</a>).</p></li>
 <li><p><strong>Glacier polygons.</strong> <a href="https://www.naturalearthdata.com/downloads/10m-physical-vectors/" class="external-link">Natural Earth Data</a> 1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice Shelves datasets combined. Distributed under the <a href="https://creativecommons.org/publicdomain/" class="external-link">CC Public Domain license</a> (<a href="https://www.naturalearthdata.com/about/terms-of-use/" class="external-link">terms of use</a>)</p></li>
 <li><p><strong>Bathymetry.</strong> <a href="https://www.ncei.noaa.gov/products/etopo-global-relief-model" class="external-link">NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. NOAA National Centers for Environmental Information.</a> <a href="https://doi.org/10.25921/fd45-gt74" class="external-link">doi:10.25921/fd45-gt74</a>
 . Distributed under the <a href="https://www.usa.gov/government-works" class="external-link">U.S. Government Work license</a>.</p></li>
@@ -326,6 +335,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># grid.col = NA removes grid lines, rotate = TRUE rotates northwards: </span></span></span>
 <span class="r-in"><span><span class="fu">basemap</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">140</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>, grid.col <span class="op">=</span> <span class="cn">NA</span>, rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>only first part of geometrycollection is retained</span>
 <span class="r-plt img"><img src="basemap-9.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Rename axis labels</span></span></span>

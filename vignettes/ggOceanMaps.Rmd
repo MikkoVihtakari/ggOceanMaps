@@ -387,8 +387,6 @@ basemap(limits = c(-20, 15, 50, 70), grid.col = "red", grid.size = 1) +
 Sometimes there is a need to control the position of graticules in between layers. At the time of writing, ggplot does not offer a straightforward way to do this, but we can use the code from [`ggplot2::coord_sf()`](https://github.com/tidyverse/ggplot2/blob/7571122f6a9455ccce9f8ceb9a2196c0a70be646/R/coord-sf.R#L226) to make the graticules:
 
 ```{r}
-data(ices_areas, package = "ggOceanMapsData")
-
 p <- basemap(limits = c(-20, 15, 50, 70), grid.col = NA) + # without graticules 
   geom_sf(data = ices_areas, aes(fill = SubArea), show.legend = FALSE) 
 
@@ -638,13 +636,13 @@ data(bs_shapes, package = "ggOceanMapsData")
 ```
 
 ```{r}
-basemap(shapefiles = list(land = bs_land, glacier = bs_glacier, bathy = bs_bathy), bathymetry = TRUE, glaciers = TRUE)
+basemap(shapefiles = list(land = bs_land, glacier = bs_glacier, bathy = bs_bathy), bathy.style = "poly_blues", glaciers = TRUE)
 ```
 
 The list elements `land`, `glacier` and `bathy` are required, but `glacier` and `bathy` can be set to `NULL` if `bathymetry` and `glaciers` are set to `FALSE`, respectively. This means that you are not forced to define bathymetries and glaciers for your custom shapefile maps if plotting them is not desired. Note how the map becomes plotted outside its actual limits. This issue will hopefully be fixed in the future. The map can be limited using the `limits` or `data` arguments as any `basemap`:
 
 ```{r}
-basemap(limits = c(10, 53, 70, 80), shapefiles = list(land = bs_land, glacier = bs_glacier, bathy = bs_bathy), bathymetry = TRUE, glaciers = TRUE)
+basemap(limits = c(10, 53, 70, 80), shapefiles = list(land = bs_land, glacier = bs_glacier, bathy = bs_bathy), bathy.style = "poly_blues", glaciers = TRUE)
 ```
 
 # Known issues

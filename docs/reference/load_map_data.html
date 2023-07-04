@@ -27,9 +27,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6>
-    <a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a>
-    <a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a>
+    <h6 class="dropdown-header" data-toc-skip>News</h6>
+    <a class="dropdown-item" href="../articles/new-features.html">New features in version 2.0</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Presentations</h6>
     <a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a>
@@ -66,7 +65,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_map_data</span><span class="op">(</span><span class="va">x</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_map_data</span><span class="op">(</span><span class="va">x</span>, force <span class="op">=</span> <span class="cn">FALSE</span>, downsample <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -77,6 +76,10 @@
 
 <dt>force</dt>
 <dd><p>Logical indicating whether to download the file even though it exists. Useful when files in the <a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData" class="external-link">Github repository have been changed</a>. Overwrites the old file.</p></dd>
+
+
+<dt>downsample</dt>
+<dd><p>Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See <code><a href="https://r-spatial.github.io/stars/reference/geom_stars.html" class="external-link">geom_stars</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">

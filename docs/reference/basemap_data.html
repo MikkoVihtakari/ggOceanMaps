@@ -27,9 +27,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6>
-    <a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a>
-    <a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a>
+    <h6 class="dropdown-header" data-toc-skip>News</h6>
+    <a class="dropdown-item" href="../articles/new-features.html">New features in version 2.0</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Presentations</h6>
     <a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a>
@@ -73,6 +72,7 @@
 <span>  crs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bathymetry <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  bathy.type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  downsample <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  glaciers <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  lon.interval <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lat.interval <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -85,29 +85,33 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>limits</dt>
-<dd><p>Map limits. One of the following:</p><ul><li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
+<dd><p>Map limits. One of the following:</p><ul><li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude, and the fourth element the maximum latitude of the bounding box. Also accepts <code><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">sf::st_bbox</a></code> type named vectors with limits in any order. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
 <li><p><strong>single integer</strong> between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.</p></li>
 </ul><p>Can be omitted if <code>data</code> or <code>shapefiles</code> are defined.</p></dd>
 
 
 <dt>data</dt>
-<dd><p>A data frame, sp, or <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a> shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produces a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to <a href="guess_coordinate_columns.html">guess the correct columns</a> and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if <code>limits</code> or <code>shapefiles</code> are defined.</p></dd>
+<dd><p>A data frame, sp, or <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a> shape containing longitude and latitude coordinates. If a data frame, the coordinates have to be given in decimal degrees. The limits are extracted from these coordinates and produce a rectangular map. Suited for situations where a certain dataset is plotted on a map. The function attempts to <a href="guess_coordinate_columns.html">guess the correct columns</a> and it is advised to use intuitive column names for longitude (such as "lon", "long", or "longitude") and latitude ("lat", "latitude") columns. Can be omitted if <code>limits</code> or <code>shapefiles</code> are defined.</p></dd>
 
 
 <dt>shapefiles</dt>
-<dd><p>Either a <a href="shapefile_list.html">list containing shapefile information</a> or a character argument referring to a name of pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code>. This name is partially matched. Can be omitted if <code>limits</code> or <code>data</code> are defined as decimal degrees.</p></dd>
+<dd><p>Either a <a href="shapefile_list.html">list containing shapefile information</a> or a character argument referring to a name of pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code>. This name is partially matched. Can be omitted if <code>limits</code> or <code>data</code> is defined as decimal degrees.</p></dd>
 
 
 <dt>crs</dt>
-<dd><p><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">Coordinate reference system</a> (CRS) for the map. If <code>NULL</code> (default), the CRS is selected automatically based on <code>limits</code>, <code>data</code> or <code>shapefiles</code>. Passed to <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></code>. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with <code>rotate</code>.</p></dd>
+<dd><p><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">Coordinate reference system</a> (CRS) for the map. If <code>NULL</code> (default), the CRS is selected automatically based on <code>limits</code>, <code>data</code>, or <code>shapefiles</code>. Passed to <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></code>. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with <code>rotate</code>.</p></dd>
 
 
 <dt>bathymetry</dt>
-<dd><p>Logical indicating whether bathymetry should be added to the map.</p></dd>
+<dd><p>Logical indicating whether bathymetry should be added to the map. Functions together with <code>bathy.style</code>. See Details.</p></dd>
+
+
+<dt>downsample</dt>
+<dd><p>Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See <code><a href="https://r-spatial.github.io/stars/reference/geom_stars.html" class="external-link">geom_stars</a></code></p></dd>
 
 
 <dt>glaciers</dt>
-<dd><p>Logical indicating whether glaciers and ice-sheets should be added to the map.</p></dd>
+<dd><p>Logical indicating whether glaciers and ice sheets should be added to the map.</p></dd>
 
 
 <dt>lon.interval, lat.interval</dt>
@@ -119,11 +123,11 @@
 
 
 <dt>rotate</dt>
-<dd><p>Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit.</p></dd>
+<dd><p>Logical indicating whether the projected maps should be rotated to point towards the pole relative to the mid-longitude limit.</p></dd>
 
 
 <dt>verbose</dt>
-<dd><p>Logical indicating whether information about the projection and guessed column names should be returned as message. Set to <code>FALSE</code> to make the function silent.</p></dd>
+<dd><p>Logical indicating whether information about the projection and guessed column names should be returned as messages. Set to <code>FALSE</code> to make the function silent.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -45,29 +45,29 @@ options(ggOceanMaps.datapath = "~/Documents/ggOceanMapsLargeData")
 options(ggOceanMaps.userpath = "~/Downloads/gebco_2023/GEBCO_2023.nc")
 ```
 
-The old GIS packages for R (`sp`, `raster` and `rgeos`) as the engine for ggOceanMaps have been replaced by newer ones, `sf` handling vector data and `stars` handling rasters. This allowed more efficient use of the geospatial data while plotting maps and led to multiple improvements.
+The old GIS packages for R (`sp`, `raster` and `rgeos`) as the engine for ggOceanMaps have been replaced by newer ones: `sf` handling vector data and `stars` handling rasters. This allowed more efficient use of the geospatial data while plotting maps and led to multiple improvements.
 
 # Dependencies
 
-Number of dependencies has been reduced. Since plotting bathymetries in raster format is now quicker than in vector format, low-resolution raster data could be shipped with ggOceanMaps and the **ggOceanMapsData package is no longer needed**. Further, the **strong dependency to the ggspatial package has been removed** meaning that you'll now need to load the package into workspace before you can use ggspatial functions to plot data on basemaps. Obviously, also the dependencies to the old GIS packages for R have been removed.  
+Number of dependencies has been reduced. Since plotting bathymetries in raster format is now quicker than in vector format, low-resolution raster data could be shipped with ggOceanMaps and the **ggOceanMapsData package is no longer needed**. Further, the **strong dependency to the ggspatial package has been removed** meaning that you'll now need to load the package into workspace before you can use ggspatial functions to plot data on basemaps. Also the dependencies to the old GIS packages for R have been removed.  
 
 # New bathymetry system
 
 The shift to stars package allowed more efficient plotting of raster data. This made it possible to add support for raster bathymetries. Consequently, the bathymetry system which stemmed from PlotSvalbard, the predecessor of ggOceanMaps, has been redesigned. You **can always roll back to the old system** by setting `options(ggOceanMaps.bathy.style = "poly_blues")` in your Rprofile, but please read further because **the new system is better**.
 
-ggOceanMaps now ships with a low-resolution raster bathymetry dataset in decimal degree coordinate reference system (4326). This dataset is projected on the fly depending on basemap limits. The projection is incredibly fast and the quality is not much worse compared to pre-v2.0 ggOceanMaps:
+ggOceanMaps now ships with a low-resolution raster bathymetry dataset in decimal degree coordinate reference system (4326). This dataset is projected on the fly depending on basemap limits. The projection is faster and the quality is not much worse compared to pre-v2.0 ggOceanMaps:
 
 ```{r, timeit = TRUE}
 basemap(c(100, 160, -20, 30), bathymetry = TRUE)
 ```
 
-The good news are that the low-resolution default bathymetry is optimized for processing time and that there are higher-resolution datasets available. You'll just need to download them. Some of the downloads happen automatically, while for the others, you'll need to do a bit of setup work. As for the automatic download, ggOceanMapsLargeData contains a compressed version of [ETOPO 60 arc-second global relief model](https://www.ncei.noaa.gov/products/etopo-global-relief-model) (it's the 60 Arc-Second Resolution/Ice surface_elevation netCDF on the webpage). Use and download this dataset by simply specifying the `bathy.style` argument:
+The **low-resolution default bathymetry is optimized for processing time** and **there are higher-resolution datasets available** but you'll need to download them. Some of the downloads happen automatically, while for the others, you'll need to do a bit of setup work. As for the automatic download, ggOceanMapsLargeData contains a compressed version of [ETOPO 60 arc-second global relief model](https://www.ncei.noaa.gov/products/etopo-global-relief-model) (it's the 60 Arc-Second Resolution/Ice surface_elevation netCDF on the webpage). Use and download this dataset by simply specifying the `bathy.style` argument:
 
 ```{r, timeit = TRUE}
 basemap(c(100, 160, -20, 30), bathy.style = "rcb")
 ```
 
-Then the best bit. If this resolution still is not enough, you can use any bathymetry grid you want as long as `stars::read_stars` can open it. First, we'll download the entire [GEBCO 15 arc-second grid](https://www.gebco.net/data_and_products/gridded_bathymetry_data/) (click [this](https://www.bodc.ac.uk/data/open_download/gebco/gebco_2023/zip/) or the netCDF link for "GEBCO_2023 Grid (ice surface elevation)" in the table). This dataset is 7.5 Gb in size, so you'll need a good internet connection. Unzip the dataset to the downloads folder, and define this option either at the beginning of your R session or in your Rprofile: `options(ggOceanMaps.userpath = "~/Downloads/gebco_2023/GEBCO_2023.nc")`. Now we can make maps using 15 arc-second GEBCO data:
+Then the best bit. If this resolution still is not enough, **you can use any bathymetry grid you want** as long as `stars::read_stars` can open it. First, we'll download the entire [GEBCO 15 arc-second grid](https://www.gebco.net/data_and_products/gridded_bathymetry_data/) (click [this-](https://www.bodc.ac.uk/data/open_download/gebco/gebco_2023/zip/) or the netCDF link for "GEBCO_2023 Grid (ice surface elevation)" in the table on the website). This dataset is 7.5 Gb in size, so you'll need a good internet connection. Unzip the dataset to the downloads folder, and define this option either at the beginning of your R session or in your Rprofile: `options(ggOceanMaps.userpath = "~/Downloads/gebco_2023/GEBCO_2023.nc")`. Now we can make maps using 15 arc-second GEBCO data:
 
 ```{r, timeit = TRUE}
 basemap(c(100, 160, -20, 30), bathy.style = "rub")
@@ -78,6 +78,8 @@ basemap(c(100, 160, -20, 30), bathy.style = "rub")
 ```{r, timeit = TRUE}
 basemap(c(100, 160, -20, 30), bathy.style = "rub", downsample = 10)
 ```
+
+Note how the processing time does not change in this case, but it seems to be shorter for smaller maps. 
 
 You can also use custom bathymetries from other packages, such as **marmap**, but you'll have to specify correct `bathy.style` for the data (this should be improved in future versions of the package):
 
@@ -96,27 +98,27 @@ bathy <- raster_bathymetry(stars::st_as_stars(marmap::as.raster(mar_bathy)),
 basemap(dt, shapefiles = list(land = dd_land, bathy = bathy), bathy.style = "rcb")
 ```
 
-Note that the `shapefiles` providing better polygon bathymetry resolution in ggOceanMapsLargeData have been deprecated for now. Remaking all shapefiles and quality-controlling them was too time consuming since I had to rewrite most of the code and quality-control the changes. More `shapefiles` options might appear with future releases of ggOceanMaps. 
+Note that shapefiles providing better polygon bathymetry resolution in ggOceanMapsLargeData have been deprecated for now. Remaking all shapefiles and quality-controlling them was too time consuming since I had to rewrite most of the code and quality-control the changes. More `shapefiles` options might appear with future releases of ggOceanMaps. 
 
-Since the new bathymetry system is mostly raster based now, it is advised to save the maps made by ggOceanMaps in raster format (most journals accept [jpeg](https://stat.ethz.ch/R-manual/R-patched/library/grDevices/html/png.html)s with highest quality setting and >= 600 ppi `res`olution). To learn more about the new bathymetry system, please check out the [User Manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html)
+Since the new bathymetry system is mostly raster based now, it is advised to **save the maps made by ggOceanMaps in raster format** (most journals accept [jpeg](https://stat.ethz.ch/R-manual/R-patched/library/grDevices/html/png.html)s with highest quality setting and >= 600 ppi `res`olution). To **learn more about the new bathymetry system**, please check out the [User Manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html)
 
-# The new world is round - mostly
+# The new world is round - sometimes
 
-The sf package uses round-Earth model (s2 package) instead of the flat-Earth model used by geos. While thinking round can be challenging when making polygons, ggOceanMaps attempts to use the s2 capabilities as much as possible - and you might encounter unexpected "features" as a consequence. The benefit of going round-Earth is that we can now use only one land polygon shapefile in decimal degrees which get projected to flat-Earth on the fly while plotting maps:
+The [sf package uses round-Earth model](https://cran.r-project.org/web/packages/sf/vignettes/sf7.html) ([s2](https://CRAN.R-project.org/package=s2) package) instead of the flat-Earth model used by geos. While thinking round can be challenging when making polygons, ggOceanMaps attempts to use the s2 capabilities as much as possible - and you might encounter unexpected "features" as a consequence. The benefit of going round-Earth is that we can now use only one land polygon shapefile in decimal degrees, which gets projected to flat-Earth on the fly while plotting maps:
 
 ```{r}
 basemap(c(-20, 15, 50, 70), bathy.style = "rub")
 ```
 
-The map above is entirely produced from decimal degree data, which are transformed during plotting. Doing such transformation within a reasonable time (and quality) was not possible when using flat-Earth model (geos) and old geospatial packages for R. 
+The map above is entirely produced from decimal degree data, which are transformed during plotting. Doing such transformation within a reasonable time (and quality) was not possible when using old geospatial packages for R. 
 
-We can now also plot maps crossing the anti-meridian:
+We **can now also plot maps crossing the anti-meridian**:
 
 ```{r}
 basemap(c(110, -110, 10, 55), bathymetry = TRUE)
 ```
 
-Round-Earth is not only a blessing and there are still some unresolved issues, such as lines from decimal degree shapes that could not be dissolved in the new projection. Most of these issues are related to glaciers:
+Round-Earth is not only a blessing and there are still some **unresolved issues**, such as lines from decimal degree shapes that could not be dissolved in the new projection. Most of these issues are related to glaciers:
 
 ```{r}
 basemap(limits = -60, glaciers = TRUE)
@@ -132,7 +134,7 @@ If someone has an idea how to fix this dissolve issue, please contact the develo
 
 # The crs argument - bring the world where your data are
 
-A limitation with pre-2.0 ggOceanMaps was that you could not change the coordinate reference system (CRS), but you'd have to change the CRS of your data instead. This was problematic in some cases when wanting to plot spatial model results that were computed using a certain CRS. Thanks to round-Earth model, sf and stars, now you can change the CRS of maps produced by ggOceanMaps on the fly:
+A limitation with pre-2.0 ggOceanMaps was that you could not change the coordinate reference system (CRS), but you'd have to change the CRS of your data instead. This was problematic in some cases when wanting to plot spatial model results that were computed using a certain CRS. Thanks to round-Earth model, sf and stars, now you can **change the CRS of maps produced by ggOceanMaps on the fly**:
 
 ```{r, fig.cap = "Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b) 3995, i.e. Arctic stereographic and c) 32633, i.e. UTM zone 33N."}
 cowplot::plot_grid(
@@ -154,7 +156,7 @@ qmap(data.frame(lat = c(34, 38, 41, 32), lon = c(138, 137, 144, 129)),
 
 # dist2land goes round-Earth
 
-The `dist2land()` function was bugged for large-scale datasets in pre-2.0 ggOceanMaps because it used a flat-Earth model and different shapefiles depending on the location. This should not be the case any longer as `dist2land` now uses the s2 package and returns great circle distances in kilometers. The only known bug is that the function does not manage to calculate the 0,0 lon/lat point correctly:
+The `dist2land()` function was bugged for large-scale datasets in pre-2.0 ggOceanMaps because it used a flat-Earth model and different shapefiles depending on the location. This should not be the case any longer as `dist2land` now uses the s2 package and **returns great circle distances in kilometers**. The only known bug is that the function does not manage to calculate the 0,0 lon/lat point correctly:
 
 ```{r, timeit = TRUE}
 lon = deg_to_dd(seq(0,360,30)); lat = c(80,50,20,0,-20,-50,-80)

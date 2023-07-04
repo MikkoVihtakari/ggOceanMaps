@@ -65,13 +65,13 @@ dt <- data.frame(
   
 # The distance calculation is slow for large datasets
 system.time(dist2land(dt))
-user  system elapsed 
-12.677   0.146  12.849 
+# user  system elapsed 
+# 12.677   0.146  12.849 
 
 # binary = TRUE speeds the function up
 system.time(dist2land(dt, binary = TRUE))
-user  system elapsed 
-1.239   0.120   1.369 
+# user  system elapsed 
+# 1.239   0.120   1.369 
 }
 }
 \author{

@@ -30,10 +30,6 @@
     <h6 class="dropdown-header" data-toc-skip>News</h6>
     <a class="dropdown-item" href="../articles/new-features.html">New features in version 2.0</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6>
-    <a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a>
-    <a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a>
-    <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Presentations</h6>
     <a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a>
     <a class="external-link dropdown-item" href="https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html">AeN workshop slides</a>
@@ -85,8 +81,7 @@
 <span>  legend.position <span class="op">=</span> <span class="st">"right"</span>,</span>
 <span>  lon.interval <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lat.interval <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  bathy.style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ggOceanMaps.bathy.style"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ggOceanMaps.bathy.style"</span><span class="op">)</span>, <span class="st">"raster_binned_blues"</span><span class="op">)</span>,</span>
+<span>  bathy.style <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bathy.border.col <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  bathy.size <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  land.col <span class="op">=</span> <span class="st">"grey60"</span>,</span>
@@ -119,29 +114,29 @@
 
 
 <dt>limits</dt>
-<dd><p>Map limits. One of the following:</p><ul><li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
+<dd><p>Map limits. One of the following:</p><ul><li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude, and the fourth element the maximum latitude of the bounding box. Also accepts <code><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">sf::st_bbox</a></code> type named vectors with limits in any order. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
 <li><p><strong>single integer</strong> between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.</p></li>
 </ul><p>Can be omitted if <code>data</code> or <code>shapefiles</code> are defined.</p></dd>
 
 
 <dt>shapefiles</dt>
-<dd><p>Either a <a href="shapefile_list.html">list containing shapefile information</a> or a character argument referring to a name of pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code>. This name is partially matched. Can be omitted if <code>limits</code> or <code>data</code> are defined as decimal degrees.</p></dd>
+<dd><p>Either a <a href="shapefile_list.html">list containing shapefile information</a> or a character argument referring to a name of pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code>. This name is partially matched. Can be omitted if <code>limits</code> or <code>data</code> is defined as decimal degrees.</p></dd>
 
 
 <dt>crs</dt>
-<dd><p><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">Coordinate reference system</a> (CRS) for the map. If <code>NULL</code> (default), the CRS is selected automatically based on <code>limits</code>, <code>data</code> or <code>shapefiles</code>. Passed to <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></code>. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with <code>rotate</code>.</p></dd>
+<dd><p><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">Coordinate reference system</a> (CRS) for the map. If <code>NULL</code> (default), the CRS is selected automatically based on <code>limits</code>, <code>data</code>, or <code>shapefiles</code>. Passed to <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></code>. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with <code>rotate</code>.</p></dd>
 
 
 <dt>bathymetry</dt>
-<dd><p>Logical indicating whether bathymetry should be added to the map.</p></dd>
+<dd><p>Logical indicating whether bathymetry should be added to the map. Functions together with <code>bathy.style</code>. See Details.</p></dd>
 
 
 <dt>glaciers</dt>
-<dd><p>Logical indicating whether glaciers and ice-sheets should be added to the map.</p></dd>
+<dd><p>Logical indicating whether glaciers and ice sheets should be added to the map.</p></dd>
 
 
 <dt>rotate</dt>
-<dd><p>Logical indicating whether the projected maps should be rotated to point towards the pole relative to mid-longitude limit.</p></dd>
+<dd><p>Logical indicating whether the projected maps should be rotated to point towards the pole relative to the mid-longitude limit.</p></dd>
 
 
 <dt>legends</dt>
@@ -157,17 +152,11 @@
 
 
 <dt>bathy.style</dt>
-<dd><p>Character defining the bathymetry style. Partially matched and can be abbreviated. Alternatives:</p><ul><li><p><code>"raster_binned_blues"</code> or <code>"rbb"</code> (default) plots binned raster bathymetry filled with different shades of blue. Does not require a download.</p></li>
-<li><p><code>"raster_continuous_blues"</code> or <code>"rcb"</code> plots continuous raster bathymetry filled with different shades of blue. More detailed and visually more appealing than the binned bathymetry. Recommended. Requires a download.</p></li>
-<li><p><code>"poly_blues"</code> or <code>"pb"</code> plots polygon bathymetry filled with different shades of blue. Default in the versions older than 2.0 of ggOceanMaps. Requires a download.</p></li>
-<li><p><code>"poly_greys"</code> or <code>"pg"</code> plots polygon bathymetry filled with different shades of gray. Requires a download.</p></li>
-<li><p><code>"contour_blues"</code> or <code>"cb"</code> contour lines with different shades of blue. Requires a download.</p></li>
-<li><p><code>"contour_grey"</code> or <code>"cg"</code> plots gray contour lines. Requires a download.</p></li>
-</ul></dd>
+<dd><p>Character (plots bathymetry; list of alternatives in Details) or <code>NULL</code> ("raster_binned_blues" if <code>bathymetry = TRUE</code>) defining the bathymetry style. Partially matched, can be abbreviated, and used to control bathymetry plotting together with <code>bathymetry</code>. See Details.</p></dd>
 
 
 <dt>land.col, gla.col, grid.col</dt>
-<dd><p>Character code specifying the color of land, glaciers and grid lines, respectively. Use <code>NA</code> to remove the grid lines.</p></dd>
+<dd><p>Character code specifying the color of land, glaciers, and grid lines, respectively. Use <code>NA</code> to remove the grid lines.</p></dd>
 
 
 <dt>land.border.col, gla.border.col, bathy.border.col</dt>
@@ -191,7 +180,7 @@
 
 
 <dt>verbose</dt>
-<dd><p>Logical indicating whether information about the projection and guessed column names should be returned as message. Set to <code>FALSE</code> to make the function silent.</p></dd>
+<dd><p>Logical indicating whether information about the projection and guessed column names should be returned as messages. Set to <code>FALSE</code> to make the function silent.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -220,20 +209,18 @@
 <span class="r-in"><span><span class="fu">qmap</span><span class="op">(</span><span class="va">dt</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="qmap-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># Set color</span></span></span>
 <span class="r-in"><span><span class="fu">qmap</span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="st">"blue"</span><span class="op">)</span><span class="op">)</span> </span></span>
 <span class="r-plt img"><img src="qmap-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># Map color to a variable</span></span></span>
 <span class="r-in"><span><span class="fu">qmap</span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="va">var</span><span class="op">)</span> </span></span>
 <span class="r-plt img"><img src="qmap-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="co"># </span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span> </span></span>
 <span class="r-in"><span><span class="co"># Map text to a variable </span></span></span>
 <span class="r-in"><span><span class="fu">qmap</span><span class="op">(</span><span class="va">dt</span>, label <span class="op">=</span> <span class="va">var</span><span class="op">)</span> </span></span>
 <span class="r-plt img"><img src="qmap-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span> </span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># All basemap arguments work in qmap()</span></span></span>
 <span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>, <span class="op">-</span><span class="fl">80</span>, <span class="op">-</span><span class="fl">50</span>, <span class="op">-</span><span class="fl">50</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">65</span>, <span class="fl">80</span>, <span class="fl">80</span>, <span class="fl">65</span><span class="op">)</span><span class="op">)</span></span></span>

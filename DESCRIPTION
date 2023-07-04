@@ -8,12 +8,7 @@ Authors@R: c(person("Mikko", "Vihtakari", email = "mikko.vihtakari@hi.no",
                   comment = c(affiliation = "Institute of Marine Research", 
                   ORCID = "0000-0003-0371-4319")),
              person("Roger", "Bivand", role = "ctb"),
-             person("Hadley", "Wickham", role = "ctb"),
-             person("Yves", "Reecht", role = "ctb",
-                  comment = c(affiliation = "Institute of Marine Research", 
-                  ORCID = "0000-0003-3583-1843")),
-             person("Hadley", "Wickham", role = "ctb"),
-             person("Simon", "O'Hanlon", role = "ctb")
+             person("Hadley", "Wickham", role = "ctb")
             )
 URL: https://mikkovihtakari.github.io/ggOceanMaps/
 BugReports: https://github.com/MikkoVihtakari/ggOceanMaps/issues

@@ -15,9 +15,8 @@
 
 **Breaking news (pun intended): ggOceanMaps goes
 [sf](https://r-spatial.github.io/sf/)!** Most of ggOceanMaps code has
-been rewritten. There are plenty of new features in 2.0 (see [here]()
-and the
-[changelog](https://mikkovihtakari.github.io/ggOceanMaps/news/index.html)),
+been rewritten. There are plenty of new features in 2.0 (see
+[this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.html)),
 but likely also many new bugs. Please [report them
 here](https://github.com/MikkoVihtakari/ggOceanMaps/issues).
 
@@ -50,7 +49,7 @@ updated more frequently than the CRAN version.
 Installation of the GitHub version:
 
 ``` r
-remotes::install_github("MikkoVihtakari/ggOceanMaps", ref = "sf-version")
+remotes::install_github("MikkoVihtakari/ggOceanMaps")
 ```
 
 Installation of the CRAN version:

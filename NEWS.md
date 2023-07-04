@@ -1,8 +1,11 @@
-# ggOceanMaps 1.4 (development version)
+# ggOceanMaps 2.0 
 
 * Full [sf](https://r-spatial.github.io/sf/) integration. Old GIS packages for R and ggspatial dependencies removed. Since this change required rewriting of most functions, new bugs have almost certainly been introduced.
+* Bathymetry system redesigned (see [this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.html))
 * Decimal degree maps can now be plotted across the antimeridian.
+* Added spatial data to ggOceanMaps making the ggOceanMapsData package not needed any longer.
 * `dist2land()` now uses great circle distances on a spherical Earth ([s2](https://r-spatial.github.io/s2/)) by default and should be able to calculate distances to land anywhere around the globe.
+* qmap points turned red. Addressed a long-standing issue with `shapefiles` and `shape` getting mixed. 
 * Fixed a bug with shapefiles argument shortcut.
 * Fixed a bug in ices_data
 * Added sf support for clip_shapefile
