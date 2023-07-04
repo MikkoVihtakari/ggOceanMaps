@@ -5,7 +5,7 @@
 #' @name fdir_main_areas
 #' @format \code{\link[sf:st_sf]{sf object}} containing major fishing zones defined by the Norwegian Directorate of Fisheries. Contains also Northwest Atlantic Fisheries Organization's divisions where Norwegian vessels tend to fish.
 #' @source \href{https://open-data-fiskeridirektoratet-fiskeridir.hub.arcgis.com/}{Norwegian Directorate of Fisheries} and \href{https://www.nafo.int/About-us/Maps}{Northwest Atlantic Fisheries Organization}
-#' @import sf
+#' @importFrom sf st_sf
 #' @examples
 #' if(requireNamespace("ggspatial")) {
 #' \donttest{ 
@@ -22,7 +22,7 @@
 #' @name fdir_sub_areas
 #' @format \code{\link[sf:st_sf]{sf object}} containing major fishing zones defined by the Norwegian Directorate of Fisheries.
 #' @source \href{https://open-data-fiskeridirektoratet-fiskeridir.hub.arcgis.com/}{Norwegian Directorate of Fisheries}
-#' @import sf
+#' @importFrom sf st_sf
 #' @examples 
 #' if(requireNamespace("ggspatial")) {
 #' \donttest{
@@ -39,7 +39,7 @@
 #' @name ices_areas
 #' @format \code{\link[sf:st_sf]{sf object}} containing ICES Advisory Areas.
 #' @source \href{https://www.ices.dk/}{International Council for the Exploration of the Sea}
-#' @import sf
+#' @importFrom sf st_sf
 #' @examples
 #' if(requireNamespace("ggspatial")) {
 #' \donttest{

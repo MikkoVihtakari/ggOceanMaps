@@ -11,8 +11,7 @@ clip_shapefile(
   simplify = FALSE,
   tol = 60,
   return.boundary = FALSE,
-  extra.validate = FALSE,
-  output.sf = TRUE
+  extra.validate = FALSE
 )
 }
 \arguments{
@@ -29,11 +28,9 @@ clip_shapefile(
 \item{return.boundary}{Logical. If \code{TRUE} returns the clip boundary together with the shapefile.}
 
 \item{extra.validate}{Logical indicating whether \code{x} should be run through extra validation. Slows down the function but is necessary in some cases involving anti-meridian.}
-
-\item{output.sf}{Logical indicating return the results in \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or sp (\code{FALSE}) format.}
 }
 \value{
-Clipped spatial object. The class is depending on the \code{output.sf} argument. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
+Clipped spatial object. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
 }
 \description{
 Clips an area from a larger shapefile provided in sf or sp formats.
@@ -48,7 +45,7 @@ Other create shapefiles:
 \code{\link{vector_bathymetry}()}
 }
 \author{
-Mikko Vihtakari with a solution from \href{https://stackoverflow.com/questions/15881455/how-to-clip-worldmap-with-polygon-in-r}{Simon O'Hanlon, Roger Bivand/SO community}
+Mikko Vihtakari
 }
 \concept{create shapefiles}
 \keyword{internal}

@@ -7,7 +7,6 @@
 #' @param expand.factor Expansion factor for map limits. Set to \code{NULL} to ignore.
 #' @param rotate Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.
 #' @param verbose Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.
-#' @param output.sf Logical indicating whether an \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or \code{sp} (\code{FALSE}) polygon should be returned.
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function.
 #' @return A list of limits and projections in \code{proj.in} and \code{proj.out} formats.
 #' @keywords internal
@@ -18,8 +17,8 @@
 #'    lat = c(60, 60, 80)))
 #' @export
 
-# lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; expand.factor = NULL; verbose = FALSE; output.sf = TRUE
-auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out = NULL, expand.factor = NULL, verbose = FALSE, output.sf = TRUE) {
+# lon = NULL; lat = NULL; proj.in = 4326; proj.out = NULL; expand.factor = NULL; verbose = FALSE
+auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out = NULL, expand.factor = NULL, verbose = FALSE) {
   
   # Get coordinates from spatial objects
   
@@ -136,8 +135,6 @@ auto_limits <- function(data, lon = NULL, lat = NULL, proj.in = 4326, proj.out =
   names(decLims) <- c("xmin", "xmax", "ymin", "ymax")
   
   # Return
-  
-  if(!output.sf) projBound <- sf::as_Spatial(projBound)
   
   list(ddLimits = decLims, projLimits = projLims, projBound = projBound, 
        proj.in = attributes(x)$proj.in, proj.out = proj.out)

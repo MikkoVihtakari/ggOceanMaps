@@ -4,16 +4,15 @@
 #' @param drop.crumbs Single numeric value specifying a threshold (area in km2) for disconnected polygons which should be removed. Set to \code{NULL} to bypass the removal. Uses the \link[smoothr]{drop_crumbs} function.
 #' @param remove.holes Single numeric value specifying a threshold (area in km2) for holes which should be removed. Set to \code{NULL} to bypass the removal. Uses the \link[smoothr]{fill_holes} function. Currently VERY slow. 
 #' @param smooth Logical indicating whether the pixelated contours should be smoothed. Uses the \link[smoothr]{smooth_ksmooth} function.
-#' @param output.sf Logical indicating whether an \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or \code{sp} (\code{FALSE}) polygon should be returned.
 #' @details The \code{drop.crumbs} and \code{remove.holes} arguments can be used to make the resulting object smaller in file size. The \code{smooth} argument can be used to remove the pixelated contours, but often increases file size. Note also that using this option will bias the contours with respect to real world.
-#' @return An \link[sf:st_polygon]{sf} or \code{sp} object containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sf:st_crs]{CRS}}).
+#' @return An \link[sf:st_polygon]{sf} object containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sf:st_crs]{CRS}}).
 #' @author Mikko Vihtakari
 #' @family create shapefiles
 #' @export
 
 
-# bathy = rb; drop.crumbs = NULL; remove.holes = NULL; smooth = FALSE; output.sf = TRUE
-vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, smooth = FALSE, output.sf = TRUE) {
+# bathy = rb; drop.crumbs = NULL; remove.holes = NULL; smooth = FALSE
+vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, smooth = FALSE) {
   
   ## Turn off s2
   # s2_mode <- sf::sf_use_s2()
@@ -41,7 +40,7 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
   }
   
   utils::setTxtProgressBar(pb, 1)
- 
+  
   ## Polygonization ####
   
   pol <- sf::st_as_sf(bathy$raster, as_points = FALSE, merge = TRUE)
@@ -119,10 +118,6 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
   
   ## Return
   
-  if(output.sf) {
-    return(pol)
-  } else {
-    return(sf::as_Spatial(pol))
-  }
+  return(pol)
   
 }

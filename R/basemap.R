@@ -187,7 +187,7 @@
 #'       axis.ticks.y = element_blank()
 #'       )
 #' }
-#' @import ggplot2 sf
+#' @import ggplot2
 #' @export
 
 ## Test parameters
@@ -317,6 +317,10 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs
     }
   }
   
+  ## An expand bug, try with basemap(limits = c(-120, -0, -60, -90), rotate = TRUE)
+  
+  if(diff(X$map.limits[3:4]) > 1e6 && X$map.limits[3] == 0) X$map.limits[3] <- 1
+  
   ## Final plotting
   
   out <- eval(parse(text=layers))
@@ -328,7 +332,7 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs
   attributes(out)$limits <- X$map.limits
   attributes(out)$polarmap <- X$polar.map
   attributes(out)$map.grid <- X$map.grid
-  attributes(out)$crs <- X$proj
+  attributes(out)$crs <- sf::st_crs(X$proj)
   
   out
   

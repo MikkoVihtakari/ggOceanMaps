@@ -30,9 +30,13 @@ library(ggOceanMaps)
 
 The old GIS packages for R (`sp`, `raster` and `rgeos`) as the engine for ggOceanMaps have been replaced by newer ones, `sf` handling vector data and `stars` handling rasters. This allowed more efficient use of the geospatial data while plotting maps and led to multiple improvements.
 
-# ggOceanMapsData is no longer needed
+# Dependencies
+
+Number of dependencies has been reduced. Since plotting bathymetries in raster format is now quicker than in vector format, low-resolution data could be shipped with ggOceanMaps and the ggOceanMapsData package is no longer needed. Further, dependency to the ggspatial package has been removed meaning that you'll now need to load the package into workspace before you can use ggspatial functions to plot data on basemaps. Obviously, also the dependencies to the old GIS packages for R have been removed.  
 
 # New bathymetry system
+
+The shift to stars package allowed more efficient plotting of raster data. This made it possible to add support for raster bathymetries. Consequently, the bathymetry system which stemmed from PlotSvalbard, the predecessor of ggOceanMaps, has been redesigned. 
 
 ```{r}
 library(sf); library(stars)

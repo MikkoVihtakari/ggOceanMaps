@@ -46,9 +46,9 @@ The function calculates great circle spherical distances using the \code{\link[s
 # Simple example:
 dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
 dt <- dist2land(dt, verbose = FALSE)
+\donttest{
 qmap(dt, color = ldist) + scale_color_viridis_c()
 
-\donttest{
 # Datasets covering the entire Earth seem to work now, except 0,0 lon/lat point
 lon = deg_to_dd(seq(0,360,30)); lat = c(80,50,20,0,-20,-50,-80)
 

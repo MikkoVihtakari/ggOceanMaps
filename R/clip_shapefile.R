@@ -7,19 +7,18 @@
 #' @param tol Numerical tolerance value to be used for simplification. See \code{?sf::st_simplfy}.
 #' @param return.boundary Logical. If \code{TRUE} returns the clip boundary together with the shapefile.
 #' @param extra.validate Logical indicating whether \code{x} should be run through extra validation. Slows down the function but is necessary in some cases involving anti-meridian. 
-#' @param output.sf Logical indicating return the results in \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or sp (\code{FALSE}) format. 
 #' @details The function uses the \code{\link[sf]{st_intersection}} function to clip smaller polygons from larger ones. The clip area is constrained by either a numeric vector or a spatial object in the \code{limits} argument. Defining \code{limits} by a \code{\link[sf:st_sf]{sf}} object gives greater freedom for the clip area as the area does not have to be rectangular.
-#' @return Clipped spatial object. The class is depending on the \code{output.sf} argument. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
+#' @return Clipped spatial object. If \code{return.boundary = TRUE}, a list containing the shapefile together with the clip boundary.
 #' @keywords internal
 #' @family create shapefiles
 #' @importFrom methods slot slot<-
 #' @importFrom grDevices chull
-#' @author Mikko Vihtakari with a solution from \href{https://stackoverflow.com/questions/15881455/how-to-clip-worldmap-with-polygon-in-r}{Simon O'Hanlon, Roger Bivand/SO community}
+#' @author Mikko Vihtakari
 #' @export
 
 # Test parameters
-# proj.limits = 4326; simplify = FALSE; tol = 60; return.boundary = FALSE; output.sf = TRUE
-clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol = 60, return.boundary = FALSE, extra.validate = FALSE, output.sf = TRUE) {
+# proj.limits = 4326; simplify = FALSE; tol = 60; return.boundary = FALSE
+clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol = 60, return.boundary = FALSE, extra.validate = FALSE) {
   
   ## Checks
   
@@ -82,6 +81,9 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
     }
   }
   
+  ## Densify (e.g. add vertices) the clip boundary
+  
+  # clip_boundary <- smoothr::densify(clip_boundary)
   
   ## Check that the projections match
   
@@ -124,12 +126,6 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
     if(!all(sf::st_is_valid(shapefile))) {
       shapefile <- sf::st_make_valid(shapefile)
     }
-  }
-  
-  ## Convert to sp (if asked)
-  
-  if(!output.sf) {
-    shapefile <- sf::as_Spatial(shapefile)
   }
   
   ## Return

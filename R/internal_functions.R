@@ -82,31 +82,31 @@ deg_to_dd <- function(x) {
   ifelse(x >= 0 & x <= 180, x, ifelse(x > 180, -1*(360 - x), NA))
 }
 
-#' @title Pick a suitable number of cores
-#' @description Picks maximum four cores for parallel processing
-#' @return Integer of suitable number of cores
-#' @keywords internal
-#' @importFrom parallel detectCores
-#' @author The \href{https://github.com/StoXProject/RstoxData/blob/master/R/Utilities.R}{StoXProject}
-#' @export
-
-getCores <- function() {
-  cores <- as.integer(getOption("mc.cores"))
-  if (length(cores) == 0 || is.na(cores)) {
-    cores <- parallel::detectCores()
-    if (is.na(cores)) {
-      return(1)
-    } else {
-      # Don't use too many cores in autodetect
-      if (cores > 4)
-        return(4)
-      else
-        return(cores)
-    }
-  } else {
-    return(cores)
-  }
-}
+# #' @title Pick a suitable number of cores
+# #' @description Picks maximum four cores for parallel processing
+# #' @return Integer of suitable number of cores
+# #' @keywords internal
+# #' @importFrom parallel detectCores
+# #' @author The \href{https://github.com/StoXProject/RstoxData/blob/master/R/Utilities.R}{StoXProject}
+# #' @export
+# 
+# getCores <- function() {
+#   cores <- as.integer(getOption("mc.cores"))
+#   if (length(cores) == 0 || is.na(cores)) {
+#     cores <- parallel::detectCores()
+#     if (is.na(cores)) {
+#       return(1)
+#     } else {
+#       # Don't use too many cores in autodetect
+#       if (cores > 4)
+#         return(4)
+#       else
+#         return(cores)
+#     }
+#   } else {
+#     return(cores)
+#   }
+# }
 
 #' @title Rotate CRS
 #' @description Rotates a CRS such that North is in the middle of two meridians

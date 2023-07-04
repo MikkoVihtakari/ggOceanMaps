@@ -9,7 +9,6 @@
 #' map_cmd("grid_utm"), map_cmd("defs_utm"), sep = "+")))}
 #' @keywords internal
 #' @export
-#' @import ggplot2
 #' @author Mikko Vihtakari
 #' @seealso \code{\link{basemap}}
 
@@ -143,7 +142,7 @@ map_cmd <- function(command, alternative = FALSE) {
       ggplot2::scale_y_continuous(breaks = X$map.grid$lat.breaks, expand = c(0,0.1)) +
       ggplot2::scale_x_continuous(breaks = X$map.grid$lon.breaks, expand = c(0,0.1)) +
       ggplot2::labs(y = "Latitude (decimal degrees)", x = "Longitude (decimal degrees)") + 
-      ggplot2::coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], expand = TRUE,
+      ggplot2::coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], expand = FALSE,
                crs = sf::st_crs(X$proj), default = TRUE) +
       theme_map(base_size = base_size, grid.col = grid.col, grid.size = grid.size) +
       ggplot2::theme(legend.position = legend.position,

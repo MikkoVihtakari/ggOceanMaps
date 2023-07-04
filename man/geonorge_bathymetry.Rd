@@ -4,7 +4,7 @@
 \alias{geonorge_bathymetry}
 \title{Open Geonorge bathymetry shapefiles}
 \usage{
-geonorge_bathymetry(filepath, layer = NULL, verbose = FALSE, output.sf = FALSE)
+geonorge_bathymetry(filepath, layer = NULL, verbose = FALSE)
 }
 \arguments{
 \item{filepath}{Character string defining the path to the \code{.gml} file. Must contain the file extension.}
@@ -12,8 +12,6 @@ geonorge_bathymetry(filepath, layer = NULL, verbose = FALSE, output.sf = FALSE)
 \item{layer}{Character string defining the layer containing depth information. If \code{NULL} assumed to be "dybdeareal".}
 
 \item{verbose}{Logical indicating whether information the reading process should be returned.}
-
-\item{output.sf}{Logical indicating whether an \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or \code{sp} polygon should be returned.}
 }
 \value{
 An \link[sf:st_polygon]{sf} or \code{sp} object containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sf:st_crs]{CRS}}).

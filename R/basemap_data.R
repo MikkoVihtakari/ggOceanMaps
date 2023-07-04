@@ -5,7 +5,6 @@
 #' @return A list of class \code{basemapData} containing information required for plotting a \code{\link{basemap}}.
 #' @keywords internal
 #' @export
-#' @import sf
 #' @author Mikko Vihtakari
 #' @seealso \code{\link{basemap}}
 
@@ -582,13 +581,14 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
     if(!is.null(crs)) { # this hack is required for custom crs. Couldn't come up with a better solution
       landBoundary <- clip_shapefile(
         x$shapefiles$land,
-        limits = x$clip_limits,
+        limits = smoothr::densify(x$clip_limits),
         return.boundary = TRUE
       )
       
       landBoundary <- lapply(landBoundary, function(k) {
         sf::st_transform(k, crs)
       })
+      
     } else {
       landBoundary <- clip_shapefile(
         sf::st_transform(x$shapefiles$land, crs = x$crs),

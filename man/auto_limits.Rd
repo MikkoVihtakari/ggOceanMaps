@@ -11,8 +11,7 @@ auto_limits(
   proj.in = 4326,
   proj.out = NULL,
   expand.factor = NULL,
-  verbose = FALSE,
-  output.sf = TRUE
+  verbose = FALSE
 )
 }
 \arguments{
@@ -27,8 +26,6 @@ auto_limits(
 \item{expand.factor}{Expansion factor for map limits. Set to \code{NULL} to ignore.}
 
 \item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.}
-
-\item{output.sf}{Logical indicating whether an \code{\link[sf:st_polygon]{sf}} (\code{TRUE}) or \code{sp} (\code{FALSE}) polygon should be returned.}
 
 \item{rotate}{Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.}
 }
