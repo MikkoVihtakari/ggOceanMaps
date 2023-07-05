@@ -46,7 +46,7 @@
     
     <a class="navbar-brand me-2" href="index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +97,7 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="ggoceanmaps">ggOceanMaps<a class="anchor" aria-label="anchor" href="#ggoceanmaps"></a>
 </h1></div>
-<p><strong>Plot data on oceanographic maps using ggplot2. R package version 2.0.0</strong></p>
+<p><strong>Plot data on oceanographic maps using ggplot2. R package version 2.0.2</strong></p>
 <!-- badges: start -->
 
 <!-- [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml) -->
@@ -132,7 +132,7 @@
 <span><span class="fu"><a href="reference/basemap.html">basemap</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_polygon.html" class="external-link">geom_polygon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, </span>
 <span>               color <span class="op">=</span> <span class="st">"red"</span>, fill <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-5-1.png"><!-- --></p>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.png"><!-- --></p>
 <p>See the <a href="https://mikkovihtakari.github.io/ggOceanMaps/index.html" class="external-link">ggOceanMaps website</a>, <a href="https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html" class="external-link">function reference</a>, and the <a href="https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html" class="external-link">user manual</a> for how to use and modify the maps plotted by the package. You may also find <a href="https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html#1" class="external-link">these slides about the package</a> useful.</p>
 </div>
 <div class="section level2">
@@ -142,7 +142,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">.ggOceanMapsenv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">new.env</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">.ggOceanMapsenv</span><span class="op">$</span><span class="va">datapath</span> <span class="op">&lt;-</span> <span class="st">'YourCustomPath'</span></span></code></pre></div>
-<p>It is smart to use a directory R has writing access to. For example <code>normalizePath("~/Documents/ggOceanMapsLargeData")</code> would work for most operating systems.</p>
+<p>It is smart to use a directory R has writing access to. For example <code>"~/ggOceanMapsLargeData"</code> would work for most operating systems.</p>
 <p>You will need to set up the data path to your .Rprofile file only once and ggOceanMaps will find the path even though you updated your R or packages. ggOceanMaps will inform you about your data path when you load the package.</p>
 </div>
 <div class="section level2">
@@ -171,7 +171,7 @@
 <span><span class="co">#&gt; To cite package 'ggOceanMaps' in publications use:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Vihtakari M (2023). _ggOceanMaps: Plot Data on Oceanographic Maps</span></span>
-<span><span class="co">#&gt;   using 'ggplot2'_. R package version 2.0.0,</span></span>
+<span><span class="co">#&gt;   using 'ggplot2'_. R package version 2.0.2,</span></span>
 <span><span class="co">#&gt;   &lt;https://mikkovihtakari.github.io/ggOceanMaps/&gt;.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
@@ -180,7 +180,7 @@
 <span><span class="co">#&gt;     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},</span></span>
 <span><span class="co">#&gt;     author = {Mikko Vihtakari},</span></span>
 <span><span class="co">#&gt;     year = {2023},</span></span>
-<span><span class="co">#&gt;     note = {R package version 2.0.0},</span></span>
+<span><span class="co">#&gt;     note = {R package version 2.0.2},</span></span>
 <span><span class="co">#&gt;     url = {https://mikkovihtakari.github.io/ggOceanMaps/},</span></span>
 <span><span class="co">#&gt;   }</span></span></code></pre></div>
 </div>
