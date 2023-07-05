@@ -66,7 +66,7 @@ load_map_data <- function(x, force = FALSE, downsample = 0) {
   exist_list <- lapply(x[c("land", "glacier", "bathy")], function(k) {
     if(is.null(k)) {
       NULL
-    } else if(grepl("/", k)) {
+    } else if(grepl("/|\\\\", k)) {
       if(file.exists(k) & !force) {
         TRUE
       } else {
@@ -97,11 +97,11 @@ load_map_data <- function(x, force = FALSE, downsample = 0) {
     lapply(x[c("land", "glacier")], function(k) {
     if(is.null(k)) {
       NULL
-    } else if(grepl("/", k)) {
+    } else if(grepl("/|\\\\", k)) {
       if(file.exists(k) & !force) {
         mget(load(k))[[1]]
       } else {
-        tmp <- unlist(strsplit(k, "/"))
+        tmp <- unlist(strsplit(k, "/|\\\\"))
         dest_path <- file.path(normalizePath(getOption("ggOceanMaps.datapath")),tmp[length(tmp)])
         
         download.file(paste0(x$path, tmp[length(tmp)]), dest_path)
@@ -118,11 +118,11 @@ load_map_data <- function(x, force = FALSE, downsample = 0) {
     if(bathy_user_defined) {
       x[["bathy"]] <- stars::read_stars(k, downsample = downsample)
     } else {
-      if(grepl("/", k)) {
+      if(grepl("/|\\\\", k)) {
         if(file.exists(k) & !force) {
           x[["bathy"]] <- mget(load(k))[[1]]
         } else {
-          tmp <- unlist(strsplit(k, "/"))
+          tmp <- unlist(strsplit(k, "/|\\\\"))
           dest_path <- file.path(normalizePath(getOption("ggOceanMaps.datapath")),tmp[length(tmp)])
           
           download.file(paste0(x$path, tmp[length(tmp)]), dest_path)

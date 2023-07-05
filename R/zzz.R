@@ -33,7 +33,7 @@
                   ".ggOceanMapsenv <- new.env(); ",
                   ".ggOceanMapsenv$datapath <- 'YourCustomPath'}",
                   ". You can use usethis::edit_r_profile() to edit the file.", 
-                  " normalizePath('~/Documents/ggOceanMapsLargeData') ",
+                  " '~/ggOceanMapsLargeData' ",
                   "would make it in a writable folder on most operating systems.")
   } else {
     msg <- paste0("ggOceanMaps: Using ", getOption("ggOceanMaps.datapath"),

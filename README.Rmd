@@ -74,7 +74,7 @@ While ggOceanMaps allows plotting any custom-made shapefiles, the package contai
 .ggOceanMapsenv$datapath <- 'YourCustomPath'
 ```
 
-It is smart to use a directory R has writing access to. For example `normalizePath("~/Documents/ggOceanMapsLargeData")` would work for most operating systems.
+It is smart to use a directory R has writing access to. For example `"~/ggOceanMapsLargeData"` would work for most operating systems.
 
 You will need to set up the data path to your .Rprofile file only once and ggOceanMaps will find the path even though you updated your R or packages. ggOceanMaps will inform you about your data path when you load the package. 
 

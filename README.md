@@ -2,7 +2,7 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-2.0.0**
+2.0.2**
 
 <!-- badges: start -->
 
@@ -97,7 +97,7 @@ basemap(data = dt, bathymetry = TRUE) +
                color = "red", fill = NA)
 ```
 
-![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->
 
 See the [ggOceanMaps
 website](https://mikkovihtakari.github.io/ggOceanMaps/index.html),
@@ -133,8 +133,7 @@ computer by modifying your .Rprofile file
 ```
 
 It is smart to use a directory R has writing access to. For example
-`normalizePath("~/Documents/ggOceanMapsLargeData")` would work for most
-operating systems.
+`"~/ggOceanMapsLargeData"` would work for most operating systems.
 
 You will need to set up the data path to your .Rprofile file only once
 and ggOceanMaps will find the path even though you updated your R or
@@ -194,7 +193,7 @@ citation("ggOceanMaps")
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Vihtakari M (2023). _ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'_. R package version 2.0.0,
+#>   using 'ggplot2'_. R package version 2.0.2,
 #>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -203,7 +202,7 @@ citation("ggOceanMaps")
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2023},
-#>     note = {R package version 2.0.0},
+#>     note = {R package version 2.0.2},
 #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```
