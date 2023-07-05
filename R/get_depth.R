@@ -15,7 +15,7 @@
 #' @export
 
 # data = data.frame(lon = c(-160, 160, 160, -160), lat = c(80, 80, 60, 60))
-# bathy.style = "rcb"; lon = NULL; lat = NULL; shapefile = "DecimalDegree"; proj.in = 4326; bind = TRUE; depth.col = "depth"; verbose = TRUE
+# bathy.style = "ru"; lon = NULL; lat = NULL; shapefile = "DecimalDegree"; proj.in = 4326; bind = TRUE; depth.col = "depth"; verbose = TRUE
 get_depth <- function(data, bathy.style = "raster_continuous", lon = NULL, lat = NULL, shapefile = "DecimalDegree", proj.in = 4326, bind = TRUE, depth.col = "depth", verbose = FALSE) {
   
   # Bathymetry grid
@@ -86,8 +86,7 @@ get_depth <- function(data, bathy.style = "raster_continuous", lon = NULL, lat =
     na.rows <- is.na(data[[lon]]) | is.na(data[[lat]])
     contains.nas <- any(na.rows)
     
-    x <- as.data.frame(data[!na.rows, c(lon, lat)])
-    colnames(x) <- c("lon", "lat")
+    x <- data[!na.rows, c(lon, lat)]
     
     ## Extract depths
     
