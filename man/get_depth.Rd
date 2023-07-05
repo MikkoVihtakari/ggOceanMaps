@@ -19,7 +19,7 @@ get_depth(
 \arguments{
 \item{data}{Data frame or \link[sf:sf]{sf} object containing geographic coordinates.}
 
-\item{bathy.style}{Character defining the \link{basemap} bathymetry raster which should be used for the depth extraction. Valid alternatives: \code{"raster_binned"} (or \code{"rb"}), \code{"raster_continuous"} (or \code{"rc"}; default), or \code{"raster_user"} (\code{"ru"}).}
+\item{bathy.style}{Character defining the \link{basemap} bathymetry raster which should be used for the depth extraction. Valid alternatives: \code{"raster_binned"} (or \code{"rb"}), \code{"raster_continuous"} (or \code{"rc"}; default), or \code{"raster_user"} (or \code{"ru"}).}
 
 \item{lon, lat}{Either the names of the longitude and latitude columns in \code{data} or \code{NULL} to \link[=guess_coordinate_columns]{guess the longitude and/or latitude columns} in \code{data}.}
 
