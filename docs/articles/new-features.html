@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">04 July, 2023</h4>
+            <h4 data-toc-skip class="date">05 July, 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/new-features.Rmd" class="external-link"><code>vignettes/new-features.Rmd</code></a></small>
       <div class="d-none name"><code>new-features.Rmd</code></div>
@@ -128,7 +128,7 @@ ggOceanMaps:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="new-features_files/figure-html/unnamed-chunk-2-1.png" width="700">
-Processing time: 3.3 sec</p>
+Processing time: 2.9 sec</p>
 <p>The <strong>low-resolution default bathymetry is optimized for
 processing time</strong> and <strong>there are higher-resolution
 datasets available</strong> but you’ll need to download them. Some of
@@ -142,7 +142,7 @@ argument:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rcb"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="new-features_files/figure-html/unnamed-chunk-3-1.png" width="700">
-Processing time: 18.1 sec</p>
+Processing time: 16.6 sec</p>
 <p>Then the best bit. If this resolution still is not enough,
 <strong>you can use any bathymetry grid you want</strong> as long as
 <code><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">stars::read_stars</a></code> can open it. First, we’ll download the
@@ -158,7 +158,7 @@ Now we can make maps using 15 arc-second GEBCO data:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rub"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="new-features_files/figure-html/unnamed-chunk-4-1.png" width="700">
-Processing time: 54.2 sec</p>
+Processing time: 41.3 sec</p>
 <p><code><a href="../reference/basemap.html">basemap()</a></code> now has <code>downsample</code> argument which
 can be used to reduce the resolution of excessively large custom raster
 datasets for a given region (the lower the resolution, the smaller the
@@ -166,7 +166,7 @@ file size):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rub"</span>, downsample <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="new-features_files/figure-html/unnamed-chunk-5-1.png" width="700">
-Processing time: 49.6 sec</p>
+Processing time: 31.9 sec</p>
 <p>Note how the processing time does not change in this case, but it
 seems to be shorter for smaller maps.</p>
 <p>You can also use custom bathymetries from other packages, such as
@@ -202,6 +202,29 @@ check out the <a href="https://mikkovihtakari.github.io/ggOceanMaps/articles/ggO
 Manual</a></p>
 </div>
 <div class="section level2">
+<h2 id="get-depth-from-bathymetry-grids">Get depth from bathymetry grids<a class="anchor" aria-label="anchor" href="#get-depth-from-bathymetry-grids"></a>
+</h2>
+<p>(Added to v2.0.4, which is currently available on GitHub, but not on
+CRAN). Thanks to the shift to raster bathymetries, it is easy to use
+ggOceanMaps to estimate depth (and whether the point is on land)
+now:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lon</span> <span class="op">=</span> <span class="fu"><a href="../reference/deg_to_dd.html">deg_to_dd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">360</span>,<span class="fl">30</span><span class="op">)</span><span class="op">)</span>; <span class="va">lat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">50</span>,<span class="fl">20</span>,<span class="fl">0</span>,<span class="op">-</span><span class="fl">20</span>,<span class="op">-</span><span class="fl">50</span>,<span class="op">-</span><span class="fl">80</span><span class="op">)</span></span>
+<span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">lon</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">lat</span><span class="op">)</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">lat</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">lon</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_depth.html">get_depth</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span></span></code></pre></div>
+<p>Processing time: 15 sec</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="va">depth</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="new-features_files/figure-html/unnamed-chunk-8-1.png" alt="Depth of data frame coordinates extracted from the raster_continuous ETOPO 60 arc-second dataset. Grey (NA) indicates coordinates on land." width="700"><p class="caption">
+Depth of data frame coordinates extracted from the raster_continuous
+ETOPO 60 arc-second dataset. Grey (NA) indicates coordinates on land.
+</p>
+</div>
+</div>
+<div class="section level2">
 <h2 id="the-new-world-is-round---sometimes">The new world is round - sometimes<a class="anchor" aria-label="anchor" href="#the-new-world-is-round---sometimes"></a>
 </h2>
 <p>The <a href="https://cran.r-project.org/web/packages/sf/vignettes/sf7.html" class="external-link">sf
@@ -212,30 +235,30 @@ capabilities as much as possible - and you might encounter unexpected
 “features” as a consequence. The benefit of going round-Earth is that we
 can now use only one land polygon shapefile in decimal degrees, which
 gets projected to flat-Earth on the fly while plotting maps:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">15</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rub"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="new-features_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="new-features_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>The map above is entirely produced from decimal degree data, which
 are transformed during plotting. Doing such transformation within a
 reasonable time (and quality) was not possible when using old geospatial
 packages for R.</p>
 <p>We <strong>can now also plot maps crossing the
 anti-meridian</strong>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">110</span>, <span class="op">-</span><span class="fl">110</span>, <span class="fl">10</span>, <span class="fl">55</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="new-features_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="new-features_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>Round-Earth is not only a blessing and there are still some
 <strong>unresolved issues</strong>, such as lines from decimal degree
 shapes that could not be dissolved in the new projection. Most of these
 issues are related to glaciers:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="op">-</span><span class="fl">60</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="new-features_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p><img src="new-features_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>A simple fix for now is to use projected shapefiles from
 ggOceanMapsLargeData:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="op">-</span><span class="fl">60</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span>, shapefiles <span class="op">=</span> <span class="st">"Antarctic"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="new-features_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p><img src="new-features_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 <p>If someone has an idea how to fix this dissolve issue, please contact
 the developer.</p>
 </div>
@@ -248,7 +271,7 @@ of your data instead. This was problematic in some cases when wanting to
 plot spatial model results that were computed using a certain CRS.
 Thanks to round-Earth model, sf and stars, now you can <strong>change
 the CRS of maps produced by ggOceanMaps on the fly</strong>:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rub"</span>, crs <span class="op">=</span> <span class="fl">4326</span>, legends <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rub"</span>, legends <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
@@ -256,7 +279,7 @@ the CRS of maps produced by ggOceanMaps on the fly</strong>:</p>
 <span>  ncol <span class="op">=</span> <span class="fl">3</span>, labels <span class="op">=</span> <span class="st">"auto"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="new-features_files/figure-html/unnamed-chunk-11-1.png" alt="Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b) 3995, i.e. Arctic stereographic and c) 32633, i.e. UTM zone 33N." width="700"><p class="caption">
+<img src="new-features_files/figure-html/unnamed-chunk-13-1.png" alt="Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b) 3995, i.e. Arctic stereographic and c) 32633, i.e. UTM zone 33N." width="700"><p class="caption">
 Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b) 3995,
 i.e. Arctic stereographic and c) 32633, i.e. UTM zone 33N.
 </p>
@@ -273,10 +296,10 @@ default grey land. In addition, the long-standing issue with
 <code>qmap</code> confusing <code>shape</code> argument to
 <code>shapefiles</code> argument in <code>basemap</code> has finally
 been fixed:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/qmap.html">qmap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">34</span>, <span class="fl">38</span>, <span class="fl">41</span>, <span class="fl">32</span><span class="op">)</span>, lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">138</span>, <span class="fl">137</span>, <span class="fl">144</span>, <span class="fl">129</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>     shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="new-features_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<p><img src="new-features_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="dist2land-goes-round-earth">dist2land goes round-Earth<a class="anchor" aria-label="anchor" href="#dist2land-goes-round-earth"></a>
@@ -288,16 +311,16 @@ case any longer as <code>dist2land</code> now uses the s2 package and
 <strong>returns great circle distances in kilometers</strong>. The only
 known bug is that the function does not manage to calculate the 0,0
 lon/lat point correctly:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lon</span> <span class="op">=</span> <span class="fu"><a href="../reference/deg_to_dd.html">deg_to_dd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">360</span>,<span class="fl">30</span><span class="op">)</span><span class="op">)</span>; <span class="va">lat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">50</span>,<span class="fl">20</span>,<span class="fl">0</span>,<span class="op">-</span><span class="fl">20</span>,<span class="op">-</span><span class="fl">50</span>,<span class="op">-</span><span class="fl">80</span><span class="op">)</span></span>
 <span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">lon</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">lat</span><span class="op">)</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">lat</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">lon</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dist2land.html">dist2land</a></span><span class="op">(</span><span class="va">dt</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Processing time: 2.2 sec</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="va">ldist</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="new-features_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="new-features_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <p>The function is still somewhat slow for large datasets and there
 currently is no parallellization option. If you have large datasets,
 split them up and try running in multiple cores using a

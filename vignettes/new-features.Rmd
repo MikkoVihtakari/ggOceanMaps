@@ -102,6 +102,22 @@ Note that shapefiles providing better polygon bathymetry resolution in ggOceanMa
 
 Since the new bathymetry system is mostly raster based now, it is advised to **save the maps made by ggOceanMaps in raster format** (most journals accept [jpeg](https://stat.ethz.ch/R-manual/R-patched/library/grDevices/html/png.html)s with highest quality setting and >= 600 ppi `res`olution). To **learn more about the new bathymetry system**, please check out the [User Manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html)
 
+# Get depth from bathymetry grids
+
+(Added to v2.0.4, which is currently available on GitHub, but not on CRAN). Thanks to the shift to raster bathymetries, it is easy to use ggOceanMaps to estimate depth (and whether the point is on land) now:
+
+```{r, timeit = TRUE}
+lon = deg_to_dd(seq(0,360,30)); lat = c(80,50,20,0,-20,-50,-80)
+dt <- data.frame(
+  lon = rep(lon, length(lat)), lat = rep(lat, each = length(lon)))
+dt <- get_depth(dt)
+```
+
+```{r, fig.cap = "Depth of data frame coordinates extracted from the raster_continuous ETOPO 60 arc-second dataset. Grey (NA) indicates coordinates on land."}
+qmap(dt, color = depth) +
+  scale_color_viridis_c()
+```
+
 # The new world is round - sometimes
 
 The [sf package uses round-Earth model](https://cran.r-project.org/web/packages/sf/vignettes/sf7.html) ([s2](https://CRAN.R-project.org/package=s2) package) instead of the flat-Earth model used by geos. While thinking round can be challenging when making polygons, ggOceanMaps attempts to use the s2 capabilities as much as possible - and you might encounter unexpected "features" as a consequence. The benefit of going round-Earth is that we can now use only one land polygon shapefile in decimal degrees, which gets projected to flat-Earth on the fly while plotting maps:
