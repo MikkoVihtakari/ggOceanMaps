@@ -1,6 +1,8 @@
 # ggOceanMaps 2.1 (development version on GitHub)
 
 * Fix a bug in bathy.style wording.
+* Add get_depth function.
+* Fix a critical issue with downloads failing on Windows.
 
 # ggOceanMaps 2.0 
 

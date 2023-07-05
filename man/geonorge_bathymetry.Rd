@@ -14,7 +14,7 @@ geonorge_bathymetry(filepath, layer = NULL, verbose = FALSE)
 \item{verbose}{Logical indicating whether information the reading process should be returned.}
 }
 \value{
-An \link[sf:st_polygon]{sf} or \code{sp} object containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sf:st_crs]{CRS}}).
+An \link[sf:st_polygon]{sf} object containing the depth polygons. Uses same projection than \code{bathy} (see \code{\link[sf:st_crs]{CRS}}).
 }
 \description{
 Opens and formats Geonorge bathymetry shapefiles ready for plotting in ggOceanMaps

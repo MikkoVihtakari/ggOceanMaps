@@ -1,6 +1,6 @@
-#' @title Calculate distance to the closest land for coordinates in a data frame
+#' @title Calculate distance to the closest land for coordinates
 #' @description Calculates the closest distance to land for coordinates in a data frame
-#' @param data Data frame containing geographic coordinates.
+#' @param data Data frame or \link[sf:sf]{sf} object containing geographic coordinates.
 #' @param lon,lat Either the names of the longitude and latitude columns in \code{data} or \code{NULL} to \link[=guess_coordinate_columns]{guess the longitude and/or latitude columns} in \code{data}.
 #' @param proj.in \code{\link[sf:st_crs]{coordinate reference system}} of \code{data}.
 #' @param shapefile Land shape to which distances should be calculated. Either a character argument referring to a name of pre-made shapefiles in \code{\link{shapefile_list}}, a single \link[sf]{sf} or \code{sp} polygons object object or \code{NULL} to enable automatic definition of the land shapes based on \code{data}. Set to \code{"DecimalDegree"} by default which enables great circle distances using \link[sf]{s2} features assuming a spherical Earth (as a contrast to earlier versions of the function which used flat Earth).
@@ -49,77 +49,89 @@
 
 dist2land <- function(data, lon = NULL, lat = NULL, shapefile = "DecimalDegree", proj.in = 4326, bind = TRUE, dist.col = "ldist", binary = FALSE, verbose = TRUE) {
   
-  ## Case for defined x and undefined lon or/and lat ####
+  # sf data
   
-  if(is.null(lon) | is.null(lat)) {
-    if(all(!is.data.frame(data))) stop("x argument has to be a data.frame")
+  if(inherits(data, c("sf", "sfc"))) { 
     
-    tmp <- guess_coordinate_columns(data)
+    x <- data
     
-    lon <- unname(tmp[names(tmp) == "lon"])
-    lat <- unname(tmp[names(tmp) == "lat"])
+  } else {
+    ## Case for defined x and undefined lon or/and lat ####
     
-    if(verbose) {
-      message(paste0("Used ", lon, " and ", lat, " as input coordinate column names in data"))
-    }
-    
-    if(length(lon) != 1 | length(lat) != 1) {
-      stop("lon or lat columns were not found. Define manually.")
-    }
-  }
-  
-  ## Data
-  
-  ### Remove NA coordinates (and add later)
-  
-  na.rows <- is.na(data[[lon]]) | is.na(data[[lat]])
-  contains.nas <- any(na.rows)
-  
-  x <- as.data.frame(data[!na.rows, c(lon, lat)])
-  colnames(x) <- c("lon", "lat")
-  
-  ## Land shape ###
-  
-  if(!is.null(shapefile)) {
-    
-    error_test <- quiet(try(match.arg(shapefile, shapefile_list("all")$name), silent = TRUE))
-    
-    if(!inherits(error_test, "try-error")) {
-      shapefile <- shapefile_list(shapefile)
-      if(verbose) message(paste("Using", shapefile$name, "as land shapes."))
-      land <- eval(parse(text = shapefile$land))
-    } else {
-      if(!inherits(shapefile, c("sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons"))) stop("The shapefile must either be matchable string to shapefile_list or a sf or sp polygons object.")
-      if(verbose) message("Using custom land shapes.")
-      if(inherits(shapefile, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
-        land <- sf::st_as_sf(shapefile)
-      } else {
-        land <- shapefile
+    if(is.null(lon) | is.null(lat)) {
+      if(all(!is.data.frame(data))) stop("x argument has to be a data.frame")
+      
+      tmp <- guess_coordinate_columns(data)
+      
+      lon <- unname(tmp[names(tmp) == "lon"])
+      lat <- unname(tmp[names(tmp) == "lat"])
+      
+      if(verbose) {
+        message(paste0("Used ", lon, " and ", lat, " as input coordinate column names in data"))
+      }
+      
+      if(length(lon) != 1 | length(lat) != 1) {
+        stop("lon or lat columns were not found. Define manually.")
       }
     }
-  } else {
     
-    ddLimits <- auto_limits(data = x, lon = "lon", lat = "lat", proj.in = proj.in, verbose = FALSE)$ddLimits
+    ## Data
     
-    shapefile.def <- define_shapefiles(ddLimits)
-    shapefile <- shapefile_list(shapefile.def$shapefile.name)
-    if(verbose) message(paste("Using", shapefile$name, "as land shapes."))
+    ### Remove NA coordinates (and add later)
     
-    land <- eval(parse(text = shapefile$land))
+    na.rows <- is.na(data[[lon]]) | is.na(data[[lat]])
+    contains.nas <- any(na.rows)
+    
+    x <- as.data.frame(data[!na.rows, c(lon, lat)])
+    colnames(x) <- c("lon", "lat")
+    
+    x <- sf::st_as_sf(x, coords = c("lon", "lat"), crs = sf::st_crs(proj.in))
+    
+  }
+    
+    ## Land shape ###
+    
+    if(!is.null(shapefile)) {
+      
+      error_test <- quiet(try(match.arg(shapefile, shapefile_list("all")$name), silent = TRUE))
+      
+      if(!inherits(error_test, "try-error")) {
+        shapefile <- shapefile_list(shapefile)
+        if(verbose) message(paste("Using", shapefile$name, "as land shapes."))
+        land <- eval(parse(text = shapefile$land))
+      } else {
+        if(!inherits(shapefile, c("sf", "sfc", "SpatialPolygonsDataFrame", "SpatialPolygons"))) stop("The shapefile must either be matchable string to shapefile_list or a sf or sp polygons object.")
+        if(verbose) message("Using custom land shapes.")
+        if(inherits(shapefile, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
+          land <- sf::st_as_sf(shapefile)
+        } else {
+          land <- shapefile
+        }
+      }
+    } else {
+      
+      ddLimits <- auto_limits(data = x, lon = "lon", lat = "lat", proj.in = proj.in, verbose = FALSE)$ddLimits
+      
+      shapefile.def <- define_shapefiles(ddLimits)
+      shapefile <- shapefile_list(shapefile.def$shapefile.name)
+      if(verbose) message(paste("Using", shapefile$name, "as land shapes."))
+      
+      land <- eval(parse(text = shapefile$land))
+    }
+    
+    ## Coordinate points ###
+    
+  if(sf::st_crs(land) != sf::st_crs(x)) {
+    x <- sf::st_transform(x, sf::st_crs(land))
   }
   
-  ## Coordinate points ###
-  
-  x <- sf::st_as_sf(x, coords = c("lon", "lat"), crs = sf::st_crs(proj.in))
-  x <- sf::st_transform(x, sf::st_crs(land))
- 
   ############################
   ## Distance calculation ####
   
   if(binary) { ## Binary positions
     
     if(verbose) message("Calculating binary positions...")
-
+    
     tmp <- is.na(as.integer(suppressMessages(sf::st_intersects(x, land))))
     if(verbose) message("Returning binary positions: TRUE in the ocean, FALSE on land.")
     
@@ -132,10 +144,10 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = "DecimalDegree",
       if(verbose) message("Returning great circle spherical distances from land as kilometers.")
     } else {
       if(verbose) message("Returning Euclidean distances from land as kilometers.")
-
+      
     }
   }
-
+  
   ## Splitting x to number of available cores and running the distance calculus parallel would be possible but not implemented due to focus on other tasks in 2.0
   ## Saving the parallelization code from 1.3.7 ggOceanMaps version so that it can be implemented later when there's time.
   # cores <- min(length(x), cores)
@@ -157,10 +169,13 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = "DecimalDegree",
   
   ## Return
   
-  if(contains.nas) {
-    na.rows[!na.rows] <- tmp
-    na.rows[na.rows == 1] <- NA
-    tmp <- na.rows
+  if(!inherits(data, c("sf", "sfc"))) { 
+    
+    if(contains.nas) {
+      na.rows[!na.rows] <- tmp
+      na.rows[na.rows == 1] <- NA
+      tmp <- na.rows
+    }
   }
   
   if(bind) {
@@ -169,7 +184,6 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = "DecimalDegree",
   } else {
     tmp
   }
-  
 }
 
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dist2land.R
 \name{dist2land}
 \alias{dist2land}
-\title{Calculate distance to the closest land for coordinates in a data frame}
+\title{Calculate distance to the closest land for coordinates}
 \usage{
 dist2land(
   data,
@@ -17,7 +17,7 @@ dist2land(
 )
 }
 \arguments{
-\item{data}{Data frame containing geographic coordinates.}
+\item{data}{Data frame or \link[sf:sf]{sf} object containing geographic coordinates.}
 
 \item{lon, lat}{Either the names of the longitude and latitude columns in \code{data} or \code{NULL} to \link[=guess_coordinate_columns]{guess the longitude and/or latitude columns} in \code{data}.}
 
