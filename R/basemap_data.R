@@ -354,9 +354,16 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     }
     
     if(sf::st_is_longlat(crs) && sign(limits[1]) != sign(limits[2]) & !rotate) {
-      msg <- paste0("Detecting antimeridian crossing on decimal degree map. Plotting only 
+      
+      if(utils::compareVersion(sf::sf_extSoftVersion()["PROJ"], "8.0") < 0) {
+        msg <- paste0("Detecting antimeridian crossing with old PROJ version. Plotting 
+        might not work as intended. Please update your PROJ to plot maps 
+        crossing the antimeridian.")
+      } else {
+        msg <- paste0("Detecting antimeridian crossing on decimal degree map. Plotting only 
               works with rotate = TRUE. Turning rotate on. Adjust limits if this
               is not desired.")
+      }
       
       message(paste(strwrap(msg), collapse= "\n"))
       rotate <- TRUE
