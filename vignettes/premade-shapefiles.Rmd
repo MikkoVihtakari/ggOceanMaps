@@ -37,6 +37,7 @@ etopoPath <- ""
 NEDPath <- ""
 gebcoPath <- ""
 outPath <- ""
+EEAPath <- ""
 ```
 
 Define the the [coordinate reference systems](https://mgimond.github.io/Spatial/coordinate-systems-in-r.html).
@@ -211,6 +212,23 @@ save(antarctic_glacier, file = file.path(outPath, "ggOceanMapsData/antarctic_gla
 ```
 
 # 2. High-resolution shapefiles in ggOceanMapsLargeData
+
+## Europe
+
+Download the EEA landshapes from here: https://www.eea.europa.eu/en/datahub/datahubitem-view/af40333f-9e94-4926-a4f0-0a787f1d2b8f
+
+Unzip the file and paste the folder path to the `EEAPath` object as a string. 
+
+```{r}
+europe_land <- sf::read_sf(file.path(EEAPath, "EEA_Coastline_20170228.shp"))
+all(sf::st_is_valid(europe_land))
+
+save(europe_land, 
+     file = file.path(outPath, "ggOceanMapsLargeData/europe_land.rda"),
+     compress = "xz"
+)
+```
+
 
 ## Barents Sea
 

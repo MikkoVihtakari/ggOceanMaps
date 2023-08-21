@@ -3,6 +3,7 @@
 * Fix a bug in bathy.style wording.
 * Add get_depth function.
 * Fix a critical issue with downloads failing on Windows.
+* Add detailed land shapes of Europe. Can be used by `basemap(shapefiles = "Europe")`
 
 # ggOceanMaps 2.0 
 

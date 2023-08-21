@@ -88,6 +88,19 @@ shapefile_list <- function(name, get.data = FALSE) {
          crs = 32636,
          limits = c(-400000, 1300000, 7400000, 9350000),
          path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda"
+    ),
+    list(name = "Europe",
+         land = file.path(options("ggOceanMaps.datapath"), "europe_land"),
+         glacier = NA,
+         bathy = c(
+           "raster_binned" = "dd_rbathy",
+           "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "dd_rbathy_cont"),
+           "raster_user" = getOption("ggOceanMaps.userpath"),
+           "vector" = file.path(options("ggOceanMaps.datapath"), "dd_bathy")),
+         crs = 3035,
+         limits = c(943609, 7601958, -375446, 6825119),
+         path = c("ggOceanMapsLargeData" = 
+                    "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/")
     )#,
     # list(name = "IBCAO",
     #      land = file.path(options("ggOceanMaps.datapath"), "ibcao_land"), 
