@@ -26,8 +26,6 @@ auto_limits(
 \item{expand.factor}{Expansion factor for map limits. Set to \code{NULL} to ignore.}
 
 \item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.}
-
-\item{rotate}{Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.}
 }
 \value{
 A list of limits and projections in \code{proj.in} and \code{proj.out} formats.

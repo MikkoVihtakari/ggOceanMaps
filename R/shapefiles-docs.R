@@ -1,5 +1,6 @@
 #' @title Decimal degree bathymetry
 #' @docType data
+#' @encoding UTF-8
 #' @keywords maps shapefiles
 #' @family mapfiles
 #' @name dd_rbathy
@@ -10,6 +11,7 @@
 
 #' @title Decimal degree land shapes
 #' @docType data
+#' @encoding UTF-8
 #' @keywords maps shapefiles
 #' @family mapfiles
 #' @name dd_land

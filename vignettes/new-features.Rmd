@@ -104,7 +104,7 @@ Since the new bathymetry system is mostly raster based now, it is advised to **s
 
 # Get depth from bathymetry grids
 
-(Added to v2.0.4, which is currently available on GitHub, but not on CRAN). Thanks to the shift to raster bathymetries, it is easy to use ggOceanMaps to estimate depth (and whether the point is on land) now:
+Thanks to the shift to raster bathymetries, it is easy to use ggOceanMaps to estimate depth (and whether the point is on land) now:
 
 ```{r, timeit = TRUE}
 lon = deg_to_dd(seq(0,360,30)); lat = c(80,50,20,0,-20,-50,-80)
@@ -188,6 +188,13 @@ qmap(dt, color = ldist) +
 
 The function is still somewhat slow for large datasets and there currently is no parallellization option. If you have large datasets, split them up and try running in multiple cores using a `mclapply` loop. Such an option could be added to `dist2land` in future releases but it is easy to do by hand too. 
 
-# The future
+# High-resolution land-shapes of Europe
 
-Obviously with so many new features and rewriting of the underlying code, there will be new unexpected bugs. These will be corrected in future releases of ggOceanMaps as reports come in. In addition to bug fixing, I am intending to revise the spatial data file collection offered in ggOceanMapsLargeData repository improving land-shape quality. The aim for the future is to find a way to plot oceans on a detailed enough level to show Norwegian fjords sufficiently. 
+Thanks to European Environment Agency, it is now possible to plot detailed land in Europe allowing plotting fjords. The bathymetry is still too low quality for most fjords, however. Here the Tromsø region:
+
+```{r}
+cowplot::plot_grid(
+  basemap(c(18.65,19.2,69.58,69.8), bathy.style = "rub", legends = FALSE) + ggtitle("Default"),
+  basemap(c(18.65,19.2,69.58,69.8), shapefiles = "Europe", bathy.style = "rub", legends = FALSE) + ggtitle("shapefiles = 'Europe'")
+)
+```

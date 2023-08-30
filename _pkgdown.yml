@@ -116,7 +116,7 @@ navbar:
     text: Articles
     menu:
     - text: News
-    - text: New features in version 2.0
+    - text: New features in version 2
       href: articles/new-features.html
     # - text: -------  
     # - text: Customising shapefiles

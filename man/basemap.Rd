@@ -246,7 +246,7 @@ Note that if you use this function to generate maps for a publication, it is adv
 \itemize{
 \item \strong{Land polygons.} \href{https://www.naturalearthdata.com/downloads/10m-physical-vectors/}{Natural Earth Data} 1:10m Physical Vectors with the Land and Minor Island datasets combined. Distributed under the \href{https://creativecommons.org/publicdomain/}{CC Public Domain license} (\href{https://www.naturalearthdata.com/about/terms-of-use/}{terms of use}).
 \item \strong{Glacier polygons.} \href{https://www.naturalearthdata.com/downloads/10m-physical-vectors/}{Natural Earth Data} 1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice Shelves datasets combined. Distributed under the \href{https://creativecommons.org/publicdomain/}{CC Public Domain license} (\href{https://www.naturalearthdata.com/about/terms-of-use/}{terms of use})
-\item \strong{Bathymetry.} \href{https://www.ncei.noaa.gov/products/etopo-global-relief-model}{NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. NOAA National Centers for Environmental Information.} \doi{10.25921/fd45-gt74}. Distributed under the \href{https://www.usa.gov/government-works}{U.S. Government Work license}.
+\item \strong{Bathymetry.} \href{https://www.ncei.noaa.gov/products/etopo-global-relief-model}{NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. NOAA National Centers for Environmental Information.} \doi{10.25921/fd45-gt74}. Distributed under the \href{https://www.usa.gov/government-works/}{U.S. Government Work license}.
 }
 }
 \seealso{

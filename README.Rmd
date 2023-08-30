@@ -23,9 +23,7 @@ knitr::opts_chunk$set(
 
 <!-- [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml) -->
 
-**Breaking news (pun intended): ggOceanMaps goes [sf](https://r-spatial.github.io/sf/)!** Most of ggOceanMaps code has been rewritten. There are plenty of new features in 2.0 (see [this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.html)), but likely also many new bugs. Please [report them here](https://github.com/MikkoVihtakari/ggOceanMaps/issues).
-
-**Note:** There is a critical bug in the CRAN version (2.0.0) which prevents automatic downloads on Windows. **Please use the GitHub version for now**: `remotes::install_github("MikkoVihtakari/ggOceanMaps")`
+**Breaking news (pun intended): ggOceanMaps goes [sf](https://r-spatial.github.io/sf/)!** Most of ggOceanMaps code has been rewritten. There are plenty of new features in v2 (see [this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.html)), but likely also many new bugs. Please [report them here](https://github.com/MikkoVihtakari/ggOceanMaps/issues).
 
 ## Overview
 

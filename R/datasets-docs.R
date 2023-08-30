@@ -1,5 +1,6 @@
 #' @title Major fisheries areas (hovedomraade) of Norway
 #' @docType data
+#' @encoding UTF-8
 #' @keywords datasets shapefiles fishery
 #' @family datasets
 #' @name fdir_main_areas
@@ -17,6 +18,7 @@
 
 #' @title Norwegian sub-areas (lokasjon) for commercial fishing
 #' @docType data
+#' @encoding UTF-8
 #' @keywords datasets shapefiles fishery
 #' @family datasets
 #' @name fdir_sub_areas
@@ -34,6 +36,7 @@
 
 #' @title ICES Advisory Areas
 #' @docType data
+#' @encoding UTF-8
 #' @keywords datasets shapefiles fishery
 #' @family datasets
 #' @name ices_areas

@@ -1,7 +1,9 @@
-# ggOceanMaps 2.1 (development version on GitHub)
+# ggOceanMaps 2.2 (development version on GitHub)
+
+# ggOceanMaps 2.1
 
 * Fix a bug in bathy.style wording.
-* Add get_depth function.
+* Add [`get_depth()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/get_depth.html) function.
 * Fix a critical issue with downloads failing on Windows.
 * Add detailed land shapes of Europe. Can be used by `basemap(shapefiles = "Europe")`
 

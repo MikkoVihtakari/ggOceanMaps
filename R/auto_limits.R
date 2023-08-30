@@ -5,7 +5,6 @@
 #' @param proj.out Resulting map projection. See \code{\link{transform_coord}}.
 #' @param lon,lat Names of longitude and latitude columns in \code{data} as character or integer index. If \code{NULL}, the column names are \link[=guess_coordinate_columns]{guessed}.
 #' @param expand.factor Expansion factor for map limits. Set to \code{NULL} to ignore.
-#' @param rotate Logical indicating whether the limits should be rotated to point towards the pole relative to mid-longitude limit.
 #' @param verbose Logical indicating whether information about the projection and guessed column names should be returned as message. Set to \code{FALSE} to make the function silent.
 #' @details This is an internal function, which is automatically run by the \code{\link{basemap}} function.
 #' @return A list of limits and projections in \code{proj.in} and \code{proj.out} formats.

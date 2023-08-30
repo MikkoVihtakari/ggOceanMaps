@@ -229,11 +229,11 @@ define_bathy_style <- function(x) {
     out <- "raster_user_blues"
   } else if(tolower(x) %in% c("rug", "raster_user_greys")) {
     out <- "raster_user_grays"
-  } else if(tolower(x) == "pb") {
+  } else if(tolower(x) %in% c("pb", "pbb", "poly_binned_blues")) {
     out <- "poly_blues"
-  } else if(tolower(x) %in% c("pg", "poly_greys")) {
+  } else if(tolower(x) %in% c("pg", "pbg", "poly_greys", "poly_binned_greys", "poly_binned_grays")) {
     out <- "poly_grays"
-  } else if(tolower(x) %in% c("cb", "cbb")) {
+  } else if(tolower(x) %in% c("cb", "cbb", "contour_binned_blues")) {
     out <- "contour_blues"
   } else if(tolower(x) %in% c("cg", "contour_grey", "contour_greys", "contour_grays")) {
     out <- "contour_gray"
