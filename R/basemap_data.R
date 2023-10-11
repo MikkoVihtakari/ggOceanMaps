@@ -42,6 +42,12 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NU
   
   x <- basemap_define_grid_lines(x = x, lon.interval = lon.interval, lat.interval = lat.interval)
   
+  # A temporary fix to make plotly::ggplotly work. Remove or move somewhere
+  
+  if(!is.null(x$shapefiles$land)) {
+    x$shapefiles$land <- sf::st_cast(x$shapefiles$land, "MULTIPOLYGON")
+  }
+  
   # Return ####
   
   out <- list(shapefiles = x$shapefiles, map.limits = x$map_limits, 

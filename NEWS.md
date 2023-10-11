@@ -1,5 +1,9 @@
 # ggOceanMaps 2.2 (development version on GitHub)
 
+- Fix an issue with certain bathy.style abbreviations
+- qmap arguments did not match those of basemap: add bathy.alpha and downsample arguments to qmap
+- Fix an [issue](https://stackoverflow.com/questions/60684049/creating-a-interactive-map-on-r-using-plotly) when trying to plot basemaps using `plotly::ggplotly()`
+
 # ggOceanMaps 2.1
 
 * Fix a bug in bathy.style wording.

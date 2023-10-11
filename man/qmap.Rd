@@ -21,8 +21,10 @@ qmap(
   lon.interval = NULL,
   lat.interval = NULL,
   bathy.style = NULL,
+  downsample = 0,
   bathy.border.col = NA,
   bathy.size = 0.1,
+  bathy.alpha = 1,
   land.col = "grey60",
   land.border.col = "black",
   land.size = 0.1,
@@ -68,6 +70,10 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 \item{lon.interval, lat.interval}{Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.}
 
 \item{bathy.style}{Character (plots bathymetry; list of alternatives in Details) or \code{NULL} ("raster_binned_blues" if \code{bathymetry = TRUE}) defining the bathymetry style. Partially matched, can be abbreviated, and used to control bathymetry plotting together with \code{bathymetry}. See Details.}
+
+\item{downsample}{Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See \code{\link[stars]{geom_stars}}}
+
+\item{bathy.alpha}{Transparency parameter for the bathymetry fill color. See \link[ggplot2]{scale_alpha}.}
 
 \item{land.col, gla.col, grid.col}{Character code specifying the color of land, glaciers, and grid lines, respectively. Use \code{NA} to remove the grid lines.}
 
