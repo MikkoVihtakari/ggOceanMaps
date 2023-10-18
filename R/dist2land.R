@@ -45,7 +45,7 @@
 #' @export
 
 ## Test parameters
-# lon = NULL; lat = NULL; shapefile = NULL; proj.in = 4326; bind = TRUE; dist.col = "ldist"; binary = FALSE; geodesic.distances = FALSE; verbose = TRUE; cores = getCores()
+# lon = NULL; lat = NULL; shapefile = "DecimalDegree"; proj.in = 4326; bind = TRUE; dist.col = "ldist"; binary = FALSE; verbose = TRUE
 
 dist2land <- function(data, lon = NULL, lat = NULL, shapefile = "DecimalDegree", proj.in = 4326, bind = TRUE, dist.col = "ldist", binary = FALSE, verbose = TRUE) {
   
@@ -132,7 +132,7 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = "DecimalDegree",
     
     if(verbose) message("Calculating binary positions...")
     
-    tmp <- is.na(as.integer(suppressMessages(sf::st_intersects(x, land))))
+    tmp <- sapply(suppressMessages(sf::st_intersects(x, land)), function(k) length(k) == 0)
     if(verbose) message("Returning binary positions: TRUE in the ocean, FALSE on land.")
     
   } else { ## Distance

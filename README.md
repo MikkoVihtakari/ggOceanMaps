@@ -2,7 +2,7 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-2.1.1**
+2.1.3**
 
 <!-- badges: start -->
 
@@ -15,7 +15,7 @@
 
 **Breaking news (pun intended): ggOceanMaps goes
 [sf](https://r-spatial.github.io/sf/)!** Most of ggOceanMaps code has
-been rewritten. There are plenty of new features in 2.0 (see
+been rewritten. There are plenty of new features in v2 (see
 [this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.html)),
 but likely also many new bugs. Please [report them
 here](https://github.com/MikkoVihtakari/ggOceanMaps/issues).
@@ -192,7 +192,7 @@ citation("ggOceanMaps")
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Vihtakari M (2023). _ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'_. R package version 2.1.1,
+#>   using 'ggplot2'_. R package version 2.1.3,
 #>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -201,7 +201,7 @@ citation("ggOceanMaps")
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2023},
-#>     note = {R package version 2.1.1},
+#>     note = {R package version 2.1.3},
 #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```
