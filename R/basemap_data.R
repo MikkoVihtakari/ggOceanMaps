@@ -9,7 +9,7 @@
 #' @seealso \code{\link{basemap}}
 
 # Test paramters
-# limits = NULL; data = NULL; shapefiles = NULL; bathymetry = FALSE; glaciers = FALSE; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE; verbose = TRUE
+# limits = NULL; data = NULL; shapefiles = NULL; crs = NULL; bathymetry = FALSE; bathy.type = NULL; downsample = 0; glaciers = FALSE; lon.interval = NULL; lat.interval = NULL; expand.factor = 1.1; rotate = FALSE; verbose = FALSE
 basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, bathy.type = NULL, downsample = 0, glaciers = FALSE, lon.interval = NULL, lat.interval = NULL, expand.factor = 1.1, rotate = FALSE, verbose = FALSE) {
   
   ## For code-readability and debugging, the function has been cut to compartments.
@@ -30,8 +30,8 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NU
   
   x <- basemap_data_define_shapefiles(
     limits = limits, data = data, shapefiles = shapefiles, crs = crs, 
-    bathymetry = bathymetry, bathy.type = bathy.type, downsample = downsample, glaciers = glaciers, 
-    rotate = rotate, expand.factor = expand.factor, verbose = FALSE
+    bathymetry = bathymetry, bathy.type = bathy.type, downsample = downsample, 
+    glaciers = glaciers, rotate = rotate, expand.factor = expand.factor, verbose = FALSE
   )
   
   # 2. Crop and rotate shapefiles if needed ####
@@ -379,7 +379,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       crs <- rotate_crs(crs, limits[1:2])
     }
     
-    clip_shape <- dd_clip_boundary(limits, crs)
+    clip_shape <- dd_clip_boundary(limits, crs, expand.factor)
     
     
     # } else if(case %in% c("data_dec")) { ### data frames ###
@@ -467,18 +467,26 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     
     if(is.null(shapefiles)) {
       
-      if(rotate) {
-        tmp <- sf::st_coordinates(sf::st_transform(data, 4326))
-        
-        limits <- stats::setNames(
-          c(deg_to_dd(range(dd_to_deg(tmp[,1]))), range(tmp[,2])),
-          c("xmin", "xmax", "ymin", "ymax"))
-        
-      } else if(!sf::st_is_longlat(data)) {
-        limits <- sf::st_bbox(sf::st_transform(data, 4326))[c("xmin", "xmax", "ymin", "ymax")] 
-      } else {
-        limits <- sf::st_bbox(data)[c("xmin", "xmax", "ymin", "ymax")] 
+      # if(rotate) {
+      
+      limits <- sf::st_bbox(sf::st_transform(data, 4326))[c("xmin", "xmax", "ymin", "ymax")] 
+      
+      if(diff(limits[1:2]) > 180) {
+        limits[1:2] <- limits[2:1]
       }
+      
+      ## Previous code, this did not work for cases where 0 lon was crossed
+      # tmp <- sf::st_coordinates(sf::st_transform(data, 4326))
+      # 
+      # limits <- stats::setNames(
+      #   c(deg_to_dd(range(dd_to_deg(tmp[,1]))), range(tmp[,2])),
+      #   c("xmin", "xmax", "ymin", "ymax"))
+      #   
+      # } else if(!sf::st_is_longlat(data)) {
+      #   limits <- sf::st_bbox(sf::st_transform(data, 4326))[c("xmin", "xmax", "ymin", "ymax")] 
+      # } else {
+      #   limits <- sf::st_bbox(data)[c("xmin", "xmax", "ymin", "ymax")] 
+      # }
       
       shapefile.def <- define_shapefiles(limits, force_dd = TRUE)
       if(is.null(crs)) crs <- sf::st_crs(shapefile.def$crs)
@@ -501,15 +509,35 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     
     if(rotate) {
       crs <- rotate_crs(crs, limits[1:2])
-      clip_shape <- dd_clip_boundary(limits, crs, expand.factor = 1.1)
+      clip_shape <- dd_clip_boundary(limits, crs, expand.factor)
     } else {
-      if(sf::st_crs(data) == crs) {
-        clip_shape <- sf::st_as_sfc(sf::st_bbox(data))
-        clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_buffer(clip_shape, dist = 0.01*sqrt(sf::st_area(clip_shape)))))
-      } else {
-        clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
-        clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_buffer(clip_shape, dist = 0.01*sqrt(sf::st_area(clip_shape)))))
-      }
+
+      clip_shape <- dd_clip_boundary(limits, crs, expand.factor)
+            
+      # tmp <- sf::st_bbox(sf::st_transform(data, crs))
+      # 
+      # if(!is.null(expand.factor)) {
+      #   lon.rdiff <- unname(diff(tmp[c("xmin", "xmax")]))
+      #   lon.shift <- ((lon.rdiff*expand.factor) - lon.rdiff)/2
+      #   tmp["xmin"] <- tmp["xmin"] - lon.shift
+      #   tmp["xmax"] <- tmp["xmax"] + lon.shift
+      #   
+      #   lat.rdiff <- unname(diff(tmp[c("ymin", "ymax")]))
+      #   lat.shift <- ((lat.rdiff*expand.factor) - lat.rdiff)/2
+      #   tmp["ymin"] <- tmp["ymin"] - lat.shift
+      #   tmp["ymax"] <- tmp["ymax"] + lat.shift
+      # }
+      # 
+      # clip_shape <- sf::st_as_sfc(tmp)
+      
+      ## Previous code. There was probably a reason why I wrote this
+      # if(sf::st_crs(data) == crs) {
+      #   clip_shape <- sf::st_as_sfc(sf::st_bbox(data))
+      #   clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_buffer(clip_shape, dist = 0.01*sqrt(sf::st_area(clip_shape)))))
+      # } else {
+      #   clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
+      #   clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_buffer(clip_shape, dist = 0.01*sqrt(sf::st_area(clip_shape)))))
+      # }
     }
     
   } else if(case %in% c("limits_proj", "data_proj")) { ## Projected limits/data ####
@@ -565,13 +593,14 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
                   lon = "lon", lat = "lat",
                   proj.in = crs,
                   proj.out = 4326,
-                  verbose = verbose)
+                  verbose = verbose,
+                  expand.factor = expand.factor)
     
     limits <- clipLimits$ddLimits
     
     if(rotate) {
       crs <- rotate_crs(crs, limits[1:2])
-      clip_shape <- dd_clip_boundary(limits, crs, expand.factor = 1.1)
+      clip_shape <- dd_clip_boundary(limits, crs)
     } else {
       clip_shape <- clipLimits$projBound
     }

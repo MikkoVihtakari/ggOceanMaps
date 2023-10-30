@@ -162,25 +162,25 @@ dd_clip_boundary <- function(limits, crs, expand.factor = NULL) {
 
   tmp <- dd_to_deg(limits[1:2])
 
-  if(!is.null(expand.factor)) {
-    
-    lon.rdiff <- diff(tmp[1:2])
-    lon.shift <- ((lon.rdiff*expand.factor) - lon.rdiff)/2
-    tmp[1] <- tmp[1] - lon.shift
-    tmp[2] <- tmp[2] + lon.shift
-    
-    lat.rdiff <- diff(limits[3:4])
-    lat.shift <- ((lat.rdiff*expand.factor) - lat.rdiff)/2
-    limits[3] <- limits[3] - lat.shift
-    limits[4] <- limits[4] + lat.shift
-    
-    # Correct >= 180/90 limits for expanded decimal degree coordinates
-    
-    if(any(tmp < 0)) tmp[tmp < 0] <- 0
-    if(any(tmp > 360)) tmp[tmp > 360] <- 360
-    if(any(limits[3:4] < -90)) limits[3:4][limits[3:4] < -90] <- -90
-    if(any(limits[3:4] > 90)) limits[3:4][limits[3:4] > 90] <- 90
-  }
+  # if(!is.null(expand.factor)) {
+  #   
+  #   lon.rdiff <- diff(tmp[1:2])
+  #   lon.shift <- ((lon.rdiff*expand.factor) - lon.rdiff)/2
+  #   tmp[1] <- tmp[1] - lon.shift
+  #   tmp[2] <- tmp[2] + lon.shift
+  #   
+  #   lat.rdiff <- diff(limits[3:4])
+  #   lat.shift <- ((lat.rdiff*expand.factor) - lat.rdiff)/2
+  #   limits[3] <- limits[3] - lat.shift
+  #   limits[4] <- limits[4] + lat.shift
+  #   
+  #   # Correct >= 180/90 limits for expanded decimal degree coordinates
+  #   
+  #   if(any(tmp < 0)) tmp[tmp < 0] <- 0
+  #   if(any(tmp > 360)) tmp[tmp > 360] <- 360
+  #   if(any(limits[3:4] < -90)) limits[3:4][limits[3:4] < -90] <- -90
+  #   if(any(limits[3:4] > 90)) limits[3:4][limits[3:4] > 90] <- 90
+  # }
     
   if(tmp[1] > tmp[2]) {
     lonDiff <- 360 - tmp[1] + tmp[2]
@@ -197,14 +197,26 @@ dd_clip_boundary <- function(limits, crs, expand.factor = NULL) {
     lat = c(rep(limits[3], 3), rep(limits[4], 3), limits[3])
   )
   
-  sf::st_as_sfc(
-    sf::st_bbox(
-      sf::st_transform(
-        sf::st_sfc(sf::st_polygon(list(as.matrix(coords))), crs = 4326),
-        sf::st_crs(crs)
-      )
+  tmp <- sf::st_bbox(
+    sf::st_transform(
+      sf::st_sfc(sf::st_polygon(list(as.matrix(coords))), crs = 4326),
+      sf::st_crs(crs)
     )
   )
+  
+  if(!is.null(expand.factor)) {
+    lon.rdiff <- unname(diff(tmp[c("xmin", "xmax")]))
+    lon.shift <- ((lon.rdiff*expand.factor) - lon.rdiff)/2
+    tmp["xmin"] <- tmp["xmin"] - lon.shift
+    tmp["xmax"] <- tmp["xmax"] + lon.shift
+    
+    lat.rdiff <- unname(diff(tmp[c("ymin", "ymax")]))
+    lat.shift <- ((lat.rdiff*expand.factor) - lat.rdiff)/2
+    tmp["ymin"] <- tmp["ymin"] - lat.shift
+    tmp["ymax"] <- tmp["ymax"] + lat.shift
+  }
+  
+  sf::st_as_sfc(tmp)
 }
 
 #' @title Define bathymetry style for \code{\link{basemap}}

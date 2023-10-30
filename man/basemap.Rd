@@ -32,7 +32,7 @@ basemap(
   grid.size = 0.1,
   base_size = 11,
   projection.grid = FALSE,
-  expand.factor = 1.1,
+  expand.factor = 1,
   verbose = FALSE
 )
 }
