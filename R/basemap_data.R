@@ -129,7 +129,7 @@ basemap_data_detect_case <- function(limits = NULL, data = NULL, shapefiles = NU
 
 
 ## Define shapefiles ####
-basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, bathy.type = NULL, downsample = 0, glaciers = FALSE, rotate = FALSE, expand.factor = 1.1, verbose = FALSE) {
+basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NULL, bathymetry = FALSE, bathy.type = NULL, downsample = 0, glaciers = FALSE, rotate = FALSE, expand.factor = 1, verbose = FALSE) {
   
   # Switches and checks ####
   
@@ -511,9 +511,11 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       crs <- rotate_crs(crs, limits[1:2])
       clip_shape <- dd_clip_boundary(limits, crs, expand.factor)
     } else {
-
-      clip_shape <- dd_clip_boundary(limits, crs, expand.factor)
-            
+      
+      ## This approach produces too wide boundaries in some cases
+      # clip_shape <- dd_clip_boundary(limits, crs, expand.factor)
+      
+      ## This approach does not work for antimeridian
       # tmp <- sf::st_bbox(sf::st_transform(data, crs))
       # 
       # if(!is.null(expand.factor)) {
@@ -530,14 +532,20 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       # 
       # clip_shape <- sf::st_as_sfc(tmp)
       
-      ## Previous code. There was probably a reason why I wrote this
-      # if(sf::st_crs(data) == crs) {
-      #   clip_shape <- sf::st_as_sfc(sf::st_bbox(data))
-      #   clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_buffer(clip_shape, dist = 0.01*sqrt(sf::st_area(clip_shape)))))
-      # } else {
-      #   clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
-      #   clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_buffer(clip_shape, dist = 0.01*sqrt(sf::st_area(clip_shape)))))
-      # }
+      ## Previous code. There was probably a reason why I wrote this, but this probably does not work either
+      if(sf::st_crs(data) == crs) {
+        clip_shape <- sf::st_as_sfc(sf::st_bbox(data))
+      } else {
+        clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
+      }
+      clip_shape <- 
+        sf::st_as_sfc(
+          sf::st_bbox(
+            sf::st_buffer(
+              clip_shape, dist = (expand.factor-1)*sqrt(sf::st_area(clip_shape))
+          )
+        )
+      )
     }
     
   } else if(case %in% c("limits_proj", "data_proj")) { ## Projected limits/data ####
