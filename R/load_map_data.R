@@ -49,8 +49,8 @@ load_map_data <- function(x, force = FALSE, downsample = 0) {
     
     if(is.null(k)) {
       NULL
-    } else if(grepl("/", k)) {
-      if(!grepl("\\.", k)) {
+    } else if(grepl("/|\\\\", k)) {
+      if(tools::file_ext(k) == "") {
         normalizePath(paste0(k, ".rda"), mustWork = FALSE)
       } else {
         normalizePath(k, mustWork = TRUE)
