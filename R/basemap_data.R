@@ -392,6 +392,8 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     
   } else if(case %in% c("data_sf", "data_sp", "data_dec")) { ### data ####
     
+    singular_case <- FALSE
+    
     if(case == "data_sp") data <- sf::st_as_sf(data)
     
     if(case == "data_dec") {
@@ -404,6 +406,16 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       # if(rotate) {
       
       limits <- sf::st_bbox(sf::st_transform(data, 4326))[c("xmin", "xmax", "ymin", "ymax")] 
+      
+      if(diff(limits[1:2]) == 0) {
+        limits[1:2] <- c(limits[1]-0.01, limits[2]+0.01)
+        singular_case <- TRUE
+      }
+      
+      if(diff(limits[3:4]) == 0) {
+        limits[3:4] <- c(limits[3]-0.01, limits[4]+0.01)
+        singular_case <- TRUE
+      }
       
       if(diff(limits[1:2]) > 180) {
         limits[1:2] <- limits[2:1]
@@ -439,7 +451,22 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       
       # clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
       limits <- sf::st_bbox(sf::st_transform(data, 4326))[c("xmin", "xmax", "ymin", "ymax")]
+      
+      if(diff(limits[1:2]) == 0) {
+        limits[1:2] <- c(limits[1]-0.01, limits[2]+0.01)
+        singular_case <- TRUE
+      }
+      
+      if(diff(limits[3:4]) == 0) {
+        limits[3:4] <- c(limits[3]-0.01, limits[4]+0.01)
+        singular_case <- TRUE
+      }
+      
+      if(diff(limits[1:2]) > 180) {
+        limits[1:2] <- limits[2:1]
+      }
     }
+    
     
     if(rotate) {
       crs <- rotate_crs(crs, limits[1:2])
@@ -468,10 +495,19 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       
       ## Previous code. There was probably a reason why I wrote this, but this probably does not work either
       if(sf::st_crs(data) == crs) {
-        clip_shape <- sf::st_as_sfc(sf::st_bbox(data))
+        if(singular_case) {
+          clip_shape <- sf::st_transform(sf::st_as_sfc(sf::st_bbox(limits, crs = 4326)), crs)
+        } else {
+          clip_shape <- sf::st_as_sfc(sf::st_bbox(data))
+        }
       } else {
-        clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
+        if(singular_case) {
+          clip_shape <- sf::st_transform(sf::st_as_sfc(sf::st_bbox(limits, crs = 4326)), crs)
+        } else {
+          clip_shape <- sf::st_as_sfc(sf::st_bbox(sf::st_transform(data, crs)))
+        }
       }
+      
       clip_shape <- 
         sf::st_as_sfc(
           sf::st_bbox(
