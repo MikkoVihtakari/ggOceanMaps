@@ -543,9 +543,9 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
           sf::st_bbox(
             sf::st_buffer(
               clip_shape, dist = (expand.factor-1)*sqrt(sf::st_area(clip_shape))
+            )
           )
         )
-      )
     }
     
   } else if(case %in% c("limits_proj", "data_proj")) { ## Projected limits/data ####
@@ -784,61 +784,29 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
 
 basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NULL) {
   
-  ## A quick fix. Improve later
-  
-  # if(!is.null(x$clipLimits)) {
-  #   if(abs(x$clipLimits$ddLimits[4]) != 90) {
-  #     tmp <- sf::st_bbox(sf::st_transform(x$clipLimits$projBound, 4326))
-  #     x$clipLimits$ddLimits <- tmp[c("xmin", "xmax", "ymin", "ymax")]
-  #   }
-  # }
-  
   ## Define intervals if not specified
   
   if(is.null(lat.interval)) {
-    
     if(x$polarMap) {
       latDist <- 90 - abs(x$decLimits)
-    } else {
-      limits <- sf::st_bbox(sf::st_transform(x$limit_shape, 4326))[c("xmin", "xmax", "ymin", "ymax")]
       
-      latDist <- abs(diff(round(limits)[3:4]))
+      lat.interval <-
+        ifelse(latDist >= 30, 10,
+               ifelse(latDist >= 15, 5,
+                      ifelse(latDist >= 10, 4,
+                             ifelse(latDist >= 6, 3,
+                                    ifelse(latDist > 4, 2, 1)
+                             ))))
+    } else {
+      lat.breaks <- ggplot2::waiver()
     }
-    lat.interval <- 
-      ifelse(latDist >= 30, 10, 
-             ifelse(latDist >= 15, 5, 
-                    ifelse(latDist >= 10, 4, 
-                           ifelse(latDist >= 6, 3, 
-                                  ifelse(latDist > 4, 2, 1)
-                           ))))
   }
   
   if(is.null(lon.interval)) {
-    
     if(x$polarMap) {
       lon.interval <- 45
     } else {
-      limits <- sf::st_bbox(sf::st_transform(x$limit_shape, 4326))[c("xmin", "xmax", "ymin", "ymax")]
-      
-      if(diff(limits[1:2]) == 360) {
-        lonDist <- 360
-      } else {
-        tmp <- dd_to_deg(round(x$decLimits)[1:2])
-        
-        if(tmp[1] > tmp[2]) {
-          lonDist <- 360 - tmp[1] + tmp[2]
-        } else {
-          lonDist <- tmp[2] - tmp[1]
-        }
-      }
-      
-      lon.interval <- 
-        ifelse(lonDist > 180, 45, 
-               ifelse(lonDist > 90, 30, 
-                      ifelse(lonDist >= 40, 10, 
-                             ifelse(lonDist > 10, 5, 
-                                    ifelse(lonDist > 4, 2, 1)
-                             ))))
+      lon.breaks <- ggplot2::waiver()
     }
   }
   
@@ -886,16 +854,19 @@ basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NUL
     
   } else {
     
-    limits <- sf::st_bbox(sf::st_transform(x$limit_shape, 4326))[c("xmin", "xmax", "ymin", "ymax")]
+    if(!is.null(lat.interval)) {
+      limits <- sf::st_bbox(sf::st_transform(x$limit_shape, 4326))[c("xmin", "xmax", "ymin", "ymax")]
+      minLat <- min(limits[3:4])  
+      minLat <- ifelse(minLat < 0, -90, round_any(minLat, 10, floor))
+      maxLat <- max(limits[3:4])
+      maxLat <- ifelse(maxLat > 0, 90, round_any(maxLat, 10, ceiling))
+      lat.breaks <- seq(minLat, maxLat, lat.interval)
+    }
     
-    minLat <- min(limits[3:4])
-    maxLat <- max(limits[3:4])
+    if(!is.null(lon.interval)) {
+      lon.breaks <- unique(c(seq(0, 180, lon.interval), seq(-180, 0, lon.interval)))
+    }
     
-    minLat <- ifelse(minLat < 0, -90, round_any(minLat, 10, floor))
-    maxLat <- ifelse(maxLat > 0, 90, round_any(maxLat, 10, ceiling))
-    
-    lat.breaks <- seq(minLat, maxLat, lat.interval)
-    lon.breaks <- unique(c(seq(0, 180, lon.interval), seq(-180, 0, lon.interval)))
     mapGrid <- list(lon.breaks = lon.breaks, lat.breaks = lat.breaks)
   }
   
