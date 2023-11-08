@@ -340,6 +340,15 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
   } else if(case %in% c("limits_dec")) { 
     ### limits_dec ####
     
+    if(diff(limits[1:2]) == -360) {
+      message("First limits element 180, second -180. Assuming that these were provided the wrong way around")
+      limits[1:2] <- limits[2:1] 
+    }
+    
+    if(diff(limits[1:2]) == 360) {
+      limits[1:2] <- c(-179.9,179.9)
+    }
+    
     # Shapefile definitions
     
     if(is.null(shapefiles)) {
@@ -359,20 +368,20 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       }
     }
     
-    if(sf::st_is_longlat(crs) && sign(limits[1]) != sign(limits[2]) & !rotate) {
+    if(sf::st_is_longlat(crs) && sign(limits[1]) == 1 & sign(limits[2]) == -1 && !rotate) {
       
       if(utils::compareVersion(sf::sf_extSoftVersion()["PROJ"], "8.0") < 0) {
-        msg <- paste0("Detecting antimeridian crossing with old PROJ version. Plotting 
-        might not work as intended. Please update your PROJ to plot maps 
+        msg <- paste0("Detecting antimeridian crossing with old PROJ version. Plotting
+        might not work as intended. Please update your PROJ to plot maps
         crossing the antimeridian.")
       } else {
-        msg <- paste0("Detecting antimeridian crossing on decimal degree map. Plotting only 
-              works with rotate = TRUE. Turning rotate on. Adjust limits if this
-              is not desired.")
+        msg <- paste0("Do you want to make a decimal degree map which has antimeridian
+        crossing? If yes, please turn rotate = TRUE. Automatic rotation was removed 
+        because it did not always work.")
       }
       
       message(paste(strwrap(msg), collapse= "\n"))
-      rotate <- TRUE
+      # rotate <- TRUE
     }
     
     if(rotate) {
@@ -381,81 +390,6 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     
     clip_shape <- dd_clip_boundary(limits, crs, expand.factor)
     
-    
-    # } else if(case %in% c("data_dec")) { ### data frames ###
-    #   
-    #   if(is.null(shapefiles)) {
-    #     
-    #     
-    #     
-    #     
-    #     
-    #     if(rotate){
-    #       tmp <- auto_limits(data, verbose = verbose)
-    # 
-    #       tmp2 <- guess_coordinate_columns(data)
-    #       tmp$ddLimits <- stats::setNames(
-    #         c(deg_to_dd(range(dd_to_deg(data[[tmp2[names(tmp2) == "lon"]]]))),
-    #           range(data[[tmp2[names(tmp2) == "lat"]]])
-    #           ),
-    #         c("xmin", "xmax", "ymin", "ymax")
-    #       )
-    #     } else {
-    #       tmp <- auto_limits(data, expand.factor = 1.1, verbose = verbose)
-    #     }
-    #     
-    #     shapefile.def <- define_shapefiles(tmp$ddLimits, force_dd = TRUE)
-    #     if(is.null(crs)) {crs <- sf::st_crs(shapefile.def$crs)}
-    #     shapefile.name <- shapefile.def$shapefile.name
-    #     shapefiles <- shapefile_list(shapefile.name)
-    #     # clip_shape <- tmp$projBound
-    #     # 
-    #   } else {
-    #     if(inherits(shapefiles$land, c("sf", "SpatialPolygonsDataFrame", "SpatialPolygons"))) {
-    #       if(inherits(shapefiles$land, c("SpatialPolygonsDataFrame", "SpatialPolygons"))) {
-    #         shapefiles$land <- sf::st_as_sf(shapefiles$land)
-    #       }
-    #       crs <- suppressWarnings(sf::st_crs(shapefiles$land))
-    #     } else {
-    #       crs <- suppressWarnings(sf::st_crs(eval(parse(text = shapefiles$land))))
-    #     }
-    #     
-    #     tmp <- auto_limits(data, proj.out = crs, expand.factor = 1.1, verbose = verbose)
-    #     clip_shape <- sf::st_transform(tmp$projBound, crs)
-    #   }
-    #   
-    #   
-    #   # if(rotate) {
-    #   #   limits <- tmp$ddLimits
-    #   # } else {
-    #     limits <- sf::st_bbox(sf::st_transform(tmp$projBound, crs = 4326))[c("xmin", "xmax", "ymin", "ymax")]
-    #     
-    #     if(rotate) {
-    #       crs <- rotate_crs(crs, limits[1:2])
-    #     }
-    #     
-    #     clip_shape <- dd_clip_boundary(limits, crs)
-    #   # }
-    #   
-    #   #limits <- tmp$ddLimits
-    #   # limits <- sf::st_bbox(sf::st_transform(sf::st_as_sfc(sf::st_bbox(clip_shape)), crs = 4326))[c("xmin", "xmax", "ymin", "ymax")]
-    #   
-    #   if(sf::st_is_longlat(crs) && sign(limits[1]) != sign(limits[2]) && diff(limits[1:2]) < 180 & !rotate) {
-    #     msg <- paste0("Detecting antimeridian crossing on decimal degree map. Plotting only 
-    #             works with rotate = TRUE. Turning rotate on. Adjust limits if this
-    #             is not desired.")
-    #     
-    #     message(paste(strwrap(msg), collapse= "\n"))
-    #     rotate <- TRUE
-    #   }
-    #   
-    #   if(rotate) {
-    #     crs <- rotate_crs(crs, limits[1:2])
-    #     clip_shape <- dd_clip_boundary(limits, crs, expand.factor = 1.1)
-    #   } else {
-    #     clip_shape <- dd_clip_boundary(limits, crs)
-    #   }
-    #   
   } else if(case %in% c("data_sf", "data_sp", "data_dec")) { ### data ####
     
     if(case == "data_sp") data <- sf::st_as_sf(data)
@@ -685,28 +619,6 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
   x$shapefiles$land <- landBoundary$shapefile
   x$clip_limits <- landBoundary$boundary
   
-  # if(x$rotate) {
-  #   landBoundary <- clip_shapefile(
-  #     sf::st_transform(x$shapefiles$land, crs = x$crs),
-  #     limits = sf::st_transform(x$clip_limits, crs = x$crs),
-  #     return.boundary = TRUE
-  #   )
-  #   
-  #   x$shapefiles$land <- landBoundary$shapefile
-  #   x$clip_limits <- landBoundary$boundary
-  #   
-  # } else {
-  #   
-  #   landBoundary <- clip_shapefile(
-  #     x$shapefiles$land, 
-  #     limits = x$clip_limits, 
-  #     return.boundary = TRUE
-  #   )
-  #   
-  #   x$shapefiles$land <- landBoundary$shapefile
-  #   
-  # }
-  # 
   if(glaciers) {
     if(!is.null(crs)) { # this hack is required for custom crs. Couldn't come up with a better solution
       x$shapefiles$glacier <- 
