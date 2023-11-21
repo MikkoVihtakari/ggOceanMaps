@@ -24,14 +24,14 @@
 #' @param bathy.alpha Transparency parameter for the bathymetry fill color. See \link[ggplot2]{scale_alpha}.
 #' @param base_size Base size parameter for ggplot. See \link[ggplot2]{ggtheme}.
 #' @param projection.grid Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.
-#' @param expand.factor Expansion factor for map limits with the \code{data} argument. Can be used to zoom in and out automatically limited maps. Defaults to 1.1. Set to \code{NULL} to ignore.
+#' @param expand.factor Expansion factor for map limits. Can be used to zoom in (decrease the value under 1) and out (increase the value over 1) automatically (\code{data}) limited maps. Defaults to 1, which means that outermost data points are located at the boundaries of the plotting region. 
 #' @param verbose Logical indicating whether information about the projection and guessed column names should be returned as messages. Set to \code{FALSE} to make the function silent.
 #' @return Returns a \link[ggplot2]{ggplot} map, which can be assigned to an object and modified as any ggplot object.
 #' @details The function uses \link[ggplot2:ggplot2-package]{ggplot2}, \link[sf:sf]{sf}, \link[stars:st_as_stars]{stars} and spatial files to plot maps of the world's oceans. 
 #' 
 #' \strong{Limits}
 #'
-#' If the limits are in decimal degrees, the longitude limits (\code{[1:2]}) specify the start and end segments of corresponding angular lines that should reside inside the map area. The longitude limits are defined \strong{counter-clockwise}. The latitude limits \code{[3:4]} define the parallels that should reside inside the limited region given the longitude segments. Note that the actual limited region becomes wider than the polygon defined by the coordinates (shown in Examples). Using \code{data} to limit the map expands the map all around the data points to make them fit into the map. If the limits are given as projected coordinates or as decimal degrees for maps with -60 < latitude < 60, limit elements represent lines encompassing the map area in cartesian space. 
+#' If the limits are in decimal degrees, the longitude limits (\code{[1:2]}) specify the start and end segments of corresponding angular lines that should reside inside the map area. The longitude limits are defined \strong{counter-clockwise}. The latitude limits \code{[3:4]} define the parallels that should reside inside the limited region given the longitude segments. Note that the actual limited region becomes wider than the polygon defined by the coordinates (shown in Examples). Using \code{data} to limit the map, making the points barely fit into the map. The \code{expand.factor} argument can be used to adjust the space between map borders and points. If the limits are given as projected coordinates or as decimal degrees for maps with -60 < latitude < 60, limit elements represent lines encompassing the map area in cartesian space. 
 #' 
 #' \strong{Projections}
 #' 
@@ -249,6 +249,16 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs
   if(!is.null(crs) & rotate) {
     rotate <- FALSE
     message("The rotate argument cannot be used with custom crs. Turning rotate to FALSE.")
+  }
+  
+  if(!is.null(data)) {
+    if(!inherits(data, "data.frame")) stop("The data argument has to be a data.frame, tibble or data.table")
+    if(nrow(data) == 0) stop("There are no rows in data.")
+  }
+  
+  if(!is.null(limits)) {
+    if(!length(limits) %in% c(1,4)) stop("The limits argument has to be numeric vector of length 1 or 4. See Arguments.")
+    if(!inherits(limits, c("numeric", "integer"))) stop("The limits argument has to be a numeric vector. See Arguments.")
   }
   
   ###########

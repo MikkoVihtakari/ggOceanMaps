@@ -1,17 +1,26 @@
 # ggOceanMaps 2.2 (development version on GitHub)
 
-- Fix an issue with certain bathy.style abbreviations
-- qmap arguments did not match those of basemap: add bathy.alpha and downsample arguments to qmap
-- Fix an [issue](https://stackoverflow.com/questions/60684049/creating-a-interactive-map-on-r-using-plotly) when trying to plot basemaps using `plotly::ggplotly()`
+* Add tests better explaining wrongly specified arguments
+* Update the user manual
+* Fix an issue with certain `bathy.style` abbreviations
+* qmap arguments did not match those of basemap: add `bathy.alpha` and `downsample` arguments to qmap
+* Fix an [issue](https://stackoverflow.com/questions/60684049/creating-a-interactive-map-on-r-using-plotly) when trying to plot basemaps using `plotly::ggplotly()`
+* Fix an issue with . in file path
+* Fix an issue when plotting singular points
+* Fix `basemap(c(-180, 180, -90, 90))` case and turn off automatic rotation when crossing the anti-meridian. A message is shown instead.
+* Turn off `expand` in `ggplot2::coord_sf()` to avoid an error when having map border at 0 meridian. 
+* Fix a case where data argument produced too wide boundaries
+* `expand.factor` should work now as designed
+* Fix an error in `dist2land(binary = TRUE)`
 
-# ggOceanMaps 2.1
+# ggOceanMaps 2.1.1
 
 * Fix a bug in bathy.style wording.
 * Add [`get_depth()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/get_depth.html) function.
 * Fix a critical issue with downloads failing on Windows.
 * Add detailed land shapes of Europe. Can be used by `basemap(shapefiles = "Europe")`
 
-# ggOceanMaps 2.0 
+# ggOceanMaps 2.0.0
 
 * Full [sf](https://r-spatial.github.io/sf/) integration. Old GIS packages for R and ggspatial dependencies removed. Since this change required rewriting of most functions, new bugs have almost certainly been introduced.
 * Bathymetry system redesigned (see [this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.html))

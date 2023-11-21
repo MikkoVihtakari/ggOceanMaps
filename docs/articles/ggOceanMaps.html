@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.12</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">30 August, 2023</h4>
+            <h4 data-toc-skip class="date">09 November, 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/ggOceanMaps.Rmd" class="external-link"><code>vignettes/ggOceanMaps.Rmd</code></a></small>
       <div class="d-none name"><code>ggOceanMaps.Rmd</code></div>
@@ -91,9 +91,6 @@
 
     
     
-<p><strong>Note:</strong> Due to the update to 2.0, this user manual
-might be slightly outdated. This note will disappear once the manual has
-been revised entirely.</p>
 <p>The ggOceanMaps package for <a href="https://www.r-project.org/" class="external-link">R</a> allows plotting data on
 bathymetric maps using <a href="https://ggplot2.tidyverse.org/reference/" class="external-link">ggplot2</a>. The package
 is designed for ocean sciences and greatly simplifies bathymetric map
@@ -130,19 +127,27 @@ documentation</a> while reading the tutorial.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/" class="external-link">ggOceanMaps</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="limits">Limits<a class="anchor" aria-label="anchor" href="#limits"></a>
+<h3 id="limiting-maps">Limiting maps<a class="anchor" aria-label="anchor" href="#limiting-maps"></a>
 </h3>
 <p>To ensure simplicity, ggOceanMaps package attempts to use <a href="https://en.wikipedia.org/wiki/Decimal_degrees" class="external-link">decimal degree</a>
 <a href="https://en.wikipedia.org/wiki/Coordinate_system" class="external-link">coordinate
 system</a> as much as possible. This system represents coordinates on a
 sphere, while maps are plotted in two dimensions. Therefore, the
 underlying map data have to be projected using <a href="#projections">different mathematical algorithms depending on the
-geographic location</a>. The simplest way of defining the geographic
-location is to use the <code>limits</code> argument with decimal
-degrees. The limits argument can be defined either as a numeric vector
-of length 1 or 4. Specifying the argument as a single integer between 30
-and 88 or -88 and -30 plots a polar stereographic map for the Arctic or
-Antarctic, respectively.</p>
+geographic location</a>.</p>
+<p>Maps can be limited (e.g. provide geographic location for a map)
+using three arguments: <code>limits</code>, <code>data</code>, and
+<code>shapefiles</code>. The limit type is automatically detected when
+supplied to the first argument (called <code>x</code>) in the
+<code><a href="../reference/basemap.html">basemap()</a></code> and <code><a href="../reference/qmap.html">qmap()</a></code> functions.</p>
+<div class="section level4">
+<h4 id="limits">Limits<a class="anchor" aria-label="anchor" href="#limits"></a>
+</h4>
+<p>The simplest way of defining the geographic location is to use the
+<code>limits</code> argument with decimal degrees. The limits argument
+can be defined either as a numeric vector of length 1 or 4. Specifying
+the argument as a single integer between 30 and 88 or -88 and -30 plots
+a polar stereographic map for the Arctic or Antarctic, respectively.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/" class="external-link">ggOceanMaps</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://paleolimbot.github.io/ggspatial/" class="external-link">ggspatial</a></span><span class="op">)</span> <span class="co"># for data plotting</span></span>
@@ -165,7 +170,7 @@ counter-clockwise, also the longitude limits have to be defined
 <code>limits</code> will lead to expanded limits towards the poles when
 using Arctic and Antarctic Polar Stereographic projections because
 decimal degrees represent a sphere:</p>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-5-1.png" width="960"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>The figure above: Limiting rectangular basemaps is done by placing
 four coordinates to the limit argument. A) If the limits are in decimal
 degrees, the longitude limits (<code>[1:2]</code>) specify the start and
@@ -180,15 +185,16 @@ limits are <code>c(120, -120, 60, 80)</code>. B) If the limits are given
 as projected coordinates or as decimal degrees for maps with |latitude|
 &lt; 60, limits elements represent lines encompassing the map area in
 cartesian space. The example limits are the limits from A) projected to
-the Arctic stereographic (crs = 3995). When limiting basemaps using
-data, the limits are calculated for the maximum reach of projected
-coordinates as in B but with an added buffer to place all points inside
-the map area.</p>
-<p>As an example:</p>
+the Arctic stereographic (crs = 3995).</p>
+<p>The example above as a map. Note how the latitude limits give a much
+larger map than one would expect from cartesian coordinates because the
+60 <span class="math inline">\(^\circ\)</span>N parallel is within the
+map area between 120 <span class="math inline">\(^\circ\)</span>E and
+120 <span class="math inline">\(^\circ\)</span>W meridians.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">160</span>, <span class="fl">160</span>, <span class="op">-</span><span class="fl">160</span>, <span class="op">-</span><span class="fl">160</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">80</span>, <span class="fl">80</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">120</span>, <span class="fl">120</span>, <span class="op">-</span><span class="fl">120</span>, <span class="op">-</span><span class="fl">120</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">80</span>, <span class="fl">80</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">160</span>, <span class="op">-</span><span class="fl">160</span>, <span class="fl">60</span>, <span class="fl">80</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">120</span>, <span class="op">-</span><span class="fl">120</span>, <span class="fl">60</span>, <span class="fl">80</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggspatial</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_polygon</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">dt</span>, </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
@@ -215,151 +221,208 @@ would be enough for “ArcticStereographic”):</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2e6</span>, <span class="fl">1e6</span>, <span class="fl">0</span>, <span class="fl">3e6</span><span class="op">)</span>, shapefiles <span class="op">=</span> <span class="st">"Arctic"</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
-<div class="section level3">
-<h3 id="data-limits">Data limits<a class="anchor" aria-label="anchor" href="#data-limits"></a>
-</h3>
+<div class="section level4">
+<h4 id="data-limits">Data limits<a class="anchor" aria-label="anchor" href="#data-limits"></a>
+</h4>
 <p>The limits of a map can also be defined by inputting a data frame to
 the <code>data</code> argument. The limits are automatically defined
 allowing the user to quickly find limits for a desired spatial
 dataset:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">160</span>, <span class="op">-</span><span class="fl">160</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">80</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">160</span>, <span class="fl">180</span>, <span class="op">-</span><span class="fl">160</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">70</span>, <span class="fl">80</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span> <span class="op">+</span> <span class="co"># a synonym: basemap(dt)</span></span>
 <span>  <span class="fu">ggspatial</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
-<p>Note how the function expands the map to make all data fit inside the
-map area compared to a similar plot using the <code>limits</code>
-argument above. The function automatically detects columns containing
-longitude and latitude information. The automatic detection algorithm is
-not very advanced and it is recommended to use intuitive column names
-for longitude (such as “lon”, “long”, or “longitude”) and latitude
-(“lat”, “latitude”) columns. The coordinate data have to be given as
-decimal degrees for the <code>data</code> argument to function.</p>
+<p>The function makes the map such that the outermost data points barely
+fit into the mapped region. The space between the map borders and data
+points can be adjusted using the <code>expand.factor</code>
+argument:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="va">dt</span>, expand.factor <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggspatial</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="va">dt</span>, expand.factor <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggspatial</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="st">"AUTO"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="ggOceanMaps_files/figure-html/fig-expand-factor-1.png" alt="Figure above: The expand.factor argument can be used to expand (A) and reduce (B) map region in relation to data." width="700"><p class="caption">
+Figure above: The expand.factor argument can be used to expand (A) and
+reduce (B) map region in relation to data.
+</p>
+</div>
+<p>See the <a href="#adding-data-to-maps">Adding data to maps</a>
+section for more information. The <code><a href="../reference/basemap.html">basemap()</a></code> function
+automatically detects columns containing longitude and latitude
+information when the <code>data</code> argument is used. The automatic
+detection algorithm is not very advanced and it is recommended to use
+intuitive column names for longitude (such as “lon”, “long”, or
+“longitude”) and latitude (“lat”, “latitude”) columns. The coordinate
+data have to be given as decimal degrees for the <code>data</code>
+argument to function.</p>
+</div>
+<div class="section level4">
+<h4 id="shape-files">Shape files<a class="anchor" aria-label="anchor" href="#shape-files"></a>
+</h4>
+<p>The ggOceanMaps package contains a set of [premade shapefiles]. Only
+the decimal degree land shapes are shipped with the package while others
+are downloaded as needed. See the <a href="https://mikkovihtakari.github.io/ggOceanMaps/index.html#data-path" class="external-link">front
+page for instructions how to setup the automatic download folder</a>
+before you start downloading shape files. Any character supplied to the
+<code>x</code> argument in the <code><a href="../reference/basemap.html">basemap()</a></code> function will
+automatically be understood as <code>shapefiles</code> argument. The
+maps are limited showing the entire land shape. Use the
+<code>limits</code> argument to further limit the shape file.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"Arctic"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="bathymetry">Bathymetry<a class="anchor" aria-label="anchor" href="#bathymetry"></a>
 </h3>
-<p>Bathymetry system has been revised in version 2.0. Bathymetry can be
+<p>Bathymetry system was revised in version 2.0. Bathymetry can be
 plotted by simply specifying <code>bathymetry = TRUE</code> or
-<code>bathy.style</code> (you won’t need to specify both any
-longer):</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code>bathy.style</code> (no need to specify both any longer):</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">125</span>, <span class="op">-</span><span class="fl">110</span>, <span class="fl">25</span>, <span class="fl">35</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>The default, <code>bathy.style = "raster_binned_blues"</code>, uses a
 low-resolution raster file shipped with ggOceanMaps. The package
 contains an option to plot higher resolution bathymetries than the
 default binned blue alternative. These bathymetries can be accessed by
 specifying the <code>bathy.style</code> argument and require a download
 from ggOceanMapsLargeData or other online repositories.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">125</span>, <span class="op">-</span><span class="fl">110</span>, <span class="fl">25</span>, <span class="fl">35</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rcb"</span><span class="op">)</span> <span class="co"># synonym to "raster_continuous_blues"</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
-<p>The bathy.style character argument consists of three parts separated
-by a <code>_</code>. The first part gives the type: raster, poly(gon),
-or contour. The two latter ones use vector data. The second part gives
-the resolution: binned, continuous or user. The continuous and user
-options cannot be used for vector data.</p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<p>The <code>bathy.style</code> character argument consists of three
+parts separated by a <code>_</code>. The <em>first part gives the
+type</em>: raster, poly(gon), or contour. The two latter ones use vector
+data. The <em>second part gives the resolution</em>: binned, continuous
+or user. The continuous and user options cannot be used for vector
+data.</p>
 <p>The user option accepts any raster file that can be opened using <a href="https://search.r-project.org/CRAN/refmans/stars/html/read_stars.html" class="external-link">stars::read_stars</a>.
-The path to the file has to be stored in ggOceanMaps.userpath option
+The path to the file has to be stored in
+<code>ggOceanMaps.userpath</code> option
 (e.g. <code>options(ggOceanMaps.userpath = "PATH_TO_THE_FILE")</code>)
 (you can set this in .Rprofile to avoid having to type it every
 time).</p>
-<p>The last part defines the color: blues or grays. These options can be
-abbreviated by specifying the first letter of each part. Gray contour
-lines are an exception to the rule above and can be plotted using
-bathy.style = “contour_gray”. Future versions may contain a combination
-of raster and gray contours, but these have not been implemented yet.
-Currently implemented bathy.style alternatives are:</p>
+<p>The <em>last part defines the color</em>: blues or grays. These
+<em>options can be abbreviated</em> by specifying the first letter of
+each part. Gray contour lines are an exception to the rule above and can
+be plotted using bathy.style = “contour_gray”. Future versions may
+contain a combination of raster and gray contours, but these have not
+been implemented yet. Currently implemented bathy.style alternatives
+are:</p>
 <ul>
-<li>NULL (default). Bathymetry style is searched from
-getOption(“ggOceanMaps.bathy.style”). If not found,
-“raster_binned_blues” is used.</li>
-</ul>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
-<ul>
-<li>“raster_binned_blues” or “rbb” plots binned raster bathymetry filled
-with different shades of blue. Does not require a download.</li>
-</ul>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rbb"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
-<ul>
-<li>“raster_binned_grays” or “rbg” the same than above but uses
-different shades of gray.</li>
+<li>
+<em>NULL (default)</em>. Bathymetry style is searched from
+<code>getOption("ggOceanMaps.bathy.style")</code>. If not found,
+<code>"raster_binned_blues"</code> is used.</li>
 </ul>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rbg"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 <ul>
-<li>“raster_continuous_blues” or “rcb” plots continuous raster
-bathymetry filled with different shades of blue. More detailed and
-visually more appealing than the binned bathymetry. Recommended.
-Requires a download.</li>
+<li>
+<em><code>"raster_binned_blues"</code></em> or <code>"rbb"</code>
+plots binned raster bathymetry filled with different shades of blue.
+Does not require a download.</li>
 </ul>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rcb"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rbb"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <ul>
-<li>“raster_continuous_grays” or “rcg” the same than above but uses
-different shades of gray.</li>
+<li>
+<em><code>"raster_binned_grays"</code></em> or <code>"rbg"</code>
+the same than above but uses different shades of gray.</li>
 </ul>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rcg"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rbg"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+<ul>
+<li>
+<em><code>"raster_continuous_blues"</code></em> or
+<code>"rcb"</code> plots continuous raster bathymetry filled with
+different shades of blue. More detailed and visually more appealing than
+the binned bathymetry. Requires a download.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rcb"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <ul>
-<li>“raster_user_blues” or “rub” plots continuous raster bathymetry
-filled with different shades of blue from
-getOption(“ggOceanMaps.user.path”). Any file supported by read_stars
+<li>
+<em><code>"raster_continuous_grays"</code></em> or
+<code>"rcg"</code> the same than above but uses different shades of
+gray.</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rcg"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<ul>
+<li>
+<em><code>"raster_user_blues"</code></em> or <code>"rub"</code>
+plots continuous raster bathymetry filled with different shades of blue
+from <code>getOption("ggOceanMaps.user.path")</code>. Any file supported
+by <a href="https://search.r-project.org/CRAN/refmans/stars/html/read_stars.html" class="external-link">stars::read_stars</a>
 should work. The file has to be placed into the location specified by
 the path. Experimental feature. Has been tested using ETOPO 60
 arc-second and GEBCO 15 arc-second grids. Please report any bugs you
 find.</li>
 </ul>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rub"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
-<ul>
-<li>“raster_user_grays” or “rug” the same than above but uses different
-shades of gray.</li>
-</ul>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rug"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <ul>
-<li>“poly_binned_blues”, “poly_blues”, “pbb” or “pb” plots polygon
-bathymetry filled with different shades of blue. Default in the versions
-older than 2.0 of ggOceanMaps. Requires a download.</li>
-</ul>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"pb"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
-<ul>
-<li>“poly_binned_grays”, “poly_grays”, “pbg” or “pg” same than above but
-uses different shades of gray.</li>
+<li>
+<em><code>"raster_user_grays"</code></em> or <code>"rug"</code> the
+same than above but uses different shades of gray.</li>
 </ul>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"pg"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rug"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 <ul>
-<li>“contour_binned_blues”, “contour_blues”, “cbb” or “cb” contour lines
-with different shades of blue. Requires a download.</li>
+<li>
+<em><code>"poly_binned_blues"</code></em>,
+<code>"poly_blues"</code>, <code>"pbb"</code> and <code>"pb"</code> plot
+polygon bathymetry filled with different shades of blue. Default in the
+versions older than 2.0 of ggOceanMaps. Requires a download.</li>
 </ul>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"cb"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"pb"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 <ul>
-<li>“contour_gray”, “contour_gray” or “cg” plots gray contour lines.
-Requires a download.</li>
+<li>
+<em><code>"poly_binned_grays"</code></em>,
+<code>"poly_grays"</code>, <code>"pbg"</code> or <code>"pg"</code> same
+than above but uses different shades of gray.</li>
 </ul>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"cg"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"pg"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<ul>
+<li>
+<em><code>"contour_binned_blues"</code></em>,
+<code>"contour_blues"</code>, <code>"cbb"</code> or <code>"cb"</code>
+contour lines with different shades of blue. Requires a download.</li>
+</ul>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"cb"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
-<p>The <strong>default can be changed by setting the
-ggOceanMaps.bathy.style option</strong>.
+<ul>
+<li>
+<em><code>"contour_gray"</code></em>, <code>"contour_gray"</code> or
+<code>"cg"</code> plots gray contour lines. Requires a download.</li>
+</ul>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>,<span class="fl">16</span>,<span class="fl">67.3</span>,<span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"cg"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p>The <em>default <code>bythy.style</code> can be changed by setting
+the <code>ggOceanMaps.bathy.style</code> option</em>.
 <code>options(ggOceanMaps.bathy.style = "poly_blues")</code> would make
 the style similar to older pre-2.0 versions of ggOceanMaps.</p>
 </div>
@@ -368,9 +431,9 @@ the style similar to older pre-2.0 versions of ggOceanMaps.</p>
 </h3>
 <p>Since 2.0, glaciers require a download. It is a good idea to use the
 polar stereographic datasets for this purpose:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="op">-</span><span class="fl">60</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span>, shapefiles <span class="op">=</span> <span class="st">"Antarctic"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="adding-data-to-maps">Adding data to maps<a class="anchor" aria-label="anchor" href="#adding-data-to-maps"></a>
@@ -389,23 +452,23 @@ plotted using projected coordinates. The <a href="https://CRAN.R-project.org/pac
 ggplot’s <a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link"><code>geom_sf</code></a>
 functions convert the coordinates automatically to the projected
 coordinates:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">0</span>, <span class="fl">30</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">180</span>, <span class="fl">30</span><span class="op">)</span><span class="op">)</span>, lat <span class="op">=</span> <span class="op">-</span><span class="fl">70</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="op">-</span><span class="fl">60</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> </span>
+<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="op">-</span><span class="fl">60</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span>, shapefiles <span class="op">=</span> <span class="st">"Antarctic"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">ggspatial</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html" class="external-link">geom_spatial_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
 <p>The ggplot functions can also be used, but the coordinates need to be
 transformed to the basemap projection first using the
 <code>transform_coord</code> function:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="op">-</span><span class="fl">60</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> </span>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="op">-</span><span class="fl">60</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span>, shapefiles <span class="op">=</span> <span class="st">"Antarctic"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="../reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
 <p>Note that the maps plotted in temperate and tropical regions are not
 projected. Consequently, decimal degrees work for such maps
 directly:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">100</span>, <span class="op">-</span><span class="fl">80</span>, <span class="op">-</span><span class="fl">60</span><span class="op">)</span>, </span>
 <span>                 lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">25</span>, <span class="fl">40</span><span class="op">)</span>, </span>
 <span>                 var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span></span>
@@ -413,52 +476,49 @@ directly:</p>
 <span></span>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
 <p>The <code>transform_coord</code> function detects the projection
 automatically, given that the map is limited using a similar range of
 coordinates. Therefore you can use the <code>transform_coord</code> as
 demonstrated above whenever using standard ggplot layers.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="op">-</span><span class="fl">80</span>, lat <span class="op">=</span> <span class="fl">25</span><span class="op">)</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   lon lat lon.proj lat.proj</span></span>
-<span><span class="co">#&gt; 1 -80  25      -80       25</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="op">-</span><span class="fl">80</span>, lat <span class="op">=</span> <span class="fl">25</span><span class="op">)</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt;   lon lat lon.proj lat.proj</span></span>
+<span><span class="co">#&gt; 1 -80  25      -80       25</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="rotating-maps">Rotating maps<a class="anchor" aria-label="anchor" href="#rotating-maps"></a>
 </h3>
 <p>The stereographic maps can be rotated to point towards north using
 the <code>rotate</code> argument:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>, <span class="op">-</span><span class="fl">80</span>, <span class="fl">60</span>, <span class="fl">85</span><span class="op">)</span>, rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
-<p>A word of warning, however: the rotation involves reprojecting all
-shapefiles in their entirety and is memory consuming especially for
-large bathymetry shapes. Rotation does not currently work within the
-<code><a href="../reference/transform_coord.html">transform_coord()</a></code> function. Use the
-<code>ggspatial::geom_spatial_*</code> functions when adding data to
-rotated maps.</p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
+<p>Note that rotation changes the underlying CRS and data need to be
+added using <code>ggspatial::geom_spatial_*</code>,
+<code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::geom_sf()</a></code> or
+<code>transform_coord(rotate = TRUE)</code> functions.</p>
 </div>
 <div class="section level3">
 <h3 id="quick-map">Quick map<a class="anchor" aria-label="anchor" href="#quick-map"></a>
 </h3>
 <p>The <code>qmap</code> function is designed as a shortcut to quickly
-take a look at a spatial dataset similar to the ggplot’s <a href="https://ggplot2.tidyverse.org/reference/qplot.html" class="external-link"><code>qplot</code></a>
-function. This function is supposed to automatically detect the type of
-data fed into the function and plot a map using appropriate geometries,
-limits, and projection. You can use the <code>expand.factor</code>
-argument to adjust the automatic zoom into <code>data</code>. Note that
-too large <code>expand.factor</code> values will lead to errors.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+take a look at a spatial dataset. This function automatically detects
+the type of data fed into the function and plots a map using appropriate
+geometries, limits, and projection. You can use the
+<code>expand.factor</code> argument to adjust the automatic zoom into
+<code>data</code>.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">100</span>, <span class="op">-</span><span class="fl">80</span>, <span class="op">-</span><span class="fl">60</span><span class="op">)</span>, </span>
 <span>                 lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">25</span>, <span class="fl">40</span><span class="op">)</span>, </span>
 <span>                 var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="st">"red"</span><span class="op">)</span><span class="op">)</span> <span class="co"># set color</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="va">var</span>, expand.factor <span class="op">=</span> <span class="fl">1.3</span><span class="op">)</span> <span class="co"># map color, zoom out</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-29-2.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-30-2.png" width="700"></p>
 </div>
 </div>
 <div class="section level2">
@@ -478,12 +538,16 @@ argument to automatically detect the required projection for a map (or
 the <code>data</code> argument to calculate <code>limits</code>). The
 algorithms deciding which projection to use are defined in
 <code>define_shapefiles</code> and <code>shapefile_list</code>
-functions. These conditions are expected to change during the
-development of the package and documented information here or in the
-<code>basemap</code> function might be outdated. Make sure to check the
-projection definition functions for up-to-date information. At the time
-of writing, the function uses three different projections (given as <a href="https://epsg.io/" class="external-link">EPSG codes</a>):</p>
+functions. The <code>basemap</code> function uses decimal degree land
+shapes as default and transforms them to polar stereographic projections
+based on following rules (given as <a href="https://epsg.io/" class="external-link">EPSG
+codes</a>):</p>
 <ul>
+<li>
+<strong>4326</strong> WGS 84 / World Geodetic System 1984, used in
+GPS. Called “DecimalDegree”. For min latitude (<code>limits[3]</code>)
+&lt; 30 or &gt; -30, max latitude (<code>limits[4]</code>) &lt; 60 or
+&gt; -60, and single integer latitudes &lt; 30 and &gt; -30.</li>
 <li>
 <strong>3995</strong> WGS 84 / Arctic Polar Stereographic. Called
 “ArcticStereographic”. For max latitude (<code>limits[4]</code>) &gt;=
@@ -494,54 +558,72 @@ integer latitudes &gt;= 30 and &lt;= 89.</li>
 “AntarcticStereographic”. For max latitude (<code>limits[4]</code>)
 &lt;= -60 (if min latitude (<code>limits[3]</code>) &lt;= -30), and
 single integer latitudes &lt;= -30 and &gt;= -89.</li>
-<li>
-<strong>4326</strong> WGS 84 / World Geodetic System 1984, used in
-GPS. Called “DecimalDegree”. For min latitude (<code>limits[3]</code>)
-&lt; 30 or &gt; -30, max latitude (<code>limits[4]</code>) &lt; 60 or
-&gt; -60, and single integer latitudes &lt; 30 and &gt; -30.</li>
 </ul>
-<p>The <code>basemap</code> function uses pre-transformed shapefiles for
-each of the projections above (defined in <code>shapefile_list</code>).
-This is to make the plotting quicker and more memory efficient but leads
-to larger data size required by the package.</p>
-<p>Since 2.0, it is possible to override the default CRS used by basemap
-using the <code>crs</code> argument:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<p>Further, higher resolution land shapes use different following
+projections:</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">name</th>
+<th align="right">crs</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">ArcticStereographic</td>
+<td align="right">3995</td>
+</tr>
+<tr class="even">
+<td align="left">AntarcticStereographic</td>
+<td align="right">3031</td>
+</tr>
+<tr class="odd">
+<td align="left">DecimalDegree</td>
+<td align="right">4326</td>
+</tr>
+<tr class="even">
+<td align="left">Svalbard</td>
+<td align="right">32633</td>
+</tr>
+<tr class="odd">
+<td align="left">BarentsSea</td>
+<td align="right">32636</td>
+</tr>
+<tr class="even">
+<td align="left">Europe</td>
+<td align="right">3035</td>
+</tr>
+</tbody>
+</table>
+<p>Since 2.0, it is possible to override the default CRS used by
+<code><a href="../reference/basemap.html">basemap()</a></code> using the <code>crs</code> argument:</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">15</span>, <span class="fl">55</span>, <span class="fl">65</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">32631</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="appearance">Appearance<a class="anchor" aria-label="anchor" href="#appearance"></a>
 </h3>
-<!-- ## Bathymetry styles -->
-<!-- The `basemap` function contains four pre-made bathymetry styles defined using the `bathy.style` argument. Two of these alternatives (`"poly_*"`) have been mapped to `fill` using the `geom_polygon` function, while the two others (`contour_*`) have been mapped to `color`. The default style (`"poly_blues"`) has been displayed throughout this user manual. The other styles are: -->
-<!-- ```{r} -->
-<!-- basemap(limits = c(0, 46, 70, 81), bathymetry = TRUE, bathy.style = "poly_greys") -->
-<!-- basemap(limits = c(0, 46, 70, 81), bathymetry = TRUE, bathy.style = "contour_blues") -->
-<!-- basemap(limits = c(0, 46, 70, 81), bathymetry = TRUE, bathy.style = "contour_grey") -->
-<!-- ``` -->
 <div class="section level4">
 <h4 id="customizing-bathymetry-scales">Customizing bathymetry scales<a class="anchor" aria-label="anchor" href="#customizing-bathymetry-scales"></a>
 </h4>
 <p>The <code>bathy.style = "*_binned_*"</code> bathymetry polygons are
-mapped to <code>geom_fill_discrete</code> and can be modifying using
+mapped to <code>geom_fill_discrete</code> and can be modified using
 standard ggplot syntax:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">140</span>, <span class="op">-</span><span class="fl">105</span>, <span class="fl">20</span>, <span class="fl">40</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></span><span class="op">(</span><span class="st">"Water depth (m)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-31-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
 <p>The <code>bathy.style = "*_continuous_*"</code> bathymetry polygons
 are mapped to <code>geom_fill_continuous</code>:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">140</span>, <span class="op">-</span><span class="fl">105</span>, <span class="fl">20</span>, <span class="fl">40</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rcb"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span><span class="st">"Water depth (m)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
 <p>The <code>bathy.style = "contour_*"</code> bathymetry lines are
 mapped to <code>geom_color_discrete</code>:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span>, <span class="fl">68</span>, <span class="fl">80</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, bathy.style <span class="op">=</span> <span class="st">"contour_blues"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html" class="external-link">scale_color_hue</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
 </div>
 </div>
 <div class="section level3">
@@ -554,34 +636,33 @@ may suddenly change without warning. You may want to modify the
 appearances of a <code>basemap</code> to your own liking. This can be
 done using the <code>*.col</code> (fill), <code>*.border.col</code>
 (line color) and <code>*.size</code> (line width) arguments:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">55</span>, <span class="fl">70</span><span class="op">)</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>        bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, bathy.style <span class="op">=</span> <span class="st">"poly_greys"</span>,</span>
 <span>        land.col <span class="op">=</span> <span class="st">"#eeeac4"</span>, gla.col <span class="op">=</span> <span class="st">"cadetblue"</span>, </span>
 <span>        land.border.col <span class="op">=</span> <span class="cn">NA</span>, gla.border.col <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>        grid.size <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
 <p>Graticules (the grid lines) can be removed by setting the
 <code>grid.col</code> to <code>NA</code>. Axis labels can be manipulated
 using standard ggplot code:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">124</span>, <span class="fl">148</span>, <span class="fl">31</span>, <span class="fl">50</span><span class="op">)</span>, grid.col <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Only latitude for you, ..."</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="add-scale-bar-and-north-arrow">Add scale bar and north arrow<a class="anchor" aria-label="anchor" href="#add-scale-bar-and-north-arrow"></a>
 </h3>
 <p>Scale bar and north arrows can be added using the <a href="https://paleolimbot.github.io/ggspatial/index.html" class="external-link"><strong>ggspatial</strong>
-functions</a> (the package is automatically loaded when you use
-ggOceanMaps):</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+functions</a>:</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">75</span>, <span class="op">-</span><span class="fl">45</span>, <span class="fl">62</span>, <span class="fl">78</span><span class="op">)</span>, rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">ggspatial</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/annotation_scale.html" class="external-link">annotation_scale</a></span><span class="op">(</span>location <span class="op">=</span> <span class="st">"br"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">ggspatial</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/annotation_north_arrow.html" class="external-link">annotation_north_arrow</a></span><span class="op">(</span>location <span class="op">=</span> <span class="st">"tr"</span>, which_north <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
-<p>Note that the north arrow in the example above points towards North
-where it is placed and that the direction of North varies as shown by
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
+<p>Note that the north arrow in the example above points toward north
+where it is placed and that the direction of north varies as shown by
 the meridians. The scale bar is correct at 71 <span class="math inline">\(\circ\)</span>N latitude as specified by the
 projection (crs = 3995) for Arctic stereographic maps.</p>
 </div>
@@ -591,11 +672,11 @@ projection (crs = 3995) for Arctic stereographic maps.</p>
 <p>The objects produced by the <code>basemap</code> function are
 standard ggplot objects with the difference that relevant information
 used in mapping is added to <code>attributes</code> of the object:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "names"      "class"      "bathymetry" "glaciers"   "limits"    </span></span>
-<span><span class="co">#&gt; [6] "polarmap"   "map.grid"   "crs"</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; [1] "names"      "class"      "bathymetry" "glaciers"   "limits"    </span></span>
+<span><span class="co">#&gt; [6] "polarmap"   "map.grid"   "crs"</span></span></code></pre>
 <p>Accessing the <code>attributes</code> allow custom modifications of
 maps produced by the <code>basemap</code> function. See the <a href="#reordering-layers">Reordering layers</a> section as an
 example.</p>
@@ -612,48 +693,41 @@ Directorate of Fisheries data portal</a> (use “ESRI shapefile” option).
 The example works for any spatial polygons with crs information,
 however.</p>
 <p>The Norwegian fishing regions are included as an example dataset in
-the <strong>ggOceanMaps</strong> package. You can download these data
-and use the <code>rgdal::readOGR</code> function to read the shapefile
-if you wish to follow the example fully.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+the <strong>ggOceanMaps</strong> package. You can add any data you want
+using the <code><a href="https://rdrr.io/pkg/sf/man/st_read.html" class="external-link">sf::st_read</a></code> function.</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fdir_areas</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="va">fdir_main_areas</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">ggspatial</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/layer_spatial.html" class="external-link">annotation_spatial</a></span><span class="op">(</span><span class="va">fdir_main_areas</span>, fill <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># required to keep the limits</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
-<p>The initial plot draws the polygons. Note how we had to add
-<code>coord_sf(expand = FALSE)</code> because <code>layer_spatial</code>
-and <code>annotation_spatial</code> functions from the ggspatial package
-seem to modify <code>coord_sf</code> when added to the plot. The
-<code>basemap</code> function uses <code>expand = FALSE</code> (run the
-script without the addition and see the difference). Note also how the
-polygon boundaries are partly on land. We want to eventually hide them
-under land. We also add region labels and color the polygons based on
-their area to demonstrate the capabilities of ggplot, ggspatial and
+<span>  <span class="fu">ggspatial</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/layer_spatial.html" class="external-link">annotation_spatial</a></span><span class="op">(</span><span class="va">fdir_main_areas</span>, fill <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
+<p>The initial plot draws the polygons. Note how the polygon boundaries
+are partly on land. We want to eventually hide them under land. We also
+add region labels and color the polygons based on their area to
+demonstrate the capabilities of sf, ggplot2, ggspatial and
 ggOceanMaps:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="va">fdir_main_areas</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">fdir_main_areas</span><span class="op">$</span><span class="va">area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_area</a></span><span class="op">(</span><span class="va">fdir_main_areas</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fl">1e9</span> <span class="co"># calculate area in 1000 km2</span></span>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="va">fdir_main_areas</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">fdir_main_areas</span><span class="op">$</span><span class="va">area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/geos_measures.html" class="external-link">st_area</a></span><span class="op">(</span><span class="va">fdir_main_areas</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fl">1e9</span> <span class="co"># calculate area in 1000 km2</span></span>
 <span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="va">fdir_main_areas</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fdir_main_areas</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">area</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf_text</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">labels</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">main_area</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="../reference/FS.html">FS</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>, fontface <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_distiller</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Area\n(1000 km2)"</span>,</span>
 <span>                       palette <span class="op">=</span> <span class="st">"Spectral"</span>, na.value <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>                       limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span><span class="op">)</span>, oob <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/oob.html" class="external-link">squish</a></span><span class="op">)</span></span>
+<span>                       limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span><span class="op">)</span>, oob <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/scales/man/oob.html" class="external-link">squish</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/reorder_layers.html">reorder_layers</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
 <p>Ideally, the region labels should not go under land. This can be
 fixed by plotting the labels on top of the reordered ggplot object. To
 demonstrate how to reorder layers, we do this manually here:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reorder_layers.html">reorder_layers</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
 <span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">layers</span>, <span class="kw">function</span><span class="op">(</span><span class="va">k</span><span class="op">)</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">k</span><span class="op">$</span><span class="va">mapping</span><span class="op">$</span><span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="co"># the layer with label mapping</span></span>
 <span><span class="va">p</span><span class="op">$</span><span class="va">layers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">layers</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span><span class="op">]</span>, <span class="va">p</span><span class="op">$</span><span class="va">layers</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">p</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="contolling-the-plotting-order-of-graticules">Contolling the plotting order of graticules<a class="anchor" aria-label="anchor" href="#contolling-the-plotting-order-of-graticules"></a>
@@ -665,26 +739,26 @@ element (see the next section). The <a href="https://mikkovihtakari.github.io/gg
 function, which is automatically executed together with every
 <code><a href="../reference/basemap.html">basemap()</a></code> and <code><a href="../reference/qmap.html">qmap()</a></code> command, controls the
 position of the graticules and they are set on top by default:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">15</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>, grid.col <span class="op">=</span> <span class="st">"red"</span>, grid.size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
 <p>To move the graticules under all layers, use the
 <code>panel.ontop</code> argument in <code><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">ggplot2::theme()</a></code>:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">15</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>, grid.col <span class="op">=</span> <span class="st">"red"</span>, grid.size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>panel.ontop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
 <p>Sometimes there is a need to control the position of graticules in
 between layers. At the time of writing, ggplot does not offer a
 straightforward way to do this, but we can use the code from <a href="https://github.com/tidyverse/ggplot2/blob/7571122f6a9455ccce9f8ceb9a2196c0a70be646/R/coord-sf.R#L226" class="external-link"><code>ggplot2::coord_sf()</code></a>
 to make the graticules:</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">15</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>, grid.col <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span> <span class="co"># without graticules </span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ices_areas</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">SubArea</span><span class="op">)</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="co"># Make the graticules:</span></span>
 <span><span class="va">lims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">limits</span> </span>
-<span><span class="va">graticule</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_graticule.html" class="external-link">st_graticule</a></span><span class="op">(</span></span>
+<span><span class="va">graticule</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_graticule.html" class="external-link">st_graticule</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">lims</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span>, </span>
 <span>  crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span>,</span>
 <span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">15</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
@@ -696,15 +770,15 @@ to make the graticules:</p>
 <span>           crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># labels on top of graticules</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf_label</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">st_make_valid</a></span><span class="op">(</span><span class="va">ices_areas</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/valid.html" class="external-link">st_make_valid</a></span><span class="op">(</span><span class="va">ices_areas</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">Area_Full</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
 <p>An exception are the polar maps for which graticules are drawn by
 ggOceanMaps (because ggplot2 graticules for those maps were bugged some
 years ago when writing the function; this part requires a revision at
 some point).</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap_data.html">basemap_data</a></span><span class="op">(</span><span class="fl">60</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fl">60</span>, grid.col <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span></span>
@@ -717,7 +791,7 @@ some point).</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">X</span><span class="op">$</span><span class="va">shapefiles</span><span class="op">$</span><span class="va">land</span>, </span>
 <span>    fill <span class="op">=</span> <span class="st">"grey60"</span>, color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="coloring-the-ocean-background">Coloring the ocean (background)<a class="anchor" aria-label="anchor" href="#coloring-the-ocean-background"></a>
@@ -725,22 +799,22 @@ some point).</p>
 <p>Similarly, the <a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link"><code>ggplot2::theme()</code></a>
 <em>panel</em> element allows <a href="https://stackoverflow.com/questions/67615318/how-to-colour-the-ocean" class="external-link">coloring
 the ocean</a>:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">129</span>, <span class="op">-</span><span class="fl">124</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">49</span>, <span class="fl">53</span><span class="op">)</span><span class="op">)</span>, grid.col <span class="op">=</span> <span class="st">"red"</span>, grid.size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>panel.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"lightblue"</span><span class="op">)</span>,</span>
 <span>        panel.ontop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-47-1.png" width="700"></p>
 <p>If you want the graticules on top, you’ll need to define them
 manually because, both, the background and the grid, are contained in
 the same ggplot element called <em>panel</em>:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">129</span>, <span class="op">-</span><span class="fl">124</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">49</span>, <span class="fl">53</span><span class="op">)</span><span class="op">)</span>, grid.col <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>panel.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"lightblue"</span><span class="op">)</span>,</span>
 <span>        panel.ontop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="co"># Make the graticules:</span></span>
 <span><span class="va">lims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">limits</span> </span>
-<span><span class="va">graticule</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_graticule.html" class="external-link">st_graticule</a></span><span class="op">(</span></span>
+<span><span class="va">graticule</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_graticule.html" class="external-link">st_graticule</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">lims</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span>, </span>
 <span>  crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span>,</span>
 <span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">map.grid</span><span class="op">$</span><span class="va">lon.breaks</span>, </span>
@@ -752,12 +826,12 @@ the same ggplot element called <em>panel</em>:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">graticule</span>, color <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fu"><a href="../reference/LS.html">LS</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># graticules</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="va">lims</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>, ylim <span class="op">=</span> <span class="va">lims</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="co"># redefine limits</span></span>
 <span>           crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-48-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="add-a-fill-scale-on-top-of-bathymetry">Add a fill scale on top of bathymetry<a class="anchor" aria-label="anchor" href="#add-a-fill-scale-on-top-of-bathymetry"></a>
 </h3>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">15</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/layer_spatial.html" class="external-link">annotation_spatial</a></span><span class="op">(</span><span class="va">ices_areas</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Area_Full</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in `f()`:</span></span>
@@ -766,22 +840,22 @@ the same ggplot element called <em>panel</em>:</p>
 <p>This error comes because ggplot does not allow two color scales with
 similar mapping in one plot. The issue can be evaded by using contour
 bathymetry:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">15</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>        bathy.style <span class="op">=</span> <span class="st">"contour_blues"</span>, legends <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/layer_spatial.html" class="external-link">annotation_spatial</a></span><span class="op">(</span><span class="va">ices_areas</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Area_Full</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-48-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-50-1.png" width="700"></p>
 <p>Or by using the <a href="https://github.com/eliocamp/ggnewscale" class="external-link">ggnewscale</a> package to
 make the data <code>fill</code> mapping disconnected from that in
 <code>basemap</code>:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">15</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>        bathy.style <span class="op">=</span> <span class="st">"poly_greys"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggnewscale</span><span class="fu">::</span><span class="fu"><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">new_scale_fill</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/layer_spatial.html" class="external-link">annotation_spatial</a></span><span class="op">(</span><span class="va">ices_areas</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Area_Full</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-49-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-51-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="add-longitude-and-latitude-labels-to-a-polar-map">Add longitude and latitude labels to a polar map<a class="anchor" aria-label="anchor" href="#add-longitude-and-latitude-labels-to-a-polar-map"></a>
@@ -789,16 +863,16 @@ make the data <code>fill</code> mapping disconnected from that in
 <p>Since adding longitude and latitude labels to polar maps requires
 some manual fiddling for each map, there is no premade solution for
 this. Instead, you can do this using the sf package:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>; <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span><span class="op">)</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span>, shapefiles <span class="op">=</span> <span class="st">"Antarctic"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">map.grid</span><span class="op">$</span><span class="va">lat.grid.lines</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>      <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>      <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">X</span> <span class="op">==</span> <span class="op">-</span><span class="fl">180</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html" class="external-link">add_row</a></span><span class="op">(</span>X <span class="op">=</span> <span class="op">-</span><span class="fl">180</span>, Y <span class="op">=</span> <span class="op">-</span><span class="fl">90</span>, L1 <span class="op">=</span> <span class="fl">3</span>, L2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -808,7 +882,7 @@ this. Instead, you can do this using the sf package:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">map.grid</span><span class="op">$</span><span class="va">lon.grid.lines</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>      <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>      <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">==</span> <span class="op">-</span><span class="fl">60</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="op">-</span><span class="fl">63</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -819,16 +893,15 @@ this. Instead, you can do this using the sf package:</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-50-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-52-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="custom-shapefiles">Custom shapefiles<a class="anchor" aria-label="anchor" href="#custom-shapefiles"></a>
 </h3>
-<p>The <strong>ggOceanMaps package uses vector (spatial polygon)
-data</strong> to make the plotting more efficient and to produce sharp
-images at any resolution. For the time being, the package supports three
-kinds of shapefiles: 1) land shapes, 2) glacier shapes, and 3)
-bathymetry shapes. Each of these shapes has to be defined using the same
+<p>The ggOceanMaps package uses vector (spatial polygon) data for land
+and glaciers to make the plotting more efficient and to produce sharp
+images at any resolution. Further, both vector and raster bathymetries
+can be used. Each of these layers have to be defined using the same
 projection. Since the shapefiles are large and generating them may
 require long processing time, it is most convenient to save them in a
 Rdata file in sf format and load them to the memory when used to make a
@@ -841,15 +914,16 @@ Earth Data</a> provides polygon data in relatively high detail for the
 entire Earth. Used as data-source for land and glacier shapes throughout
 the package, except for the most detailed maps.</li>
 <li>
+<a href="https://www.eea.europa.eu/en/datahub/datahubitem-view/af40333f-9e94-4926-a4f0-0a787f1d2b8f" class="external-link">European
+Environment Agency</a> provides high-resolution land shapes for
+Europe.</li>
+<li>
 <a href="https://www.kartverket.no/" class="external-link">Norwegian Mapping Authority</a>
-provides high-resolution spatial data for mainland Norway and Svalbard.
-<!-- Used as data-source for detailed coastal Norwegian maps as well as for detailed bathymetry in Svalbard maps. -->
-</li>
+provides high-resolution spatial data for mainland Norway and
+Svalbard.</li>
 <li>
 <a href="https://geodata.npolar.no/" class="external-link">Norwegian Polar Institute</a>
-provides high-resolution vector data for Norwegian polar regions.
-<!-- Used as data-source for detailed Svalbard maps.  -->
-</li>
+provides high-resolution vector data for Norwegian polar regions.</li>
 </ul>
 <p><strong>Raster data for bathymetry</strong></p>
 <ul>
@@ -859,10 +933,10 @@ Compilation Group (2019) GEBCO 2019 15-arcsecond grid</a>. The highest
 resolution open bathymetry grid available at the moment. Referred to as
 “GEBCO data”.</li>
 <li>
-<a href="https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/docs/ETOPO1.pdf" class="external-link">ETOPO1
-1 Arc-Minute Global Relief Model</a>. Can also be accessed using the <a href="https://www.rdocumentation.org/packages/marmap/versions/1.0.3/topics/getNOAA.bathy" class="external-link"><code>marmap::getNOAA.bathy</code></a>
+<a href="https://www.ncei.noaa.gov/products/etopo-global-relief-model" class="external-link">ETOPO1
+15 Arc-Second Global Relief Model</a>. Can also be accessed using the <a href="https://www.rdocumentation.org/packages/marmap/versions/1.0.3/topics/getNOAA.bathy" class="external-link"><code>marmap::getNOAA.bathy</code></a>
 (see <a href="#making">Section 1</a>). Referred to as “NOAA data” and
-“ETOPO1 data”.</li>
+“ETOPO data”.</li>
 </ul>
 <p>There are probably more sources which the author has not needed yet.
 Please send an email to add more options to the list. The bathymetry
@@ -878,21 +952,21 @@ the world.</p>
 Earth Data</a> provides bathymetry vector data, which can be readily
 used in ggOceanMaps. The contours in that dataset are, however, not very
 practical for marine biology and fisheries in shallow seas such as the
-Barents Sea. Download the <a href="https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/data/ice_surface/grid_registered/netcdf/" class="external-link">ETOPO1
-dataset as grid registered NetCDF gmt4</a> to a folder in your computer.
-It may be beneficial to make a “GIS” or “Shapefiles” folder where you
-store similar datasets for later use. Whether you use ice or bed-rock
-surface does not matter for this example as there are no glaciers under
-the sea-level within the region of interest. In any case, this choice
-has no visual effect because land and glaciers will be plotted on top of
-the bathymetry, but the ice surface option will lead to smaller file
-size.</p>
+Barents Sea. Download the <a href="https://www.ncei.noaa.gov/products/etopo-global-relief-model" class="external-link">ETOPO
+dataset as Ice surface elevation NetCDF</a> to a folder in your
+computer. It may be beneficial to make a “GIS” or “Shapefiles” folder
+where you store similar datasets for later use. Whether you use ice or
+bed-rock surface does not matter for this example as there are no
+glaciers under the sea-level within the region of interest. In any case,
+this choice has no visual effect because land and glaciers will be
+plotted on top of the bathymetry, but the ice surface option will lead
+to smaller file size.</p>
 <p>The bathymetry needs first to be reclassified and formatted for the
 consequent vectorization step. First, we need to define the location of
 the ETOPO1 dataset and to find limits for our region in decimal degrees.
 The limits can be found using the <code>basemap</code> function. It is
 advised to use slightly wider limits than the region of interest.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">etopoPath</span> <span class="op">&lt;-</span> <span class="st">""</span> <span class="co"># Replace by the path to the folder where the ETOPO1 grd file is located.</span></span>
 <span><span class="va">lims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">8</span>, <span class="fl">65</span>, <span class="fl">68</span>, <span class="fl">82</span><span class="op">)</span></span>
 <span><span class="va">projection</span> <span class="op">&lt;-</span> <span class="st">"EPSG:32636"</span></span>
@@ -905,14 +979,14 @@ relatively slow for large data. The <code>aggregation.factor</code>
 argument can be used to reduce file size but will influence the
 resolution of the resulting shapefile (higher factors lead to a lower
 resolution).</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span>bathy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">etopoPath</span>, <span class="st">"ETOPO1_Ice_g_gmt4.grd"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>,</span>
 <span>                        depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">1500</span>, <span class="fl">2000</span>, <span class="fl">4000</span>, <span class="fl">6000</span>, <span class="fl">10000</span><span class="op">)</span>, </span>
 <span>                        proj.out <span class="op">=</span> <span class="va">projection</span>, </span>
 <span>                        boundary <span class="op">=</span> <span class="va">lims</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Now we have the bathyRaster object which can be vectorized:</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span></span>
 <span><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rb</span><span class="op">$</span><span class="va">raster</span><span class="op">)</span></span></code></pre></div>
@@ -923,7 +997,7 @@ parameters can be used to reduce the file size, while the
 high zoom levels. Note that the smoothing of raster cell edges is
 completely arbitrary and may lead to map contours that do not exist in
 reality.</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bs_bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span></span>
 <span><span class="fu">sp</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">bs_bathy</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -937,13 +1011,13 @@ need to write a function to do this. We use Natural Earth Data instead.
 Download the Natural Earth Data <a href="http://www.naturalearthdata.com/downloads/10m-physical-vectors/" class="external-link">Land
 and Minor Islands</a> vectors to your “GIS” or “Shapefiles” folder and
 define folder paths under:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">NEDPath</span> <span class="op">&lt;-</span> <span class="st">""</span> <span class="co"># Natural Earth Data location</span></span>
 <span><span class="va">outPath</span> <span class="op">&lt;-</span> <span class="st">""</span> <span class="co"># Data output location</span></span></code></pre></div>
 <p>Once done, we go ahead and process the shapefiles:</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu">readOGR</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_land/ne_10m_land.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">islands</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu">readOGR</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_minor_islands/ne_10m_minor_islands.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/rgdal-deprecated.html" class="external-link">readOGR</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_land/ne_10m_land.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">islands</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/rgdal-deprecated.html" class="external-link">readOGR</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_minor_islands/ne_10m_minor_islands.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">islands</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">bs_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">lims</span><span class="op">)</span></span>
@@ -956,8 +1030,8 @@ define folder paths under:</p>
 </h5>
 <p>Download the Natural Earth Data <a href="http://www.naturalearthdata.com/downloads/10m-physical-vectors/" class="external-link">Glaciated
 Areas</a> vectors to your <code>NEDPath</code>.</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu">readOGR</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_glaciated_areas/ne_10m_glaciated_areas.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/rgdal-deprecated.html" class="external-link">readOGR</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">NEDPath</span>, <span class="st">"ne_10m_glaciated_areas/ne_10m_glaciated_areas.shp"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/pred-unary-gIsValid.html" class="external-link">gIsValid</a></span><span class="op">(</span><span class="va">glaciers</span><span class="op">)</span> <span class="co"># Needs buffering</span></span>
 <span><span class="va">glaciers</span> <span class="op">&lt;-</span> <span class="fu">rgeos</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgeos/man/rgeos-deprecated.html" class="external-link">gBuffer</a></span><span class="op">(</span><span class="va">glaciers</span>, byid <span class="op">=</span> <span class="cn">TRUE</span>, width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
@@ -973,13 +1047,13 @@ Areas</a> vectors to your <code>NEDPath</code>.</p>
 <p>Now that we have the shapefiles, we can save them to a file so that
 we do not run the script above every time we plot a map using custom
 shapefiles.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">bs_bathy</span>, <span class="va">bs_land</span>, <span class="va">bs_glacier</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">outPath</span>, <span class="st">"bs_shapes.rda"</span>, sep <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span>, compress <span class="op">=</span> <span class="st">"xz"</span><span class="op">)</span></span></code></pre></div>
 <p>The shapefiles can now be plotted using the <code>basemap</code>
 function:</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">bs_land</span>, glacier <span class="op">=</span> <span class="va">bs_glacier</span>, bathy <span class="op">=</span> <span class="va">bs_bathy</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"poly_blues"</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-60-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-62-1.png" width="700"></p>
 <p>The list elements <code>land</code>, <code>glacier</code> and
 <code>bathy</code> are required, but <code>glacier</code> and
 <code>bathy</code> can be set to <code>NULL</code> if
@@ -990,9 +1064,9 @@ plotting them is not desired. Note how the map becomes plotted outside
 its actual limits. This issue will hopefully be fixed in the future. The
 map can be limited using the <code>limits</code> or <code>data</code>
 arguments as any <code>basemap</code>:</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">53</span>, <span class="fl">70</span>, <span class="fl">80</span><span class="op">)</span>, shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">bs_land</span>, glacier <span class="op">=</span> <span class="va">bs_glacier</span>, bathy <span class="op">=</span> <span class="va">bs_bathy</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"poly_blues"</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-61-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-63-1.png" width="700"></p>
 </div>
 </div>
 </div>
@@ -1001,14 +1075,14 @@ arguments as any <code>basemap</code>:</p>
 </h2>
 <p>The land and glacier shapes do not get dissolved correctly when
 projecting from decimal degrees:</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fl">60</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-62-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-64-1.png" width="700"></p>
 <p>A solution until the issue has been fixed is to use projected
 downloadable shape files:</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fl">60</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span>, shapefiles <span class="op">=</span> <span class="st">"Arctic"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-63-1.png" width="700"></p>
+<p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-65-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="citations-and-data-sources">Citations and data sources<a class="anchor" aria-label="anchor" href="#citations-and-data-sources"></a>
@@ -1020,12 +1094,12 @@ the package. Please see <a href="https://mikkovihtakari.github.io/ggOceanMaps/#c
 for a list of data sources.</p>
 <p>Please cite the package whenever maps generated by the package are
 published. For up-to-date citation information, please use:</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"ggOceanMaps"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; To cite package 'ggOceanMaps' in publications use:</span></span>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"ggOceanMaps"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; To cite package 'ggOceanMaps' in publications use:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Vihtakari M (2023). _ggOceanMaps: Plot Data on Oceanographic Maps</span></span>
-<span><span class="co">#&gt;   using 'ggplot2'_. R package version 2.1.1,</span></span>
+<span><span class="co">#&gt;   using 'ggplot2'_. R package version 2.1.12,</span></span>
 <span><span class="co">#&gt;   &lt;https://mikkovihtakari.github.io/ggOceanMaps/&gt;.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
@@ -1034,9 +1108,9 @@ published. For up-to-date citation information, please use:</p>
 <span><span class="co">#&gt;     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},</span></span>
 <span><span class="co">#&gt;     author = {Mikko Vihtakari},</span></span>
 <span><span class="co">#&gt;     year = {2023},</span></span>
-<span><span class="co">#&gt;     note = {R package version 2.1.1},</span></span>
+<span><span class="co">#&gt;     note = {R package version 2.1.12},</span></span>
 <span><span class="co">#&gt;     url = {https://mikkovihtakari.github.io/ggOceanMaps/},</span></span>
-<span><span class="co">#&gt;   }</span></span></code></pre></div>
+<span><span class="co">#&gt;   }</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

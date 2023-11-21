@@ -30,7 +30,7 @@ library(ggOceanMaps)
 
 # General
 
-In addition to the [standard ones](#standard-maps), the ggOceanMaps package contains a possibility to plot premade detailed shapefiles within limited regions the package author has needed in his work. The detailed shapefiles are stored in the [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData) repository and downloaded as needed. Available shapefiles can be viewed using the `shapefile_list()` function.
+In addition to the [standard maps](#standard-maps), the ggOceanMaps package contains a possibility to plot premade detailed shapefiles within limited regions the package author has needed in his work. The detailed shapefiles are stored in the [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData) repository and downloaded as needed. Available shapefiles can be viewed using the `shapefile_list()` function.
 
 ```{r}
 shapefile_list("all")
@@ -44,11 +44,26 @@ basemap(shapefiles = "BarentsSea", bathymetry = TRUE)
 
 The detailed shapefiles can be **large**. Use the standard basemap data sources to find the limits for your map before you make detailed plots. Exporting to a file is advised over plotting into the plot window. Note that the detailed shapefile approach **generally does not work for large areas**. The solution is sub-optimal and a possibility of plotting raster from WMS is under work.
 
-# Standard maps {#standard-maps}
+# Standard map {#standard-maps}
+
+## The default
+
+The default map coming with ggOceanMaps uses decimal degrees and [Natural Earth Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/) 1:10m Physical Vectors with the Land and Minor Island datasets combined. The map is transformed to other polar stereographic projections based on limits used in the map. 
+
+```{r eval = F}
+basemap("DecimalDegree", bathymetry = TRUE, glaciers = TRUE)
+```
+
+![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png)
+
+## Arctic Stereographic
+
+
+
 
 Standard maps requiring the ggOceanMapsData package are selected automatically based on limits used in the map. You can also use the `shapefiles` argument or the `x` argument as a shortcut to specifically plot these maps (the shortcut requires ggOceanMaps >=1.3.1). Since partial matching is used, you do not need write out the entire name. Only "Arctic" will do for the Arctic stereographic map, for instance.
 
-## Arctic Stereographic
+
 
 ```{r eval = F}
 basemap("ArcticStereographic", bathymetry = TRUE, glaciers = TRUE)
@@ -66,11 +81,6 @@ basemap("AntarcticStereographic", bathymetry = TRUE, glaciers = TRUE)
 
 ## Decimal degree
 
-```{r eval = F}
-basemap("DecimalDegree", bathymetry = TRUE, glaciers = TRUE)
-```
-
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png)
 The detailed shapefiles for time being are:
 
 # GEBCO based maps

@@ -64,7 +64,7 @@ dd_rbathy <- raster_bathymetry(
 save(dd_rbathy, file = file.path(outPath, "ggOceanMapsData/dd_rbathy.rda"), compress = "bzip2")
 
 # Vector bathymetry
-dd_bathy <- vector_bathymetry(dd_rbathy, drop.crumbs = 50) 
+dd_bathy <- vector_bathymetry(dd_rbathy, drop.crumbs = 25, smooth = TRUE) 
 save(dd_bathy, file = file.path(outPath, "ggOceanMapsData/dd_bathy.rda"), compress = "xz")
 
 # Continuous raster bathymetry

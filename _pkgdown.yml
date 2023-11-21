@@ -118,10 +118,10 @@ navbar:
     - text: News
     - text: New features in version 2
       href: articles/new-features.html
-    # - text: -------  
-    # - text: Customising shapefiles
-    # - text: Premade maps
-    #  href: articles/premade-maps.html
+    - text: -------
+    - text: Customising shapefiles
+    - text: Premade maps
+     href: articles/premade-maps.html
     # - text: Premade shapefiles
     #  href: articles/premade-shapefiles.html
     - text: -------

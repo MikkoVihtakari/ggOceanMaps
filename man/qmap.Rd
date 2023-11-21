@@ -85,7 +85,7 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
 \item{projection.grid}{Logical indicating whether the coordinate grid should show projected coordinates instead of decimal degree values. Useful to define limits for large maps in polar regions.}
 
-\item{expand.factor}{Expansion factor for map limits with the \code{data} argument. Can be used to zoom in and out automatically limited maps. Defaults to 1.1. Set to \code{NULL} to ignore.}
+\item{expand.factor}{Expansion factor for map limits. Can be used to zoom in (decrease the value under 1) and out (increase the value over 1) automatically (\code{data}) limited maps. Defaults to 1, which means that outermost data points are located at the boundaries of the plotting region.}
 
 \item{verbose}{Logical indicating whether information about the projection and guessed column names should be returned as messages. Set to \code{FALSE} to make the function silent.}
 }

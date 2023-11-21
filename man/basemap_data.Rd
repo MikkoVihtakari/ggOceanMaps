@@ -42,7 +42,7 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
 \item{lon.interval, lat.interval}{Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.}
 
-\item{expand.factor}{Expansion factor for map limits with the \code{data} argument. Can be used to zoom in and out automatically limited maps. Defaults to 1.1. Set to \code{NULL} to ignore.}
+\item{expand.factor}{Expansion factor for map limits. Can be used to zoom in (decrease the value under 1) and out (increase the value over 1) automatically (\code{data}) limited maps. Defaults to 1, which means that outermost data points are located at the boundaries of the plotting region.}
 
 \item{rotate}{Logical indicating whether the projected maps should be rotated to point towards the pole relative to the mid-longitude limit.}
 

@@ -77,18 +77,18 @@ shapefile_list <- function(name, get.data = FALSE) {
          path = c("ggOceanMapsLargeData" = 
                     "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/")
     ),
-    list(name = "BarentsSea",
-         land = file.path(options("ggOceanMaps.datapath"), "barentssea_land"),
-         glacier = file.path(options("ggOceanMaps.datapath"), "barentssea_glacier"),
-         bathy = c(
-           "raster_binned" = "barentssea_rbathy",
-           "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "dd_rbathy_cont"),
-           "raster_user" = getOption("ggOceanMaps.userpath"),
-           "vector" = file.path(options("ggOceanMaps.datapath"), "barentssea_bathy")),
-         crs = 32636,
-         limits = c(-400000, 1300000, 7400000, 9350000),
-         path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda"
-    ),
+    # list(name = "BarentsSea",
+    #      land = file.path(options("ggOceanMaps.datapath"), "barentssea_land"),
+    #      glacier = file.path(options("ggOceanMaps.datapath"), "barentssea_glacier"),
+    #      bathy = c(
+    #        "raster_binned" = "barentssea_rbathy",
+    #        "raster_continuous" = file.path(options("ggOceanMaps.datapath"), "dd_rbathy_cont"),
+    #        "raster_user" = getOption("ggOceanMaps.userpath"),
+    #        "vector" = file.path(options("ggOceanMaps.datapath"), "barentssea_bathy")),
+    #      crs = 32636,
+    #      limits = c(-400000, 1300000, 7400000, 9350000),
+    #      path = "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda"
+    # ),
     list(name = "Europe",
          land = file.path(options("ggOceanMaps.datapath"), "europe_land"),
          glacier = NA,
