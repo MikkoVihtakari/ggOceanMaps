@@ -598,7 +598,7 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
     if(!is.null(crs)) { # this hack is required for custom crs. Couldn't come up with a better solution
       landBoundary <- clip_shapefile(
         x$shapefiles$land,
-        limits = smoothr::densify(x$clip_limits),
+        limits = smoothr::densify(x$clip_limits, 100),
         return.boundary = TRUE
       )
       
