@@ -67,6 +67,8 @@ get_depth <- function(data, bathy.style = "raster_continuous", lon = NULL, lat =
         out[[depth.col]] <- -1*out[[depth.col]]
       } 
       
+      out[out[[depth.col]] < 0, depth.col] <- NA
+      
       return(out)
       
     } else {
@@ -75,6 +77,8 @@ get_depth <- function(data, bathy.style = "raster_continuous", lon = NULL, lat =
       if(mean(out, na.rm = TRUE) < 0) {
         out <- -1*out
       }
+      
+      out[out < 0] <- NA
       
       return(out)
     }
@@ -123,6 +127,8 @@ get_depth <- function(data, bathy.style = "raster_continuous", lon = NULL, lat =
     if(mean(out, na.rm = TRUE) < 0) {
       out <- -1*out
     }
+    
+    out[out < 0] <- NA
     
     ## Recombine with NAs
     
