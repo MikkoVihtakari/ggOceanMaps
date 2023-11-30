@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.17</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,10 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>News</h6>
     <a class="dropdown-item" href="../articles/new-features.html">New features in version 2</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6>
+    <h6 class="dropdown-header" data-toc-skip>Premade maps</h6>
+    <h6 class="dropdown-header" data-toc-skip>Premade shapefiles</h6>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Presentations</h6>
     <a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a>
@@ -83,7 +87,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">09 November, 2023</h4>
+            <h4 data-toc-skip class="date">30 November, 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/ggOceanMaps.Rmd" class="external-link"><code>vignettes/ggOceanMaps.Rmd</code></a></small>
       <div class="d-none name"><code>ggOceanMaps.Rmd</code></div>
@@ -320,8 +324,8 @@ been implemented yet. Currently implemented bathy.style alternatives
 are:</p>
 <ul>
 <li>
-<em>NULL (default)</em>. Bathymetry style is searched from
-<code>getOption("ggOceanMaps.bathy.style")</code>. If not found,
+<em><code>NULL</code> (default)</em>. Bathymetry style is searched
+from <code>getOption("ggOceanMaps.bathy.style")</code>. If not found,
 <code>"raster_binned_blues"</code> is used.</li>
 </ul>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -559,8 +563,9 @@ integer latitudes &gt;= 30 and &lt;= 89.</li>
 &lt;= -60 (if min latitude (<code>limits[3]</code>) &lt;= -30), and
 single integer latitudes &lt;= -30 and &gt;= -89.</li>
 </ul>
-<p>Further, higher resolution land shapes use different following
-projections:</p>
+<p>Further, there are higher resolution data that can be downloaded when
+needed. They use a projection which suits that region. Here are all
+<code>shapefiles</code> and their projections (CRS):</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">name</th>
@@ -584,10 +589,6 @@ projections:</p>
 <td align="right">32633</td>
 </tr>
 <tr class="odd">
-<td align="left">BarentsSea</td>
-<td align="right">32636</td>
-</tr>
-<tr class="even">
 <td align="left">Europe</td>
 <td align="right">3035</td>
 </tr>
@@ -694,7 +695,7 @@ The example works for any spatial polygons with crs information,
 however.</p>
 <p>The Norwegian fishing regions are included as an example dataset in
 the <strong>ggOceanMaps</strong> package. You can add any data you want
-using the <code><a href="https://rdrr.io/pkg/sf/man/st_read.html" class="external-link">sf::st_read</a></code> function.</p>
+using the <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::st_read</a></code> function.</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">fdir_areas</span><span class="op">)</span></span>
 <span></span>
@@ -707,15 +708,15 @@ add region labels and color the polygons based on their area to
 demonstrate the capabilities of sf, ggplot2, ggspatial and
 ggOceanMaps:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="va">fdir_main_areas</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">fdir_main_areas</span><span class="op">$</span><span class="va">area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/geos_measures.html" class="external-link">st_area</a></span><span class="op">(</span><span class="va">fdir_main_areas</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fl">1e9</span> <span class="co"># calculate area in 1000 km2</span></span>
+<code class="sourceCode R"><span><span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="va">fdir_main_areas</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">fdir_main_areas</span><span class="op">$</span><span class="va">area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_area</a></span><span class="op">(</span><span class="va">fdir_main_areas</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fl">1e9</span> <span class="co"># calculate area in 1000 km2</span></span>
 <span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="va">fdir_main_areas</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fdir_main_areas</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">area</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf_text</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">labels</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">main_area</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="../reference/FS.html">FS</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>, fontface <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_distiller</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Area\n(1000 km2)"</span>,</span>
 <span>                       palette <span class="op">=</span> <span class="st">"Spectral"</span>, na.value <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>                       limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span><span class="op">)</span>, oob <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/scales/man/oob.html" class="external-link">squish</a></span><span class="op">)</span></span>
+<span>                       limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span><span class="op">)</span>, oob <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/oob.html" class="external-link">squish</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/reorder_layers.html">reorder_layers</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
@@ -758,7 +759,7 @@ to make the graticules:</p>
 <span></span>
 <span><span class="co"># Make the graticules:</span></span>
 <span><span class="va">lims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">limits</span> </span>
-<span><span class="va">graticule</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_graticule.html" class="external-link">st_graticule</a></span><span class="op">(</span></span>
+<span><span class="va">graticule</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_graticule.html" class="external-link">st_graticule</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">lims</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span>, </span>
 <span>  crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span>,</span>
 <span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">15</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
@@ -770,7 +771,7 @@ to make the graticules:</p>
 <span>           crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># labels on top of graticules</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf_label</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/valid.html" class="external-link">st_make_valid</a></span><span class="op">(</span><span class="va">ices_areas</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">st_make_valid</a></span><span class="op">(</span><span class="va">ices_areas</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">Area_Full</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="ggOceanMaps_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
@@ -814,7 +815,7 @@ the same ggplot element called <em>panel</em>:</p>
 <span></span>
 <span><span class="co"># Make the graticules:</span></span>
 <span><span class="va">lims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">limits</span> </span>
-<span><span class="va">graticule</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_graticule.html" class="external-link">st_graticule</a></span><span class="op">(</span></span>
+<span><span class="va">graticule</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_graticule.html" class="external-link">st_graticule</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">lims</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">lims</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span>, </span>
 <span>  crs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">crs</span>,</span>
 <span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">map.grid</span><span class="op">$</span><span class="va">lon.breaks</span>, </span>
@@ -872,7 +873,7 @@ this. Instead, you can do this using the sf package:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">map.grid</span><span class="op">$</span><span class="va">lat.grid.lines</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>      <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>      <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">X</span> <span class="op">==</span> <span class="op">-</span><span class="fl">180</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html" class="external-link">add_row</a></span><span class="op">(</span>X <span class="op">=</span> <span class="op">-</span><span class="fl">180</span>, Y <span class="op">=</span> <span class="op">-</span><span class="fl">90</span>, L1 <span class="op">=</span> <span class="fl">3</span>, L2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -882,7 +883,7 @@ this. Instead, you can do this using the sf package:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">$</span><span class="va">map.grid</span><span class="op">$</span><span class="va">lon.grid.lines</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>      <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>      <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">==</span> <span class="op">-</span><span class="fl">60</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="op">-</span><span class="fl">63</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -963,7 +964,7 @@ plotted on top of the bathymetry, but the ice surface option will lead
 to smaller file size.</p>
 <p>The bathymetry needs first to be reclassified and formatted for the
 consequent vectorization step. First, we need to define the location of
-the ETOPO1 dataset and to find limits for our region in decimal degrees.
+the ETOPO dataset and to find limits for our region in decimal degrees.
 The limits can be found using the <code>basemap</code> function. It is
 advised to use slightly wider limits than the region of interest.</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
@@ -1099,7 +1100,7 @@ published. For up-to-date citation information, please use:</p>
 <pre><code><span><span class="co">#&gt; To cite package 'ggOceanMaps' in publications use:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Vihtakari M (2023). _ggOceanMaps: Plot Data on Oceanographic Maps</span></span>
-<span><span class="co">#&gt;   using 'ggplot2'_. R package version 2.1.12,</span></span>
+<span><span class="co">#&gt;   using 'ggplot2'_. R package version 2.1.17,</span></span>
 <span><span class="co">#&gt;   &lt;https://mikkovihtakari.github.io/ggOceanMaps/&gt;.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
@@ -1108,7 +1109,7 @@ published. For up-to-date citation information, please use:</p>
 <span><span class="co">#&gt;     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},</span></span>
 <span><span class="co">#&gt;     author = {Mikko Vihtakari},</span></span>
 <span><span class="co">#&gt;     year = {2023},</span></span>
-<span><span class="co">#&gt;     note = {R package version 2.1.12},</span></span>
+<span><span class="co">#&gt;     note = {R package version 2.1.17},</span></span>
 <span><span class="co">#&gt;     url = {https://mikkovihtakari.github.io/ggOceanMaps/},</span></span>
 <span><span class="co">#&gt;   }</span></span></code></pre>
 </div>

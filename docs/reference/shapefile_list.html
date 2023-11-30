@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.17</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,6 +29,10 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>News</h6>
     <a class="dropdown-item" href="../articles/new-features.html">New features in version 2</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6>
+    <h6 class="dropdown-header" data-toc-skip>Premade maps</h6>
+    <h6 class="dropdown-header" data-toc-skip>Premade shapefiles</h6>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Presentations</h6>
     <a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a>
@@ -111,60 +115,54 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 AntarcticStereographic</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3          DecimalDegree</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4               Svalbard</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5             BarentsSea</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                 Europe</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                           land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/arctic_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/antarctic_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                      dd_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/svalbard_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/barentssea_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/europe_land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                           glacier</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/arctic_glacier</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/antarctic_glacier</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/dd_glacier</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/svalbard_glacier</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/barentssea_glacier</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                                            &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                         bathy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1             dd_rbathy|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/dd_rbathy_cont|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/arctic_bathy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          dd_rbathy|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/dd_rbathy_cont|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/antarctic_bathy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 dd_rbathy|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/dd_rbathy_cont|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/dd_bathy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           dd_rbathy|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/dd_rbathy_cont|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/svalbard_bathy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 barentssea_rbathy|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/dd_rbathy_cont|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/barentssea_bathy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                 dd_rbathy|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/dd_rbathy_cont|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/dd_bathy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                 Europe</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                          land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/arctic_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/antarctic_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                     dd_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/svalbard_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/europe_land</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                          glacier</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/arctic_glacier</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/antarctic_glacier</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/dd_glacier</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  /var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/svalbard_glacier</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                                                           &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                bathy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    dd_rbathy|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/dd_rbathy_cont|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/arctic_bathy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 dd_rbathy|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/dd_rbathy_cont|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/antarctic_bathy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        dd_rbathy|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/dd_rbathy_cont|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/dd_bathy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  dd_rbathy|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/dd_rbathy_cont|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/svalbard_bathy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        dd_rbathy|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/dd_rbathy_cont|/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/dd_bathy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     crs                                      limits</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  3995                                       c(30)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  3031                                      c(-35)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  4326                       c(-180, 180, -90, 90)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 32633 c(402204.7, 845943.9, 8253526.1, 8978517.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 32636        c(-4e+05, 1300000, 7400000, 9350000)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3035        c(943609, 7601958, -375446, 6825119)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                    path</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1               https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2               https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3               https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4               https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/barentssea.rda</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6               https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  3035        c(943609, 7601958, -375446, 6825119)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                      path</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span>
 <span class="r-in"><span><span class="fu">shapefile_list</span><span class="op">(</span><span class="st">"Arctic"</span><span class="op">)</span> <span class="co"># partial matching</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ArcticStereographic"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $land</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/arctic_land"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/arctic_land"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $glacier</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/arctic_glacier"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/arctic_glacier"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bathy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                 raster_binned </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                   "dd_rbathy" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                             raster_continuous </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/dd_rbathy_cont" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/dd_rbathy_cont" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                        vector </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   "/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpZiZ6Ej/arctic_bathy" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   "/var/folders/9v/b70pd53x04d3jjmlrbcgp4_w0000gv/T//RtmpMmVtD3/arctic_bathy" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $crs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3995</span>
