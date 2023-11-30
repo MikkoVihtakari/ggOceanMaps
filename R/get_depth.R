@@ -61,9 +61,22 @@ get_depth <- function(data, bathy.style = "raster_continuous", lon = NULL, lat =
     
     if(bind) {
       names(out)[names(out) == names(bathy)] <- depth.col
-      out
+      out[[depth.col]] <- as.numeric(out[[depth.col]])
+      
+      if(mean(out[[depth.col]], na.rm = TRUE) < 0) {
+        out[[depth.col]] <- -1*out[[depth.col]]
+      } 
+      
+      return(out)
+      
     } else {
-      out[[names(bathy)]]
+      out <- as.numeric(out[[names(bathy)]])
+      
+      if(mean(out, na.rm = TRUE) < 0) {
+        out <- -1*out
+      }
+      
+      return(out)
     }
     
   } else {
