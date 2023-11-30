@@ -5,13 +5,15 @@
 * Fix an issue with certain `bathy.style` abbreviations
 * qmap arguments did not match those of basemap: add `bathy.alpha` and `downsample` arguments to qmap
 * Fix an [issue](https://stackoverflow.com/questions/60684049/creating-a-interactive-map-on-r-using-plotly) when trying to plot basemaps using `plotly::ggplotly()`
-* Fix an issue with . in file path
-* Fix an issue when plotting singular points
+* Fix [an issue with . in file path](https://github.com/MikkoVihtakari/ggOceanMaps/issues/32)
+* Fix [an issue when plotting singular points](https://github.com/MikkoVihtakari/ggOceanMaps/issues/34)
 * Fix `basemap(c(-180, 180, -90, 90))` case and turn off automatic rotation when crossing the anti-meridian. A message is shown instead.
 * Turn off `expand` in `ggplot2::coord_sf()` to avoid an error when having map border at 0 meridian. 
 * Fix a case where data argument produced too wide boundaries
-* `expand.factor` should work now as designed
+* [`expand.factor` should work now as designed](https://github.com/MikkoVihtakari/ggOceanMaps/issues/33)
 * Fix an error in `dist2land(binary = TRUE)`
+* `get_depth()` now uses `raster_user` and returns depths as positive numeric. 
+* Fix an issue where land boundaries did not get clipped correctly when using custom crs
 
 # ggOceanMaps 2.1.1
 

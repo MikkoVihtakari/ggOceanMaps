@@ -252,8 +252,9 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs
   }
   
   if(!is.null(data)) {
-    if(!inherits(data, "data.frame")) stop("The data argument has to be a data.frame, tibble or data.table")
-    if(nrow(data) == 0) stop("There are no rows in data.")
+    if(inherits(data, "data.frame")) {
+      if(nrow(data) == 0) stop("There are no rows in data.")
+    }
   }
   
   if(!is.null(limits)) {
@@ -319,9 +320,21 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs
     }
   } else {
     if(projection.grid) {
-      layers <- paste(layers, map_cmd("defs_rect_proj"), sep = " + ")
+      if(sf::st_is_longlat(X$proj)) { #  & X$map.limits[1] != 0
+        # to address a sf/ggplot2 crash (try basemap(c(0, 10, 70, 75)) + coord_sf(expand = FALSE))
+        layers <- gsub("expand = TRUE", "expand = FALSE", 
+             paste(layers, map_cmd("defs_rect_proj"), sep = " + "))
+      } else {
+        layers <- paste(layers, map_cmd("defs_rect_proj"), sep = " + ")
+      }
     } else {
-      layers <- paste(layers, map_cmd("defs_rect"), sep = " + ")
+      if(sf::st_is_longlat(X$proj)) { #  & X$map.limits[1] != 0
+        # to address a sf/ggplot2 crash (try basemap(c(0, 10, 70, 75)) + coord_sf(expand = FALSE))
+        layers <- gsub("expand = TRUE", "expand = FALSE", 
+                       paste(layers, map_cmd("defs_rect"), sep = " + "))
+      } else {
+        layers <- paste(layers, map_cmd("defs_rect"), sep = " + ")
+      }
     }
   }
   

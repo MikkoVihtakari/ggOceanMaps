@@ -433,7 +433,8 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     
     if(rotate) {
       crs <- rotate_crs(crs, limits[1:2])
-      clip_shape <- dd_clip_boundary(limits, crs, expand.factor)
+      clip_shape <- smoothr::densify(
+        dd_clip_boundary(limits, crs, expand.factor), 100)
     } else {
       
       ## This approach produces too wide boundaries in some cases
@@ -655,7 +656,8 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
       x$shapefiles$bathy <- raster_bathymetry(
         x$shapefiles$bathy,
         depths = NULL,
-        boundary = sf::st_transform(smoothr::densify(x$clip_limits, n = 10), crs = 4326),
+        boundary = sf::st_transform(smoothr::densify(x$clip_limits, n = 100),
+                                    crs = 4326),
         verbose = FALSE
       )
       
