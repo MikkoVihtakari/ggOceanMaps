@@ -23,8 +23,6 @@ knitr::opts_chunk$set(
 
 <!-- [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions/workflows/R-CMD-check.yaml) -->
 
-**Breaking news (pun intended): ggOceanMaps goes [sf](https://r-spatial.github.io/sf/)!** Most of ggOceanMaps code has been rewritten. There are plenty of new features in v2 (see [this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.html)), but likely also many new bugs. Please [report them here](https://github.com/MikkoVihtakari/ggOceanMaps/issues).
-
 ## Overview
 
 The ggOceanMaps package for [R](https://www.r-project.org/) allows plotting data on bathymetric maps using [ggplot2](https://ggplot2.tidyverse.org/reference). The package is designed for ocean sciences and greatly simplifies bathymetric map plotting anywhere around the globe. ggOceanMaps uses openly available geographic data. Citing the particular data sources is advised by the CC-BY licenses whenever maps from the package are published (see the [*Citations and data sources*](#citations-and-data-sources) section). 
@@ -47,7 +45,7 @@ Installation of the CRAN version:
 install.packages("ggOceanMaps")
 ```
 
-The new 2.0 version of ggOceanMaps does not require the ggOceanMapsData package any longer. Detailed map data are downloaded when needed from the [ggOceanMapsLargeData](#data-path) repository.
+The new >2.0 versions of ggOceanMaps do not require the ggOceanMapsData package any longer. Detailed map data are downloaded when needed from the [ggOceanMapsLargeData](#data-path) repository.
 
 ## Usage
 

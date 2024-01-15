@@ -27,7 +27,7 @@ raster_bathymetry(
 
 \item{boundary}{A \link[sf]{st_polygon} object, text string defining the file path to a spatial polygon, \link[sf:st_bbox]{bounding box}, or a numeric vector of length 4 giving the boundaries for which \code{bathy} should be cut to. Should be given as \strong{decimal degrees}. If unnamed numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. You can also use the sf bounding box format as named vector. Use \code{NULL} not to cut \code{bathy}.}
 
-\item{warp}{Logical indicating whether the resulting grid should be resampled to a new CRS if \code{proj.out} != code{proj.bathy} using the \code{\link[stars]{st_warp}} function. A time-consuming operation, but necessary when CRS changes in raster bathymetries. Not required if the next step is to vectorise the bathymetry.}
+\item{warp}{Logical indicating whether the resulting grid should be resampled to a new CRS if \code{proj.out != proj.bathy} using the \code{\link[stars]{st_warp}} function. A time-consuming operation, but necessary when CRS changes in raster bathymetries. Not required if the next step is to vectorise the bathymetry.}
 
 \item{estimate.land}{Logical indicating whether to include land to the output. Can be used in the following \code{\link{vector_bathymetry}} step to estimate land polygons.}
 

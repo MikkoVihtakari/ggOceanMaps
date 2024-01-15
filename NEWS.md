@@ -1,5 +1,7 @@
 # ggOceanMaps 2.2 (development version on GitHub)
 
+# ggOceanMaps 2.2.0
+
 * Add tests better explaining wrongly specified arguments
 * Update the user manual
 * Fix an issue with certain `bathy.style` abbreviations
