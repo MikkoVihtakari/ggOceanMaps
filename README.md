@@ -51,9 +51,9 @@ Installation of the CRAN version:
 install.packages("ggOceanMaps")
 ```
 
-The new \>2.0 versions of ggOceanMaps do not require the ggOceanMapsData
-package any longer. Detailed map data are downloaded when needed from
-the [ggOceanMapsLargeData](#data-path) repository.
+Note that \>2.0 versions of ggOceanMaps do not require the
+ggOceanMapsData package any longer. Detailed map data are downloaded
+when needed from the [ggOceanMapsLargeData](#data-path) repository.
 
 ## Usage
 
@@ -186,7 +186,7 @@ citation("ggOceanMaps")
 #> 
 #>   Vihtakari M (2024). _ggOceanMaps: Plot Data on Oceanographic Maps
 #>   using 'ggplot2'_. R package version 2.2.0,
-#>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
+#>   <https://CRAN.R-project.org/package=ggOceanMaps>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -195,7 +195,7 @@ citation("ggOceanMaps")
 #>     author = {Mikko Vihtakari},
 #>     year = {2024},
 #>     note = {R package version 2.2.0},
-#>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
+#>     url = {https://CRAN.R-project.org/package=ggOceanMaps},
 #>   }
 ```
 

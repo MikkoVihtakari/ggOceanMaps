@@ -1,8 +1,8 @@
 Package: ggOceanMaps
 Type: Package
 Title: Plot Data on Oceanographic Maps using 'ggplot2'
-Version: 2.2.0
-Date: 2024-01-15
+Version: 2.2.1
+Date: 2024-10-17
 Authors@R: c(person("Mikko", "Vihtakari", email = "mikko.vihtakari@hi.no",
                   role = c("aut", "cre"), 
                   comment = c(affiliation = "Institute of Marine Research", 
@@ -28,6 +28,6 @@ Imports: sf, stars, methods, utils, smoothr, units
 Suggests: ggspatial, cowplot, knitr, rmarkdown, scales, ggnewscale
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 LazyData: true
 LazyDataCompression: xz

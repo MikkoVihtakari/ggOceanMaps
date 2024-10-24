@@ -1,4 +1,6 @@
-# ggOceanMaps 2.2 (development version on GitHub)
+# ggOceanMaps 2.3 (development version on GitHub)
+
+* Fixed a bug there both `load_map_data(shapefile_list("Arctic"))` and `shapefile_list("Arctic", get.data = TRUE)` would cause error due to changed bathymetry system.
 
 # ggOceanMaps 2.2.0
 

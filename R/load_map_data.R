@@ -37,29 +37,38 @@ load_map_data <- function(x, force = FALSE, downsample = 0) {
   bathy_user_defined <- FALSE
   
   if(!is.null(x$bathy)) {
-    if(grepl("user", names(x$bathy))) {
+    if(grepl("user", names(x$bathy)[1])) {
       bathy_user_defined <- TRUE
     } 
+  }
+  
+  # A hack, correct later
+  
+  if(!is.null(x$bathy)) {
+    if(length(x$bathy) > 1) {
+      message("Using raster_binned bathy.type. Improve the code if you don't want this")
+      x$bathy <- x$bathy[1]
+    }
   }
   
   # Create file paths
   
   x[c("land", "glacier", "bathy")] <- 
     lapply(x[c("land", "glacier", "bathy")], function(k) {
-    
-    if(is.null(k)) {
-      NULL
-    } else if(grepl("/|\\\\", k)) {
-      if(tools::file_ext(k) == "") {
-        normalizePath(paste0(k, ".rda"), mustWork = FALSE)
+      
+      if(is.null(k)) {
+        NULL
+      } else if(grepl("/|\\\\", k)) {
+        if(tools::file_ext(k) == "") {
+          normalizePath(paste0(k, ".rda"), mustWork = FALSE)
+        } else {
+          normalizePath(k, mustWork = TRUE)
+        }
       } else {
-        normalizePath(k, mustWork = TRUE)
+        unname(k)
+        #paste(getOption("ggOceanMaps.datapath"), paste0(tolower(x$name), ".rda"), sep = "/")
       }
-    } else {
-      unname(k)
-      #paste(getOption("ggOceanMaps.datapath"), paste0(tolower(x$name), ".rda"), sep = "/")
-    }
-  })
+    })
   
   # Check whether the data has already been downloaded
   
@@ -95,22 +104,22 @@ load_map_data <- function(x, force = FALSE, downsample = 0) {
   
   x[c("land", "glacier")] <-
     lapply(x[c("land", "glacier")], function(k) {
-    if(is.null(k)) {
-      NULL
-    } else if(grepl("/|\\\\", k)) {
-      if(file.exists(k) & !force) {
-        mget(load(k))[[1]]
+      if(is.null(k)) {
+        NULL
+      } else if(grepl("/|\\\\", k)) {
+        if(file.exists(k) & !force) {
+          mget(load(k))[[1]]
+        } else {
+          tmp <- unlist(strsplit(k, "/|\\\\"))
+          dest_path <- file.path(normalizePath(getOption("ggOceanMaps.datapath")),tmp[length(tmp)])
+          
+          download.file(paste0(x$path, tmp[length(tmp)]), dest_path)
+          mget(load(dest_path))[[1]]
+        }
       } else {
-        tmp <- unlist(strsplit(k, "/|\\\\"))
-        dest_path <- file.path(normalizePath(getOption("ggOceanMaps.datapath")),tmp[length(tmp)])
-        
-        download.file(paste0(x$path, tmp[length(tmp)]), dest_path)
-        mget(load(dest_path))[[1]]
+        eval(parse(text = k))
       }
-    } else {
-      eval(parse(text = k))
-    }
-  })
+    })
   
   if(!is.null(x$bathy)) {
     k <- x[["bathy"]]

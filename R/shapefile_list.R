@@ -160,7 +160,21 @@ shapefile_list <- function(name, get.data = FALSE) {
     out <- alternatives[[match.arg(name, names(alternatives))]] # Allows partial matching (typos likely in name)
     
     if(get.data) {
-      out[c("land", "glacier", "bathy")] <- lapply(out[c("land", "glacier", "bathy")], function(k) get(k))
+      out[c("land", "glacier", "bathy")] <- 
+        lapply(out[c("land", "glacier", "bathy")], function(k) {
+          if(length(k) > 1) {
+            message("Returning raster_binned for bathymetry")
+            get(k[1])
+          } else {
+            if(grepl("/|\\\\", k) & tools::file_ext(k) == "") {
+              load(normalizePath(paste0(k, ".rda"), mustWork = FALSE))
+              tmp <- unlist(strsplit(k, "/|\\\\"))
+              get(tmp[length(tmp)])
+            } else {
+              get(k)
+            }
+          }
+        })
     }
   }
   
