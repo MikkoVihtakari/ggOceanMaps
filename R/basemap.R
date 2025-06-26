@@ -335,6 +335,15 @@ basemap <- function(x = NULL, limits = NULL, data = NULL, shapefiles = NULL, crs
       } else {
         layers <- paste(layers, map_cmd("defs_rect"), sep = " + ")
       }
+      
+      # Fix an issue with lon/lat.breaks not hitting the map and causing a crash. Also try using the ggplot2 native breaks as default.
+      if(is.null(lat.interval) & !rotate) {
+        layers <- sub("breaks = X\\$map.grid\\$lat.breaks,", "", layers)
+      }
+      
+      if(is.null(lon.interval) & !rotate) {
+        layers <- sub("breaks = X\\$map.grid\\$lon.breaks,", "", layers)
+      }
     }
   }
   

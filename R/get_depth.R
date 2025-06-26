@@ -18,6 +18,12 @@
 # bathy.style = "ru"; lon = NULL; lat = NULL; shapefile = "DecimalDegree"; proj.in = 4326; bind = TRUE; depth.col = "depth"; verbose = TRUE
 get_depth <- function(data, bathy.style = "raster_continuous", lon = NULL, lat = NULL, shapefile = "DecimalDegree", proj.in = 4326, bind = TRUE, depth.col = "depth", verbose = FALSE) {
   
+  ## Checks
+  
+  if(!inherits(data, c(c("sf", "sfc", "data.frame")))) {
+    stop("The data argument has to be a data.frame or sf object")
+  }
+  
   # Bathymetry grid
   
   if(grepl("raster_binned|^rb", bathy.style)) {
