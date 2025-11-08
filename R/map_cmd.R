@@ -99,7 +99,7 @@ map_cmd <- function(command, alternative = FALSE) {
     bathy_pb = '
       ggplot2::geom_sf(data = X$shapefiles$bathy, ggplot2::aes(fill = depth), 
       show.legend = bathy.legend, color = bathy.border.col, 
-      size = bathy.size, alpha = bathy.alpha) +
+      linewidth = bathy.size, alpha = bathy.alpha) +
       ggplot2::scale_fill_manual(name = "Depth (m)", 
       values = colorRampPalette(c("#F7FBFF", "#DEEBF7", "#9ECAE1", "#4292C6", "#08306B"))(nlevels(X$shapefiles$bathy$depth)), 
       guide =
@@ -111,7 +111,7 @@ map_cmd <- function(command, alternative = FALSE) {
     ',
     bathy_pg = '
       ggplot2::geom_sf(data = X$shapefiles$bathy, ggplot2::aes(fill = depth), 
-      show.legend = bathy.legend, color = bathy.border.col, size = bathy.size, 
+      show.legend = bathy.legend, color = bathy.border.col, linewidth = bathy.size, 
       alpha = bathy.alpha) +
       scale_fill_grey("Depth (m)", start = 1, end = 0.5, guide =
         if(bathy.legend) {
@@ -122,21 +122,21 @@ map_cmd <- function(command, alternative = FALSE) {
       ',
     bathy_cg = '
       ggplot2::geom_sf(data = X$shapefiles$bathy, fill = NA, 
-      color = bathy.border.col, size = bathy.size)
+      color = bathy.border.col, linewidth = bathy.size)
     ',
     bathy_cb = '
       ggplot2::geom_sf(data = X$shapefiles$bathy, ggplot2::aes(color = depth),
-      show.legend = bathy.legend, fill = NA, size = land.size) +
+      show.legend = bathy.legend, fill = NA, linewidth = land.size) +
       ggplot2::scale_color_manual(name = "Depth (m)",
       values = colorRampPalette(c("#DEEBF7", "#9ECAE1", "#4292C6", "#08306B", "#76536F"))(nlevels(X$shapefiles$bathy$depth)))
     ',
     land = '
       ggplot2::geom_sf(data = X$shapefiles$land, fill = land.col, 
-      color = land.border.col, size = land.size)
+      color = land.border.col, linewidth = land.size)
     ',
     glacier = '
       ggplot2::geom_sf(data = X$shapefiles$glacier, fill = gla.col, 
-      color = gla.border.col, size = gla.size)
+      color = gla.border.col, linewidth = gla.size)
     ',
     defs_rect = '
       ggplot2::scale_y_continuous(
@@ -168,7 +168,7 @@ map_cmd <- function(command, alternative = FALSE) {
     } + {
     if(!is.na(grid.col)) ggplot2::geom_sf(data = X$map.grid$lat.grid.lines, color = grid.col, linewidth = grid.size)
     } +
-    ggplot2::geom_sf(data = X$map.grid$lat.limit.line, color = land.border.col, size = land.size) +
+    ggplot2::geom_sf(data = X$map.grid$lat.limit.line, color = land.border.col, linewidth = land.size) +
     ggplot2::coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], expand = FALSE,
              crs = sf::st_crs(X$proj), default = TRUE) +
     ggplot2::theme_void(base_size = base_size) +
@@ -178,7 +178,7 @@ map_cmd <- function(command, alternative = FALSE) {
     ',
     defs_polar_proj = '
     ggplot2::labs(y = "Latitude (meters)", x = "Longitude (meters)") +
-    ggplot2::geom_sf(data = X$map.grid$lat.limit.line, color = land.border.col, size = land.size) +
+    ggplot2::geom_sf(data = X$map.grid$lat.limit.line, color = land.border.col, linewidth = land.size) +
     ggplot2::coord_sf(xlim = X$map.limits[1:2], ylim = X$map.limits[3:4], expand = FALSE,
              crs = sf::st_crs(X$proj), datum = sf::st_crs(X$proj), default = TRUE) +
     theme_map(base_size = base_size, grid.col = grid.col, grid.size = grid.size) +
