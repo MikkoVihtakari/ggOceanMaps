@@ -128,10 +128,10 @@ basemap(c(-20, 15, 50, 70), bathy.style = "rub")
 
 The map above is entirely produced from decimal degree data, which are transformed during plotting. Doing such transformation within a reasonable time (and quality) was not possible when using old geospatial packages for R. 
 
-We **can now also plot maps crossing the anti-meridian**:
+We **can now also plot maps crossing the anti-meridian**. Use the `rotate` argument to turn on the crossing:
 
 ```{r}
-basemap(c(110, -110, 10, 55), bathymetry = TRUE)
+basemap(c(110, -110, 10, 55), bathymetry = TRUE, rotate = TRUE)
 ```
 
 Round-Earth is not only a blessing and there are still some **unresolved issues**, such as lines from decimal degree shapes that could not be dissolved in the new projection. Most of these issues are related to glaciers:

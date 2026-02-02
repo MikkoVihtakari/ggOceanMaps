@@ -8,8 +8,8 @@
 #' @family customize shapefiles
 #' @export
 
-theme_map <- function(..., grid.col, grid.size) {
-    theme_bw(...) %+replace%
+theme_map <- function(..., grid.col = NULL, grid.size = NULL) {
+    theme_bw(...) +
       theme(panel.background = element_blank(),
       panel.border = element_rect(fill = NA, colour = "black", linewidth = 0.2),
       panel.grid = element_line(colour = grid.col, linewidth = grid.size),
