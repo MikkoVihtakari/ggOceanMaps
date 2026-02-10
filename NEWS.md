@@ -1,35 +1,43 @@
 # ggOceanMaps 2.4 (development version on GitHub)
 
+* Fixed anti-meridian crossing land clipping in rotated basemaps ([#53](https://github.com/MikkoVihtakari/ggOceanMaps/pull/53))
+* Fixed bugs and package incompatibilities, including TopologyException ([#52](https://github.com/MikkoVihtakari/ggOceanMaps/pull/52), [#40](https://github.com/MikkoVihtakari/ggOceanMaps/issues/40))
+* Fixed issue with plotting Indian and Pacific Ocean ([#51](https://github.com/MikkoVihtakari/ggOceanMaps/pull/51), [#44](https://github.com/MikkoVihtakari/ggOceanMaps/issues/44))
+* Replaced `size` with `linewidth` to stop ggplot2 warning ([#49](https://github.com/MikkoVihtakari/ggOceanMaps/pull/49), [#48](https://github.com/MikkoVihtakari/ggOceanMaps/issues/48))
+* Removed size-related warnings throughout the package
+* Updated `grid.size`/`grid.col` behavior
+* Various minor bug fixes
+
 
 
 # ggOceanMaps 2.3.0
 
-* Fixed a bug there both `load_map_data(shapefile_list("Arctic"))` and `shapefile_list("Arctic", get.data = TRUE)` would cause error due to changed bathymetry system.
+* Fixed a bug where both `load_map_data(shapefile_list("Arctic"))` and `shapefile_list("Arctic", get.data = TRUE)` would cause error due to changed bathymetry system.
 * Fixed size -> linewidth issues
 
 # ggOceanMaps 2.2.0
 
-* Add tests better explaining wrongly specified arguments
-* Update the user manual
-* Fix an issue with certain `bathy.style` abbreviations
-* qmap arguments did not match those of basemap: add `bathy.alpha` and `downsample` arguments to qmap
-* Fix an [issue](https://stackoverflow.com/questions/60684049/creating-a-interactive-map-on-r-using-plotly) when trying to plot basemaps using `plotly::ggplotly()`
-* Fix [an issue with . in file path](https://github.com/MikkoVihtakari/ggOceanMaps/issues/32)
-* Fix [an issue when plotting singular points](https://github.com/MikkoVihtakari/ggOceanMaps/issues/34)
-* Fix `basemap(c(-180, 180, -90, 90))` case and turn off automatic rotation when crossing the anti-meridian. A message is shown instead.
-* Turn off `expand` in `ggplot2::coord_sf()` to avoid an error when having map border at 0 meridian. 
-* Fix a case where data argument produced too wide boundaries
+* Added tests better explaining wrongly specified arguments
+* Updated the user manual
+* Fixed an issue with certain `bathy.style` abbreviations
+* qmap arguments did not match those of basemap: added `bathy.alpha` and `downsample` arguments to qmap
+* Fixed an [issue](https://stackoverflow.com/questions/60684049/creating-a-interactive-map-on-r-using-plotly) when trying to plot basemaps using `plotly::ggplotly()`
+* Fixed [an issue with . in file path](https://github.com/MikkoVihtakari/ggOceanMaps/issues/32)
+* Fixed [an issue when plotting singular points](https://github.com/MikkoVihtakari/ggOceanMaps/issues/34)
+* Fixed `basemap(c(-180, 180, -90, 90))` case and turned off automatic rotation when crossing the anti-meridian. A message is shown instead.
+* Turned off `expand` in `ggplot2::coord_sf()` to avoid an error when having map border at 0 meridian. 
+* Fixed a case where data argument produced too wide boundaries
 * [`expand.factor` should work now as designed](https://github.com/MikkoVihtakari/ggOceanMaps/issues/33)
-* Fix an error in `dist2land(binary = TRUE)`
+* Fixed an error in `dist2land(binary = TRUE)`
 * `get_depth()` now uses `raster_user` and returns depths as positive numeric. 
-* Fix an issue where land boundaries did not get clipped correctly when using custom crs
+* Fixed an issue where land boundaries did not get clipped correctly when using custom crs
 
 # ggOceanMaps 2.1.1
 
-* Fix a bug in bathy.style wording.
-* Add [`get_depth()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/get_depth.html) function.
-* Fix a critical issue with downloads failing on Windows.
-* Add detailed land shapes of Europe. Can be used by `basemap(shapefiles = "Europe")`
+* Fixed a bug in bathy.style wording.
+* Added [`get_depth()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/get_depth.html) function.
+* Fixed a critical issue with downloads failing on Windows.
+* Added detailed land shapes of Europe. Can be used by `basemap(shapefiles = "Europe")`
 
 # ggOceanMaps 2.0.0
 
