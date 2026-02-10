@@ -4,7 +4,7 @@
 \alias{theme_map}
 \title{A ggplot2 theme for maps}
 \usage{
-theme_map(..., grid.col, grid.size)
+theme_map(..., grid.col = NULL, grid.size = NULL)
 }
 \arguments{
 \item{...}{additional arguments passed to \code{\link[ggplot2]{ggtheme}}.}

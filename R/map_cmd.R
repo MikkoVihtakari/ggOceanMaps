@@ -13,7 +13,8 @@
 #' @seealso \code{\link{basemap}}
 
 map_cmd <- function(command, alternative = FALSE) {
-  out <- switch(command,
+  out <- switch(
+    command,
     base = '
       ggplot2::ggplot()
     ',
@@ -63,11 +64,11 @@ map_cmd <- function(command, alternative = FALSE) {
         na.value = "white"
         )
       ',
-    # bathy_rbb = 
+    # bathy_rbb =
     #   'stars::geom_stars(data = X$shapefiles$bathy$raster, na.action = na.omit,
     #   show.legend = bathy.legend, alpha = bathy.alpha) +
     #   ggplot2::scale_fill_manual(
-    #     name = "Depth (m)", 
+    #     name = "Depth (m)",
     #     values = colorRampPalette(c("#F7FBFF", "#DEEBF7", "#9ECAE1", "#4292C6", "#08306B"))(nlevels(X$shapefiles$bathy$raster[[1]])),
     #     guide =
     #       if(bathy.legend) {
@@ -76,11 +77,11 @@ map_cmd <- function(command, alternative = FALSE) {
     #         "none"
     #       })
     # ',
-    # bathy_rcb = 
+    # bathy_rcb =
     #   'stars::geom_stars(data = X$shapefiles$bathy$raster,
     #   show.legend = bathy.legend, alpha = bathy.alpha) +
     #   ggplot2::scale_fill_gradientn(
-    #     name = "Depth (m)", limits = c(0,NA), 
+    #     name = "Depth (m)", limits = c(0,NA),
     #     values = c(0,0.01,0.05,0.25,0.75,1),
     #     colors = colorRampPalette(c("#F7FBFF", "#DEEBF7", "#9ECAE1", "#4292C6", "#08306B"))(10),
     #     na.value = "white"
@@ -186,24 +187,6 @@ map_cmd <- function(command, alternative = FALSE) {
           legend.margin = margin(t = 0.2, b = 0, r = 0.2, unit = "cm")
     )
     ',
-    # Scrap stuff. Delete when used
-    #
-    # labels_polar = '
-    #   geom_text(data = X$Grid$lon, aes(x = label.offset*lon.end, y = label.offset*lat.end, angle = angle, label = paste(label, "^o", sep = "")), size = FS(label.font), parse = TRUE) +
-    #   geom_text(data = X$Grid$lat.breaks, aes(x = lon.utm, y = lat.utm, label = paste(label, "^o", sep = "")), hjust = 0, vjust = 0, size = FS(label.font), parse = TRUE)
-    # ',
-    # labels_polar_limits = '
-    #   scale_y_continuous(labels = formatterUTMkm) +
-    #   scale_x_continuous(labels = formatterUTMkm) +
-    #   labs(x = "Longitude (km)", y = "Latitude (km)")
-    # ',
-    # defs_polar_limits = '
-    #   coord_fixed(xlim = c(X$Grid$boundaries$lon.utm[1], X$Grid$boundaries$lon.utm[2]), ylim = c(X$Grid$boundaries$lat.utm[1], X$Grid$boundaries$lat.utm[2]), expand = FALSE) +
-    #   theme_map(base_size = base_size) + theme(legend.key.height = unit(0.4, "cm"))
-    # ',
-    # remove_labels = '
-    #   theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
-    # ',
     stop(paste("map command", command, "not found."))
   )
 

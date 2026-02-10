@@ -91,11 +91,11 @@ Returns a \link[ggplot2]{ggplot} map, which can be assigned to an object and mod
 Creates a ggplot2 basemap for further plotting of data.
 }
 \details{
-The function uses \link[ggplot2:ggplot2-package]{ggplot2}, \link[sf:sf]{sf}, \link[stars:st_as_stars]{stars} and spatial files to plot maps of the world's oceans. 
+The function uses \link[ggplot2:ggplot2-package]{ggplot2}, \link[sf:sf]{sf}, \link[stars:st_as_stars]{stars} and spatial files to plot maps of the world's oceans.
 
 \strong{Limits}
 
-If the limits are in decimal degrees, the longitude limits (\code{[1:2]}) specify the start and end segments of corresponding angular lines that should reside inside the map area. The longitude limits are defined \strong{counter-clockwise}. The latitude limits \code{[3:4]} define the parallels that should reside inside the limited region given the longitude segments. Note that the actual limited region becomes wider than the polygon defined by the coordinates (shown in Examples). Using \code{data} to limit the map, making the points barely fit into the map. The \code{expand.factor} argument can be used to adjust the space between map borders and points. If the limits are given as projected coordinates or as decimal degrees for maps with -60 < latitude < 60, limit elements represent lines encompassing the map area in cartesian space. 
+If the limits are in decimal degrees, the longitude limits (\code{[1:2]}) specify the start and end segments of corresponding angular lines that should reside inside the map area. The longitude limits are defined \strong{counter-clockwise}. The latitude limits \code{[3:4]} define the parallels that should reside inside the limited region given the longitude segments. Note that the actual limited region becomes wider than the polygon defined by the coordinates (shown in Examples). Using \code{data} to limit the map, making the points barely fit into the map. The \code{expand.factor} argument can be used to adjust the space between map borders and points. If the limits are given as projected coordinates or as decimal degrees for maps with -60 < latitude < 60, limit elements represent lines encompassing the map area in cartesian space.
 
 \strong{Projections}
 
@@ -106,28 +106,28 @@ If the \code{shapefiles} are not specified, the function uses either the \code{l
 \item \strong{4326} WGS 84 / World Geodetic System 1984, used in GPS. Called "DecimalDegree". For min latitude (\code{limits[3]}) < 30 or > -30, max latitude (\code{limits[4]}) < 60 or > -60, and single integer latitudes < 30 and > -30.
 }
 
-The \code{rotate} argument changes the pre-defined projection such that mid-longitude point in the map points northward. 
+The \code{rotate} argument changes the pre-defined projection such that mid-longitude point in the map points northward.
 
-The \code{crs} argument can be used to define the projection, which can be useful when plotting, for instance, model data that are difficult to transform into another projection. 
+The \code{crs} argument can be used to define the projection, which can be useful when plotting, for instance, model data that are difficult to transform into another projection.
 
 \strong{Bathymetry}
 
 Bathymetry can be plotted by simply specifying \code{bathymetry = TRUE} or \code{bathy.style} (you won't need to specify both any longer). The former uses a low-resolution raster file shipped with ggOceanMaps. The package contains an option to plot higher resolution bathymetries than the default binned blue alternative (\code{bathy.style = "raster_binned_blues"}). These bathymetries can be accessed by specifying the \code{bathy.style} argument and require a download from \href{https://github.com/MikkoVihtakari/ggOceanMapsLargeData}{ggOceanMapsLargeData} or other online repositories. The \code{bathy.style} character argument consists of three parts separated by a \code{_}. The first part gives the type: raster, poly(gon), or contour. The two latter ones use vector data. The second part gives the resolution: binned, continuous or user. The continuous and user options cannot be used for vector data. The user option accepts any raster file that can be opened using \link[stars]{read_stars}. The path to the file has to be stored in \code{ggOceanMaps.userpath} \link[base:options]{option} (e.g. \code{options(ggOceanMaps.userpath = "PATH_TO_THE_FILE")}) (you can set this in .Rprofile to avoid having to type it every time). The last part defines the color: blues or grays. These options can be abbreviated by specifying the first letter of each part. Gray contour lines are an exception to the rule above and can be plotted using \code{bathy.style = "contour_gray"}. Future versions may contain a combination of raster and gray contours, but these have not been implemented yet. Currently implemented \code{bathy.style} alternatives are:
 \itemize{
-\item \code{NULL} (\strong{default}). Bathymetry style is searched from \code{getOption("ggOceanMaps.bathy.style")}. If not found, \code{"raster_binned_blues"} is used. 
+\item \code{NULL} (\strong{default}). Bathymetry style is searched from \code{getOption("ggOceanMaps.bathy.style")}. If not found, \code{"raster_binned_blues"} is used.
 \item \code{"raster_binned_blues"} or \code{"rbb"} plots binned raster bathymetry filled with different shades of blue. Does not require a download.
 \item \code{"raster_binned_grays"} or \code{"rbg"} the same than above but uses different shades of gray.
-\item \code{"raster_continuous_blues"} or \code{"rcb"} plots continuous raster bathymetry filled with different shades of blue. More detailed and visually more appealing than the binned bathymetry. Recommended. Requires a download. 
+\item \code{"raster_continuous_blues"} or \code{"rcb"} plots continuous raster bathymetry filled with different shades of blue. More detailed and visually more appealing than the binned bathymetry. Recommended. Requires a download.
 \item \code{"raster_continuous_grays"} or \code{"rcg"} the same than above but uses different shades of gray.
-\item \code{"raster_user_blues"} or \code{"rub"} plots continuous raster bathymetry filled with different shades of blue from \code{getOption("ggOceanMaps.user.path")}. Any file supported by \link[stars]{read_stars} should work. The file has to be placed into the location specified by the path. Experimental feature. Has been tested using \href{https://www.ncei.noaa.gov/products/etopo-global-relief-model}{ETOPO 60 arc-second} and \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/}{GEBCO 15 arc-second} grids. Please report any bugs you find. 
+\item \code{"raster_user_blues"} or \code{"rub"} plots continuous raster bathymetry filled with different shades of blue from \code{getOption("ggOceanMaps.user.path")}. Any file supported by \link[stars]{read_stars} should work. The file has to be placed into the location specified by the path. Experimental feature. Has been tested using \href{https://www.ncei.noaa.gov/products/etopo-global-relief-model}{ETOPO 60 arc-second} and \href{https://www.gebco.net/data_and_products/gridded_bathymetry_data/}{GEBCO 15 arc-second} grids. Please report any bugs you find.
 \item \code{"raster_user_grays"} or \code{"rug"} the same than above but uses different shades of gray.
-\item \code{"poly_binned_blues"}, \code{"poly_blues"}, \code{"pbb"} or \code{"pb"} plots polygon bathymetry filled with different shades of blue. Default in the versions older than 2.0 of ggOceanMaps. Requires a download. 
+\item \code{"poly_binned_blues"}, \code{"poly_blues"}, \code{"pbb"} or \code{"pb"} plots polygon bathymetry filled with different shades of blue. Default in the versions older than 2.0 of ggOceanMaps. Requires a download.
 \item \code{"poly_binned_grays"}, \code{"poly_grays"}, \code{"pbg"} or \code{"pg"} same than above but uses different shades of gray.
 \item \code{"contour_binned_blues"}, \code{"contour_blues"}, \code{"cbb"} or \code{"cb"} contour lines with different shades of blue. Requires a download.
-\item \code{"contour_gray"}, \code{"contour_gray"} or \code{"cg"} plots gray contour lines. Requires a download. 
+\item \code{"contour_gray"}, \code{"contour_gray"} or \code{"cg"} plots gray contour lines. Requires a download.
 }
 
-The default can be changed by setting the \code{ggOceanMaps.bathy.style} option. \code{options(ggOceanMaps.bathy.style = "poly_blues")} would make the style similar to older pre-2.0 versions of ggOceanMaps. 
+The default can be changed by setting the \code{ggOceanMaps.bathy.style} option. \code{options(ggOceanMaps.bathy.style = "poly_blues")} would make the style similar to older pre-2.0 versions of ggOceanMaps.
 
 \strong{Pre-made shapefiles}
 
@@ -145,7 +145,7 @@ Custom shapefiles have to be a named list containing at least the following elem
 See Examples.
 
 \strong{Line width and font size}
- 
+
 The line size aesthetics in \link[ggplot2:ggplot2-package]{ggplot2} generates approximately 2.13 wider lines measured in pt than the given values. If you want a specific line width in pt, use the internal function \code{\link{LS}} to convert the desired line width to the ggplot2 equivalent. A similar function is also available for font sizes (\code{\link{FS}}).
 }
 \examples{
@@ -166,7 +166,7 @@ basemap(limits = -60, glaciers = TRUE, shapefiles = "Arctic")
 dt <- data.frame(lon = c(-150, 150), lat = c(60, 90))
 if(requireNamespace("ggspatial", quietly = TRUE)) {
 basemap(data = dt, bathymetry = TRUE) +
-  ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat), 
+  ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat),
     color = "red")
 }
 \dontrun{
@@ -181,7 +181,7 @@ ggspatial::geom_spatial_point(dt, aes(x = lon, y = lat), color = "red")
 # to the projection used by the map:
 dt <- transform_coord(dt, bind = TRUE)
 
-basemap(data = dt) + 
+basemap(data = dt) +
   geom_point(data = dt, aes(x = lon.proj, y = lat.proj), color = "red")
 
 # The limits argument of length 4 plots a map anywhere in the world:
@@ -204,7 +204,7 @@ basemap(data = dt, rotate = TRUE) +
 
 # Alternative:
 basemap(data = dt, rotate = TRUE) +
-  geom_polygon(data = transform_coord(dt, rotate = TRUE), 
+  geom_polygon(data = transform_coord(dt, rotate = TRUE),
     aes(x = lon, y = lat), fill = NA, color = "red")
 
 ## To find UTM coordinates to limit a polar map:
@@ -216,13 +216,13 @@ basemap(limits = c(2.5e4, -2.5e6, 2e6, -2.5e5), shapefiles = "Arctic")
 
 # Using custom shapefiles (requires download):
 data(bs_shapes, package = "ggOceanMapsData")
-basemap(shapefiles = list(land = bs_land))#' 
+basemap(shapefiles = list(land = bs_land))#'
 
 # Premade shapefiles from ggOceanMapsLargeData (requires download):
 basemap("BarentsSea", bathymetry = TRUE)
 }
 
-# grid.col = NA removes grid lines, rotate = TRUE rotates northwards: 
+# grid.col = NA removes grid lines, rotate = TRUE rotates northwards:
 basemap(limits = c(-180, -140, 50, 70), grid.col = NA, rotate = TRUE)
 
 # Rename axis labels
