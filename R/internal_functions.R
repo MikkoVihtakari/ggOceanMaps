@@ -190,7 +190,7 @@ dd_clip_boundary <- function(limits, crs, expand.factor = NULL) {
   
   midLon <- tmp[1] + lonDiff/2
   
-  if(limits[1] > limits[2]) {
+  if (limits[1] > limits[2]) {
     tmp <- c(tmp[1], midLon, tmp[2])
   } else {
     tmp <- deg_to_dd(c(tmp[1], midLon, tmp[2]))
