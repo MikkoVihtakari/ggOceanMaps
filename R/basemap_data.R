@@ -584,6 +584,52 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
 
 basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NULL) {
   
+  # Pre-clip shapefiles in WGS84 when rotating across the anti-meridian
+  # to prevent polygon transformation artifacts. Without this, land polygons
+  # that cross the "new anti-meridian" (opposite side of lon_0) get distorted
+  # during st_transform, producing incorrect land shapes.
+  
+  if(x$rotate && !x$polarMap && sf::st_is_longlat(x$shapefiles$land)) {
+    dd_lims <- x$limits
+    if(length(dd_lims) == 4 && dd_lims["xmin"] > dd_lims["xmax"]) {
+      
+      s2_prev <- sf::sf_use_s2()
+      suppressMessages(sf::sf_use_s2(FALSE))
+      on.exit(suppressMessages(sf::sf_use_s2(s2_prev)), add = TRUE)
+      
+      lon_buffer <- 30
+      pre_xmin <- max(-180, dd_lims["xmin"] - lon_buffer)
+      pre_xmax <- min(180, dd_lims["xmax"] + lon_buffer)
+      
+      # Only pre-clip if the buffered region still crosses the anti-meridian
+      if(pre_xmin > pre_xmax) {
+        box_east <- sf::st_as_sfc(sf::st_bbox(
+          c(xmin = pre_xmin, xmax = 180, ymin = -90, ymax = 90),
+          crs = sf::st_crs(4326)))
+        box_west <- sf::st_as_sfc(sf::st_bbox(
+          c(xmin = -180, xmax = pre_xmax, ymin = -90, ymax = 90),
+          crs = sf::st_crs(4326)))
+        wgs84_clip <- sf::st_union(box_east, box_west)
+        
+        x$shapefiles$land <- suppressWarnings(suppressMessages(
+          sf::st_intersection(sf::st_make_valid(x$shapefiles$land), wgs84_clip)
+        ))
+        
+        if(!is.null(x$shapefiles$glacier)) {
+          x$shapefiles$glacier <- suppressWarnings(suppressMessages(
+            sf::st_intersection(sf::st_make_valid(x$shapefiles$glacier), wgs84_clip)
+          ))
+        }
+        
+        if(bathymetry && inherits(x$shapefiles$bathy, "sf") && sf::st_is_longlat(x$shapefiles$bathy)) {
+          x$shapefiles$bathy <- suppressWarnings(suppressMessages(
+            sf::st_intersection(sf::st_make_valid(x$shapefiles$bathy), wgs84_clip)
+          ))
+        }
+      }
+    }
+  }
+  
   # 1. Clip shapefiles ####
   
   if(x$polarMap) {
