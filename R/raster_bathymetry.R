@@ -95,8 +95,10 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
   
   ## Open raster ###
   
-  if(inherits(bathy, "stars")) {
+  if(inherits(bathy, c("stars", "stars_proxy"))) {
     ras <- bathy
+  } else if(inherits(bathy, "RasterLayer")) {
+    ras <- stars::st_as_stars(bathy)
   } else {
     ras <- stars::read_stars(bathy, quiet = !verbose)
     # ras <- terra::rast(bathy)

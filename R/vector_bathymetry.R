@@ -34,7 +34,7 @@ vector_bathymetry <- function(bathy, drop.crumbs = NULL, remove.holes = NULL, sm
   ### The drop.crumbs argument
   
   if(!is.null(drop.crumbs)) {
-    if(!(is.vector(drop.crumbs) & class(drop.crumbs) %in% c("numeric", "integer") & length(drop.crumbs) == 1)) {
+    if(!(is.vector(drop.crumbs) & inherits(drop.crumbs, c("numeric", "integer")) & length(drop.crumbs) == 1)) {
       stop("The drop.crumbs parameter has to be a single value.")
     }
   }

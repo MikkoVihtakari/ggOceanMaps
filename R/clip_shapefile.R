@@ -98,7 +98,7 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
     tmp <- sf::st_bbox(clip_boundary)[c("xmin", "xmax")]
 
     if((#sign(tmp[1]) != sign(tmp[2]) &&
-        sf::st_crs(x)$proj4string == sf::st_crs(4326)$proj4string)) {
+        isTRUE(x_proj == sf::st_crs(4326)))) {
       s2_mode <- sf::sf_use_s2()
       suppressMessages(sf::sf_use_s2(FALSE))
       on.exit({suppressMessages(sf::sf_use_s2(s2_mode))})
