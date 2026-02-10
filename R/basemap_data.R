@@ -579,9 +579,6 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
 }
 
 
-
-
-
 ##################### #
 ## Crop shapefiles ####
 
@@ -733,7 +730,8 @@ basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NUL
       if(diff(limits[1:2]) > 350) {
         lonDist <- 360
       } else {
-        tmp <- dd_to_deg(round(x$decLimits)[1:2])
+        
+        tmp <- round(x$decLimits)[1:2] # dd_to_deg(round(x$decLimits)[1:2])
         
         if(tmp[1] > tmp[2]) {
           lonDist <- 360 - tmp[1] + tmp[2]
