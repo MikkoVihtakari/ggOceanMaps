@@ -612,7 +612,7 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
         box_west <- sf::st_as_sfc(sf::st_bbox(
           c(xmin = -180, xmax = pre_xmax, ymin = -90, ymax = 90),
           crs = sf::st_crs(4326)))
-        wgs84_clip <- sf::st_union(box_east, box_west)
+        wgs84_clip <- suppressMessages(sf::st_union(box_east, box_west))
         
         x$shapefiles$land <- suppressWarnings(suppressMessages(
           sf::st_intersection(sf::st_make_valid(x$shapefiles$land), wgs84_clip)
