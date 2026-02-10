@@ -134,7 +134,16 @@ rotate_crs <- function(crs, meridians) {
   
   ## CRS rotation
   
-  tmp <- unlist(strsplit(sf::st_crs(crs)$proj4string, " "))
+  crs_info <- sf::st_crs(crs)
+  crs_input <- crs_info$input
+  if(is.null(crs_input) || is.na(crs_input) || !nzchar(crs_input) || !grepl("\\+proj", crs_input)) {
+    crs_input <- suppressWarnings(crs_info$proj4string)
+  }
+  if(is.null(crs_input) || is.na(crs_input) || !nzchar(crs_input)) {
+    stop("crs does not have a PROJ string representation.")
+  }
+  
+  tmp <- unlist(strsplit(crs_input, " "))
   
   if(any(grepl("lon_0=", tmp))) {
     tmp[grepl("lon_0=", tmp)] <- paste0("lon_0=", midLon)
