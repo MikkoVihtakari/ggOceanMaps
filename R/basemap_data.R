@@ -597,6 +597,9 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
       suppressMessages(sf::sf_use_s2(FALSE))
       on.exit(suppressMessages(sf::sf_use_s2(s2_prev)), add = TRUE)
       
+      # Buffer of 30 degrees ensures enough land is kept beyond the map limits
+      # (which are further expanded by expand.factor) while still excluding
+      # polygons near the new anti-meridian that cause transformation artifacts
       lon_buffer <- 30
       pre_xmin <- max(-180, dd_lims["xmin"] - lon_buffer)
       pre_xmax <- min(180, dd_lims["xmax"] + lon_buffer)
