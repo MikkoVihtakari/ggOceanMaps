@@ -96,9 +96,9 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
   if(suppressWarnings(sf::st_is_longlat(x))) {
     
     tmp <- sf::st_bbox(clip_boundary)[c("xmin", "xmax")]
-
+    
     if((#sign(tmp[1]) != sign(tmp[2]) &&
-        sf::st_crs(x)$proj4string == sf::st_crs(4326)$proj4string)) {
+      sf::st_crs(x)$proj4string == sf::st_crs(4326)$proj4string)) {
       s2_mode <- sf::sf_use_s2()
       suppressMessages(sf::sf_use_s2(FALSE))
       on.exit({suppressMessages(sf::sf_use_s2(s2_mode))})
@@ -122,7 +122,15 @@ clip_shapefile <- function(x, limits, proj.limits = 4326, simplify = FALSE, tol 
   if(nrow(sf::st_coordinates(clip_boundary)) > 100) {
     shapefile <- suppressMessages(suppressWarnings(sf::st_intersection(x, clip_boundary)))
   } else {
-    shapefile <- suppressWarnings(suppressMessages(sf::st_crop(x, clip_boundary)))
+    shapefile <- 
+      try({suppressWarnings(suppressMessages(sf::st_crop(x, clip_boundary)))}, 
+          silent = TRUE)
+    
+    if(inherits(shapefile, "try-error")) {
+      shapefile <- suppressWarnings(
+        suppressMessages(sf::st_crop(sf::st_make_valid(x), clip_boundary))
+      )
+    } 
   }
   
   ### Validate shapefile

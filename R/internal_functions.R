@@ -143,9 +143,6 @@ rotate_crs <- function(crs, meridians) {
   }
   
   sf::st_crs(paste(tmp, collapse = " "))
-  
-  
-  
 }
 
 #' @title Create clip boundary from decimal degree limits
