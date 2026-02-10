@@ -1,5 +1,7 @@
 # ggOceanMaps 2.4 (development version on GitHub)
 
+# ggOceanMaps 2.3.0
+
 * Fixed anti-meridian crossing land clipping in rotated basemaps ([#53](https://github.com/MikkoVihtakari/ggOceanMaps/pull/53))
 * Fixed bugs and package incompatibilities, including TopologyException ([#52](https://github.com/MikkoVihtakari/ggOceanMaps/pull/52), [#40](https://github.com/MikkoVihtakari/ggOceanMaps/issues/40))
 * Fixed issue with plotting Indian and Pacific Ocean ([#51](https://github.com/MikkoVihtakari/ggOceanMaps/pull/51), [#44](https://github.com/MikkoVihtakari/ggOceanMaps/issues/44))
@@ -7,13 +9,7 @@
 * Removed size-related warnings throughout the package
 * Updated `grid.size`/`grid.col` behavior
 * Various minor bug fixes
-
-
-
-# ggOceanMaps 2.3.0
-
 * Fixed a bug where both `load_map_data(shapefile_list("Arctic"))` and `shapefile_list("Arctic", get.data = TRUE)` would cause error due to changed bathymetry system.
-* Fixed size -> linewidth issues
 
 # ggOceanMaps 2.2.0
 

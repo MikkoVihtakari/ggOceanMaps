@@ -42,7 +42,7 @@ knitr::knit_hooks$set(timeit = local({
 )
 
 options(ggOceanMaps.datapath = "~/Documents/ggOceanMapsLargeData")
-options(ggOceanMaps.userpath = "~/Downloads/gebco_2023/GEBCO_2023.nc")
+options(ggOceanMaps.userpath = "~/Downloads/gebco_2025/GEBCO_2025.nc")
 ```
 
 The old GIS packages for R (`sp`, `raster` and `rgeos`) as the engine for ggOceanMaps have been replaced by newer ones: `sf` handling vector data and `stars` handling rasters. This allowed more efficient use of the geospatial data while plotting maps and led to multiple improvements.
