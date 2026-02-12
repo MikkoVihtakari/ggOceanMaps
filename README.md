@@ -6,7 +6,7 @@
 
 <!-- badges: start -->
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4554714.svg)](https://doi.org/10.5281/zenodo.4554714)
+[![DOI](https://zenodo.org/badge/DOI/10.32614/CRAN.package.ggOceanMaps.svg)](https://doi.org/10.32614/CRAN.package.ggOceanMaps)
 [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://CRAN.R-project.org/package=ggOceanMaps)
 <!-- badges: end -->
