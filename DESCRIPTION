@@ -25,7 +25,7 @@ Description: Allows plotting data on bathymetric maps using 'ggplot2'. Plotting
   when needed. 
 Depends: R (>= 3.5.0), ggplot2 (>= 3.4.0)
 Imports: sf, stars, methods, utils, smoothr, units
-Suggests: ggspatial, cowplot, knitr, rmarkdown, scales, ggnewscale
+Suggests: ggspatial, cowplot, knitr, rmarkdown, scales, ggnewscale, testthat (>= 3.0.0)
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.3.3
