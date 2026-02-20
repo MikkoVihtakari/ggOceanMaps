@@ -138,7 +138,11 @@ dist2land <- function(data, lon = NULL, lat = NULL, shapefile = "DecimalDegree",
   } else { ## Distance
     
     if(verbose) message("Calculating distances...")
-    tmp <- apply(sf::st_distance(x, land), 1, min)/1e3 # km
+
+    if(!inherits(land, "sf")) land <- sf::st_as_sf(land)
+
+    nearest <- sf::st_nearest_feature(x, land)
+    tmp <- as.numeric(sf::st_distance(x, land[nearest,], by_element = TRUE))/1e3 # km
     
     if(sf::st_is_longlat(x)) {
       if(verbose) message("Returning great circle spherical distances from land as kilometers.")
