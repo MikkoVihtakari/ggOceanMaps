@@ -101,8 +101,6 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     ras <- stars::st_as_stars(bathy)
   } else {
     ras <- stars::read_stars(bathy, quiet = !verbose)
-    # ras <- terra::rast(bathy)
-    # ras <- raster::raster(bathy)
   }
   
   if(verbose) utils::setTxtProgressBar(pb, 2)
@@ -135,8 +133,6 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     
     if(inherits(boundary, c("sf", "sfc", "bbox"))) {
       ras <- ras[sf::st_bbox(boundary)]
-      # ras <- raster::crop(ras, raster::extent(boundary))
-      # ras <- terra::crop(ras, boundary)
     } else {
       stop("boundary must be an sf object at this stage")
     }
@@ -168,9 +164,6 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     
     ras <- sf::st_transform(ras, sf::st_crs(proj.out))
     
-    # ras <- sf::st_transform(ras, sf::st_crs(proj.out)) 
-    # ras <- raster::projectRaster(from = ras, crs = raster::crs(proj.out))
-    # ras <- terra::project(ras, sf::st_crs(proj.out)$input)
   } else {
     warp <- FALSE
   }
@@ -210,8 +203,6 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
       cut_df$interval[grepl("Inf-0", cut_df$interval)] <- "land"
     } else {
       cut_df$interval[grepl("Inf-0", cut_df$interval)] <- NA
-      # bathy$raster <- stars::st_as_stars(bathy$raster)
-      # levels(bathy$raster[[1]])[levels(bathy$raster[[1]]) == "land"] <- NA
     }
     
     r <- cut(ras, c(cut_df$from, Inf), labels = cut_df$interval)
