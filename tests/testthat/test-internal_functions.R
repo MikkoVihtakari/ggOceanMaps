@@ -24,3 +24,10 @@ test_that("LS handles non-numeric input", {
   # Since LS is x/2.13, it should behave like standard R division.
   expect_error(LS("a"))
 })
+
+test_that("quiet works", {
+  expect_output(quiet(cat("This should not be printed")), NA)
+  expect_equal(quiet(1 + 1), 2)
+  expect_message(quiet(message("This is a message")), "This is a message")
+  expect_error(quiet(stop("This is an error")), "This is an error")
+})
