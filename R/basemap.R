@@ -467,12 +467,6 @@ basemap <- function(
     X$map.limits[3] <- 1
   }
 
-  ## Fix for ggplot2 3.4.0: size is deprecated for lines/polygons, use linewidth
-  # layers <- gsub("size\\s*=\\s*land\\.size", "linewidth = land.size", layers)
-  # layers <- gsub("size\\s*=\\s*gla\\.size", "linewidth = gla.size", layers)
-  # layers <- gsub("size\\s*=\\s*bathy\\.size", "linewidth = bathy.size", layers)
-  # layers <- gsub("size\\s*=\\s*grid\\.size", "linewidth = grid.size", layers)
-
   ## Final plotting
 
   out <- eval(parse(text = layers))
