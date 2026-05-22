@@ -811,9 +811,9 @@ basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NUL
     
     LonGridLines <- 
       sf::st_sfc(sf::st_multilinestring(
-        x = lapply(unique(LonGridLines$id), function(i) {
-          sf::st_linestring(as.matrix(LonGridLines[LonGridLines$id == i, 2:3]))
-        })
+        x = unname(lapply(split(LonGridLines[2:3], LonGridLines$id), function(df) {
+          sf::st_linestring(as.matrix(df))
+        }))
       ), crs = 4326)
     
     LatLimitLine <- data.frame(lon = seq(-180, 180, 1), lat = x$decLimits)
@@ -827,9 +827,9 @@ basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NUL
                  lat = rep(LatGridLines, each = nrow(LatLimitLine)))
     
     LatGridLines <- sf::st_sfc(sf::st_multilinestring(
-      lapply(unique(LatGridLines$lat), function(k) {
-        sf::st_linestring(as.matrix(LatGridLines[LatGridLines$lat == k,]))
-      })
+      unname(lapply(split(LatGridLines, LatGridLines$lat), function(df) {
+        sf::st_linestring(as.matrix(df))
+      }))
     ), crs = 4326)
     
     LatLimitLine <- 
