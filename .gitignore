@@ -47,3 +47,9 @@ README.html
 
 # Rstudio project
 *.Rproj
+
+# Claude Code
+.claude/
+memory/
+CLAUDE.md
+.positai

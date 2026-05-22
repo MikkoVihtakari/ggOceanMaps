@@ -17,4 +17,8 @@
 ^NEWS\.md$
 ^ggOceanMapsData
 ^vignettes$
+^CLAUDE\.md$
+^\.claude$
+^memory$
 
+^\.positai$
