@@ -51,10 +51,11 @@ GEBCO Compilation Group (2025) GEBCO 2025 (doi:10.5285/37c52e96-24ea-67ce-e063-7
 NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. NOAA National Centers for Environmental Information. \doi{10.25921/fd45-gt74}.
 }
 \seealso{
-Other create shapefiles: 
-\code{\link{clip_shapefile}()},
-\code{\link{geonorge_bathymetry}()},
-\code{\link{vector_bathymetry}()}
+Other create shapefiles:
+\code{\link[=clip_shapefile]{clip_shapefile()}},
+\code{\link[=geonorge_bathymetry]{geonorge_bathymetry()}},
+\code{\link[=vector_bathymetry]{vector_bathymetry()}},
+\code{\link[=vector_land]{vector_land()}}
 }
 \author{
 Mikko Vihtakari

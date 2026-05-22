@@ -54,6 +54,7 @@ reference:
   contents:
   - raster_bathymetry
   - vector_bathymetry
+  - vector_land
   - geonorge_bathymetry
   - clip_shapefile
   - rotate_crs

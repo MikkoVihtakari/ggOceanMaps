@@ -16,8 +16,8 @@ A vector of decimal degrees
 Converts angular degree values to decimal degrees. Used in decimal degree limit calculations.
 }
 \seealso{
-Other degree converters: 
-\code{\link{dd_to_deg}()}
+Other degree converters:
+\code{\link[=dd_to_deg]{dd_to_deg()}}
 }
 \author{
 Mikko Vihtakari

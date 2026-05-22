@@ -30,10 +30,11 @@ Vectorizes bathymetry rasters. Designed to be used for the output of \code{\link
 The \code{drop.crumbs} and \code{remove.holes} arguments can be used to make the resulting object smaller in file size. The \code{smooth} argument can be used to remove the pixelated contours, but often increases file size. Note also that using this option will bias the contours with respect to real world.
 }
 \seealso{
-Other create shapefiles: 
-\code{\link{clip_shapefile}()},
-\code{\link{geonorge_bathymetry}()},
-\code{\link{raster_bathymetry}()}
+Other create shapefiles:
+\code{\link[=clip_shapefile]{clip_shapefile()}},
+\code{\link[=geonorge_bathymetry]{geonorge_bathymetry()}},
+\code{\link[=raster_bathymetry]{raster_bathymetry()}},
+\code{\link[=vector_land]{vector_land()}}
 }
 \author{
 Mikko Vihtakari

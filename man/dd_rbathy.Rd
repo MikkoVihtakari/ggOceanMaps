@@ -18,7 +18,7 @@ dd_rbathy
 Decimal degree bathymetry
 }
 \seealso{
-Other mapfiles: 
+Other mapfiles:
 \code{\link{dd_land}}
 }
 \concept{mapfiles}

@@ -252,10 +252,10 @@ Note that if you use this function to generate maps for a publication, it is adv
 \seealso{
 \code{\link[ggplot2]{ggplot}}
 
-Other basemap functions: 
-\code{\link{qmap}()},
-\code{\link{shapefile_list}()},
-\code{\link{transform_coord}()}
+Other basemap functions:
+\code{\link[=qmap]{qmap()}},
+\code{\link[=shapefile_list]{shapefile_list()}},
+\code{\link[=transform_coord]{transform_coord()}}
 }
 \author{
 Mikko Vihtakari

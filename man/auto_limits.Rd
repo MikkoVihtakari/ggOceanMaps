@@ -41,9 +41,9 @@ auto_limits(data = expand.grid(lon = c(-120, 180, 120),
    lat = c(60, 60, 80)))
 }
 \seealso{
-Other customize shapefiles: 
-\code{\link{reorder_layers}()},
-\code{\link{theme_map}()}
+Other customize shapefiles:
+\code{\link[=reorder_layers]{reorder_layers()}},
+\code{\link[=theme_map]{theme_map()}}
 }
 \author{
 Mikko Vihtakari
