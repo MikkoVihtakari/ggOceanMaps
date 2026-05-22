@@ -654,10 +654,13 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
       
     } else {
       landBoundary <- clip_shapefile(
-        sf::st_transform(x$shapefiles$land, crs = x$crs),
-        limits = sf::st_transform(x$clip_limits, crs = x$crs),
+        x$shapefiles$land,
+        limits = sf::st_transform(x$clip_limits, crs = sf::st_crs(x$shapefiles$land)),
         return.boundary = TRUE
       )
+
+      landBoundary$shapefile <- sf::st_transform(landBoundary$shapefile, crs = x$crs)
+      landBoundary$boundary <- sf::st_transform(landBoundary$boundary, crs = x$crs)
     }
   }
   
