@@ -1,0 +1,171 @@
+---
+title: "ggOceanMaps cookbook"
+author: "Mikko Vihtakari (Institute of Marine Research)"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{ggOceanMaps cookbook}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 5
+)
+```
+
+A collection of short, self-contained recipes for common ggOceanMaps tasks.
+Each recipe is meant to be copy-pasteable. For background and the conceptual
+walk-through, see the [user manual](ggOceanMaps.html).
+
+```{r setup}
+library(ggOceanMaps)
+library(ggplot2)
+```
+
+# Choosing a region
+
+## How do I plot a specific lon/lat box?
+
+```{r}
+basemap(limits = c(-20, 30, 50, 70))
+```
+
+`limits` is `c(xmin, xmax, ymin, ymax)`.
+
+## How do I plot the Arctic / Antarctic?
+
+A single value in `limits` means "polar projection bounded at this latitude":
+
+```{r}
+basemap(60)    # Arctic
+```
+
+```{r}
+basemap(-60)   # Antarctic
+```
+
+## How do I plot a region that crosses the antimeridian?
+
+```{r}
+basemap(limits = c(160, -160, 60, 80), rotate = TRUE)
+```
+
+Without `rotate = TRUE` you'll get the whole world with a message; with it,
+ggOceanMaps rotates the projection so the antimeridian sits in the middle.
+
+## How do I fit the map to my data automatically?
+
+```{r}
+dt <- data.frame(lon = c(-150, 150), lat = c(60, 85))
+basemap(data = dt, rotate = TRUE)
+```
+
+# Adding your own data
+
+## How do I add points to a decimal-degree map?
+
+```{r}
+dt <- data.frame(lon = c(0, 10, 20), lat = c(55, 60, 65))
+basemap(limits = c(-10, 30, 50, 70)) +
+  geom_point(data = dt, aes(x = lon, y = lat), color = "red", size = 3)
+```
+
+## How do I add points to a *projected* map?
+
+Projected maps (polar, custom CRS) need the coordinates transformed first:
+
+```{r, eval = FALSE}
+dt <- data.frame(lon = c(0, 10, 20), lat = c(70, 75, 80))
+dt <- transform_coord(dt, bind = TRUE)   # adds lon.proj, lat.proj
+basemap(60) +
+  geom_point(data = dt, aes(x = lon.proj, y = lat.proj),
+             color = "red", size = 3)
+```
+
+Or let `ggspatial` handle the transform:
+
+```{r, eval = FALSE}
+basemap(60) +
+  ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat),
+                                crs = 4326, color = "red", size = 3)
+```
+
+## How do I quickly plot a data frame's coordinates?
+
+```{r, eval = FALSE}
+qmap(dt, color = I("red"))
+```
+
+`qmap()` picks limits and projection automatically.
+
+# Bathymetry
+
+## How do I add bathymetry without downloading anything?
+
+```{r, eval = FALSE}
+basemap(limits = c(-20, 30, 50, 70), bathymetry = TRUE)
+```
+
+This uses the binned-blues raster shipped with the package.
+
+## How do I get higher-resolution bathymetry?
+
+> *(Recipe stub — to be filled in alongside the WCS bathymetry work in
+> phase 2: ggOceanMapsLargeData download flow, `options(ggOceanMaps.datapath)`,
+> the `rcb` / `pb` / `cb` styles.)*
+
+## How do I use my own bathymetry raster (e.g. GEBCO)?
+
+> *(Recipe stub — `options(ggOceanMaps.userpath)`, `bathy.style = "rub"`.)*
+
+## How do I fetch bathymetry on demand from EMODnet / GEBCO?
+
+> *(Recipe stub — to be added when the WCS bathymetry subsystem lands in
+> phase 2.)*
+
+# Building your own shapefiles
+
+## How do I make land + bathymetry from a downloaded raster?
+
+> *(Recipe stub — `raster_bathymetry()` → `vector_bathymetry()` /
+> `vector_land()` pipeline.)*
+
+## How do I clip an existing shapefile to my region?
+
+> *(Recipe stub — `clip_shapefile()`.)*
+
+# Special cases
+
+## How do I draw ocean current vectors over a map?
+
+> *(Recipe stub — to be added with the Barents-Sea-currents example in
+> phase 2.)*
+
+## How do I add ICES or Norwegian fishery zones?
+
+> *(Recipe stub — `ices_areas`, `fdir_main_areas`, `fdir_sub_areas`.)*
+
+# Saving and exporting
+
+## How do I save the map to PNG/PDF?
+
+```{r, eval = FALSE}
+p <- basemap(limits = c(-20, 30, 50, 70))
+ggsave("europe.png", p, width = 6, height = 5, dpi = 300)
+ggsave("europe.pdf", p, width = 6, height = 5)
+```
+
+`basemap()` returns a regular ggplot — anything that works on a ggplot works
+here.

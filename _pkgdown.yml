@@ -116,6 +116,9 @@ navbar:
    articles:
     text: Articles
     menu:
+    - text: Cookbook
+      href: articles/cookbook.html
+    - text: -------
     - text: News
     - text: New features in version 2
       href: articles/new-features.html

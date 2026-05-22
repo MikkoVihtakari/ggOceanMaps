@@ -18,6 +18,7 @@
 ^ggOceanMapsData
 ^vignettes$
 ^CLAUDE\.md$
+^AGENTS\.md$
 ^\.claude$
 ^memory$
 
