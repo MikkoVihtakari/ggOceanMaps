@@ -32,7 +32,9 @@ Suggests:
     rmarkdown,
     scales,
     ggnewscale,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    vdiffr (>= 1.0.0),
+    sp
 Config/testthat/edition: 3
 License: GPL-3
 Encoding: UTF-8
