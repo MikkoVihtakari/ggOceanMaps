@@ -206,7 +206,6 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       
       if(all(sapply(customShapefiles, function(k) is.null(k)))) stop("One of following shapefiles elements 'land', 'glacier', and 'bathy' must be a an sf or stars object. See Details.")
     }
-    # if(any(sapply(shapefiles, function(k) !inherits(k, c("NULL", "sf", "SpatialPolygonsDataFrame", "SpatialPolygons"))))) stop("Shapefiles elements 'land', 'glacier', and 'bathy' must either be a SpatialPolygonsDataFrame, SpatialPolygons, or NULL. See Details.")
     
     shapefilesDefined <- TRUE
   }
