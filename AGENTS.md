@@ -98,7 +98,7 @@ basemap(limits = c(-20, 30, 50, 70), bathy.style = "rcb")  # continuous blues
 User-supplied raster (any GEBCO / ETOPO / IBCAO NetCDF):
 
 ```r
-options(ggOceanMaps.userpath = "~/Downloads/GEBCO_2025.nc")
+options(ggOceanMaps.userpath = "path/to/your/bathymetry.nc")
 basemap(limits = c(-20, 30, 50, 70), bathy.style = "rub")
 ```
 
