@@ -1,5 +1,5 @@
 # R-CMD-check workflow for ggOceanMaps
-# Based on r-lib/actions examples, pinned to the stable v2 branch.
+# Based on r-lib/actions examples, pinned to the stable v2 tag.
 
 on:
   push:
@@ -39,17 +39,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: r-lib/actions/setup-pandoc@v2-branch
+      - uses: r-lib/actions/setup-pandoc@v2
 
-      - uses: r-lib/actions/setup-r@v2-branch
+      - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
           extra-repositories: https://mikkovihtakari.github.io/drat
 
-      - uses: r-lib/actions/setup-r-dependencies@v2-branch
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
 
-      - uses: r-lib/actions/check-r-package@v2-branch
+      - uses: r-lib/actions/check-r-package@v2
