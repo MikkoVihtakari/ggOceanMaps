@@ -27,7 +27,8 @@ Other create shapefiles:
 \code{\link[=clip_shapefile]{clip_shapefile()}},
 \code{\link[=raster_bathymetry]{raster_bathymetry()}},
 \code{\link[=vector_bathymetry]{vector_bathymetry()}},
-\code{\link[=vector_land]{vector_land()}}
+\code{\link[=vector_land]{vector_land()}},
+\code{\link[=wcs_bathymetry]{wcs_bathymetry()}}
 }
 \author{
 Mikko Vihtakari

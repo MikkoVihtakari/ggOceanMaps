@@ -46,7 +46,8 @@ Other create shapefiles:
 \code{\link[=clip_shapefile]{clip_shapefile()}},
 \code{\link[=geonorge_bathymetry]{geonorge_bathymetry()}},
 \code{\link[=raster_bathymetry]{raster_bathymetry()}},
-\code{\link[=vector_bathymetry]{vector_bathymetry()}}
+\code{\link[=vector_bathymetry]{vector_bathymetry()}},
+\code{\link[=wcs_bathymetry]{wcs_bathymetry()}}
 }
 \author{
 Mikko Vihtakari
