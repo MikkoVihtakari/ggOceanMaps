@@ -590,7 +590,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       limits = unname(wcs_bbox),
       source = wcs_source,
       verbose = verbose
-    )$raster
+    )
   }
   
   # 5. Return ####

@@ -1,5 +1,8 @@
 # ggOceanMaps 2.4 (development version on GitHub)
 
+Bring ggOceanMaps to the AI age. Package improvements using AI (Claude Code, 
+Github Copilot) and addition documentation files for AI agents.
+
 ## New features
 
 * On-demand WCS bathymetry from EMODnet via the new `wcs_bathymetry()` function

@@ -217,14 +217,26 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     } else {
       r <- ras
     }
-    
-    # Remove land and turn depths to positive values
-    r[[1]][r[[1]] > 0] <- NA
-    r[[1]] <- -1*r[[1]]
-    
+
+    # Detect whether the input is raw (negative depths + positive land) or has
+    # already been processed by an earlier call (positive depths + NA land).
+    # Only invert sign when raw input is detected — otherwise the second pass
+    # would zero everything to NA and trigger a "no non-missing arguments to
+    # min/max" warning at the range() call further down.
+    vals_min <- suppressWarnings(min(r[[1]], na.rm = TRUE))
+    if(is.finite(vals_min) && vals_min < 0) {
+      # Raw bathymetry: remove land, turn depths to positive values.
+      r[[1]][r[[1]] > 0] <- NA
+      r[[1]] <- -1 * r[[1]]
+    }
+
     # Depth intervals
-    
-    cut_df <- range(r[[1]], na.rm = TRUE)
+
+    if(all(is.na(r[[1]]))) {
+      cut_df <- c(NA_real_, NA_real_)
+    } else {
+      cut_df <- range(r[[1]], na.rm = TRUE)
+    }
   }
   
   ## Warp to new grid
