@@ -17,13 +17,23 @@
 #'   exists.
 #' @param max_area_deg2 Numeric. Maximum bounding-box area (in degree-squared)
 #'   allowed before the function errors. Guards against accidentally
-#'   downloading a very large tile. Default \code{10}.
+#'   downloading a very large area. Default \code{50}. Bounding boxes larger
+#'   than the source's single-request cap are split into tiles and mosaicked
+#'   automatically — see Details.
+#' @param tile_size_deg Numeric. Edge length (in degrees) of the largest
+#'   single-request tile. Defaults to \code{3} which keeps each EMODnet
+#'   request comfortably under the server's ~98 MB read cap (EMODnet reads
+#'   8-byte doubles internally, so a 4° tile already exceeds the cap).
 #' @param timeout Numeric. HTTP timeout in seconds.
 #' @param verbose Logical. Print download progress and informational messages.
 #' @details EMODnet's WCS endpoint serves the European-waters bathymetric DTM
 #'   at ~115 m native resolution (~0.00104°) in EPSG:4326 GeoTIFF format. The
-#'   1°×1° tile around the North Sea is ~4 MB; a 5°×5° tile is ~100 MB.
-#'   Plan accordingly.
+#'   1°×1° tile around the North Sea is ~4 MB; a 5°×5° tile would be ~100 MB
+#'   and hit the server's ~98 MB read cap. To handle larger bounding boxes,
+#'   \code{wcs_bathymetry()} splits the request into tiles of at most
+#'   \code{tile_size_deg} per axis, caches each tile, and mosaicks them via a
+#'   GDAL virtual raster. Each tile is cached independently so subsequent
+#'   overlapping requests reuse what's already on disk.
 #'
 #'   The returned object is a \code{bathyRaster} (same class returned by
 #'   \code{\link{raster_bathymetry}} with \code{depths = NULL}) and can be
@@ -55,7 +65,8 @@ wcs_bathymetry <- function(
     coverage = NULL,
     cache_dir = NULL,
     force = FALSE,
-    max_area_deg2 = 10,
+    max_area_deg2 = 50,
+    tile_size_deg = 3,
     timeout = 60,
     verbose = TRUE
 ) {
@@ -92,36 +103,80 @@ wcs_bathymetry <- function(
     dir.create(cache_dir, recursive = TRUE, showWarnings = FALSE)
   }
 
-  cache_file <- wcs_cache_path(cache_dir, src, bbox)
+  ## Decide on tiling ----
 
-  ## Fetch or hit cache ----
+  old_timeout <- getOption("timeout")
+  on.exit(options(timeout = old_timeout), add = TRUE)
+  options(timeout = max(old_timeout, timeout))
 
-  if(!force && file.exists(cache_file)) {
-    if(verbose) message("ggOceanMaps: using cached WCS tile: ", cache_file)
+  dx <- unname(bbox["xmax"] - bbox["xmin"])
+  dy <- unname(bbox["ymax"] - bbox["ymin"])
+
+  if(dx <= tile_size_deg && dy <= tile_size_deg) {
+    cache_file <- wcs_fetch_tile(src, bbox, cache_dir, force, verbose)
+    ras <- stars::read_stars(cache_file, quiet = !verbose)
   } else {
-    url <- wcs_build_url(src, bbox)
-    if(verbose) message("ggOceanMaps: downloading bathymetry from ", src$label, " WCS...")
+    ## Tile and mosaic ----
+    x_breaks <- sort(unique(c(seq(bbox["xmin"], bbox["xmax"], by = tile_size_deg), bbox["xmax"])))
+    y_breaks <- sort(unique(c(seq(bbox["ymin"], bbox["ymax"], by = tile_size_deg), bbox["ymax"])))
 
-    old_timeout <- getOption("timeout")
-    on.exit(options(timeout = old_timeout), add = TRUE)
-    options(timeout = max(old_timeout, timeout))
-
-    result <- tryCatch(
-      utils::download.file(url, destfile = cache_file, mode = "wb", quiet = !verbose),
-      error = function(e) e,
-      warning = function(w) w
+    tiles <- expand.grid(
+      i = seq_len(length(x_breaks) - 1L),
+      j = seq_len(length(y_breaks) - 1L)
     )
+    if(verbose) message(sprintf(
+      "ggOceanMaps: bounding box exceeds %g deg per axis; fetching %d tile(s) from %s.",
+      tile_size_deg, nrow(tiles), src$label
+    ))
 
-    if(inherits(result, c("error", "warning")) || !file.exists(cache_file) || file.size(cache_file) < 1000) {
-      if(file.exists(cache_file)) unlink(cache_file)
-      stop("WCS download failed. Check internet connectivity and that ", src$label, " is reachable. Original error: ", conditionMessage(result))
-    }
+    tile_files <- vapply(seq_len(nrow(tiles)), function(k) {
+      i <- tiles$i[k]; j <- tiles$j[k]
+      tile_bbox <- stats::setNames(
+        c(x_breaks[i], x_breaks[i + 1L], y_breaks[j], y_breaks[j + 1L]),
+        c("xmin", "xmax", "ymin", "ymax")
+      )
+      wcs_fetch_tile(src, tile_bbox, cache_dir, force, verbose)
+    }, character(1))
+
+    # GDAL doesn't expand "~"; normalise paths before passing in.
+    tile_files <- normalizePath(tile_files, mustWork = TRUE)
+    vrt_path <- tempfile(fileext = ".vrt")
+    on.exit(unlink(vrt_path), add = TRUE)
+    sf::gdal_utils("buildvrt", source = tile_files, destination = vrt_path, quiet = !verbose)
+    ras <- stars::read_stars(vrt_path, quiet = !verbose)
   }
 
-  ## Open and convert ----
+  ## Convert to bathyRaster ----
 
-  ras <- stars::read_stars(cache_file, quiet = !verbose)
   raster_bathymetry(ras, depths = NULL, verbose = verbose)
+}
+
+
+# Internal: fetch a single tile (returns path to cached GeoTIFF) ----------
+
+wcs_fetch_tile <- function(src, bbox, cache_dir, force, verbose) {
+  cache_file <- wcs_cache_path(cache_dir, src, bbox)
+
+  if(!force && file.exists(cache_file)) {
+    if(verbose) message("ggOceanMaps: using cached WCS tile: ", basename(cache_file))
+    return(cache_file)
+  }
+
+  url <- wcs_build_url(src, bbox)
+  if(verbose) message("ggOceanMaps: downloading ", basename(cache_file), " from ", src$label, " WCS...")
+
+  result <- tryCatch(
+    utils::download.file(url, destfile = cache_file, mode = "wb", quiet = !verbose),
+    error = function(e) e,
+    warning = function(w) w
+  )
+
+  if(inherits(result, c("error", "warning")) || !file.exists(cache_file) || file.size(cache_file) < 1000) {
+    if(file.exists(cache_file)) unlink(cache_file)
+    stop("WCS download failed. Check internet connectivity and that ", src$label, " is reachable. Original error: ", conditionMessage(result))
+  }
+
+  cache_file
 }
 
 
