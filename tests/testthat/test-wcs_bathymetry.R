@@ -88,3 +88,32 @@ test_that("wcs_bathymetry output plugs into basemap()", {
   )
   expect_s3_class(p, "gg")
 })
+
+# bathy.style integration tests ------------------------------------------
+
+test_that("define_bathy_style accepts wcs_emodnet_blues and abbreviations", {
+  expect_equal(unname(define_bathy_style("wcs_emodnet_blues")), "bathy_rc")
+  expect_equal(names(define_bathy_style("wcs_emodnet_blues")), "wcs_emodnet_blues")
+  expect_equal(names(define_bathy_style("wemb")), "wcs_emodnet_blues")
+  expect_equal(names(define_bathy_style("wemg")), "wcs_emodnet_grays")
+})
+
+test_that("basemap with bathy.style = wcs_emodnet_blues renders (live network)", {
+  skip_if_no_internet()
+  # Route the WCS cache to a fresh tempdir so we don't pollute the user's data dir.
+  withr::with_options(
+    list(ggOceanMaps.datapath = tempfile("wcs-basemap-")),
+    {
+      dir.create(getOption("ggOceanMaps.datapath"))
+      p <- basemap(c(2, 3, 54, 55), bathy.style = "wcs_emodnet_blues", verbose = FALSE)
+      expect_s3_class(p, "gg")
+    }
+  )
+})
+
+test_that("basemap rejects WCS styles on polar maps", {
+  expect_error(
+    basemap(60, bathy.style = "wcs_emodnet_blues", verbose = FALSE),
+    "WCS bathymetry styles.*decimal-degree"
+  )
+})

@@ -268,7 +268,7 @@ basemap <- function(
 
   bathy_cmd <- define_bathy_style(bathy.style)
   bathy.type <- gsub("_blues$|_grays$", "", names(bathy_cmd))
-  bathy.type <- ifelse(grepl("raster", bathy.type), bathy.type, "vector")
+  bathy.type <- ifelse(grepl("^raster|^wcs_", bathy.type), bathy.type, "vector")
   bathy_color <- utils::tail(unlist(strsplit(names(bathy_cmd), "_")), n = 1)
 
   if (bathymetry & !is.null(shapefiles) & inherits(shapefiles, "list")) {
@@ -384,7 +384,7 @@ basemap <- function(
         ),
         sep = " + "
       )
-    } else if (bathy.type %in% c("raster_user", "raster_continuous")) {
+    } else if (bathy.type %in% c("raster_user", "raster_continuous") || grepl("^wcs_", bathy.type)) {
       layers <- paste(
         map_cmd("base"),
         map_cmd(bathy_cmd),

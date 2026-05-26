@@ -550,25 +550,47 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
   }
   
   # 4. Define shapefiles ####
-  
+
+  needs_wcs_inject <- FALSE
+  wcs_source <- NULL
+
   if(!shapefilesDefined) {
-    
+
     if(exists("shapefile.name") & is.null(shapefiles)) shapefiles <- shapefile_list(shapefile.name)
-    
+
     if(!glaciers) shapefiles$glacier <- NULL
     if(!bathymetry) {
+      shapefiles$bathy <- NULL
+    } else if(grepl("^wcs_", bathy.type)) {
+      wcs_source <- sub("^wcs_", "", bathy.type)
+      needs_wcs_inject <- TRUE
       shapefiles$bathy <- NULL
     } else {
       if(bathy.type == "raster_user" && is.na(shapefiles$bathy[bathy.type])) {
         msg <- "Define path to the user defined bathymetry raster using options(ggOceanMaps.userpath = 'PATH_TO_THE_FILE'))"
         stop(paste(strwrap(msg), collapse= "\n"))
       }
-      
+
       shapefiles$bathy <- shapefiles$bathy[bathy.type]
     }
-    
+
     shapefiles <- load_map_data(shapefiles, downsample = downsample)
-    
+
+  }
+
+  if(needs_wcs_inject) {
+    if(polarMap || !is.numeric(limits) || length(limits) < 4) {
+      stop("WCS bathymetry styles (e.g. 'wcs_emodnet_blues') require a 4-element decimal-degree bounding box. Polar maps and projected-limit cases are not supported.")
+    }
+    wcs_bbox <- stats::setNames(
+      as.numeric(limits[c("xmin", "xmax", "ymin", "ymax")]),
+      c("xmin", "xmax", "ymin", "ymax")
+    )
+    shapefiles$bathy <- wcs_bathymetry(
+      limits = unname(wcs_bbox),
+      source = wcs_source,
+      verbose = verbose
+    )$raster
   }
   
   # 5. Return ####
