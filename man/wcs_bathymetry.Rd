@@ -12,6 +12,7 @@ wcs_bathymetry(
   force = FALSE,
   max_area_deg2 = 50,
   tile_size_deg = 3,
+  downsample = 0,
   timeout = 60,
   verbose = TRUE
 )
@@ -44,6 +45,16 @@ automatically — see Details.}
 single-request tile. Defaults to \code{3} which keeps each EMODnet
 request comfortably under the server's ~98 MB read cap (EMODnet reads
 8-byte doubles internally, so a 4° tile already exceeds the cap).}
+
+\item{downsample}{Integer. Number of grid cells to skip when reducing the
+raster after download. \code{0} (default) keeps the native ~115 m
+resolution; \code{1} keeps every second cell (~230 m); \code{n} keeps
+every \code{(n+1)}-th cell. Applied client-side via
+\code{\link[stars]{st_downsample}} — the server still ships native data
+(no WCS-side resampling is honoured before the read cap), so the
+bandwidth saving is in the resulting object's in-memory size, not the
+download itself. Useful for wider maps where native resolution is
+overkill for screen rendering.}
 
 \item{timeout}{Numeric. HTTP timeout in seconds.}
 

@@ -589,6 +589,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     shapefiles$bathy <- wcs_bathymetry(
       limits = unname(wcs_bbox),
       source = wcs_source,
+      downsample = downsample,
       verbose = verbose
     )
   }

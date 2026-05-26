@@ -24,6 +24,15 @@
 #'   single-request tile. Defaults to \code{3} which keeps each EMODnet
 #'   request comfortably under the server's ~98 MB read cap (EMODnet reads
 #'   8-byte doubles internally, so a 4° tile already exceeds the cap).
+#' @param downsample Integer. Number of grid cells to skip when reducing the
+#'   raster after download. \code{0} (default) keeps the native ~115 m
+#'   resolution; \code{1} keeps every second cell (~230 m); \code{n} keeps
+#'   every \code{(n+1)}-th cell. Applied client-side via
+#'   \code{\link[stars]{st_downsample}} — the server still ships native data
+#'   (no WCS-side resampling is honoured before the read cap), so the
+#'   bandwidth saving is in the resulting object's in-memory size, not the
+#'   download itself. Useful for wider maps where native resolution is
+#'   overkill for screen rendering.
 #' @param timeout Numeric. HTTP timeout in seconds.
 #' @param verbose Logical. Print download progress and informational messages.
 #' @details EMODnet's WCS endpoint serves the European-waters bathymetric DTM
@@ -67,6 +76,7 @@ wcs_bathymetry <- function(
     force = FALSE,
     max_area_deg2 = 50,
     tile_size_deg = 3,
+    downsample = 0,
     timeout = 60,
     verbose = TRUE
 ) {
@@ -144,6 +154,13 @@ wcs_bathymetry <- function(
     on.exit(unlink(vrt_path), add = TRUE)
     sf::gdal_utils("buildvrt", source = tile_files, destination = vrt_path, quiet = !verbose)
     ras <- stars::read_stars(vrt_path, quiet = !verbose)
+  }
+
+  ## Optionally downsample before further processing ----
+
+  if(!is.null(downsample) && downsample > 0) {
+    if(verbose) message("ggOceanMaps: downsampling raster by n = ", downsample, ".")
+    ras <- stars::st_downsample(ras, n = downsample)
   }
 
   ## Convert to bathyRaster ----
