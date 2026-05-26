@@ -1,28 +1,36 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/v2-branch/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+# R-CMD-check workflow for ggOceanMaps
+# Based on r-lib/actions examples, pinned to the stable v2 branch.
+
 on:
   push:
-    branches: [main, master]
+    branches: [master]
   pull_request:
-    branches: [main, master]
+    branches: [master]
+  workflow_dispatch:
 
 name: R-CMD-check
+
+permissions:
+  contents: read
+
+concurrency:
+  group: r-cmd-check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
-
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
 
     strategy:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release'}
+          - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: 'oldrel-1'}
+          - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest,  r: 'release'}
+          - {os: ubuntu-latest,  r: 'oldrel-1'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -39,9 +47,9 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
           extra-repositories: https://mikkovihtakari.github.io/drat
-    
+
       - uses: r-lib/actions/setup-r-dependencies@v2-branch
         with:
-          extra-packages: rcmdcheck
+          extra-packages: any::rcmdcheck
 
       - uses: r-lib/actions/check-r-package@v2-branch
