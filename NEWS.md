@@ -1,5 +1,42 @@
 # ggOceanMaps 2.4 (development version on GitHub)
 
+## New features
+
+* On-demand WCS bathymetry from EMODnet via the new `wcs_bathymetry()` function
+  and `bathy.style = "wcs_emodnet_blues"` (abbrev. `"wemb"`) /
+  `"wcs_emodnet_grays"` (`"wemg"`). Fetches ~115 m European-waters bathymetry
+  on demand; tiles cached under `getOption("ggOceanMaps.datapath")`.
+* `vector_land()` extracts a land polygon from a `bathyRaster` produced by
+  `raster_bathymetry()`. Pairs with `vector_bathymetry()` for build-your-own
+  shapefile workflows.
+* New `AGENTS.md` for AI assistants helping users *use* ggOceanMaps, and a new
+  `vignette("cookbook")` of short copy-pasteable recipes.
+
+## Testing
+
+* Comprehensive testthat suite added: smoke tests covering the historical
+  regression corpus run everywhere; vdiffr SVG snapshot tests catch
+  "code runs but wrong map" regressions locally.
+* Unit tests for `transform_coord()`, `auto_limits()`,
+  `guess_coordinate_columns()`, `LS()`, `quiet()`, `vector_land()`,
+  `wcs_bathymetry()`.
+
+## Internal
+
+* Performance: `basemap_data_crop()` now clips in native CRS before
+  reprojecting, avoiding world-scale transforms for small map extents
+  ([#55](https://github.com/MikkoVihtakari/ggOceanMaps/pull/55)).
+* Performance: grid-line generation in polar maps switched from
+  `lapply(unique())` to `split() + lapply()`
+  ([#57](https://github.com/MikkoVihtakari/ggOceanMaps/pull/57)).
+* Removed ~131 lines of dead/commented code across `basemap.R`,
+  `basemap_data.R`, `raster_bathymetry.R`, `dist2land.R`
+  ([#56](https://github.com/MikkoVihtakari/ggOceanMaps/pull/56),
+  [#59](https://github.com/MikkoVihtakari/ggOceanMaps/pull/59),
+  [#60](https://github.com/MikkoVihtakari/ggOceanMaps/pull/60),
+  [#61](https://github.com/MikkoVihtakari/ggOceanMaps/pull/61),
+  [#62](https://github.com/MikkoVihtakari/ggOceanMaps/pull/62)).
+
 # ggOceanMaps 2.3.0
 
 * Fixed anti-meridian crossing land clipping in rotated basemaps ([#53](https://github.com/MikkoVihtakari/ggOceanMaps/pull/53))

@@ -104,14 +104,28 @@ basemap(limits = c(-20, 30, 50, 70), bathy.style = "rub")
 
 `bathy.style` strings are `type_resolution_color`:
 
-| code | type | resolution | colour |
-|---|---|---|---|
-| `rbb` | raster | binned | blues (default) |
-| `rcb` | raster | continuous | blues (needs largedata) |
-| `rub` | raster | user | blues (needs userpath) |
-| `pb` | poly | binned | blues (needs largedata) |
-| `cb` | contour | binned | blues (needs largedata) |
-| ...replace `b` with `g` for grays | | | |
+| code | type | resolution | colour | needs |
+|---|---|---|---|---|
+| `rbb` | raster | binned | blues (default) | nothing |
+| `rcb` | raster | continuous | blues | largedata download |
+| `rub` | raster | user | blues | `ggOceanMaps.userpath` |
+| `wemb` | WCS | EMODnet ~115 m | blues | internet (live, cached) |
+| `pb` | poly | binned | blues | largedata download |
+| `cb` | contour | binned | blues | largedata download |
+| ...replace `b` with `g` for grays | | | | |
+
+The `wemb` / `wcs_emodnet_blues` style fetches bathymetry on demand from
+EMODnet's WCS endpoint. Use it when you want detailed European-waters
+bathymetry without pre-downloading anything:
+
+```r
+basemap(limits = c(2, 3, 54, 55), bathy.style = "wcs_emodnet_blues")
+```
+
+Tiles are cached under `getOption("ggOceanMaps.datapath")` so subsequent
+calls for the same bbox are instant. Requires decimal-degree limits and
+European-waters coverage; polar maps and bboxes outside EMODnet's extent
+won't work.
 
 ### Use a custom CRS
 

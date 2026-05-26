@@ -130,10 +130,38 @@ This uses the binned-blues raster shipped with the package.
 
 > *(Recipe stub — `options(ggOceanMaps.userpath)`, `bathy.style = "rub"`.)*
 
-## How do I fetch bathymetry on demand from EMODnet / GEBCO?
+## How do I fetch bathymetry on demand from EMODnet?
 
-> *(Recipe stub — to be added when the WCS bathymetry subsystem lands in
-> phase 2.)*
+The `wcs_emodnet_blues` (abbrev. `wemb`) style downloads ~115 m
+European-waters bathymetry from EMODnet's WCS endpoint on demand. No
+pre-download needed; tiles are cached locally.
+
+```{r, eval = FALSE}
+basemap(limits = c(2, 3, 54, 55), bathy.style = "wcs_emodnet_blues")
+```
+
+For a manual fetch (e.g. to pass through `vector_bathymetry()` for a
+custom shapefile workflow), use `wcs_bathymetry()` directly:
+
+```{r, eval = FALSE}
+bathy <- wcs_bathymetry(c(2, 3, 54, 55), source = "emodnet")
+basemap(c(2, 3, 54, 55),
+        shapefiles = list(land = dd_land, glacier = NULL,
+                          bathy = bathy$raster),
+        bathymetry = TRUE)
+```
+
+Requirements / caveats:
+
+- **Decimal-degree limits only**; polar maps aren't supported by EMODnet.
+- **European waters only**; EMODnet coverage is regional.
+- **Bbox size is capped** at 10°² by default via `max_area_deg2`; raise
+  it explicitly for larger requests.
+- **Caching** uses `getOption("ggOceanMaps.datapath")` (or `tempdir()`
+  as fallback). Set it permanently in `.Rprofile` for cross-session
+  reuse.
+- **Citation**: EMODnet bathymetry is CC-BY. Cite it when publishing
+  figures — see <https://emodnet.ec.europa.eu/en/bathymetry>.
 
 # Building your own shapefiles
 
