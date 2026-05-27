@@ -2,11 +2,13 @@
 #' @description Fetches gridded bathymetry data on demand from an OGC Web
 #'   Coverage Service (WCS) and returns it as a \code{bathyRaster} object
 #'   compatible with \code{\link{basemap}} and \code{\link{vector_bathymetry}}.
-#'   Currently EMODnet is the supported source.
+#'   Two sources are currently supported: \code{"emodnet"} (~115 m European
+#'   waters) and \code{"etopo"} (1 arc-minute / ~1.85 km global).
 #' @param limits Numeric vector of length 4 giving the bounding box in decimal
 #'   degrees as \code{c(xmin, xmax, ymin, ymax)}.
-#' @param source Character. The WCS source to query. Currently only
-#'   \code{"emodnet"} is supported. Partial matching applies.
+#' @param source Character. The WCS source to query. One of \code{"emodnet"}
+#'   (European waters, high-res) or \code{"etopo"} (global, 1 arc-minute).
+#'   Partial matching applies.
 #' @param coverage Character. Override the default coverage for the source
 #'   (e.g. \code{"emodnet__mean_2022"} for the 2022-vintage EMODnet DTM).
 #'   \code{NULL} uses the source default.
@@ -17,13 +19,15 @@
 #'   exists.
 #' @param max_area_deg2 Numeric. Maximum bounding-box area (in degree-squared)
 #'   allowed before the function errors. Guards against accidentally
-#'   downloading a very large area. Default \code{50}. Bounding boxes larger
-#'   than the source's single-request cap are split into tiles and mosaicked
+#'   downloading a very large area. \code{NULL} uses the source default
+#'   (50 for EMODnet, 2000 for ETOPO). Bounding boxes larger than the
+#'   source's single-request cap are split into tiles and mosaicked
 #'   automatically — see Details.
 #' @param tile_size_deg Numeric. Edge length (in degrees) of the largest
-#'   single-request tile. Defaults to \code{3} which keeps each EMODnet
-#'   request comfortably under the server's ~98 MB read cap (EMODnet reads
-#'   8-byte doubles internally, so a 4° tile already exceeds the cap).
+#'   single-request tile. \code{NULL} uses the source default (3 for
+#'   EMODnet, 30 for ETOPO). EMODnet reads 8-byte doubles internally so a
+#'   4° tile already exceeds its ~98 MB read cap; ETOPO is much coarser
+#'   so larger tiles are fine.
 #' @param downsample Integer. Number of grid cells to skip when reducing the
 #'   raster after download. \code{0} (default) keeps the native ~115 m
 #'   resolution; \code{1} keeps every second cell (~230 m); \code{n} keeps
@@ -35,10 +39,18 @@
 #'   overkill for screen rendering.
 #' @param timeout Numeric. HTTP timeout in seconds.
 #' @param verbose Logical. Print download progress and informational messages.
-#' @details EMODnet's WCS endpoint serves the European-waters bathymetric DTM
-#'   at ~115 m native resolution (~0.00104°) in EPSG:4326 GeoTIFF format. The
+#' @details \strong{EMODnet} serves the European-waters bathymetric DTM at
+#'   ~115 m native resolution (~0.00104°) in EPSG:4326 GeoTIFF format. The
 #'   1°×1° tile around the North Sea is ~4 MB; a 5°×5° tile would be ~100 MB
-#'   and hit the server's ~98 MB read cap. To handle larger bounding boxes,
+#'   and hit the server's ~98 MB read cap. Coverage is European regional seas
+#'   only (~−36° to 43° lon, ~15° to 90° lat).
+#'
+#'   \strong{ETOPO} (ETOPO1 Ice Surface, served by NOAA NCEI) is a global
+#'   1 arc-minute (~1.85 km) topo-bathy grid in EPSG:4326. Useful when EMODnet
+#'   has no coverage. NCEI returns the GeoTIFF inside a multipart/related MIME
+#'   envelope; \code{wcs_bathymetry()} extracts the binary part transparently.
+#'
+#'   To handle bounding boxes larger than the source's single-request cap,
 #'   \code{wcs_bathymetry()} splits the request into tiles of at most
 #'   \code{tile_size_deg} per axis, caches each tile, and mosaicks them via a
 #'   GDAL virtual raster. Each tile is cached independently so subsequent
@@ -50,15 +62,25 @@
 #'   passed to \code{\link{vector_bathymetry}}.
 #'
 #'   Citation requirements: EMODnet bathymetry is published under CC-BY and
-#'   must be cited if used in figures. See
-#'   \url{https://emodnet.ec.europa.eu/en/bathymetry}.
+#'   must be cited if used in figures
+#'   (\url{https://emodnet.ec.europa.eu/en/bathymetry}). ETOPO1 also requires
+#'   citation (Amante & Eakins 2009, NOAA NGDC; see
+#'   \url{https://www.ncei.noaa.gov/products/etopo-global-relief-model}).
 #' @return A \code{bathyRaster} object: a list with elements \code{raster}
 #'   (a \code{\link[stars]{stars}} object with positive depth values) and
 #'   \code{depth.invervals} (a length-2 numeric range).
 #' @examples
 #' \dontrun{
+#'   # European waters, high resolution
 #'   bathy <- wcs_bathymetry(c(2, 3, 54, 55), source = "emodnet")
 #'   basemap(c(2, 3, 54, 55),
+#'           shapefiles = list(land = dd_land, glacier = NULL,
+#'                             bathy = bathy$raster),
+#'           bathymetry = TRUE)
+#'
+#'   # Global coverage (Hawaii — outside EMODnet)
+#'   bathy <- wcs_bathymetry(c(-160, -154, 18, 23), source = "etopo")
+#'   basemap(c(-160, -154, 18, 23),
 #'           shapefiles = list(land = dd_land, glacier = NULL,
 #'                             bathy = bathy$raster),
 #'           bathymetry = TRUE)
@@ -74,8 +96,8 @@ wcs_bathymetry <- function(
     coverage = NULL,
     cache_dir = NULL,
     force = FALSE,
-    max_area_deg2 = 50,
-    tile_size_deg = 3,
+    max_area_deg2 = NULL,
+    tile_size_deg = NULL,
     downsample = 0,
     timeout = 60,
     verbose = TRUE
@@ -97,6 +119,14 @@ wcs_bathymetry <- function(
   }
 
   src <- wcs_source_info(match.arg(source, names(wcs_registry())), coverage)
+
+  ## Resolve source-dependent defaults ----
+  if(is.null(max_area_deg2)) {
+    max_area_deg2 <- if(!is.null(src$default_max_area_deg2)) src$default_max_area_deg2 else 50
+  }
+  if(is.null(tile_size_deg)) {
+    tile_size_deg <- if(!is.null(src$default_tile_size_deg)) src$default_tile_size_deg else 3
+  }
 
   ## Check whether the bbox lies entirely outside the source's known coverage ----
   ## (Do this before the area guard so the user gets a useful diagnostic, not
@@ -217,6 +247,19 @@ wcs_fetch_tile <- function(src, bbox, cache_dir, force, verbose) {
     stop("WCS download failed. Check internet connectivity and that ", src$label, " is reachable.", err_detail)
   }
 
+  ## Some servers (NCEI/ArcGIS) wrap the GeoTIFF in a multipart/related MIME
+  ## envelope. Extract the binary part in-place before validation.
+  if(isTRUE(src$multipart)) {
+    extracted <- .extract_tiff_from_multipart(cache_file)
+    if(!extracted) {
+      unlink(cache_file)
+      stop(sprintf(
+        "Could not extract a GeoTIFF from the multipart response from %s. The requested area may be outside coverage.",
+        src$label
+      ))
+    }
+  }
+
   if(!.is_valid_tiff(cache_file)) {
     unlink(cache_file)
     stop(sprintf(paste0(
@@ -249,7 +292,31 @@ wcs_registry <- function() {
       # Approximate geographic extent c(xmin, xmax, ymin, ymax) in decimal degrees.
       # Used to reject clearly out-of-range requests before hitting the network.
       # EMODnet covers European regional seas only (North Atlantic → Arctic → Black Sea).
-      extent = c(-36, 43, 15, 90)
+      extent = c(-36, 43, 15, 90),
+      # Server returns raw GeoTIFF (no multipart envelope)
+      multipart = FALSE,
+      # Source-specific size guards
+      default_max_area_deg2 = 50,
+      default_tile_size_deg = 3
+    ),
+    etopo = list(
+      label = "ETOPO1 (NOAA NCEI)",
+      url = "https://gis.ngdc.noaa.gov/arcgis/services/DEM_mosaics/ETOPO1_ice_surface/ImageServer/WCSServer",
+      coverage = "Coverage1",
+      version = "2.0.1",
+      format = "image/tiff",
+      crs = "EPSG:4326",
+      # ArcGIS Server uses lowercase 'y' / 'x' axis labels
+      axis_lat = "y",
+      axis_lon = "x",
+      native_res_deg = 0.01667,  # 1 arc-minute
+      # Global coverage
+      extent = c(-180, 180, -90, 90),
+      # NCEI wraps the GeoTIFF in a multipart/related MIME envelope
+      multipart = TRUE,
+      # Much coarser than EMODnet → larger areas / tiles are fine
+      default_max_area_deg2 = 2000,
+      default_tile_size_deg = 30
     )
   )
 }
@@ -284,6 +351,51 @@ wcs_cache_path <- function(cache_dir, src, bbox) {
     gsub("\\.", "-", as.character(src$version))
   )
   file.path(cache_dir, key)
+}
+
+
+# Internal: extract a GeoTIFF from a multipart/related MIME envelope ------
+# Used for servers like NOAA NCEI that wrap the binary in a multipart message.
+# Locates the "Content-Type: image/tiff" header, skips past the blank line,
+# and copies bytes up to (but not including) the next boundary marker.
+# Returns TRUE on success (file is overwritten in place with the raw TIFF),
+# FALSE if the multipart structure could not be parsed.
+
+.extract_tiff_from_multipart <- function(path) {
+  rb <- readBin(path, raw(), n = file.size(path))
+
+  ct_marker <- charToRaw("Content-Type: image/tiff")
+  ct_pos <- grepRaw(ct_marker, rb, all = FALSE)
+  if(length(ct_pos) == 0L) return(FALSE)
+  ct_start <- ct_pos[1L]
+
+  # Header block terminator: \r\n\r\n or \n\n
+  tail_rb <- rb[ct_start:length(rb)]
+  blank_crlf <- grepRaw(as.raw(c(0x0D, 0x0A, 0x0D, 0x0A)), tail_rb, all = FALSE)
+  blank_lf <- grepRaw(as.raw(c(0x0A, 0x0A)), tail_rb, all = FALSE)
+  if(length(blank_crlf) > 0L) {
+    body_start <- ct_start + blank_crlf[1L] + 3L  # past the four bytes
+  } else if(length(blank_lf) > 0L) {
+    body_start <- ct_start + blank_lf[1L] + 1L    # past the two bytes
+  } else {
+    return(FALSE)
+  }
+
+  # Find the next boundary marker after the binary body: "\n--"
+  body_rb <- rb[body_start:length(rb)]
+  bdy <- grepRaw(as.raw(c(0x0A, 0x2D, 0x2D)), body_rb, all = FALSE)
+  if(length(bdy) == 0L) {
+    body_end <- length(rb)
+  } else {
+    body_end <- body_start + bdy[1L] - 2L  # one before the \n
+    # Strip preceding \r if present (\r\n line ending)
+    if(body_end >= 1L && rb[body_end] == as.raw(0x0D)) body_end <- body_end - 1L
+  }
+
+  if(body_end <= body_start) return(FALSE)
+
+  writeBin(rb[body_start:body_end], path)
+  TRUE
 }
 
 

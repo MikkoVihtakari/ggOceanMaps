@@ -109,23 +109,28 @@ basemap(limits = c(-20, 30, 50, 70), bathy.style = "rub")
 | `rbb` | raster | binned | blues (default) | nothing |
 | `rcb` | raster | continuous | blues | largedata download |
 | `rub` | raster | user | blues | `ggOceanMaps.userpath` |
-| `wemb` | WCS | EMODnet ~115 m | blues | internet (live, cached) |
+| `wemb` | WCS | EMODnet ~115 m (European waters) | blues | internet (live, cached) |
+| `wceb` | WCS | ETOPO1 ~1.85 km (global) | blues | internet (live, cached) |
 | `pb` | poly | binned | blues | largedata download |
 | `cb` | contour | binned | blues | largedata download |
 | ...replace `b` with `g` for grays | | | | |
 
-The `wemb` / `wcs_emodnet_blues` style fetches bathymetry on demand from
-EMODnet's WCS endpoint. Use it when you want detailed European-waters
-bathymetry without pre-downloading anything:
+The `wemb` / `wcs_emodnet_blues` and `wceb` / `wcs_etopo_blues` styles
+fetch bathymetry on demand from a Web Coverage Service. Pick by region:
 
 ```r
-basemap(limits = c(2, 3, 54, 55), bathy.style = "wcs_emodnet_blues")
+# High-resolution European waters → EMODnet
+basemap(limits = c(2, 3, 54, 55), bathy.style = "wemb")
+
+# Anywhere else on the globe → ETOPO
+basemap(limits = c(-160, -154, 18, 23), bathy.style = "wceb")  # Hawaii
+basemap(limits = c(110, 120, -20, 30), bathy.style = "wceb")   # Indonesia
 ```
 
 Tiles are cached under `getOption("ggOceanMaps.datapath")` so subsequent
-calls for the same bbox are instant. Requires decimal-degree limits and
-European-waters coverage; polar maps and bboxes outside EMODnet's extent
-won't work.
+calls for the same bbox are instant. Both require decimal-degree limits;
+polar maps are not supported. EMODnet outside European waters errors
+cleanly with a pointer to switch to `wceb`.
 
 ### Use a custom CRS
 

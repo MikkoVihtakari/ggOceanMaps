@@ -189,38 +189,58 @@ basemap(
 The manual route is also the entry point for vectorizing the bathymetry (depth
 contour polygons) — see the *Building your own shapefiles* section below.
 
-## How do I fetch bathymetry on demand from EMODnet?
+## How do I fetch bathymetry on demand from a web service?
 
-The `wcs_emodnet_blues` (abbrev. `wemb`) style downloads ~115 m
-European-waters bathymetry from EMODnet's WCS endpoint on demand. No
-pre-download needed; tiles are cached locally.
+Two WCS sources are wired into `basemap()` — pick by region:
+
+| Style alias | Abbrev. | Source | Coverage | Resolution |
+|---|---|---|---|---|
+| `wcs_emodnet_blues` | `wemb` | EMODnet | European waters | ~115 m |
+| `wcs_emodnet_grays` | `wemg` | EMODnet | European waters | ~115 m |
+| `wcs_etopo_blues`   | `wceb` | ETOPO1 (NOAA NCEI) | Global | ~1.85 km |
+| `wcs_etopo_grays`   | `wceg` | ETOPO1 (NOAA NCEI) | Global | ~1.85 km |
 
 ```{r, eval = FALSE}
-basemap(limits = c(2, 3, 54, 55), bathy.style = "wcs_emodnet_blues")
+# North Sea — high resolution from EMODnet
+basemap(c(2, 3, 54, 55), bathy.style = "wemb")
+
+# Hawaii — global coverage from ETOPO
+basemap(c(-160, -154, 18, 23), bathy.style = "wceb")
+
+# Indonesia / Java Trench — also ETOPO (outside EMODnet)
+basemap(c(110, 120, -20, 30), bathy.style = "wceb")
 ```
 
 For a manual fetch (e.g. to pass through `vector_bathymetry()` for a
-custom shapefile workflow), use `wcs_bathymetry()` directly:
+custom shapefile workflow), call `wcs_bathymetry()` directly:
 
 ```{r, eval = FALSE}
-bathy <- wcs_bathymetry(c(2, 3, 54, 55), source = "emodnet")
-basemap(c(2, 3, 54, 55),
+bathy_emo <- wcs_bathymetry(c(2, 3, 54, 55),   source = "emodnet")
+bathy_eto <- wcs_bathymetry(c(110, 120, -20, 30), source = "etopo")
+
+basemap(c(110, 120, -20, 30),
         shapefiles = list(land = dd_land, glacier = NULL,
-                          bathy = bathy$raster),
+                          bathy = bathy_eto$raster),
         bathymetry = TRUE)
 ```
 
 Requirements / caveats:
 
-- **Decimal-degree limits only**; polar maps aren't supported by EMODnet.
-- **European waters only**; EMODnet coverage is regional.
-- **Bbox size is capped** at 50°² by default via `max_area_deg2`; raise
-  it explicitly for larger requests.
+- **Decimal-degree limits only**; polar maps are not supported.
+- **EMODnet covers European regional seas only** (≈−36° to 43° lon, ≈15°
+  to 90° lat). Outside that, use ETOPO. ggOceanMaps will error with a
+  clear message and the suggested alternative if you pick the wrong
+  source.
+- **Bbox size is capped** per source: 50°² for EMODnet (~115 m grid),
+  2000°² for ETOPO (~1.85 km grid). Override with `max_area_deg2` for
+  larger requests; the function tiles automatically.
 - **Caching** uses `getOption("ggOceanMaps.datapath")` (or `tempdir()`
   as fallback). Set it permanently in `.Rprofile` for cross-session
   reuse.
-- **Citation**: EMODnet bathymetry is CC-BY. Cite it when publishing
-  figures — see <https://emodnet.ec.europa.eu/en/bathymetry>.
+- **Citation**: EMODnet is CC-BY
+  (<https://emodnet.ec.europa.eu/en/bathymetry>); ETOPO1 is Amante &
+  Eakins 2009, NOAA NGDC
+  (<https://www.ncei.noaa.gov/products/etopo-global-relief-model>).
 
 # Building your own shapefiles
 

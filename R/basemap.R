@@ -59,6 +59,8 @@
 #' \item \code{"raster_user_grays"} or \code{"rug"} the same than above but uses different shades of gray.
 #' \item \code{"wcs_emodnet_blues"} or \code{"wemb"} fetches ~115 m European-waters bathymetry on demand from EMODnet's Web Coverage Service (\url{https://emodnet.ec.europa.eu/en/bathymetry}). Downloaded tiles are cached under \code{getOption("ggOceanMaps.datapath")}. Requires decimal-degree limits and is limited to European waters; not supported on polar maps. See \code{\link{wcs_bathymetry}}.
 #' \item \code{"wcs_emodnet_grays"} or \code{"wemg"} the same than above but uses different shades of gray.
+#' \item \code{"wcs_etopo_blues"} or \code{"wceb"} fetches ~1.85 km (1 arc-minute) \strong{global} topo-bathy on demand from NOAA NCEI's ETOPO1 Web Coverage Service (\url{https://www.ncei.noaa.gov/products/etopo-global-relief-model}). Use this whenever your region is outside EMODnet coverage. Same caching, decimal-degree-only and no-polar-maps restrictions as the EMODnet style. See \code{\link{wcs_bathymetry}}.
+#' \item \code{"wcs_etopo_grays"} or \code{"wceg"} the same than above but uses different shades of gray.
 #' \item \code{"poly_binned_blues"}, \code{"poly_blues"}, \code{"pbb"} or \code{"pb"} plots polygon bathymetry filled with different shades of blue. Default in the versions older than 2.0 of ggOceanMaps. Requires a download.
 #' \item \code{"poly_binned_grays"}, \code{"poly_grays"}, \code{"pbg"} or \code{"pg"} same than above but uses different shades of gray.
 #' \item \code{"contour_binned_blues"}, \code{"contour_blues"}, \code{"cbb"} or \code{"cb"} contour lines with different shades of blue. Requires a download.

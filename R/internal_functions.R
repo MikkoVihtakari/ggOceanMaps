@@ -263,13 +263,18 @@ define_bathy_style <- function(x) {
     out <- "wcs_emodnet_blues"
   } else if(tolower(x) %in% c("wemg", "wcs_emodnet_greys", "wcs_emodnet_grey", "wcs_emodnet_gray")) {
     out <- "wcs_emodnet_grays"
+  } else if(tolower(x) %in% c("wceb", "wcs_etopo_blue")) {
+    out <- "wcs_etopo_blues"
+  } else if(tolower(x) %in% c("wceg", "wcs_etopo_greys", "wcs_etopo_grey", "wcs_etopo_gray")) {
+    out <- "wcs_etopo_grays"
   } else {
     out <- match.arg(
       x,
       c("raster_binned_blues", "raster_binned_grays", "raster_continuous_blues",
         "raster_continuous_grays", "raster_user_blues", "raster_user_grays",
         "poly_blues", "poly_grays", "contour_blues", "contour_gray",
-        "wcs_emodnet_blues", "wcs_emodnet_grays")
+        "wcs_emodnet_blues", "wcs_emodnet_grays",
+        "wcs_etopo_blues", "wcs_etopo_grays")
     )
   }
 
@@ -282,6 +287,8 @@ define_bathy_style <- function(x) {
       "raster_user_grays" = "bathy_rc",
       "wcs_emodnet_blues" = "bathy_rc",
       "wcs_emodnet_grays" = "bathy_rc",
+      "wcs_etopo_blues" = "bathy_rc",
+      "wcs_etopo_grays" = "bathy_rc",
       "poly_blues" = "bathy_pb",
       "poly_grays" = "bathy_pg",
       "contour_blues" = "bathy_cb",

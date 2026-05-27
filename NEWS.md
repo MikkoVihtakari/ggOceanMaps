@@ -5,10 +5,16 @@ Github Copilot) and addition documentation files for AI agents.
 
 ## New features
 
-* On-demand WCS bathymetry from EMODnet via the new `wcs_bathymetry()` function
-  and `bathy.style = "wcs_emodnet_blues"` (abbrev. `"wemb"`) /
-  `"wcs_emodnet_grays"` (`"wemg"`). Fetches ~115 m European-waters bathymetry
-  on demand; tiles cached under `getOption("ggOceanMaps.datapath")`.
+* On-demand WCS bathymetry via the new `wcs_bathymetry()` function with two
+  sources:
+  * EMODnet — `bathy.style = "wcs_emodnet_blues"` (`"wemb"`) /
+    `"wcs_emodnet_grays"` (`"wemg"`). ~115 m European-waters bathymetry.
+  * ETOPO1 from NOAA NCEI — `bathy.style = "wcs_etopo_blues"` (`"wceb"`) /
+    `"wcs_etopo_grays"` (`"wceg"`). ~1.85 km global topo-bathy. Use this when
+    EMODnet has no coverage for your region.
+  Bounding boxes outside a source's coverage error cleanly with a pointer to
+  the right alternative. Large boxes are tiled and mosaicked automatically.
+  Tiles cached under `getOption("ggOceanMaps.datapath")`.
 * `vector_land()` extracts a land polygon from a `bathyRaster` produced by
   `raster_bathymetry()`. Pairs with `vector_bathymetry()` for build-your-own
   shapefile workflows.

@@ -170,3 +170,114 @@ test_that(".is_valid_tiff correctly identifies TIFF and non-TIFF files", {
 
   unlink(c(tiff_file, xml_file, tiff_be_file))
 })
+
+# ETOPO source tests -----------------------------------------------------
+
+test_that("wcs_registry exposes the etopo source with expected fields", {
+  reg <- wcs_registry()
+  expect_true("etopo" %in% names(reg))
+  expect_equal(reg$etopo$coverage, "Coverage1")
+  expect_equal(reg$etopo$axis_lat, "y")
+  expect_equal(reg$etopo$axis_lon, "x")
+  expect_true(reg$etopo$multipart)
+  expect_equal(reg$etopo$extent, c(-180, 180, -90, 90))
+})
+
+test_that("ETOPO default_max_area_deg2 (2000) > EMODnet default (50)", {
+  # Direct registry sanity: a 30 deg^2 bbox should be fine for ETOPO defaults,
+  # whereas a >50 deg^2 bbox would error for EMODnet without max_area_deg2.
+  reg <- wcs_registry()
+  expect_gt(reg$etopo$default_max_area_deg2, 100)
+  expect_lte(reg$emodnet$default_max_area_deg2, 100)
+
+  # And the same area bbox triggers the EMODnet area guard but not ETOPO's,
+  # without any network call. We use a bbox that's inside EMODnet coverage so
+  # the extent check passes, then the area guard fires for EMODnet only.
+  expect_error(
+    wcs_bathymetry(c(0, 10, 50, 60), source = "emodnet"),  # 100 deg^2 > 50
+    "exceeds max_area_deg2"
+  )
+  # ETOPO covers Hawaii (outside EMODnet), 5x5=25 deg^2 — neither guard fires.
+  # Stop at the timeout/network stage which is fine.
+  result <- tryCatch(
+    wcs_bathymetry(c(-160, -155, 18, 23), source = "etopo",
+                   cache_dir = tempfile("no-net-"), timeout = 0.001),
+    error = function(e) e
+  )
+  if(inherits(result, "error")) {
+    expect_false(grepl("exceeds max_area_deg2|entirely outside",
+                       conditionMessage(result)))
+  }
+})
+
+test_that("define_bathy_style accepts wcs_etopo_* and abbreviations", {
+  expect_equal(unname(define_bathy_style("wcs_etopo_blues")), "bathy_rc")
+  expect_equal(names(define_bathy_style("wcs_etopo_blues")), "wcs_etopo_blues")
+  expect_equal(names(define_bathy_style("wceb")), "wcs_etopo_blues")
+  expect_equal(names(define_bathy_style("wceg")), "wcs_etopo_grays")
+})
+
+test_that("wcs_build_url respects per-source axis labels (etopo uses y/x)", {
+  src <- wcs_source_info("etopo")
+  url <- wcs_build_url(src, c(xmin = -158, xmax = -156, ymin = 20, ymax = 22))
+  expect_match(url, "gis\\.ngdc\\.noaa\\.gov")
+  expect_match(url, "CoverageId=Coverage1")
+  expect_match(url, "SUBSET=y\\(20")
+  expect_match(url, "SUBSET=x\\(-158")
+})
+
+test_that(".extract_tiff_from_multipart pulls TIFF out of MIME envelope", {
+  # Build a synthetic multipart envelope: GML part + TIFF part
+  gml_part <- charToRaw(paste0(
+    "--wcs\r\n",
+    "Content-Type: text/xml\r\n",
+    "Content-ID: GML-Part\r\n\r\n",
+    "<dummy/>\r\n"
+  ))
+  tiff_header <- charToRaw(paste0(
+    "--wcs\r\n",
+    "Content-Type: image/tiff\r\n",
+    "Content-ID: 1.tif\r\n\r\n"
+  ))
+  fake_tiff <- as.raw(c(0x49, 0x49, 0x2A, 0x00,
+                        0x10, 0x00, 0x00, 0x00,  # arbitrary "body" bytes
+                        0xDE, 0xAD, 0xBE, 0xEF))
+  trailer <- charToRaw("\r\n--wcs--\r\n")
+
+  envelope <- c(gml_part, tiff_header, fake_tiff, trailer)
+  path <- tempfile(fileext = ".tif")
+  writeBin(envelope, path)
+
+  expect_true(.extract_tiff_from_multipart(path))
+
+  # File should now contain only the fake_tiff bytes
+  out <- readBin(path, raw(), n = file.size(path))
+  expect_identical(out, fake_tiff)
+  expect_true(.is_valid_tiff(path))
+
+  unlink(path)
+})
+
+test_that(".extract_tiff_from_multipart returns FALSE for malformed input", {
+  path <- tempfile(fileext = ".bin")
+  writeBin(charToRaw("No Content-Type header here, just text."), path)
+  expect_false(.extract_tiff_from_multipart(path))
+  unlink(path)
+})
+
+# Live network test (ETOPO) ----------------------------------------------
+
+test_that("wcs_bathymetry fetches a global tile from ETOPO (live network)", {
+  skip_if_no_internet()
+  cache <- tempfile("wcs-etopo-"); dir.create(cache)
+
+  # Hawaii — clearly outside EMODnet, requires ETOPO/global coverage
+  bathy <- wcs_bathymetry(c(-160, -154, 18, 23), source = "etopo",
+                          cache_dir = cache, verbose = FALSE)
+
+  expect_s3_class(bathy, "bathyRaster")
+  expect_s3_class(bathy$raster, "stars")
+  expect_equal(sf::st_crs(bathy$raster)$epsg, 4326L)
+  # Expect at least one cached file (1 tile, since 6×5° < 30° tile size)
+  expect_gte(length(list.files(cache, pattern = "\\.tif$")), 1L)
+})
