@@ -117,3 +117,56 @@ test_that("basemap rejects WCS styles on polar maps", {
     "WCS bathymetry styles.*decimal-degree"
   )
 })
+
+# Coverage extent and TIFF-validation tests (no network required) ---------
+
+test_that("wcs_bathymetry errors for bbox entirely outside EMODnet coverage", {
+  # Indonesian/Pacific waters — clearly outside EMODnet's European coverage
+  expect_error(
+    wcs_bathymetry(c(110, 120, -20, 30)),
+    "entirely outside.*EMODnet"
+  )
+  expect_error(
+    wcs_bathymetry(c(115, 120, -20, 30)),
+    "entirely outside.*EMODnet"
+  )
+  # Pacific meridian — also outside
+  expect_error(
+    wcs_bathymetry(c(160, 170, -50, -40)),
+    "entirely outside.*EMODnet"
+  )
+})
+
+test_that("wcs_bathymetry does NOT error for bbox inside EMODnet coverage (network not called)", {
+  # This just checks the extent logic — the request would need a network call
+  # to actually proceed, so we expect *any* error *other* than the extent error.
+  # We trigger the cache_dir initialisation stage so the extent check must pass.
+  result <- tryCatch(
+    wcs_bathymetry(c(2, 3, 54, 55), cache_dir = tempfile("no-net-"), timeout = 0.001),
+    error = function(e) e
+  )
+  # Whatever happens next (timeout, connection refused, etc.) is fine;
+  # the important thing is no "entirely outside" error.
+  if(inherits(result, "error")) {
+    expect_false(grepl("entirely outside", conditionMessage(result)))
+  }
+})
+
+test_that(".is_valid_tiff correctly identifies TIFF and non-TIFF files", {
+  # Write a minimal little-endian TIFF header
+  tiff_file <- tempfile(fileext = ".tif")
+  writeBin(as.raw(c(0x49, 0x49, 0x2A, 0x00, 0x00, 0x00, 0x00, 0x00)), tiff_file)
+  expect_true(.is_valid_tiff(tiff_file))
+
+  # Write an XML error document (as EMODnet WCS returns for bad requests)
+  xml_file <- tempfile(fileext = ".xml")
+  writeLines('<?xml version="1.0"?><ows:ExceptionReport/>', xml_file)
+  expect_false(.is_valid_tiff(xml_file))
+
+  # Write a big-endian TIFF header
+  tiff_be_file <- tempfile(fileext = ".tif")
+  writeBin(as.raw(c(0x4D, 0x4D, 0x00, 0x2A, 0x00, 0x00, 0x00, 0x08)), tiff_be_file)
+  expect_true(.is_valid_tiff(tiff_be_file))
+
+  unlink(c(tiff_file, xml_file, tiff_be_file))
+})

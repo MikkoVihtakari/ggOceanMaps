@@ -122,13 +122,72 @@ This uses the binned-blues raster shipped with the package.
 
 ## How do I get higher-resolution bathymetry?
 
-> *(Recipe stub — to be filled in alongside the WCS bathymetry work in
-> phase 2: ggOceanMapsLargeData download flow, `options(ggOceanMaps.datapath)`,
-> the `rcb` / `pb` / `cb` styles.)*
+High-resolution pre-made shapefiles live in the
+[ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)
+repository. They are not bundled with the package (too large for CRAN);
+`basemap()` downloads them on first use and caches them locally.
 
-## How do I use my own bathymetry raster (e.g. GEBCO)?
+**Step 1 — set a permanent cache directory** (add to `~/.Rprofile` once):
 
-> *(Recipe stub — `options(ggOceanMaps.userpath)`, `bathy.style = "rub"`.)*
+```{r, eval = FALSE}
+options(ggOceanMaps.datapath = "~/ggOceanMaps_data")
+```
+
+Without this the files land in `tempdir()` and are re-downloaded each session.
+
+**Step 2 — request any map that needs high-res data**:
+
+```{r, eval = FALSE}
+# Arctic raster bathymetry
+basemap(60, bathymetry = TRUE)
+
+# North Sea with polygon bathymetry contours
+basemap(limits = c(-5, 10, 50, 60), bathy.style = "poly_blues")
+```
+
+On the first call you will be prompted to download the required `.rda` file
+(~15–100 MB per region). After that the file is reused from disk instantly.
+
+## How do I use my own bathymetry raster (e.g. GEBCO, ETOPO, IBCAO)?
+
+Download the grid from the source
+([GEBCO](https://www.gebco.net/data-products/gridded-bathymetry-data/),
+[ETOPO 2022](https://www.ncei.noaa.gov/products/etopo-global-relief-model))
+and save it as a NetCDF (`.nc`) or GeoTIFF (`.tif`).
+
+**Quick route — point `ggOceanMaps.userpath` at the file:**
+
+```{r, eval = FALSE}
+options(ggOceanMaps.userpath = "path/to/your/bathymetry.nc")
+
+basemap(limits = c(-5, 10, 50, 60), bathy.style = "raster_user_blues")
+# or the abbreviation:
+basemap(limits = c(-5, 10, 50, 60), bathy.style = "rub")
+```
+
+`basemap()` crops to the plot extent, sign-flips (negative depths → positive),
+and renders the raster automatically. Use `"raster_user_greys"` / `"rug"` for
+greyscale. The `downsample` argument reduces resolution if the native grid is
+too fine for the plot size.
+
+**Manual route — pre-process for full control:**
+
+```{r, eval = FALSE}
+rb <- raster_bathymetry(
+  "path/to/your/bathymetry.nc",
+  depths = NULL,                # continuous raster; use a depth vector for polygons
+  boundary = c(-5, 10, 50, 60) # crop early to save memory
+)
+
+basemap(
+  limits = c(-5, 10, 50, 60),
+  shapefiles = list(land = dd_land, glacier = NULL, bathy = rb$raster),
+  bathymetry = TRUE
+)
+```
+
+The manual route is also the entry point for vectorizing the bathymetry (depth
+contour polygons) — see the *Building your own shapefiles* section below.
 
 ## How do I fetch bathymetry on demand from EMODnet?
 
@@ -155,7 +214,7 @@ Requirements / caveats:
 
 - **Decimal-degree limits only**; polar maps aren't supported by EMODnet.
 - **European waters only**; EMODnet coverage is regional.
-- **Bbox size is capped** at 10°² by default via `max_area_deg2`; raise
+- **Bbox size is capped** at 50°² by default via `max_area_deg2`; raise
   it explicitly for larger requests.
 - **Caching** uses `getOption("ggOceanMaps.datapath")` (or `tempdir()`
   as fallback). Set it permanently in `.Rprofile` for cross-session
@@ -167,23 +226,156 @@ Requirements / caveats:
 
 ## How do I make land + bathymetry from a downloaded raster?
 
-> *(Recipe stub — `raster_bathymetry()` → `vector_bathymetry()` /
-> `vector_land()` pipeline.)*
+The full pipeline from a single source raster (GEBCO, ETOPO, IBCAO, …) to
+a matched land + bathymetry pair is:
+
+```{r, eval = FALSE}
+library(ggOceanMaps)
+
+# 1. Process the raster — crop, sign-flip, bin depth levels
+rb <- raster_bathymetry(
+  "path/to/your/bathymetry.nc",
+  depths = c(50, 200, 500, 1000, 2000, 4000),  # depth contour break points
+  boundary = c(-5, 10, 50, 60)
+)
+
+# 2a. Vectorize bathymetry to depth-polygon shapefile
+vb <- vector_bathymetry(rb, drop.crumbs = 10)   # drop islands < 10 km²
+
+# 2b. Vectorize land from the same raster
+vl <- vector_land(rb, drop.crumbs = 10)
+
+# 3. Plot — plug both into basemap()
+basemap(
+  limits = c(-5, 10, 50, 60),
+  shapefiles = list(land = vl, glacier = NULL, bathy = vb),
+  bathymetry = TRUE
+)
+```
+
+Use `depths = NULL` instead of a depth vector to keep the raster as a
+continuous grid (skips vectorization, faster rendering):
+
+```{r, eval = FALSE}
+rb_cont <- raster_bathymetry("path/to/your/bathymetry.nc",
+                             depths = NULL, boundary = c(-5, 10, 50, 60))
+
+basemap(limits = c(-5, 10, 50, 60),
+        shapefiles = list(land = dd_land, glacier = NULL, bathy = rb_cont$raster),
+        bathymetry = TRUE)
+```
+
+**Tip**: save the processed objects as `.rda` files so you don't have to
+re-process the full raster every session:
+
+```{r, eval = FALSE}
+save(vb, vl, file = "north_sea_bathy.rda")
+```
 
 ## How do I clip an existing shapefile to my region?
 
-> *(Recipe stub — `clip_shapefile()`.)*
+Use `clip_shapefile()` to crop any sf polygon layer to a bounding box:
+
+```{r, eval = FALSE}
+clipped <- clip_shapefile(
+  my_sf_layer,
+  limits = c(-5, 10, 50, 60)   # c(xmin, xmax, ymin, ymax) decimal degrees
+)
+```
+
+`clip_shapefile()` handles both decimal-degree and projected inputs. For
+projected data specify `proj.out` (a CRS string / EPSG code) to get the
+result back in the map's native projection.
 
 # Special cases
 
 ## How do I draw ocean current vectors over a map?
 
-> *(Recipe stub — to be added with the Barents-Sea-currents example in
-> phase 2.)*
+The pattern is: load a velocity NetCDF, thin the grid to a drawable density,
+transform coordinates if on a projected map, then draw arrows with
+`geom_segment()`.
+
+```{r, eval = FALSE}
+library(stars)
+library(dplyr)
+
+# 1. Load u/v current components from a NetCDF
+uv <- read_stars(c("u_current.nc", "v_current.nc"))
+
+# 2. Convert to a data frame and thin to a manageable density
+df <- as.data.frame(uv) |>
+  na.omit() |>
+  filter(row_number() %% 5 == 0)   # keep every 5th grid point
+
+names(df)[1:4] <- c("lon", "lat", "u", "v")
+
+# 3. Scale arrow length so they look good on the plot
+scale <- 0.5   # degrees per m/s — tune to taste
+df <- df |>
+  mutate(lon_end = lon + u * scale,
+         lat_end = lat + v * scale)
+
+# 4. Plot
+basemap(limits = c(10, 40, 70, 80), bathymetry = TRUE) +
+  geom_segment(
+    data = df,
+    aes(x = lon, y = lat, xend = lon_end, yend = lat_end),
+    arrow = arrow(length = unit(0.15, "cm")),
+    color = "steelblue", linewidth = 0.4
+  )
+```
+
+**On a projected (polar) map** the coordinates must be transformed before
+plotting (the map axes are in metres, not degrees):
+
+```{r, eval = FALSE}
+# transform_coord adds lon.proj / lat.proj columns in the map's CRS
+df <- transform_coord(df, proj = 3995, bind = TRUE)
+df <- df |>
+  mutate(
+    lon_end_proj = lon.proj + u * scale * 1e4,
+    lat_end_proj = lat.proj + v * scale * 1e4
+  )
+
+basemap(75, bathymetry = TRUE) +
+  geom_segment(
+    data = df,
+    aes(x = lon.proj, y = lat.proj,
+        xend = lon_end_proj, yend = lat_end_proj),
+    arrow = arrow(length = unit(0.15, "cm")),
+    color = "steelblue", linewidth = 0.4
+  )
+```
 
 ## How do I add ICES or Norwegian fishery zones?
 
-> *(Recipe stub — `ices_areas`, `fdir_main_areas`, `fdir_sub_areas`.)*
+ggOceanMaps ships three zone datasets:
+
+| Object | Coverage | Example use |
+|---|---|---|
+| `ices_areas` | ICES advisory areas | subareas, divisions, subdivisions |
+| `fdir_main_areas` | Norwegian Directorate of Fisheries main areas | polygon chart |
+| `fdir_sub_areas` | Norwegian Directorate of Fisheries sub-areas | finer grid |
+
+All three are sf polygon objects and can be passed straight to `basemap()` for
+automatic limits or overlaid with `geom_sf()`:
+
+```{r, eval = FALSE}
+# Fit map to the extent of the ICES areas and draw them as outlines
+basemap(ices_areas) +
+  geom_sf(data = ices_areas, fill = NA, color = "red", linewidth = 0.4)
+```
+
+```{r, eval = FALSE}
+# Norwegian fisheries zones with filled polygons
+basemap(fdir_main_areas, bathymetry = TRUE) +
+  geom_sf(data = fdir_main_areas, fill = NA, color = "orange") +
+  geom_sf_label(data = fdir_main_areas, aes(label = main_area))
+```
+
+Label columns: `ices_areas$Area_Full` (full area name), `ices_areas$SubArea`,
+`ices_areas$Major_FA`; `fdir_main_areas$main_area`;
+`fdir_sub_areas$main_area`, `fdir_sub_areas$sub_area`.
 
 # Saving and exporting
 

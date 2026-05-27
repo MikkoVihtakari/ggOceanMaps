@@ -96,6 +96,31 @@ wcs_bathymetry <- function(
     stop("limits[3] (ymin) must be less than limits[4] (ymax).")
   }
 
+  src <- wcs_source_info(match.arg(source, names(wcs_registry())), coverage)
+
+  ## Check whether the bbox lies entirely outside the source's known coverage ----
+  ## (Do this before the area guard so the user gets a useful diagnostic, not
+  ##  a confusing "area too large" message for an area in the wrong ocean.)
+  if(!is.null(src$extent)) {
+    ext <- src$extent
+    if(bbox["xmin"] > ext[2] || bbox["xmax"] < ext[1] ||
+       bbox["ymin"] > ext[4] || bbox["ymax"] < ext[3]) {
+      stop(sprintf(paste0(
+        "Bounding box (%.1f° to %.1f° lon, %.1f° to %.1f° lat) lies ",
+        "entirely outside the approximate coverage of %s ",
+        "(≈%.0f° to %.0f° lon, %.0f° to %.0f° lat).\n",
+        "For global bathymetry coverage, download GEBCO or ETOPO data locally and use ",
+        "raster_bathymetry() + vector_bathymetry() instead, or wait for a global WCS ",
+        "source to be added to ggOceanMaps."
+      ),
+        unname(bbox["xmin"]), unname(bbox["xmax"]),
+        unname(bbox["ymin"]), unname(bbox["ymax"]),
+        src$label,
+        ext[1], ext[2], ext[3], ext[4]
+      ))
+    }
+  }
+
   area <- unname((bbox["xmax"] - bbox["xmin"]) * (bbox["ymax"] - bbox["ymin"]))
   if(area > max_area_deg2) {
     stop(sprintf(
@@ -103,8 +128,6 @@ wcs_bathymetry <- function(
       area, max_area_deg2
     ))
   }
-
-  src <- wcs_source_info(match.arg(source, names(wcs_registry())), coverage)
 
   if(is.null(cache_dir)) {
     cache_dir <- getOption("ggOceanMaps.datapath", tempdir())
@@ -190,7 +213,18 @@ wcs_fetch_tile <- function(src, bbox, cache_dir, force, verbose) {
 
   if(inherits(result, c("error", "warning")) || !file.exists(cache_file) || file.size(cache_file) < 1000) {
     if(file.exists(cache_file)) unlink(cache_file)
-    stop("WCS download failed. Check internet connectivity and that ", src$label, " is reachable. Original error: ", conditionMessage(result))
+    err_detail <- if(inherits(result, "condition")) paste0(" Original error: ", conditionMessage(result)) else ""
+    stop("WCS download failed. Check internet connectivity and that ", src$label, " is reachable.", err_detail)
+  }
+
+  if(!.is_valid_tiff(cache_file)) {
+    unlink(cache_file)
+    stop(sprintf(paste0(
+      "Downloaded file from %s is not a valid GeoTIFF ",
+      "(the server likely returned an XML error document). ",
+      "The requested area may be outside the source's coverage. ",
+      "See %s for coverage information."
+    ), src$label, src$url))
   }
 
   cache_file
@@ -211,7 +245,11 @@ wcs_registry <- function() {
       # WCS axis labels (note: EMODnet uses Lat first)
       axis_lat = "Lat",
       axis_lon = "Long",
-      native_res_deg = 0.00104167
+      native_res_deg = 0.00104167,
+      # Approximate geographic extent c(xmin, xmax, ymin, ymax) in decimal degrees.
+      # Used to reject clearly out-of-range requests before hitting the network.
+      # EMODnet covers European regional seas only (North Atlantic → Arctic → Black Sea).
+      extent = c(-36, 43, 15, 90)
     )
   )
 }
@@ -246,4 +284,21 @@ wcs_cache_path <- function(cache_dir, src, bbox) {
     gsub("\\.", "-", as.character(src$version))
   )
   file.path(cache_dir, key)
+}
+
+
+# Internal: validate a downloaded file has TIFF magic bytes ---------------
+# Returns FALSE for XML error documents, HTML pages, or truncated files.
+
+.is_valid_tiff <- function(path) {
+  con <- file(path, "rb")
+  on.exit(close(con))
+  magic <- readBin(con, raw(), n = 4L)
+  if(length(magic) < 4L) return(FALSE)
+  # Little-endian TIFF / BigTIFF: "II" (0x49 0x49) then 0x2A or 0x2B
+  le <- magic[1L] == as.raw(0x49L) && magic[2L] == as.raw(0x49L) &&
+        (magic[3L] == as.raw(0x2AL) || magic[3L] == as.raw(0x2BL))
+  # Big-endian TIFF / BigTIFF: "MM" (0x4D 0x4D)
+  be <- magic[1L] == as.raw(0x4DL) && magic[2L] == as.raw(0x4DL)
+  le || be
 }
