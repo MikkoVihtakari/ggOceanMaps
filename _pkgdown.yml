@@ -116,6 +116,8 @@ navbar:
    articles:
     text: Articles
     menu:
+    - text: Bathymetry
+      href: articles/bathymetry.html
     - text: Cookbook
       href: articles/cookbook.html
     - text: -------
