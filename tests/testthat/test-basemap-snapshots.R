@@ -83,6 +83,7 @@ test_that("antimeridian: issue #44 Atlantic", {
 
 test_that("projected: Arctic shapefiles", {
   skip_unless_visual()
+  skip_if_no_largedata()
   vdiffr::expect_doppelganger(
     "projected-arctic",
     basemap(limits = c(2.5e4, -2.5e6, 2e6, -2.5e5), shapefiles = "Arctic")

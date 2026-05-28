@@ -97,6 +97,7 @@ test_that("South Pacific wide rotated build", {
 # Projected limits -------------------------------------------------------
 
 test_that("projected limits with explicit shapefiles build", {
+  skip_if_no_largedata()
   expect_s3_class(
     basemap(limits = c(2.5e4, -2.5e6, 2e6, -2.5e5), shapefiles = "Arctic"),
     "gg"
@@ -104,6 +105,7 @@ test_that("projected limits with explicit shapefiles build", {
 })
 
 test_that("projected limits with expand.factor build", {
+  skip_if_no_largedata()
   expect_s3_class(
     basemap(limits = c(2.5e4, -2.5e6, 2e6, -2.5e5),
             shapefiles = "Arctic", expand.factor = 1.3),
@@ -114,6 +116,7 @@ test_that("projected limits with expand.factor build", {
 # Premade shapefile shortcut ---------------------------------------------
 
 test_that("premade shapefile shortcut builds", {
+  skip_if_no_largedata()
   expect_s3_class(basemap("ArcticStereographic"), "gg")
 })
 

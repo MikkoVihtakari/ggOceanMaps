@@ -22,17 +22,17 @@
 #'   downloading a very large area. \code{NULL} uses the source default
 #'   (50 for EMODnet, 2000 for ETOPO). Bounding boxes larger than the
 #'   source's single-request cap are split into tiles and mosaicked
-#'   automatically — see Details.
+#'   automatically -- see Details.
 #' @param tile_size_deg Numeric. Edge length (in degrees) of the largest
 #'   single-request tile. \code{NULL} uses the source default (3 for
 #'   EMODnet, 30 for ETOPO). EMODnet reads 8-byte doubles internally so a
-#'   4° tile already exceeds its ~98 MB read cap; ETOPO is much coarser
+#'   4-degree tile already exceeds its ~98 MB read cap; ETOPO is much coarser
 #'   so larger tiles are fine.
 #' @param downsample Integer. Number of grid cells to skip when reducing the
 #'   raster after download. \code{0} (default) keeps the native ~115 m
 #'   resolution; \code{1} keeps every second cell (~230 m); \code{n} keeps
 #'   every \code{(n+1)}-th cell. Applied client-side via
-#'   \code{\link[stars]{st_downsample}} — the server still ships native data
+#'   \code{\link[stars]{st_downsample}} -- the server still ships native data
 #'   (no WCS-side resampling is honoured before the read cap), so the
 #'   bandwidth saving is in the resulting object's in-memory size, not the
 #'   download itself. Useful for wider maps where native resolution is
@@ -40,10 +40,10 @@
 #' @param timeout Numeric. HTTP timeout in seconds.
 #' @param verbose Logical. Print download progress and informational messages.
 #' @details \strong{EMODnet} serves the European-waters bathymetric DTM at
-#'   ~115 m native resolution (~0.00104°) in EPSG:4326 GeoTIFF format. The
-#'   1°×1° tile around the North Sea is ~4 MB; a 5°×5° tile would be ~100 MB
-#'   and hit the server's ~98 MB read cap. Coverage is European regional seas
-#'   only (~−36° to 43° lon, ~15° to 90° lat).
+#'   ~115 m native resolution (~0.00104 deg) in EPSG:4326 GeoTIFF format. The
+#'   1x1 deg tile around the North Sea is ~4 MB; a 5x5 deg tile would be
+#'   ~100 MB and hit the server's ~98 MB read cap. Coverage is European
+#'   regional seas only (~-36 to 43 lon, ~15 to 90 lat).
 #'
 #'   \strong{ETOPO} (ETOPO1 Ice Surface, served by NOAA NCEI) is a global
 #'   1 arc-minute (~1.85 km) topo-bathy grid in EPSG:4326. Useful when EMODnet
@@ -67,7 +67,7 @@
 #'   citation (Amante & Eakins 2009, NOAA NGDC; see
 #'   \url{https://www.ncei.noaa.gov/products/etopo-global-relief-model}).
 #' @return A \code{bathyRaster} object: a list with elements \code{raster}
-#'   (a \code{\link[stars]{stars}} object with positive depth values) and
+#'   (a \code{\link[stars]{read_stars}} object with positive depth values) and
 #'   \code{depth.invervals} (a length-2 numeric range).
 #' @examples
 #' \dontrun{
@@ -78,7 +78,7 @@
 #'                             bathy = bathy$raster),
 #'           bathymetry = TRUE)
 #'
-#'   # Global coverage (Hawaii — outside EMODnet)
+#'   # Global coverage (Hawaii -- outside EMODnet)
 #'   bathy <- wcs_bathymetry(c(-160, -154, 18, 23), source = "etopo")
 #'   basemap(c(-160, -154, 18, 23),
 #'           shapefiles = list(land = dd_land, glacier = NULL,
@@ -136,9 +136,9 @@ wcs_bathymetry <- function(
     if(bbox["xmin"] > ext[2] || bbox["xmax"] < ext[1] ||
        bbox["ymin"] > ext[4] || bbox["ymax"] < ext[3]) {
       stop(sprintf(paste0(
-        "Bounding box (%.1f° to %.1f° lon, %.1f° to %.1f° lat) lies ",
+        "Bounding box (%.1f\u00b0 to %.1f\u00b0 lon, %.1f\u00b0 to %.1f\u00b0 lat) lies ",
         "entirely outside the approximate coverage of %s ",
-        "(≈%.0f° to %.0f° lon, %.0f° to %.0f° lat).\n",
+        "(\u2248%.0f\u00b0 to %.0f\u00b0 lon, %.0f\u00b0 to %.0f\u00b0 lat).\n",
         "For global bathymetry coverage, download GEBCO or ETOPO data locally and use ",
         "raster_bathymetry() + vector_bathymetry() instead, or wait for a global WCS ",
         "source to be added to ggOceanMaps."
@@ -291,7 +291,7 @@ wcs_registry <- function() {
       native_res_deg = 0.00104167,
       # Approximate geographic extent c(xmin, xmax, ymin, ymax) in decimal degrees.
       # Used to reject clearly out-of-range requests before hitting the network.
-      # EMODnet covers European regional seas only (North Atlantic → Arctic → Black Sea).
+      # EMODnet covers European regional seas only (North Atlantic -> Arctic -> Black Sea).
       extent = c(-36, 43, 15, 90),
       # Server returns raw GeoTIFF (no multipart envelope)
       multipart = FALSE,
@@ -314,7 +314,7 @@ wcs_registry <- function() {
       extent = c(-180, 180, -90, 90),
       # NCEI wraps the GeoTIFF in a multipart/related MIME envelope
       multipart = TRUE,
-      # Much coarser than EMODnet → larger areas / tiles are fine
+      # Much coarser than EMODnet -> larger areas / tiles are fine
       default_max_area_deg2 = 2000,
       default_tile_size_deg = 30
     )

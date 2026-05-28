@@ -34,7 +34,8 @@ Suggests:
     ggnewscale,
     testthat (>= 3.0.0),
     vdiffr (>= 1.0.0),
-    sp
+    sp,
+    withr
 Config/testthat/edition: 3
 License: GPL-3
 Encoding: UTF-8

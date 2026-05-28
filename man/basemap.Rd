@@ -112,7 +112,7 @@ The \code{crs} argument can be used to define the projection, which can be usefu
 
 \strong{Bathymetry}
 
-Bathymetry can be plotted by simply specifying \code{bathymetry = TRUE} or \code{bathy.style}. The former uses the low-resolution raster shipped with ggOceanMaps; the latter selects one of the styles listed below. See the dedicated \href{../articles/bathymetry.html}{bathymetry vignette} for a full walk-through with examples.
+Bathymetry can be plotted by simply specifying \code{bathymetry = TRUE} or \code{bathy.style}. The former uses the low-resolution raster shipped with ggOceanMaps; the latter selects one of the styles listed below. See the dedicated \href{https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.html}{bathymetry vignette} for a full walk-through with examples.
 
 The \code{bathy.style} string follows the pattern \emph{geometry_palette}, where \emph{geometry} encodes both the underlying data type (raster grid, polygon contours or contour lines) and where the data come from (shipped, downloaded, user-supplied or web service), and \emph{palette} is either \code{blues} or \code{grays}. All styles have a short abbreviation. Substitute \code{g} for \code{b} at the end of the abbreviation to switch from blues to grays (e.g. \code{rbb} → \code{rbg}).
 
