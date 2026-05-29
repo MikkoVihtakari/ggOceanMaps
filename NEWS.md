@@ -20,6 +20,10 @@ Github Copilot) and addition documentation files for AI agents.
   shapefile workflows.
 * New `AGENTS.md` for AI assistants helping users *use* ggOceanMaps, and a new
   `vignette("cookbook")` of short copy-pasteable recipes.
+* New `vignette("bathymetry")` covering all bathymetry sources, and a new
+  `vignette("adding-graphical-elements")` covering ocean-current arrows
+  (velocity quivers and schematic "Figure 1" arrows) and pie charts on maps
+  via `scatterpie::geom_scatterpie()`.
 
 ## Testing
 

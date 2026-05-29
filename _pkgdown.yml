@@ -118,6 +118,8 @@ navbar:
     menu:
     - text: Bathymetry
       href: articles/bathymetry.html
+    - text: Adding graphical elements
+      href: articles/adding-graphical-elements.html
     - text: Cookbook
       href: articles/cookbook.html
     - text: -------
