@@ -173,7 +173,7 @@ test_that("sp input builds", {
   skip_if_not_installed("sp")
   pts <- sp::SpatialPoints(
     data.frame(lon = c(-150, 150), lat = c(60, 85)),
-    proj4string = sp::CRS("+init=epsg:4326")
+    proj4string = sp::CRS(SRS_string = "EPSG:4326")
   )
   expect_s3_class(basemap(pts), "gg")
 })
