@@ -676,9 +676,45 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
       })
       
     } else {
+      # For non-antimeridian, non-rotated maps: densify the clip boundary
+      # before back-projecting to WGS84 so that the curved projected edges are
+      # properly represented. Without densification, the 5-point bbox polygon
+      # (4 corners + close) transforms to a severely distorted quadrilateral in
+      # WGS84, causing land near the map edges to be clipped off too early
+      # (e.g. northern Norway for basemap(c(-20, 30, 50, 70))).
+      #
+      # For antimeridian-crossing / wide-span / rotated maps we skip
+      # densification: those maps already handle land pre-clipping separately,
+      # and densifying near ±180° produces topology-invalid WGS84 polygons
+      # that cause GEOS TopologyExceptions in sf::st_intersection.
+
+      dd_lims <- if(!is.null(x$limits) && is_decimal_limit(x$limits)) x$limits else NULL
+
+      # Densification is only needed when the clip boundary is in a projected
+      # (non-latlon) CRS: back-projecting a 5-point bbox from e.g. EPSG:3995 to
+      # WGS84 gives a severely distorted quadrilateral (see comment above).
+      # For WGS84 clip limits, the bbox edges are already straight in WGS84 so
+      # no densification is needed. Also skip densification for maps that cross
+      # the antimeridian or use a rotated CRS: densifying near ±180° produces
+      # topology-invalid WGS84 polygons that cause GEOS errors.
+      antimeridian_risk <- x$rotate ||
+        (!is.null(dd_lims) && (dd_lims[1] > dd_lims[2] ||          # explicit crossing
+                               diff(dd_lims[1:2]) > 180))           # wide span
+
+      need_densify <- !sf::st_is_longlat(x$clip_limits) && !antimeridian_risk
+
+      clip_in_land_crs <- if(need_densify) {
+        sf::st_transform(
+          smoothr::densify(x$clip_limits, n = 100),
+          crs = sf::st_crs(x$shapefiles$land)
+        )
+      } else {
+        sf::st_transform(x$clip_limits, crs = sf::st_crs(x$shapefiles$land))
+      }
+
       landBoundary <- clip_shapefile(
         x$shapefiles$land,
-        limits = sf::st_transform(x$clip_limits, crs = sf::st_crs(x$shapefiles$land)),
+        limits = clip_in_land_crs,
         return.boundary = TRUE
       )
 
