@@ -118,6 +118,8 @@ navbar:
     menu:
     - text: Bathymetry
       href: articles/bathymetry.html
+    - text: Customising shapefiles
+      href: articles/customising-shapefiles.html
     - text: Adding graphical elements
       href: articles/adding-graphical-elements.html
     - text: Cookbook
