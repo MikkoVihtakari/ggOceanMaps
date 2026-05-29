@@ -1,8 +1,8 @@
 # A list of pre-made shapefiles for `basemap`
 
 Lists available pre-made shapefiles for plotting in the
-[`basemap`](basemap.md) function. Gives also instructions how to make
-custom ones.
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function. Gives also instructions how to make custom ones.
 
 ## Usage
 
@@ -30,9 +30,10 @@ otherwise.
 
 ## Details
 
-Custom shapefiles for [`basemap`](basemap.md) should be defined as lists
-with (at least) following names (everything should be provided as
-characters):
+Custom shapefiles for
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+should be defined as lists with (at least) following names (everything
+should be provided as characters):
 
 - **land** Name of the object containing land polygons. Required.
 
@@ -45,13 +46,16 @@ characters):
 All linked spatial data objects must be in same projection.
 High-resolution pre-made data are still under development and may not be
 available. Pre-made shapefiles contain additional elements that are used
-in the [`basemap`](basemap.md) function, but not required for custom
-shapefile datasets.
+in the
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function, but not required for custom shapefile datasets.
 
 ## See also
 
-Other basemap functions: [`basemap()`](basemap.md), [`qmap()`](qmap.md),
-[`transform_coord()`](transform_coord.md)
+Other basemap functions:
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md),
+[`qmap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/qmap.md),
+[`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md)
 
 ## Author
 
@@ -61,30 +65,24 @@ Mikko Vihtakari
 
 ``` r
 shapefile_list("all")
-#>                     name
-#> 1    ArcticStereographic
-#> 2 AntarcticStereographic
-#> 3          DecimalDegree
-#> 4               Svalbard
-#> 5                 Europe
-#>                                                                          land
-#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/arctic_land
-#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/antarctic_land
-#> 3                                                                     dd_land
-#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/svalbard_land
-#> 5    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/europe_land
-#>                                                                          glacier
-#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/arctic_glacier
-#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/antarctic_glacier
-#> 3        /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/dd_glacier
-#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/svalbard_glacier
-#> 5                                                                           <NA>
-#>                                                                                                                                                                bathy
-#> 1    dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/arctic_bathy
-#> 2 dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/antarctic_bathy
-#> 3        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/dd_bathy
-#> 4  dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/svalbard_bathy
-#> 5        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/dd_bathy
+#>                     name                                      land
+#> 1    ArcticStereographic    /tmp/claude-501/RtmpgS7Nh2/arctic_land
+#> 2 AntarcticStereographic /tmp/claude-501/RtmpgS7Nh2/antarctic_land
+#> 3          DecimalDegree                                   dd_land
+#> 4               Svalbard  /tmp/claude-501/RtmpgS7Nh2/svalbard_land
+#> 5                 Europe    /tmp/claude-501/RtmpgS7Nh2/europe_land
+#>                                        glacier
+#> 1    /tmp/claude-501/RtmpgS7Nh2/arctic_glacier
+#> 2 /tmp/claude-501/RtmpgS7Nh2/antarctic_glacier
+#> 3        /tmp/claude-501/RtmpgS7Nh2/dd_glacier
+#> 4  /tmp/claude-501/RtmpgS7Nh2/svalbard_glacier
+#> 5                                         <NA>
+#>                                                                                            bathy
+#> 1    dd_rbathy|/tmp/claude-501/RtmpgS7Nh2/dd_rbathy_cont|/tmp/claude-501/RtmpgS7Nh2/arctic_bathy
+#> 2 dd_rbathy|/tmp/claude-501/RtmpgS7Nh2/dd_rbathy_cont|/tmp/claude-501/RtmpgS7Nh2/antarctic_bathy
+#> 3        dd_rbathy|/tmp/claude-501/RtmpgS7Nh2/dd_rbathy_cont|/tmp/claude-501/RtmpgS7Nh2/dd_bathy
+#> 4  dd_rbathy|/tmp/claude-501/RtmpgS7Nh2/dd_rbathy_cont|/tmp/claude-501/RtmpgS7Nh2/svalbard_bathy
+#> 5        dd_rbathy|/tmp/claude-501/RtmpgS7Nh2/dd_rbathy_cont|/tmp/claude-501/RtmpgS7Nh2/dd_bathy
 #>     crs                                      limits
 #> 1  3995                                       c(30)
 #> 2  3031                                      c(-35)
@@ -102,18 +100,18 @@ shapefile_list("Arctic") # partial matching
 #> [1] "ArcticStereographic"
 #> 
 #> $land
-#> [1] "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/arctic_land"
+#> [1] "/tmp/claude-501/RtmpgS7Nh2/arctic_land"
 #> 
 #> $glacier
-#> [1] "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/arctic_glacier"
+#> [1] "/tmp/claude-501/RtmpgS7Nh2/arctic_glacier"
 #> 
 #> $bathy
-#>                                                                 raster_binned 
-#>                                                                   "dd_rbathy" 
-#>                                                             raster_continuous 
-#> "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/dd_rbathy_cont" 
-#>                                                                        vector 
-#>   "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplHy5hm/arctic_bathy" 
+#>                               raster_binned 
+#>                                 "dd_rbathy" 
+#>                           raster_continuous 
+#> "/tmp/claude-501/RtmpgS7Nh2/dd_rbathy_cont" 
+#>                                      vector 
+#>   "/tmp/claude-501/RtmpgS7Nh2/arctic_bathy" 
 #> 
 #> $crs
 #> [1] 3995

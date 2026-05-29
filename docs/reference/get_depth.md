@@ -1,7 +1,8 @@
 # Extract depth for coordinates from a raster bathymetry dataset
 
-Extracts depth from [basemap](basemap.md) bathymetry raster dataset for
-coordinates in a data frame
+Extracts depth from
+[basemap](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+bathymetry raster dataset for coordinates in a data frame
 
 ## Usage
 
@@ -28,26 +29,28 @@ get_depth(
 
 - bathy.style:
 
-  Character defining the [basemap](basemap.md) bathymetry raster which
-  should be used for the depth extraction. Valid alternatives:
-  `"raster_binned"` (or `"rb"`), `"raster_continuous"` (or `"rc"`;
-  default), or `"raster_user"` (or `"ru"`).
+  Character defining the
+  [basemap](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+  bathymetry raster which should be used for the depth extraction. Valid
+  alternatives: `"raster_binned"` (or `"rb"`), `"raster_continuous"` (or
+  `"rc"`; default), or `"raster_user"` (or `"ru"`).
 
 - lon, lat:
 
   Either the names of the longitude and latitude columns in `data` or
   `NULL` to [guess the longitude and/or latitude
-  columns](guess_coordinate_columns.md) in `data`.
+  columns](https://mikkovihtakari.github.io/ggOceanMaps/reference/guess_coordinate_columns.md)
+  in `data`.
 
 - shapefile:
 
   Land shape to which distances should be calculated. Either a character
   argument referring to a name of pre-made shapefiles in
-  [`shapefile_list`](shapefile_list.md), a single
-  [sf](https://r-spatial.github.io/sf/reference/sf.html) or `sp`
-  polygons object object or `NULL` to enable automatic definition of the
-  land shapes based on `data`. Set to `"DecimalDegree"` by default which
-  enables great circle distances using
+  [`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md),
+  a single [sf](https://r-spatial.github.io/sf/reference/sf.html) or
+  `sp` polygons object object or `NULL` to enable automatic definition
+  of the land shapes based on `data`. Set to `"DecimalDegree"` by
+  default which enables great circle distances using
   [s2](https://r-spatial.github.io/sf/reference/s2.html) features
   assuming a spherical Earth (as a contrast to earlier versions of the
   function which used flat Earth).
@@ -83,8 +86,9 @@ on land.
 
 Uses the
 [`st_extract`](https://r-spatial.github.io/stars/reference/st_extract.html)
-function to extract values from [basemap](basemap.md) bathymetry raster
-grids. Does not work for vector bathymetries.
+function to extract values from
+[basemap](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+bathymetry raster grids. Does not work for vector bathymetries.
 
 ## Author
 

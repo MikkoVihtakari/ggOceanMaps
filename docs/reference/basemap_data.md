@@ -1,7 +1,7 @@
 # Create basemapData object for basemap plotting
 
 Internal function to create a `basemapData` object for
-[`basemap`](basemap.md)
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 
 ## Usage
 
@@ -54,17 +54,19 @@ basemap_data(
   extracted from these coordinates and produce a rectangular map. Suited
   for situations where a certain dataset is plotted on a map. The
   function attempts to [guess the correct
-  columns](guess_coordinate_columns.md) and it is advised to use
-  intuitive column names for longitude (such as "lon", "long", or
-  "longitude") and latitude ("lat", "latitude") columns. Can be omitted
-  if `limits` or `shapefiles` are defined.
+  columns](https://mikkovihtakari.github.io/ggOceanMaps/reference/guess_coordinate_columns.md)
+  and it is advised to use intuitive column names for longitude (such as
+  "lon", "long", or "longitude") and latitude ("lat", "latitude")
+  columns. Can be omitted if `limits` or `shapefiles` are defined.
 
 - shapefiles:
 
-  Either a [list containing shapefile information](shapefile_list.md) or
-  a character argument referring to a name of pre-made shapefiles in
-  [`shapefile_list`](shapefile_list.md). This name is partially matched.
-  Can be omitted if `limits` or `data` is defined as decimal degrees.
+  Either a [list containing shapefile
+  information](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md)
+  or a character argument referring to a name of pre-made shapefiles in
+  [`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md).
+  This name is partially matched. Can be omitted if `limits` or `data`
+  is defined as decimal degrees.
 
 - crs:
 
@@ -119,17 +121,18 @@ basemap_data(
 ## Value
 
 A list of class `basemapData` containing information required for
-plotting a [`basemap`](basemap.md).
+plotting a
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md).
 
 ## Details
 
 This is an internal function, which is automatically run by the
-[`basemap`](basemap.md) function. Common users do not need to worry
-about these details.
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function. Common users do not need to worry about these details.
 
 ## See also
 
-[`basemap`](basemap.md)
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 
 ## Author
 

@@ -29,5 +29,6 @@ A ggplot2 theme layer.
 
 ## See also
 
-Other customize shapefiles: [`auto_limits()`](auto_limits.md),
-[`reorder_layers()`](reorder_layers.md)
+Other customize shapefiles:
+[`auto_limits()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/auto_limits.md),
+[`reorder_layers()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/reorder_layers.md)

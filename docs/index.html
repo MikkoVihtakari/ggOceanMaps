@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,12 +36,16 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><h6 class="dropdown-header" data-toc-skip>News</h6></li>
+<li><a class="dropdown-item" href="articles/bathymetry.html">Bathymetry</a></li>
+    <li><a class="dropdown-item" href="articles/customising-shapefiles.html">Customising shapefiles</a></li>
+    <li><a class="dropdown-item" href="articles/adding-graphical-elements.html">Adding graphical elements</a></li>
+    <li><a class="dropdown-item" href="articles/cookbook.html">Cookbook</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>News</h6></li>
     <li><a class="dropdown-item" href="articles/new-features.html">New features in version 2</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Premade maps</h6></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Premade shapefiles</h6></li>
+    <li><a class="dropdown-item" href="articles/premade-maps.html">Premade maps</a></li>
+    <li><a class="dropdown-item" href="articles/premade-shapefiles.html">Premade shapefiles</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Presentations</h6></li>
     <li><a class="dropdown-item" href="articles/poster.html">SI2022 poster</a></li>
@@ -92,20 +96,20 @@
 </h2>
 <p><strong>ggOceanMaps</strong> extends on <a href="http://ggplot2.tidyverse.org/reference/" class="external-link"><strong>ggplot2</strong></a>. The package uses spatial (<a href="https://r-spatial.github.io/sf/" class="external-link"><strong>sf</strong></a>) shape- (e.g. vector) and (<a href="https://r-spatial.github.io/stars/" class="external-link"><strong>stars</strong></a>) raster files, <a href="https://cran.r-project.org/web/views/Spatial.html" class="external-link">geospatial packages for R</a> to manipulate, and ggplot2 to plot these data. The vector and raster plotting is conducted internally in the <code>basemap</code> function, which uses <a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot’s sf object plotting capabilities</a>. Maps are plotted using the <code><a href="reference/basemap.html">basemap()</a></code> or <code><a href="reference/qmap.html">qmap()</a></code> functions that work almost similarly to <a href="https://ggplot2.tidyverse.org/reference/index.html" class="external-link"><code>ggplot()</code> as a base</a> for adding further layers to the plot using the <code>+</code> operator. The maps generated this way already contain multiple ggplot layers. Consequently, the <a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link"><code>data</code> argument</a> needs to be explicitly specified inside <code>geom_*</code> functions when adding <code>ggplot2</code> layers. Depending on the location of the map, the underlying coordinates may be projected. Decimal degree coordinates need to be transformed to the projected coordinates using the <code>transform_coord</code>, <a href="https://paleolimbot.github.io/ggspatial/" class="external-link">ggspatial</a>, or <a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link"><code>geom_sf</code> functions.</a></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/" class="external-link">ggOceanMaps</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/">ggOceanMaps</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">30</span>, <span class="op">-</span><span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">30</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">80</span>, <span class="fl">80</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/basemap.html">basemap</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dt</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_polygon.html" class="external-link">geom_polygon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span><span class="op">)</span>, </span>
 <span>               color <span class="op">=</span> <span class="st">"red"</span>, fill <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-4-1.png"><!-- --></p>
-<p>See the <a href="https://mikkovihtakari.github.io/ggOceanMaps/index.html" class="external-link">ggOceanMaps website</a>, <a href="https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html" class="external-link">function reference</a>, and the <a href="https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html" class="external-link">user manual</a> for how to use and modify the maps plotted by the package. You may also find <a href="https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html#1" class="external-link">these slides about the package</a> useful.</p>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.png" alt="Bathymetric basemap of the North Atlantic/Arctic with a red polygon overlaid, demonstrating basemap() with data= and transform_coord()."><!-- --></p>
+<p>See the <a href="https://mikkovihtakari.github.io/ggOceanMaps/index.html">ggOceanMaps website</a>, <a href="https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html">function reference</a>, and the <a href="https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html">user manual</a> for how to use and modify the maps plotted by the package. You may also find <a href="https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html#1" class="external-link">these slides about the package</a> useful.</p>
 </div>
 <div class="section level2">
 <h2 id="data-path">Data path<a class="anchor" aria-label="anchor" href="#data-path"></a>
 </h2>
-<p>While ggOceanMaps allows plotting any custom-made shapefiles, the package contains a shortcut to plot higher resolution maps for <a href="https://mikkovihtakari.github.io/ggOceanMaps/articles/premade-maps.html" class="external-link">certain areas needed by the author</a> without the need of generating the shapefiles manually. These high-resolution shapefiles are downloaded from the <a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData" class="external-link">ggOceanMapsLargeData</a> repository. As a default, the shapefiles are downloaded into a temporary directory meaning that the user would need to download the large shapefiles every time they restart R. This limitation is set by <a href="https://cran.r-project.org/web/packages/policies.html" class="external-link">CRAN policies</a>. You can define a custom folder for high-resolution shapefiles on your computer by modifying your .Rprofile file (e.g. <code><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">usethis::edit_r_profile()</a></code>). Add the following lines to the file:</p>
+<p>While ggOceanMaps allows plotting any custom-made shapefiles, the package contains a shortcut to plot higher resolution maps for <a href="https://mikkovihtakari.github.io/ggOceanMaps/articles/premade-maps.html">certain areas needed by the author</a> without the need of generating the shapefiles manually. These high-resolution shapefiles are downloaded from the <a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData" class="external-link">ggOceanMapsLargeData</a> repository. As a default, the shapefiles are downloaded into a temporary directory meaning that the user would need to download the large shapefiles every time they restart R. This limitation is set by <a href="https://cran.r-project.org/web/packages/policies.html" class="external-link">CRAN policies</a>. You can define a custom folder for high-resolution shapefiles on your computer by modifying your .Rprofile file (e.g. <code><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">usethis::edit_r_profile()</a></code>). Add the following lines to the file:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">.ggOceanMapsenv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">new.env</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">.ggOceanMapsenv</span><span class="op">$</span><span class="va">datapath</span> <span class="op">&lt;-</span> <span class="st">'YourCustomPath'</span></span></code></pre></div>
@@ -194,7 +198,7 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://doi.org/10.5281/zenodo.4554714" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4554714.svg" alt="DOI"></a></li>
+<li><a href="https://doi.org/10.32614/CRAN.package.ggOceanMaps" class="external-link"><img src="https://zenodo.org/badge/DOI/10.32614/CRAN.package.ggOceanMaps.svg" alt="DOI"></a></li>
 <li><a href="https://github.com/MikkoVihtakari/ggOceanMaps/actions" class="external-link"><img src="https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://CRAN.R-project.org/package=ggOceanMaps" class="external-link"><img src="https://www.r-pkg.org/badges/version/ggOceanMaps" alt="CRAN_Status_Badge"></a></li>
 </ul>

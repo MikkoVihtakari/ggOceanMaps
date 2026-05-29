@@ -77,7 +77,7 @@ The default map uses decimal degrees (EPSG:4326) and
 basemap("DecimalDegree", bathymetry = TRUE, glaciers = TRUE)
 ```
 
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png)
+![Global basemap in decimal degrees (EPSG:4326) with land, glaciers, and binned bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png)
 
 ## Arctic Stereographic
 
@@ -89,7 +89,7 @@ on first use.
 basemap("ArcticStereographic", bathymetry = TRUE, glaciers = TRUE)
 ```
 
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/ArcticStereographic.png)
+![Arctic stereographic basemap (EPSG:3995) with land, glaciers, and bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/ArcticStereographic.png)
 
 ## Antarctic Stereographic
 
@@ -99,7 +99,7 @@ The southern equivalent (EPSG:3031).
 basemap("AntarcticStereographic", bathymetry = TRUE, glaciers = TRUE)
 ```
 
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/AntarcticStereographic.png)
+![Antarctic stereographic basemap (EPSG:3031) with land, glaciers, and bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/AntarcticStereographic.png)
 
 # Detailed regional maps
 
@@ -128,7 +128,7 @@ basemap(limits = c(10.9, 12.65, 78.83, 79.12),
         legends = FALSE, glaciers = TRUE)
 ```
 
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Kongsfjorden.png)
+![High-resolution map of Kongsfjorden, Svalbard, with bathymetry and glaciers.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Kongsfjorden.png)
 
 ## Europe
 

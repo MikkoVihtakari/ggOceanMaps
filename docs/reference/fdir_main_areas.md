@@ -24,8 +24,9 @@ Organization](https://www.nafo.int/About-us/Maps)
 
 ## See also
 
-Other datasets: [`fdir_sub_areas`](fdir_sub_areas.md),
-[`ices_areas`](ices_areas.md)
+Other datasets:
+[`fdir_sub_areas`](https://mikkovihtakari.github.io/ggOceanMaps/reference/fdir_sub_areas.md),
+[`ices_areas`](https://mikkovihtakari.github.io/ggOceanMaps/reference/ices_areas.md)
 
 ## Examples
 

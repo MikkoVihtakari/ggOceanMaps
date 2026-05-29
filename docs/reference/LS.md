@@ -21,4 +21,5 @@ Returns a numeric vector of lenght `x` of ggplot line sizes
 
 ## See also
 
-Other size adjustors: [`FS()`](FS.md)
+Other size adjustors:
+[`FS()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/FS.md)

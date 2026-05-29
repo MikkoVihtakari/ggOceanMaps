@@ -7,7 +7,7 @@ output:
     toc_depth: 6
     fig_caption: true
 vignette: >
-  %\VignetteIndexEntry{ggOceanMaps}
+  %\VignetteIndexEntry{ggOceanMaps User Manual}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -361,8 +361,8 @@ basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) +
 
 The `bathy.style = "*_continuous_*"` bathymetry polygons are mapped to `geom_fill_continuous`:
 
-```{r}
-basemap(limits = c(-140, -105, 20, 40), bathy.style = "rcb") + 
+```{r, eval = FALSE}
+basemap(limits = c(-140, -105, 20, 40), bathy.style = "rcb") +
   scale_fill_viridis_c("Water depth (m)")
 ```
 

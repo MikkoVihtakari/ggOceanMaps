@@ -29,17 +29,18 @@ dist2land(
 
   Either the names of the longitude and latitude columns in `data` or
   `NULL` to [guess the longitude and/or latitude
-  columns](guess_coordinate_columns.md) in `data`.
+  columns](https://mikkovihtakari.github.io/ggOceanMaps/reference/guess_coordinate_columns.md)
+  in `data`.
 
 - shapefile:
 
   Land shape to which distances should be calculated. Either a character
   argument referring to a name of pre-made shapefiles in
-  [`shapefile_list`](shapefile_list.md), a single
-  [sf](https://r-spatial.github.io/sf/reference/sf.html) or `sp`
-  polygons object object or `NULL` to enable automatic definition of the
-  land shapes based on `data`. Set to `"DecimalDegree"` by default which
-  enables great circle distances using
+  [`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md),
+  a single [sf](https://r-spatial.github.io/sf/reference/sf.html) or
+  `sp` polygons object object or `NULL` to enable automatic definition
+  of the land shapes based on `data`. Set to `"DecimalDegree"` by
+  default which enables great circle distances using
   [s2](https://r-spatial.github.io/sf/reference/s2.html) features
   assuming a spherical Earth (as a contrast to earlier versions of the
   function which used flat Earth).

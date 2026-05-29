@@ -1,8 +1,9 @@
 # Create a polygon bathymetry from a raster bathymetry file
 
 Vectorizes bathymetry rasters. Designed to be used for the output of
-[`raster_bathymetry`](raster_bathymetry.md) function. Warning:
-processing may take a long time if the bathymetry raster is large.
+[`raster_bathymetry`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
+function. Warning: processing may take a long time if the bathymetry
+raster is large.
 
 ## Usage
 
@@ -20,7 +21,8 @@ vector_bathymetry(
 - bathy:
 
   bathyRaster object from the
-  [`raster_bathymetry`](raster_bathymetry.md) function.
+  [`raster_bathymetry`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
+  function.
 
 - drop.crumbs:
 
@@ -60,9 +62,12 @@ world.
 
 ## See also
 
-Other create shapefiles: [`clip_shapefile()`](clip_shapefile.md),
-[`geonorge_bathymetry()`](geonorge_bathymetry.md),
-[`raster_bathymetry()`](raster_bathymetry.md)
+Other create shapefiles:
+[`clip_shapefile()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/clip_shapefile.md),
+[`geonorge_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/geonorge_bathymetry.md),
+[`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md),
+[`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md),
+[`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md)
 
 ## Author
 

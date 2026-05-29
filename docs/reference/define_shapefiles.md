@@ -1,6 +1,8 @@
 # Define a shapefile to use in plotting from the limits argument
 
-An internal function to make [`basemap`](basemap.md) code more readable
+An internal function to make
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+code more readable
 
 ## Usage
 
@@ -31,11 +33,12 @@ limits were supplied as decimal degrees and coordinate reference system.
 ## Details
 
 This is an internal function, which is automatically run by the
-[`basemap`](basemap.md) function.
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function.
 
 ## See also
 
-[`basemap`](basemap.md)
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 
 ## Author
 

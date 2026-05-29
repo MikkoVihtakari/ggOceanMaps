@@ -21,7 +21,8 @@ A vector of decimal degrees
 
 ## See also
 
-Other degree converters: [`dd_to_deg()`](dd_to_deg.md)
+Other degree converters:
+[`dd_to_deg()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/dd_to_deg.md)
 
 ## Author
 

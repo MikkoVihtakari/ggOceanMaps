@@ -34,11 +34,12 @@ faster and the quality is not much worse compared to pre-v2.0
 ggOceanMaps:
 
 ``` r
+
 basemap(c(100, 160, -20, 30), bathymetry = TRUE)
 ```
 
 ![](new-features_files/figure-html/unnamed-chunk-2-1.png) Processing
-time: 1.6 sec
+time: 1.4 sec
 
 The **low-resolution default bathymetry is optimized for processing
 time** and **there are higher-resolution datasets available** but you’ll
@@ -52,11 +53,12 @@ webpage). Use and download this dataset by simply specifying the
 `bathy.style` argument:
 
 ``` r
+
 basemap(c(100, 160, -20, 30), bathy.style = "rcb")
 ```
 
 ![](new-features_files/figure-html/unnamed-chunk-3-1.png) Processing
-time: 8.3 sec
+time: 8.8 sec
 
 Then the best bit. If this resolution still is not enough, **you can use
 any bathymetry grid you want** as long as
@@ -74,23 +76,25 @@ Rprofile:
 Now we can make maps using 15 arc-second GEBCO data:
 
 ``` r
+
 basemap(c(100, 160, -20, 30), bathy.style = "rub")
 ```
 
 ![](new-features_files/figure-html/unnamed-chunk-4-1.png) Processing
-time: 18.8 sec
+time: 18.9 sec
 
-[`basemap()`](../reference/basemap.md) now has `downsample` argument
-which can be used to reduce the resolution of excessively large custom
-raster datasets for a given region (the lower the resolution, the
-smaller the file size):
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+now has `downsample` argument which can be used to reduce the resolution
+of excessively large custom raster datasets for a given region (the
+lower the resolution, the smaller the file size):
 
 ``` r
+
 basemap(c(100, 160, -20, 30), bathy.style = "rub", downsample = 10)
 ```
 
 ![](new-features_files/figure-html/unnamed-chunk-5-1.png) Processing
-time: 19.1 sec
+time: 33.8 sec
 
 Note how the processing time does not change in this case, but it seems
 to be shorter for smaller maps.
@@ -100,6 +104,7 @@ You can also use custom bathymetries from other packages, such as
 data (this should be improved in future versions of the package):
 
 ``` r
+
 library(marmap)
 
 dt <- data.frame(lon = c(-125, -125, -111, -111), lat = c(28, 37, 37, 28))
@@ -136,15 +141,17 @@ Thanks to the shift to raster bathymetries, it is easy to use
 ggOceanMaps to estimate depth (and whether the point is on land) now:
 
 ``` r
+
 lon = deg_to_dd(seq(0,360,30)); lat = c(80,50,20,0,-20,-50,-80)
 dt <- data.frame(
   lon = rep(lon, length(lat)), lat = rep(lat, each = length(lon)))
 dt <- get_depth(dt)
 ```
 
-Processing time: 9.3 sec
+Processing time: 15.4 sec
 
 ``` r
+
 qmap(dt, color = depth) +
   scale_color_viridis_c()
 ```
@@ -169,6 +176,7 @@ only one land polygon shapefile in decimal degrees, which gets projected
 to flat-Earth on the fly while plotting maps:
 
 ``` r
+
 basemap(c(-20, 15, 50, 70), bathy.style = "rub")
 ```
 
@@ -183,6 +191,7 @@ We **can now also plot maps crossing the anti-meridian**. Use the
 `rotate` argument to turn on the crossing:
 
 ``` r
+
 basemap(c(110, -110, 10, 55), bathymetry = TRUE, rotate = TRUE)
 ```
 
@@ -194,6 +203,7 @@ dissolved in the new projection. Most of these issues are related to
 glaciers:
 
 ``` r
+
 basemap(limits = -60, glaciers = TRUE)
 ```
 
@@ -203,6 +213,7 @@ A simple fix for now is to use projected shapefiles from
 ggOceanMapsLargeData:
 
 ``` r
+
 basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic")
 ```
 
@@ -221,6 +232,7 @@ Thanks to round-Earth model, sf and stars, now you can **change the CRS
 of maps produced by ggOceanMaps on the fly**:
 
 ``` r
+
 cowplot::plot_grid(
   basemap(c(11,16,67.3,68.6), bathy.style = "rub", crs = 4326, legends = FALSE),
   basemap(c(11,16,67.3,68.6), bathy.style = "rub", legends = FALSE),
@@ -238,14 +250,17 @@ i.e. Arctic stereographic and c) 32633, i.e. UTM zone 33N.
 
 ## Tweaks to qmap
 
-Don’t forget [`qmap()`](../reference/qmap.md), people. It’s meant to be
-your every-day tool to check where your spatial data are located before
-you move on to analyze on them. The default `qmap` data point color has
-been changed to red to make the points more visible on the default grey
-land. In addition, the long-standing issue with `qmap` confusing `shape`
-argument to `shapefiles` argument in `basemap` has finally been fixed:
+Don’t forget
+[`qmap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/qmap.md),
+people. It’s meant to be your every-day tool to check where your spatial
+data are located before you move on to analyze on them. The default
+`qmap` data point color has been changed to red to make the points more
+visible on the default grey land. In addition, the long-standing issue
+with `qmap` confusing `shape` argument to `shapefiles` argument in
+`basemap` has finally been fixed:
 
 ``` r
+
 qmap(data.frame(lat = c(34, 38, 41, 32), lon = c(138, 137, 144, 129)), 
      shape = I(0), size = I(4))
 ```
@@ -254,15 +269,17 @@ qmap(data.frame(lat = c(34, 38, 41, 32), lon = c(138, 137, 144, 129)),
 
 ## dist2land goes round-Earth
 
-The [`dist2land()`](../reference/dist2land.md) function was bugged for
-large-scale datasets in pre-2.0 ggOceanMaps because it used a flat-Earth
-model and different shapefiles depending on the location. This should
-not be the case any longer as `dist2land` now uses the s2 package and
-**returns great circle distances in kilometers**. The only known bug is
-that the function does not manage to calculate the 0,0 lon/lat point
-correctly:
+The
+[`dist2land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/dist2land.md)
+function was bugged for large-scale datasets in pre-2.0 ggOceanMaps
+because it used a flat-Earth model and different shapefiles depending on
+the location. This should not be the case any longer as `dist2land` now
+uses the s2 package and **returns great circle distances in
+kilometers**. The only known bug is that the function does not manage to
+calculate the 0,0 lon/lat point correctly:
 
 ``` r
+
 lon = deg_to_dd(seq(0,360,30)); lat = c(80,50,20,0,-20,-50,-80)
 dt <- data.frame(
   lon = rep(lon, length(lat)), lat = rep(lat, each = length(lon)))
@@ -272,6 +289,7 @@ dt <- dist2land(dt, verbose = FALSE)
 Processing time: 1 sec
 
 ``` r
+
 qmap(dt, color = ldist) +
   scale_color_viridis_c()
 ```
@@ -291,6 +309,7 @@ detailed land in Europe allowing plotting fjords. The bathymetry is
 still too low quality for most fjords, however. Here the Tromsø region:
 
 ``` r
+
 cowplot::plot_grid(
   basemap(c(18.65,19.2,69.58,69.8), bathy.style = "rub", legends = FALSE) + ggtitle("Default"),
   basemap(c(18.65,19.2,69.58,69.8), shapefiles = "Europe", bathy.style = "rub", legends = FALSE) + ggtitle("shapefiles = 'Europe'")

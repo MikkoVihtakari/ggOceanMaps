@@ -21,4 +21,5 @@ shapes in decimal degrees (EPSG:4326). Obtained from Natural Earth Data
 
 ## See also
 
-Other mapfiles: [`dd_rbathy`](dd_rbathy.md)
+Other mapfiles:
+[`dd_rbathy`](https://mikkovihtakari.github.io/ggOceanMaps/reference/dd_rbathy.md)

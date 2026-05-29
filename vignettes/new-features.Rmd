@@ -6,7 +6,7 @@ output:
   rmarkdown::html_vignette:
     toc_depth: 6
 vignette: >
-  %\VignetteIndexEntry{new-features}
+  %\VignetteIndexEntry{New features in ggOceanMaps version 2}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

@@ -21,7 +21,8 @@ A vector of angular degrees
 
 ## See also
 
-Other degree converters: [`deg_to_dd()`](deg_to_dd.md)
+Other degree converters:
+[`deg_to_dd()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/deg_to_dd.md)
 
 ## Author
 

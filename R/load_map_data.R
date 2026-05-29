@@ -16,17 +16,22 @@ load_map_data <- function(x, force = FALSE, downsample = 0) {
   # Create the data download folder if it does not exist
   
   if(!dir.exists(getOption("ggOceanMaps.datapath"))) {
-    
+
     msg <- paste0("ggOceanMaps.datapath is pointing to ", getOption("ggOceanMaps.datapath"), ", which does not exist.", " Do you want to create the directory?")
-    
+
     message(paste(strwrap(msg), collapse= "\n"))
-    ret.val <- utils::menu(c("Yes", "No"), "")
-    
+
+    if(!interactive()) {
+      ret.val <- 1L
+    } else {
+      ret.val <- utils::menu(c("Yes", "No"), "")
+    }
+
     if(ret.val != 1) {
       msg <- paste0("The ggOceanMaps.datapath ", getOption("ggOceanMaps.datapath"), " does not exist. Cannot download data.")
       stop(paste(strwrap(msg), collapse= "\n"))
     } else {
-      dir.create(getOption("ggOceanMaps.datapath"))
+      dir.create(getOption("ggOceanMaps.datapath"), recursive = TRUE)
       msg <- paste0("The ggOceanMaps.datapath directory created to ", getOption("ggOceanMaps.datapath"))
       message(paste(strwrap(msg), collapse= "\n"))
     }
@@ -92,10 +97,15 @@ load_map_data <- function(x, force = FALSE, downsample = 0) {
   
   if(any(!unlist(exist_list))) {
     missing_files <- paste(sapply(names(exist_list)[!unlist(exist_list)], function(k) x[[k]]), collapse = ", ")
-    msg <- paste0("Cannot find files: ", missing_files, ". Do you want download them now?") 
+    msg <- paste0("Cannot find files: ", missing_files, ". Do you want download them now?")
     message(paste(strwrap(msg), collapse= "\n"))
-    ret.val <- utils::menu(c("Yes", "No"), "")
-    
+
+    if(!interactive()) {
+      ret.val <- 1L
+    } else {
+      ret.val <- utils::menu(c("Yes", "No"), "")
+    }
+
     if(ret.val != 1) {
       msg <- paste0(missing_files, " shapefiles required to plot the map. Download the file(s) or change the shapefiles argument.")
       stop(paste(strwrap(msg), collapse= "\n"))

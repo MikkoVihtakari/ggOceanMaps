@@ -41,6 +41,7 @@ documentation](https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html
 while reading the tutorial.
 
 ``` r
+
 library(ggOceanMaps)
 ```
 
@@ -57,8 +58,11 @@ geographic location](#projections).
 Maps can be limited (e.g. provide geographic location for a map) using
 three arguments: `limits`, `data`, and `shapefiles`. The limit type is
 automatically detected when supplied to the first argument (called `x`)
-in the [`basemap()`](../reference/basemap.md) and
-[`qmap()`](../reference/qmap.md) functions.
+in the
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+and
+[`qmap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/qmap.md)
+functions.
 
 #### Limits
 
@@ -69,6 +73,7 @@ argument as a single integer between 30 and 88 or -88 and -30 plots a
 polar stereographic map for the Arctic or Antarctic, respectively.
 
 ``` r
+
 library(ggOceanMaps)
 library(ggspatial) # for data plotting
 basemap(limits = 60) # A synonym: basemap(60) 
@@ -83,6 +88,7 @@ minimum latitude and the fourth element the maximum latitude of the
 bounding box:
 
 ``` r
+
 basemap(limits = c(-20, 20, 40, 59))
 ```
 
@@ -120,6 +126,7 @@ larger map than one would expect from cartesian coordinates because the
 and 120 $`^\circ`$W meridians.
 
 ``` r
+
 dt <- data.frame(lon = c(120, 120, -120, -120), lat = c(60, 80, 80, 60))
 
 basemap(limits = c(120, -120, 60, 80)) +
@@ -136,6 +143,7 @@ limits in the underlying projected coordinate units. First, we will need
 to find out how these units look like:
 
 ``` r
+
 basemap(limits = 60, projection.grid = TRUE, grid.col = "red")
 ```
 
@@ -153,6 +161,7 @@ matching the names of the pre-made shapefiles in `shapefile_list`
 (e.g. “Ar” would be enough for “ArcticStereographic”):
 
 ``` r
+
 basemap(limits = c(-2e6, 1e6, 0, 3e6), shapefiles = "Arctic") 
 ```
 
@@ -165,6 +174,7 @@ The limits of a map can also be defined by inputting a data frame to the
 to quickly find limits for a desired spatial dataset:
 
 ``` r
+
 dt <- expand.grid(lon = c(160, 180, -160), lat = c(60, 70, 80))
 
 basemap(data = dt) + # a synonym: basemap(dt)
@@ -178,6 +188,7 @@ fit into the mapped region. The space between the map borders and data
 points can be adjusted using the `expand.factor` argument:
 
 ``` r
+
 cowplot::plot_grid(
   basemap(dt, expand.factor = 1.1) +
     ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red") +
@@ -197,8 +208,9 @@ Figure above: The expand.factor argument can be used to expand (A) and
 reduce (B) map region in relation to data.
 
 See the [Adding data to maps](#adding-data-to-maps) section for more
-information. The [`basemap()`](../reference/basemap.md) function
-automatically detects columns containing longitude and latitude
+information. The
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function automatically detects columns containing longitude and latitude
 information when the `data` argument is used. The automatic detection
 algorithm is not very advanced and it is recommended to use intuitive
 column names for longitude (such as “lon”, “long”, or “longitude”) and
@@ -213,12 +225,14 @@ are downloaded as needed. See the [front page for instructions how to
 setup the automatic download
 folder](https://mikkovihtakari.github.io/ggOceanMaps/index.html#data-path)
 before you start downloading shape files. Any character supplied to the
-`x` argument in the [`basemap()`](../reference/basemap.md) function will
-automatically be understood as `shapefiles` argument. The maps are
-limited showing the entire land shape. Use the `limits` argument to
-further limit the shape file.
+`x` argument in the
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function will automatically be understood as `shapefiles` argument. The
+maps are limited showing the entire land shape. Use the `limits`
+argument to further limit the shape file.
 
 ``` r
+
 basemap("Arctic")
 ```
 
@@ -226,158 +240,55 @@ basemap("Arctic")
 
 ### Bathymetry
 
-Bathymetry system was revised in version 2.0. Bathymetry can be plotted
-by simply specifying `bathymetry = TRUE` or `bathy.style` (no need to
-specify both any longer):
+The simplest way to add bathymetry is `bathymetry = TRUE`, which uses
+the low-resolution raster shipped with the package:
 
 ``` r
+
 basemap(limits = c(-125, -110, 25, 35), bathymetry = TRUE)
 ```
 
 ![](ggOceanMaps_files/figure-html/unnamed-chunk-11-1.png)
 
-The default, `bathy.style = "raster_binned_blues"`, uses a
-low-resolution raster file shipped with ggOceanMaps. The package
-contains an option to plot higher resolution bathymetries than the
-default binned blue alternative. These bathymetries can be accessed by
-specifying the `bathy.style` argument and require a download from
-ggOceanMapsLargeData or other online repositories.
+For higher detail, set `bathy.style` to one of the alternative styles.
+The default is `"raster_binned_blues"` (`"rbb"`); switching to
+`"raster_continuous_blues"` (`"rcb"`) gives you a higher-resolution
+continuous raster (first call downloads it from
+[ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)).
 
 ``` r
-basemap(limits = c(-125, -110, 25, 35), bathy.style = "rcb") # synonym to "raster_continuous_blues"
+
+basemap(limits = c(-125, -110, 25, 35), bathy.style = "rcb")
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-12-1.png)
+ggOceanMaps supports five different bathymetry data sources:
 
-The `bathy.style` character argument consists of three parts separated
-by a `_`. The *first part gives the type*: raster, poly(gon), or
-contour. The two latter ones use vector data. The *second part gives the
-resolution*: binned, continuous or user. The continuous and user options
-cannot be used for vector data.
+1.  **Shipped low-resolution raster** — `"rbb"` / `"rbg"`. Default. No
+    setup.
+2.  **ggOceanMapsLargeData** higher-resolution rasters, polygon
+    contours, contour lines — `"rcb"`, `"pb"`, `"cb"`, …. One-time
+    download per region.
+3.  **Your own raster** (GEBCO, ETOPO, IBCAO, …) via
+    `options(ggOceanMaps.userpath = "...")` — `"rub"` / `"rug"`.
+4.  **Live download from a Web Coverage Service** — `"wemb"` (EMODnet,
+    ~115 m European waters) or `"wceb"` (ETOPO1, ~1.85 km global). Tiles
+    are cached locally after the first fetch.
+5.  **Build-your-own** with
+    [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
+    →
+    [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
+    /
+    [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md).
 
-The user option accepts any raster file that can be opened using
-[stars::read_stars](https://search.r-project.org/CRAN/refmans/stars/html/read_stars.html).
-The path to the file has to be stored in `ggOceanMaps.userpath` option
-(e.g. `options(ggOceanMaps.userpath = "PATH_TO_THE_FILE")`) (you can set
-this in .Rprofile to avoid having to type it every time).
+The `bathy.style` string follows the pattern `geometry_palette`. Add
+`_grays` (or change the final `b` → `g` in the abbreviation) for the
+greyscale variant of any style. The full reference table — every style,
+every abbreviation, what each one needs — lives in
+[`?basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+and is walked through with examples in the dedicated [Bathymetry
+vignette](https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.md).
 
-The *last part defines the color*: blues or grays. These *options can be
-abbreviated* by specifying the first letter of each part. Gray contour
-lines are an exception to the rule above and can be plotted using
-bathy.style = “contour_gray”. Future versions may contain a combination
-of raster and gray contours, but these have not been implemented yet.
-Currently implemented bathy.style alternatives are:
-
-- *`NULL` (default)*. Bathymetry style is searched from
-  `getOption("ggOceanMaps.bathy.style")`. If not found,
-  `"raster_binned_blues"` is used.
-
-``` r
-basemap(c(11,16,67.3,68.6), bathymetry = TRUE)
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-13-1.png)
-
-- *`"raster_binned_blues"`* or `"rbb"` plots binned raster bathymetry
-  filled with different shades of blue. Does not require a download.
-
-``` r
-basemap(c(11,16,67.3,68.6), bathy.style = "rbb")
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-14-1.png)
-
-- *`"raster_binned_grays"`* or `"rbg"` the same than above but uses
-  different shades of gray.
-
-``` r
-basemap(c(11,16,67.3,68.6), bathy.style = "rbg")
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-15-1.png)
-
-- *`"raster_continuous_blues"`* or `"rcb"` plots continuous raster
-  bathymetry filled with different shades of blue. More detailed and
-  visually more appealing than the binned bathymetry. Requires a
-  download.
-
-``` r
-basemap(c(11,16,67.3,68.6), bathy.style = "rcb")
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-16-1.png)
-
-- *`"raster_continuous_grays"`* or `"rcg"` the same than above but uses
-  different shades of gray.
-
-``` r
-basemap(c(11,16,67.3,68.6), bathy.style = "rcg")
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-17-1.png)
-
-- *`"raster_user_blues"`* or `"rub"` plots continuous raster bathymetry
-  filled with different shades of blue from
-  `getOption("ggOceanMaps.user.path")`. Any file supported by
-  [stars::read_stars](https://search.r-project.org/CRAN/refmans/stars/html/read_stars.html)
-  should work. The file has to be placed into the location specified by
-  the path. Experimental feature. Has been tested using ETOPO 60
-  arc-second and GEBCO 15 arc-second grids. Please report any bugs you
-  find.
-
-``` r
-basemap(c(11,16,67.3,68.6), bathy.style = "rub")
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-18-1.png)
-
-- *`"raster_user_grays"`* or `"rug"` the same than above but uses
-  different shades of gray.
-
-``` r
-basemap(c(11,16,67.3,68.6), bathy.style = "rug")
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-19-1.png)
-
-- *`"poly_binned_blues"`*, `"poly_blues"`, `"pbb"` and `"pb"` plot
-  polygon bathymetry filled with different shades of blue. Default in
-  the versions older than 2.0 of ggOceanMaps. Requires a download.
-
-``` r
-basemap(c(11,16,67.3,68.6), bathy.style = "pb")
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-20-1.png)
-
-- *`"poly_binned_grays"`*, `"poly_grays"`, `"pbg"` or `"pg"` same than
-  above but uses different shades of gray.
-
-``` r
-basemap(c(11,16,67.3,68.6), bathy.style = "pg")
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-21-1.png)
-
-- *`"contour_binned_blues"`*, `"contour_blues"`, `"cbb"` or `"cb"`
-  contour lines with different shades of blue. Requires a download.
-
-``` r
-basemap(c(11,16,67.3,68.6), bathy.style = "cb")
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-22-1.png)
-
-- *`"contour_gray"`*, `"contour_gray"` or `"cg"` plots gray contour
-  lines. Requires a download.
-
-``` r
-basemap(c(11,16,67.3,68.6), bathy.style = "cg")
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-23-1.png)
-
-The *default `bythy.style` can be changed by setting the
+The *default `bathy.style` can be changed by setting the
 `ggOceanMaps.bathy.style` option*.
 `options(ggOceanMaps.bathy.style = "poly_blues")` would make the style
 similar to older pre-2.0 versions of ggOceanMaps.
@@ -388,52 +299,59 @@ Since 2.0, glaciers require a download. It is a good idea to use the
 polar stereographic datasets for this purpose:
 
 ``` r
+
 basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic")
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-24-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-13-1.png)
 
 ### Adding data to maps
 
 The `basemap(...)` function works almost similarly to the `ggplot(...)`
 function as a base for adding further layers to the plot. The difference
-between the [`basemap()`](../reference/basemap.md) and the
+between the
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+and the
 [`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html) is
-that the [`basemap()`](../reference/basemap.md) plot already contains
-multiple ggplot layers. All layers except bathymetry have no other `aes`
-mapping than `x`, `y` and `group`. Bathymetry is mapped to `fill` or
-`color` color in addition. This means that when you add ggplot layers,
-you need to specify the `data` argument explicitly as shown below.
-Another difference is that basemaps are plotted using projected
-coordinates. The
+that the
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+plot already contains multiple ggplot layers. All layers except
+bathymetry have no other `aes` mapping than `x`, `y` and `group`.
+Bathymetry is mapped to `fill` or `color` color in addition. This means
+that when you add ggplot layers, you need to specify the `data` argument
+explicitly as shown below. Another difference is that basemaps are
+plotted using projected coordinates. The
 [ggspatial](https://CRAN.R-project.org/package=ggspatial) and ggplot’s
 [`geom_sf`](https://ggplot2.tidyverse.org/reference/ggsf.html) functions
 convert the coordinates automatically to the projected coordinates:
 
 ``` r
+
 dt <- data.frame(lon = c(seq(-180, 0, 30), seq(30, 180, 30)), lat = -70)
 
 basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic") + 
   ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-25-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-14-1.png)
 
 The ggplot functions can also be used, but the coordinates need to be
 transformed to the basemap projection first using the `transform_coord`
 function:
 
 ``` r
+
 basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic") + 
   geom_point(data = transform_coord(dt), aes(x = lon, y = lat), color = "red")
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-26-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-15-1.png)
 
 Note that the maps plotted in temperate and tropical regions are not
 projected. Consequently, decimal degrees work for such maps directly:
 
 ``` r
+
 dt <- data.frame(lon = c(-100, -80, -60), 
                  lat = c(10, 25, 40), 
                  var = c("a", "a", "b")
@@ -443,7 +361,7 @@ basemap(data = dt) +
   geom_point(data = dt, aes(x = lon, y = lat), color = "red")
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-27-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-16-1.png)
 
 The `transform_coord` function detects the projection automatically,
 given that the map is limited using a similar range of coordinates.
@@ -451,6 +369,7 @@ Therefore you can use the `transform_coord` as demonstrated above
 whenever using standard ggplot layers.
 
 ``` r
+
 transform_coord(data.frame(lon = -80, lat = 25), bind = TRUE)
 ```
 
@@ -463,10 +382,11 @@ The stereographic maps can be rotated to point towards north using the
 `rotate` argument:
 
 ``` r
+
 basemap(limits = c(-160, -80, 60, 85), rotate = TRUE)
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-29-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-18-1.png)
 
 Note that rotation changes the underlying CRS and data need to be added
 using `ggspatial::geom_spatial_*`,
@@ -482,6 +402,7 @@ limits, and projection. You can use the `expand.factor` argument to
 adjust the automatic zoom into `data`.
 
 ``` r
+
 dt <- data.frame(lon = c(-100, -80, -60), 
                  lat = c(10, 25, 40), 
                  var = c("a", "a", "b")
@@ -490,13 +411,14 @@ dt <- data.frame(lon = c(-100, -80, -60),
 qmap(dt, color = I("red")) # set color
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-30-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-19-1.png)
 
 ``` r
+
 qmap(dt, color = var, expand.factor = 1.3) # map color, zoom out
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-30-2.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-19-2.png)
 
 ## Advanced use
 
@@ -543,13 +465,15 @@ needed. They use a projection which suits that region. Here are all
 | Europe                 |  3035 |
 
 Since 2.0, it is possible to override the default CRS used by
-[`basemap()`](../reference/basemap.md) using the `crs` argument:
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+using the `crs` argument:
 
 ``` r
+
 basemap(limits = c(0, 15, 55, 65), crs = 32631)
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-32-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-21-1.png)
 
 ### Appearance
 
@@ -559,31 +483,32 @@ The `bathy.style = "*_binned_*"` bathymetry polygons are mapped to
 `geom_fill_discrete` and can be modified using standard ggplot syntax:
 
 ``` r
+
 basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) + 
   scale_fill_viridis_d("Water depth (m)")
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-33-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-22-1.png)
 
 The `bathy.style = "*_continuous_*"` bathymetry polygons are mapped to
 `geom_fill_continuous`:
 
 ``` r
-basemap(limits = c(-140, -105, 20, 40), bathy.style = "rcb") + 
+
+basemap(limits = c(-140, -105, 20, 40), bathy.style = "rcb") +
   scale_fill_viridis_c("Water depth (m)")
 ```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-34-1.png)
 
 The `bathy.style = "contour_*"` bathymetry lines are mapped to
 `geom_color_discrete`:
 
 ``` r
+
 basemap(limits = c(0, 60, 68, 80), bathymetry = TRUE, bathy.style = "contour_blues") + 
   scale_color_hue()
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-35-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-24-1.png)
 
 ### Graphical parameters
 
@@ -595,6 +520,7 @@ change without warning. You may want to modify the appearances of a
 `*.border.col` (line color) and `*.size` (line width) arguments:
 
 ``` r
+
 basemap(limits = c(-20, 30, 55, 70), glaciers = TRUE, 
         bathymetry = TRUE, bathy.style = "poly_greys",
         land.col = "#eeeac4", gla.col = "cadetblue", 
@@ -602,17 +528,18 @@ basemap(limits = c(-20, 30, 55, 70), glaciers = TRUE,
         grid.size = 0.05)
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-36-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-25-1.png)
 
 Graticules (the grid lines) can be removed by setting the `grid.col` to
 `NA`. Axis labels can be manipulated using standard ggplot code:
 
 ``` r
+
 basemap(limits = c(124, 148, 31, 50), grid.col = NA) + 
   labs(x = NULL, y = "Only latitude for you, ...")
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-37-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-26-1.png)
 
 ### Add scale bar and north arrow
 
@@ -620,12 +547,13 @@ Scale bar and north arrows can be added using the [**ggspatial**
 functions](https://paleolimbot.github.io/ggspatial/index.html):
 
 ``` r
+
 basemap(limits = c(-75, -45, 62, 78), rotate = TRUE) + 
   ggspatial::annotation_scale(location = "br") + 
   ggspatial::annotation_north_arrow(location = "tr", which_north = "true") 
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-38-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-27-1.png)
 
 Note that the north arrow in the example above points toward north where
 it is placed and that the direction of north varies as shown by the
@@ -639,6 +567,7 @@ objects with the difference that relevant information used in mapping is
 added to `attributes` of the object:
 
 ``` r
+
 p <- basemap(-60)
 names(attributes(p))
 ```
@@ -668,13 +597,14 @@ The Norwegian fishing regions are included as an example dataset in the
 function.
 
 ``` r
+
 data(fdir_areas)
 
 basemap(fdir_main_areas) + 
   ggspatial::annotation_spatial(fdir_main_areas, fill = NA)
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-40-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-29-1.png)
 
 The initial plot draws the polygons. Note how the polygon boundaries are
 partly on land. We want to eventually hide them under land. We also add
@@ -682,6 +612,7 @@ region labels and color the polygons based on their area to demonstrate
 the capabilities of sf, ggplot2, ggspatial and ggOceanMaps:
 
 ``` r
+
 labels <- suppressWarnings(sf::st_centroid(fdir_main_areas))
 fdir_main_areas$area <- as.numeric(sf::st_area(fdir_main_areas))/1e9 # calculate area in 1000 km2
 
@@ -695,20 +626,21 @@ p <- basemap(fdir_main_areas) +
 reorder_layers(p)
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-41-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-30-1.png)
 
 Ideally, the region labels should not go under land. This can be fixed
 by plotting the labels on top of the reordered ggplot object. To
 demonstrate how to reorder layers, we do this manually here:
 
 ``` r
+
 p <- reorder_layers(p)
 tmp <- sapply(p$layers, function(k) !is.null(k$mapping$label)) # the layer with label mapping
 p$layers <- c(p$layers[-which(tmp)], p$layers[which(tmp)])
 p
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-42-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-31-1.png)
 
 ### Contolling the plotting order of graticules
 
@@ -720,26 +652,30 @@ Note that also background color is included in the *panel* element (see
 the next section). The
 [`ggOceanMaps::theme_map()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/theme_map.html)
 function, which is automatically executed together with every
-[`basemap()`](../reference/basemap.md) and
-[`qmap()`](../reference/qmap.md) command, controls the position of the
-graticules and they are set on top by default:
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+and
+[`qmap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/qmap.md)
+command, controls the position of the graticules and they are set on top
+by default:
 
 ``` r
+
 basemap(limits = c(-20, 15, 50, 70), grid.col = "red", grid.size = 1)
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-43-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-32-1.png)
 
 To move the graticules under all layers, use the `panel.ontop` argument
 in
 [`ggplot2::theme()`](https://ggplot2.tidyverse.org/reference/theme.html):
 
 ``` r
+
 basemap(limits = c(-20, 15, 50, 70), grid.col = "red", grid.size = 1) + 
   theme(panel.ontop = FALSE)
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-44-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-33-1.png)
 
 Sometimes there is a need to control the position of graticules in
 between layers. At the time of writing, ggplot does not offer a
@@ -748,6 +684,7 @@ straightforward way to do this, but we can use the code from
 to make the graticules:
 
 ``` r
+
 p <- basemap(limits = c(-20, 15, 50, 70), grid.col = NA) + # without graticules 
   geom_sf(data = ices_areas, aes(fill = SubArea), show.legend = FALSE) 
 
@@ -770,7 +707,7 @@ reorder_layers(p) +
   )
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-45-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-34-1.png)
 
 An exception are the polar maps for which graticules are drawn by
 ggOceanMaps (because ggplot2 graticules for those maps were bugged some
@@ -778,6 +715,7 @@ years ago when writing the function; this part requires a revision at
 some point).
 
 ``` r
+
 X <- basemap_data(60)
 
 basemap(60, grid.col = NA) +
@@ -792,7 +730,7 @@ basemap(60, grid.col = NA) +
     fill = "grey60", color = "black", size = 0.1)
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-46-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-35-1.png)
 
 ### Coloring the ocean (background)
 
@@ -802,18 +740,20 @@ Similarly, the
 ocean](https://stackoverflow.com/questions/67615318/how-to-colour-the-ocean):
 
 ``` r
+
 basemap(expand.grid(lon = c(-129, -124), lat = c(49, 53)), grid.col = "red", grid.size = 0.5) + 
   theme(panel.background = element_rect(fill = "lightblue"),
         panel.ontop = FALSE) 
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-47-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-36-1.png)
 
 If you want the graticules on top, you’ll need to define them manually
 because, both, the background and the grid, are contained in the same
 ggplot element called *panel*:
 
 ``` r
+
 p <- basemap(expand.grid(lon = c(-129, -124), lat = c(49, 53)), grid.col = NA) + 
   theme(panel.background = element_rect(fill = "lightblue"),
         panel.ontop = FALSE) 
@@ -834,11 +774,12 @@ p +
            crs = attributes(p)$crs) 
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-48-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-37-1.png)
 
 ### Add a fill scale on top of bathymetry
 
 ``` r
+
 basemap(c(-20, 15, 50, 70), bathymetry = TRUE) + 
   annotation_spatial(ices_areas, aes(fill = Area_Full))
 #> Error in `f()`:
@@ -851,19 +792,21 @@ similar mapping in one plot. The issue can be evaded by using contour
 bathymetry:
 
 ``` r
+
 basemap(c(-20, 15, 50, 70), bathymetry = TRUE, 
         bathy.style = "contour_blues", legends = FALSE) + 
   annotation_spatial(ices_areas, aes(fill = Area_Full), alpha = 0.4) + 
   theme(legend.position = "none")
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-50-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-39-1.png)
 
 Or by using the [ggnewscale](https://github.com/eliocamp/ggnewscale)
 package to make the data `fill` mapping disconnected from that in
 `basemap`:
 
 ``` r
+
 basemap(limits = c(-20, 15, 50, 70), bathymetry = TRUE, 
         bathy.style = "poly_greys") +
   ggnewscale::new_scale_fill() +
@@ -871,7 +814,7 @@ basemap(limits = c(-20, 15, 50, 70), bathymetry = TRUE,
   theme(legend.position = "none")
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-51-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-40-1.png)
 
 ### Add longitude and latitude labels to a polar map
 
@@ -880,6 +823,7 @@ manual fiddling for each map, there is no premade solution for this.
 Instead, you can do this using the sf package:
 
 ``` r
+
 library(sf); library(dplyr)
 
 p <- basemap(-60, shapefiles = "Antarctic")
@@ -911,203 +855,44 @@ p +
   theme(plot.margin = margin(0.25, 0.25, 0.25, 0.25, "cm"))
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-52-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-41-1.png)
 
 ### Custom shapefiles
 
-The ggOceanMaps package uses vector (spatial polygon) data for land and
-glaciers to make the plotting more efficient and to produce sharp images
-at any resolution. Further, both vector and raster bathymetries can be
-used. Each of these layers have to be defined using the same projection.
-Since the shapefiles are large and generating them may require long
-processing time, it is most convenient to save them in a Rdata file in
-sf format and load them to the memory when used to make a map. Useful
-sources for spatial data are:
-
-**Vector data**
-
-- [Natural Earth
-  Data](http://www.naturalearthdata.com/downloads/10m-physical-vectors/)
-  provides polygon data in relatively high detail for the entire Earth.
-  Used as data-source for land and glacier shapes throughout the
-  package, except for the most detailed maps.
-- [European Environment
-  Agency](https://www.eea.europa.eu/en/datahub/datahubitem-view/af40333f-9e94-4926-a4f0-0a787f1d2b8f)
-  provides high-resolution land shapes for Europe.
-- [Norwegian Mapping Authority](https://www.kartverket.no/) provides
-  high-resolution spatial data for mainland Norway and Svalbard.
-- [Norwegian Polar Institute](https://geodata.npolar.no/) provides
-  high-resolution vector data for Norwegian polar regions.
-
-**Raster data for bathymetry**
-
-- [GEBCO Compilation Group (2019) GEBCO 2019 15-arcsecond
-  grid](https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/gebco_2019_info.html).
-  The highest resolution open bathymetry grid available at the moment.
-  Referred to as “GEBCO data”.
-- [ETOPO1 15 Arc-Second Global Relief
-  Model](https://www.ncei.noaa.gov/products/etopo-global-relief-model).
-  Can also be accessed using the
-  [`marmap::getNOAA.bathy`](https://www.rdocumentation.org/packages/marmap/versions/1.0.3/topics/getNOAA.bathy)
-  (see [Section 1](#making)). Referred to as “NOAA data” and “ETOPO
-  data”.
-
-There are probably more sources which the author has not needed yet.
-Please send an email to add more options to the list. The bathymetry
-datasets are large and require vectorization before they can be plotted
-in *ggplot2* within a reasonable time.
-
-Here we go through how to plot customized shapefiles for the Barents Sea
-as an example. A similar procedure can be applied to any region in the
-world.
-
-#### Bathymetries
-
-The [Natural Earth
-Data](http://www.naturalearthdata.com/downloads/10m-physical-vectors/)
-provides bathymetry vector data, which can be readily used in
-ggOceanMaps. The contours in that dataset are, however, not very
-practical for marine biology and fisheries in shallow seas such as the
-Barents Sea. Download the [ETOPO dataset as Ice surface elevation
-NetCDF](https://www.ncei.noaa.gov/products/etopo-global-relief-model) to
-a folder in your computer. It may be beneficial to make a “GIS” or
-“Shapefiles” folder where you store similar datasets for later use.
-Whether you use ice or bed-rock surface does not matter for this example
-as there are no glaciers under the sea-level within the region of
-interest. In any case, this choice has no visual effect because land and
-glaciers will be plotted on top of the bathymetry, but the ice surface
-option will lead to smaller file size.
-
-The bathymetry needs first to be reclassified and formatted for the
-consequent vectorization step. First, we need to define the location of
-the ETOPO dataset and to find limits for our region in decimal degrees.
-The limits can be found using the `basemap` function. It is advised to
-use slightly wider limits than the region of interest.
+When the premade maps do not cover your region at the resolution you
+need, you can pass your own land, glacier, and bathymetry layers to
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+via the `shapefiles` argument:
 
 ``` r
-etopoPath <- "" # Replace by the path to the folder where the ETOPO1 grd file is located.
-lims <- c(-8, 65, 68, 82)
-projection <- "EPSG:32636"
-basemap(limits = lims)
-```
 
-We also need to define an appropriate projection. We will use the [UTM
-36N zone projection](http://epsg.io/32636), which is approximately in
-the middle of our area of interest. We define higher resolution contour
-in depths 0-500 m because our area of interest is relatively shallow.
-The `raster_bathymetry` function is relatively slow for large data. The
-`aggregation.factor` argument can be used to reduce file size but will
-influence the resolution of the resulting shapefile (higher factors lead
-to a lower resolution).
-
-``` r
-rb <- raster_bathymetry(bathy = paste(etopoPath, "ETOPO1_Ice_g_gmt4.grd", sep = "/"),
-                        depths = c(50, 100, 200, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000), 
-                        proj.out = projection, 
-                        boundary = lims
+basemap(
+  limits = c(10, 53, 70, 80),
+  shapefiles = list(land = my_land, glacier = my_glacier, bathy = my_bathy),
+  bathymetry = TRUE, glaciers = TRUE
 )
 ```
 
-Now we have the bathyRaster object which can be vectorized:
+The list elements `land`, `glacier`, and `bathy` are all recognised; set
+`glacier` and/or `bathy` to `NULL` if you do not need them. All three
+must share one projection, which
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+then uses for the map.
 
-``` r
-class(rb)
-names(rb)
-raster::plot(rb$raster)
-```
-
-The vectorization is done using the `vector_bathymetry` function. The
-`drop.crumbs` and `remove.holes` parameters can be used to reduce the
-file size, while the `smooth` parameter makes the contours look smoother
-under high zoom levels. Note that the smoothing of raster cell edges is
-completely arbitrary and may lead to map contours that do not exist in
-reality.
-
-``` r
-bs_bathy <- vector_bathymetry(rb)
-sp::plot(bs_bathy)
-```
-
-#### Land shapes
-
-Land shapes could theoretically be defined from the bathymetry raster
-(depth = 0). Nevertheless, since the [10m Natural Earth
-Data](http://www.naturalearthdata.com/downloads/10m-physical-vectors/)
-vectors are of high resolution, there has been no need to write a
-function to do this. We use Natural Earth Data instead. Download the
-Natural Earth Data [Land and Minor
-Islands](http://www.naturalearthdata.com/downloads/10m-physical-vectors/)
-vectors to your “GIS” or “Shapefiles” folder and define folder paths
-under:
-
-``` r
-NEDPath <- "" # Natural Earth Data location
-outPath <- "" # Data output location
-```
-
-Once done, we go ahead and process the shapefiles:
-
-``` r
-world <- rgdal::readOGR(paste(NEDPath, "ne_10m_land/ne_10m_land.shp", sep = "/"))
-islands <- rgdal::readOGR(paste(NEDPath, "ne_10m_minor_islands/ne_10m_minor_islands.shp", sep = "/"))
-world <- rbind(world, islands)
-
-bs_land <- clip_shapefile(world, lims)
-bs_land <- sp::spTransform(bs_land, CRSobj = sp::CRS(projection))
-rgeos::gIsValid(bs_land) # Has to return TRUE, if not use rgeos::gBuffer
-bs_land <- rgeos::gBuffer(bs_land, byid = TRUE, width = 0)
-sp::plot(bs_land)
-```
-
-##### Glacier shapes
-
-Download the Natural Earth Data [Glaciated
-Areas](http://www.naturalearthdata.com/downloads/10m-physical-vectors/)
-vectors to your `NEDPath`.
-
-``` r
-glaciers <- rgdal::readOGR(paste(NEDPath, "ne_10m_glaciated_areas/ne_10m_glaciated_areas.shp", sep = "/"))
-rgeos::gIsValid(glaciers) # Needs buffering
-glaciers <- rgeos::gBuffer(glaciers, byid = TRUE, width = 0)
-
-bs_glacier <- clip_shapefile(glaciers, lims)
-bs_glacier <- sp::spTransform(bs_glacier, CRSobj = sp::CRS(projection))
-rgeos::gIsValid(bs_glacier)
-sp::plot(bs_glacier)
-```
-
-#### Plotting the shapefiles using basemap
-
-Now that we have the shapefiles, we can save them to a file so that we
-do not run the script above every time we plot a map using custom
-shapefiles.
-
-``` r
-save(bs_bathy, bs_land, bs_glacier, file = paste(outPath, "bs_shapes.rda", sep = "/"), compress = "xz")
-```
-
-The shapefiles can now be plotted using the `basemap` function:
-
-``` r
-basemap(shapefiles = list(land = bs_land, glacier = bs_glacier, bathy = bs_bathy), bathy.style = "poly_blues", glaciers = TRUE)
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-62-1.png)
-
-The list elements `land`, `glacier` and `bathy` are required, but
-`glacier` and `bathy` can be set to `NULL` if `bathymetry` and
-`glaciers` are set to `FALSE`, respectively. This means that you are not
-forced to define bathymetries and glaciers for your custom shapefile
-maps if plotting them is not desired. Note how the map becomes plotted
-outside its actual limits. This issue will hopefully be fixed in the
-future. The map can be limited using the `limits` or `data` arguments as
-any `basemap`:
-
-``` r
-basemap(limits = c(10, 53, 70, 80), shapefiles = list(land = bs_land, glacier = bs_glacier, bathy = bs_bathy), bathy.style = "poly_blues", glaciers = TRUE)
-```
-
-![](ggOceanMaps_files/figure-html/unnamed-chunk-63-1.png)
+Building those layers — clipping an existing shapefile, turning a
+GEBCO/ETOPO grid into matched land and depth-contour polygons with
+[`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
+→
+[`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
+/
+[`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md),
+or reading Geonorge depth data with
+[`geonorge_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/geonorge_bathymetry.md)
+— is covered step by step in the dedicated [Customising
+shapefiles](https://mikkovihtakari.github.io/ggOceanMaps/articles/customising-shapefiles.md)
+article. Useful raster and vector data sources are listed in the
+[Bathymetry](https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.md)
+article.
 
 ## Known issues
 
@@ -1115,19 +900,21 @@ The land and glacier shapes do not get dissolved correctly when
 projecting from decimal degrees:
 
 ``` r
+
 basemap(60, glaciers = TRUE)
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-64-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-43-1.png)
 
 A solution until the issue has been fixed is to use projected
 downloadable shape files:
 
 ``` r
+
 basemap(60, glaciers = TRUE, shapefiles = "Arctic")
 ```
 
-![](ggOceanMaps_files/figure-html/unnamed-chunk-65-1.png)
+![](ggOceanMaps_files/figure-html/unnamed-chunk-44-1.png)
 
 ## Citations and data sources
 
@@ -1142,13 +929,14 @@ Please cite the package whenever maps generated by the package are
 published. For up-to-date citation information, please use:
 
 ``` r
+
 citation("ggOceanMaps")
 ```
 
     #> To cite package 'ggOceanMaps' in publications use:
     #> 
     #>   Vihtakari M (2026). _ggOceanMaps: Plot Data on Oceanographic Maps
-    #>   using 'ggplot2'_. R package version 2.3.0,
+    #>   using 'ggplot2'_. R package version 2.4.0,
     #>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
     #> 
     #> A BibTeX entry for LaTeX users is
@@ -1157,6 +945,6 @@ citation("ggOceanMaps")
     #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
     #>     author = {Mikko Vihtakari},
     #>     year = {2026},
-    #>     note = {R package version 2.3.0},
+    #>     note = {R package version 2.4.0},
     #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
     #>   }

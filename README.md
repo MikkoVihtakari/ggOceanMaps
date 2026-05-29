@@ -90,7 +90,7 @@ basemap(data = dt, bathymetry = TRUE) +
                color = "red", fill = NA)
 ```
 
-![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->
+![Bathymetric basemap of the North Atlantic/Arctic with a red polygon overlaid, demonstrating basemap() with data= and transform_coord().](man/figures/README-unnamed-chunk-4-1.png)<!-- -->
 
 See the [ggOceanMaps
 website](https://mikkovihtakari.github.io/ggOceanMaps/index.html),

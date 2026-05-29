@@ -20,8 +20,9 @@ Sea](https://www.ices.dk/)
 
 ## See also
 
-Other datasets: [`fdir_main_areas`](fdir_main_areas.md),
-[`fdir_sub_areas`](fdir_sub_areas.md)
+Other datasets:
+[`fdir_main_areas`](https://mikkovihtakari.github.io/ggOceanMaps/reference/fdir_main_areas.md),
+[`fdir_sub_areas`](https://mikkovihtakari.github.io/ggOceanMaps/reference/fdir_sub_areas.md)
 
 ## Examples
 

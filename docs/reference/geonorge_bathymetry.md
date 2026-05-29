@@ -40,9 +40,12 @@ Download the file in `GLM` format.
 
 ## See also
 
-Other create shapefiles: [`clip_shapefile()`](clip_shapefile.md),
-[`raster_bathymetry()`](raster_bathymetry.md),
-[`vector_bathymetry()`](vector_bathymetry.md)
+Other create shapefiles:
+[`clip_shapefile()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/clip_shapefile.md),
+[`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md),
+[`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md),
+[`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md),
+[`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md)
 
 ## Author
 

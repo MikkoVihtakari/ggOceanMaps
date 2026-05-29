@@ -21,8 +21,9 @@ Fisheries](https://open-data-fiskeridirektoratet-fiskeridir.hub.arcgis.com/)
 
 ## See also
 
-Other datasets: [`fdir_main_areas`](fdir_main_areas.md),
-[`ices_areas`](ices_areas.md)
+Other datasets:
+[`fdir_main_areas`](https://mikkovihtakari.github.io/ggOceanMaps/reference/fdir_main_areas.md),
+[`ices_areas`](https://mikkovihtakari.github.io/ggOceanMaps/reference/ices_areas.md)
 
 ## Examples
 

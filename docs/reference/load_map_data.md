@@ -13,7 +13,8 @@ load_map_data(x, force = FALSE, downsample = 0)
 
 - x:
 
-  An object from [`shapefile_list`](shapefile_list.md).
+  An object from
+  [`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md).
 
 - force:
 
@@ -36,12 +37,12 @@ A list of spatial objects
 ## Details
 
 This is an internal function, which is automatically run by the
-[`basemap`](basemap.md) function. Common users do not need to worry
-about these details.
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function. Common users do not need to worry about these details.
 
 ## See also
 
-[`basemap`](basemap.md)
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 
 ## Author
 

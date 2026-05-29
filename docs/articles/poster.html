@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,12 +34,16 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><h6 class="dropdown-header" data-toc-skip>News</h6></li>
+<li><a class="dropdown-item" href="../articles/bathymetry.html">Bathymetry</a></li>
+    <li><a class="dropdown-item" href="../articles/customising-shapefiles.html">Customising shapefiles</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-graphical-elements.html">Adding graphical elements</a></li>
+    <li><a class="dropdown-item" href="../articles/cookbook.html">Cookbook</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>News</h6></li>
     <li><a class="dropdown-item" href="../articles/new-features.html">New features in version 2</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Premade maps</h6></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Premade shapefiles</h6></li>
+    <li><a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a></li>
+    <li><a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Presentations</h6></li>
     <li><a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a></li>
@@ -70,7 +74,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">10 February, 2026</h4>
+            <h4 data-toc-skip class="date">29 May, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/poster.Rmd" class="external-link"><code>vignettes/poster.Rmd</code></a></small>
       <div class="d-none name"><code>poster.Rmd</code></div>
@@ -82,14 +86,14 @@
 <a href="https://www.si2022.org/" class="external-link">Sharks International Conference 2022
 in Valencia, Spain</a>. This site also contains references in the poster
 and code used to make the figures and download the example datasets.
-Make sure to <a href="https://mikkovihtakari.github.io/ggOceanMaps/" class="external-link">visit the front
-page</a> to learn how to <strong>install</strong> ggOceanMaps, the <a href="https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html" class="external-link">user
-manual</a> showing how to <strong>use</strong> the package and the <a href="https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html" class="external-link">function
+Make sure to <a href="https://mikkovihtakari.github.io/ggOceanMaps/">visit the front
+page</a> to learn how to <strong>install</strong> ggOceanMaps, the <a href="https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html">user
+manual</a> showing how to <strong>use</strong> the package and the <a href="https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html">function
 reference</a> to see practical <strong>examples</strong>.</p>
 <div class="section level2">
 <h2 id="the-poster">The poster<a class="anchor" aria-label="anchor" href="#the-poster"></a>
 </h2>
-<p><a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData/blob/master/docs/SI2022_poster.pdf" class="external-link"><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/SI2022_poster.png" width="800" height="1133"></a></p>
+<p><a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData/blob/master/docs/SI2022_poster.pdf" class="external-link"><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/SI2022_poster.png" alt="ggOceanMaps poster presented at Sharks International 2022, Valencia, Spain." width="800" height="1133"></a></p>
 <p>Click the picture to download a pdf of the poster with embedded
 links.</p>
 </div>
@@ -99,7 +103,7 @@ links.</p>
 <p>The numbered references in the poster:</p>
 <ol style="list-style-type: decimal">
 <li>Vihtakari, M. ggOceanMaps: Plot Data on Oceanographic Maps using
-ggplot2. R package version 1.3. (2022). <a href="https://mikkovihtakari.github.io/ggOceanMaps/" class="external-link uri">https://mikkovihtakari.github.io/ggOceanMaps/</a>
+ggplot2. R package version 1.3. (2022). <a href="https://mikkovihtakari.github.io/ggOceanMaps/" class="uri">https://mikkovihtakari.github.io/ggOceanMaps/</a>
 </li>
 <li>R Core Team. R: A Language and Environment for Statistical
 Computing. Version 4.2. R Foundation for Statistical Computing, Vienna,
@@ -136,7 +140,7 @@ package version 1.1.6. (2022). <a href="https://paleolimbot.github.io/ggspatial/
 <code class="sourceCode R"><span><span class="co"># GBIF data</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/" class="external-link">ggOceanMaps</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/">ggOceanMaps</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rgbif" class="external-link">rgbif</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Donwload example from: https://docs.ropensci.org/rgbif</span></span>

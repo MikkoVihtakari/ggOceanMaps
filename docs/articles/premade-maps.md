@@ -1,169 +1,187 @@
 # Premade maps
 
-## General
+## Overview
 
-In addition to the [standard maps](#standard-maps), the ggOceanMaps
-package contains a possibility to plot premade detailed shapefiles
-within limited regions the package author has needed in his work. The
-detailed shapefiles are stored in the
-[ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)
-repository and downloaded as needed. Available shapefiles can be viewed
-using the [`shapefile_list()`](../reference/shapefile_list.md) function.
+ggOceanMaps plots maps from **pre-made shapefiles**. Most of the time
+you do not need to think about them:
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+picks the right set automatically from the `limits` (or `data`) you give
+it. This article shows the maps that ship with — or are downloadable for
+— the package, and the projection each uses.
+
+The available sets are listed by
+[`shapefile_list()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md):
 
 ``` r
+
 shapefile_list("all")
+#>                     name                                      land
+#> 1    ArcticStereographic    /tmp/claude-501/RtmpFSpuB3/arctic_land
+#> 2 AntarcticStereographic /tmp/claude-501/RtmpFSpuB3/antarctic_land
+#> 3          DecimalDegree                                   dd_land
+#> 4               Svalbard  /tmp/claude-501/RtmpFSpuB3/svalbard_land
+#> 5                 Europe    /tmp/claude-501/RtmpFSpuB3/europe_land
+#>                                        glacier
+#> 1    /tmp/claude-501/RtmpFSpuB3/arctic_glacier
+#> 2 /tmp/claude-501/RtmpFSpuB3/antarctic_glacier
+#> 3        /tmp/claude-501/RtmpFSpuB3/dd_glacier
+#> 4  /tmp/claude-501/RtmpFSpuB3/svalbard_glacier
+#> 5                                         <NA>
+#>                                                                                            bathy
+#> 1    dd_rbathy|/tmp/claude-501/RtmpFSpuB3/dd_rbathy_cont|/tmp/claude-501/RtmpFSpuB3/arctic_bathy
+#> 2 dd_rbathy|/tmp/claude-501/RtmpFSpuB3/dd_rbathy_cont|/tmp/claude-501/RtmpFSpuB3/antarctic_bathy
+#> 3        dd_rbathy|/tmp/claude-501/RtmpFSpuB3/dd_rbathy_cont|/tmp/claude-501/RtmpFSpuB3/dd_bathy
+#> 4  dd_rbathy|/tmp/claude-501/RtmpFSpuB3/dd_rbathy_cont|/tmp/claude-501/RtmpFSpuB3/svalbard_bathy
+#> 5        dd_rbathy|/tmp/claude-501/RtmpFSpuB3/dd_rbathy_cont|/tmp/claude-501/RtmpFSpuB3/dd_bathy
+#>     crs                                      limits
+#> 1  3995                                       c(30)
+#> 2  3031                                      c(-35)
+#> 3  4326                       c(-180, 180, -90, 90)
+#> 4 32633 c(402204.7, 845943.9, 8253526.1, 8978517.5)
+#> 5  3035        c(943609, 7601958, -375446, 6825119)
+#>                                                                      path
+#> 1 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/
+#> 2 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/
+#> 3 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/
+#> 4 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/
+#> 5 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/
 ```
 
-Plotting shapefiles from the list is done as for any other shapes. Note
-that the projection of the shapefiles varies.
+Each row is a named shapefile set with a coordinate reference system
+(`crs`), a default extent (`limits`), and the names of its land /
+glacier / bathymetry objects. You can force a particular set with the
+first argument or the `shapefiles` argument (partial matching works, so
+`"Arctic"` resolves to `"ArcticStereographic"`):
 
 ``` r
-basemap(shapefiles = "BarentsSea", bathymetry = TRUE)
+
+basemap(shapefiles = "Svalbard", bathymetry = TRUE)
 ```
 
-The detailed shapefiles can be **large**. Use the standard basemap data
-sources to find the limits for your map before you make detailed plots.
-Exporting to a file is advised over plotting into the plot window. Note
-that the detailed shapefile approach **generally does not work for large
-areas**. The solution is sub-optimal and a possibility of plotting
-raster from WMS is under work.
+Low-resolution global data (`dd_land`, `dd_rbathy`) ship with the
+package. The higher-resolution regional sets live in the
+[ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)
+repository and are **downloaded automatically on first use** to
+`getOption("ggOceanMaps.datapath")`. Set that option to a permanent
+folder in your `.Rprofile` so the files are reused across sessions;
+otherwise they land in
+[`tempdir()`](https://rdrr.io/r/base/tempfile.html) and are
+re-downloaded each session.
 
-## Standard map
+## Standard maps (selected automatically)
 
-### The default
-
-The default map coming with ggOceanMaps uses decimal degrees and
-[Natural Earth
-Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
-1:10m Physical Vectors with the Land and Minor Island datasets combined.
-The map is transformed to other polar stereographic projections based on
-limits used in the map.
-
-``` r
-basemap("DecimalDegree", bathymetry = TRUE, glaciers = TRUE)
-```
-
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png)
-
-### Arctic Stereographic
-
-Standard maps requiring the ggOceanMapsData package are selected
-automatically based on limits used in the map. You can also use the
-`shapefiles` argument or the `x` argument as a shortcut to specifically
-plot these maps (the shortcut requires ggOceanMaps \>=1.3.1). Since
-partial matching is used, you do not need write out the entire name.
-Only “Arctic” will do for the Arctic stereographic map, for instance.
-
-``` r
-basemap("ArcticStereographic", bathymetry = TRUE, glaciers = TRUE)
-```
-
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/ArcticStereographic.png)
-
-### Antarctic Stereographic
-
-``` r
-basemap("AntarcticStereographic", bathymetry = TRUE, glaciers = TRUE)
-```
-
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/AntarcticStereographic.png)
+These three sets cover the whole globe and are chosen automatically from
+the latitude range of your `limits`: polar-stereographic projections
+near the poles, decimal degrees elsewhere. See the [user
+manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.md)
+for the exact selection rule.
 
 ### Decimal degree
 
-The detailed shapefiles for time being are:
-
-## GEBCO based maps
-
-### Barents Sea
-
-The Barents Sea and surroundings vectorized from [the GEBCO
-grid](https://www.gebco.net/data_and_products/gridded_bathymetry_data/).
-A subset of IBCAO and GEBCO datasets. Use this one for speed when you
-can. Replace by IBCAO when your ROI is exceeding the limits of this one.
+The default map uses decimal degrees (EPSG:4326) and [Natural
+Earth](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
+1:10m land and minor-island polygons.
 
 ``` r
-basemap("BarentsSea", bathymetry = TRUE, glaciers = TRUE)
+
+basemap("DecimalDegree", bathymetry = TRUE, glaciers = TRUE)
 ```
 
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/BarentsSea.png)
+![Global basemap in decimal degrees (EPSG:4326) with land, glaciers, and
+binned
+bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png)
 
-#### The Arctic (IBCAO)
+Global basemap in decimal degrees (EPSG:4326) with land, glaciers, and
+binned bathymetry.
 
-[The IBCAO grid (by
-GEBCO)](https://www.gebco.net/about_us/committees_and_groups/scrum/ibcao/)
-vectorized from the North Pole to approximately 60-65°N. A subset of the
-GEBCO dataset under. Definitely use this one over the GEBCO alternative
-whenever you can. It is about ten times faster.
+### Arctic Stereographic
+
+Used automatically when the map sits in the high north (EPSG:3995). Land
+and glacier polygons and vector bathymetry are downloaded from
+ggOceanMapsLargeData on first use.
 
 ``` r
-basemap("IBCAO", bathymetry = TRUE, glaciers = TRUE)
+
+basemap("ArcticStereographic", bathymetry = TRUE, glaciers = TRUE)
 ```
 
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/IBCAO.png)
+![Arctic stereographic basemap (EPSG:3995) with land, glaciers, and
+bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/ArcticStereographic.png)
 
-#### The Northern hemisphere (GEBCO)
+Arctic stereographic basemap (EPSG:3995) with land, glaciers, and
+bathymetry.
 
-The entire GEBCO grid from the North Pole to 10°N vectorized and packed
-into a \>60 Mb R data file. When opened, the data take \>3 Gb. This is a
-clumsy approach and plotting maps using this option can take a long time
-(up to 10 minutes on a test machine) and will make your computer to beg
-for mercy. Use this as the last resort and do not blame the package
-author that you were not warned ;)
+### Antarctic Stereographic
+
+The southern equivalent (EPSG:3031).
 
 ``` r
-basemap("GEBCO", bathymetry = TRUE, glaciers = TRUE)
+
+basemap("AntarcticStereographic", bathymetry = TRUE, glaciers = TRUE)
 ```
 
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/GEBCO.png)
+![Antarctic stereographic basemap (EPSG:3031) with land, glaciers, and
+bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/AntarcticStereographic.png)
 
-## Geonorge based maps
+Antarctic stereographic basemap (EPSG:3031) with land, glaciers, and
+bathymetry.
+
+## Detailed regional maps
+
+Higher-resolution sets for regions the package author works in. They are
+downloaded from ggOceanMapsLargeData when first requested. The detailed
+shapefiles can be **large**: find your limits with the standard maps
+first, and export to a file rather than plotting into the screen device
+for big extents.
 
 ### Svalbard
 
-The Svalbard map from the
+A detailed Svalbard map (EPSG:32633), originally from the
 [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package:
 
 ``` r
+
 basemap("Svalbard", bathymetry = TRUE, glaciers = TRUE)
 ```
 
-![The PlotSvalbard maps can also be generated using ggOceanMaps with the
-ggOceanMapsLargeData extension. The function asks to download the data
-when you use it for the first
-time.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png)
+![The function asks to download the data the first time you use
+it.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png)
 
-The PlotSvalbard maps can also be generated using ggOceanMaps with the
-ggOceanMapsLargeData extension. The function asks to download the data
-when you use it for the first time.
+The function asks to download the data the first time you use it.
 
-Kongsfjorden from the
-[PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package:
+Zooming to Kongsfjorden:
 
 ``` r
-basemap(limits = c(10.9, 12.65, 78.83, 79.12), 
+
+basemap(limits = c(10.9, 12.65, 78.83, 79.12),
         bathymetry = TRUE, shapefiles = "Svalbard",
         legends = FALSE, glaciers = TRUE)
 ```
 
-![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Kongsfjorden.png)
+![High-resolution map of Kongsfjorden, Svalbard, with bathymetry and
+glaciers.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Kongsfjorden.png)
 
-## EMODnet based maps
+High-resolution map of Kongsfjorden, Svalbard, with bathymetry and
+glaciers.
 
-#### Northeast Atlantic
+### Europe
 
-1/16 arc-minute map over Northeast Atlantic from
-[EMODnet](https://www.emodnet-bathymetry.eu/). Might be unfinished. If
-so and you’ll need it, nag the developer.
+A detailed European coastline (EPSG:3035) based on the [EEA
+coastline](https://www.eea.europa.eu/en/datahub/datahubitem-view/af40333f-9e94-4926-a4f0-0a787f1d2b8f).
+Useful for coastal maps around the European seas.
 
 ``` r
-basemap("EMODnet", bathymetry = TRUE)
+
+basemap(shapefiles = "Europe", limits = c(-15, 30, 40, 65), bathymetry = TRUE)
 ```
 
-![The EMODnet bathymetry is still unfinished. Here a map showing a part
-of the Norwegian coast around Ålesund for testing. Vectorization of land
-shapes from bathymetry has not been implemented
-yet.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/EMODnet.png)
+The Europe land polygons are downloaded from ggOceanMapsLargeData on
+first use.
 
-The EMODnet bathymetry is still unfinished. Here a map showing a part of
-the Norwegian coast around Ålesund for testing. Vectorization of land
-shapes from bathymetry has not been implemented yet.
+## Citing the data
+
+The data used by the package are not the property of the Institute of
+Marine Research nor the package author. Please cite the data sources
+used in any map you generate. See the [data-source
+list](https://mikkovihtakari.github.io/ggOceanMaps/#citations-and-data-sources)
+for the references.

@@ -1,6 +1,8 @@
 # Return map elements for basemap
 
-An internal function to make [`basemap`](basemap.md) code more readable
+An internal function to make
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+code more readable
 
 ## Usage
 
@@ -17,7 +19,8 @@ map_cmd(command, alternative = FALSE)
 - alternative:
 
   logical to return alternative formmatting in certain cases. Used to
-  reduce `if`-`else` statements in [`basemap`](basemap.md).
+  reduce `if`-`else` statements in
+  [`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md).
 
 ## Value
 
@@ -27,14 +30,15 @@ A character string containing a ggplot2 plotting command. Use
 ## Details
 
 This is an internal function, which is automatically run by the
-[`basemap`](basemap.md) function. Common users do not need to worry
-about these details. Basemap elements can added together using this
-function, [`parse`](https://rdrr.io/r/base/parse.html) and
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function. Common users do not need to worry about these details. Basemap
+elements can added together using this function,
+[`parse`](https://rdrr.io/r/base/parse.html) and
 [`eval`](https://rdrr.io/r/base/eval.html).
 
 ## See also
 
-[`basemap`](basemap.md)
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 
 ## Author
 
