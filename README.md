@@ -2,11 +2,11 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-2.3.0**
+2.4.0**
 
 <!-- badges: start -->
 
-[![DOI](https://zenodo.org/badge/DOI/10.32614/CRAN.package.ggOceanMaps.svg)](https://doi.org/10.32614/CRAN.package.ggOceanMaps)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4554714.svg)](https://doi.org/10.5281/zenodo.4554714)
 [![R-CMD-check](https://github.com/MikkoVihtakari/ggOceanMaps/workflows/R-CMD-check/badge.svg)](https://github.com/MikkoVihtakari/ggOceanMaps/actions)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ggOceanMaps)](https://CRAN.R-project.org/package=ggOceanMaps)
 <!-- badges: end -->
@@ -51,10 +51,6 @@ Installation of the CRAN version:
 install.packages("ggOceanMaps")
 ```
 
-Note that \>2.0 versions of ggOceanMaps do not require the
-ggOceanMapsData package any longer. Detailed map data are downloaded
-when needed from the [ggOceanMapsLargeData](#data-path) repository.
-
 ## Usage
 
 **ggOceanMaps** extends on
@@ -90,7 +86,7 @@ basemap(data = dt, bathymetry = TRUE) +
                color = "red", fill = NA)
 ```
 
-![Bathymetric basemap of the North Atlantic/Arctic with a red polygon overlaid, demonstrating basemap() with data= and transform_coord().](man/figures/README-unnamed-chunk-4-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->
 
 See the [ggOceanMaps
 website](https://mikkovihtakari.github.io/ggOceanMaps/index.html),
@@ -185,7 +181,7 @@ citation("ggOceanMaps")
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Vihtakari M (2026). _ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'_. R package version 2.3.0,
+#>   using 'ggplot2'_. R package version 2.4.0,
 #>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -194,7 +190,7 @@ citation("ggOceanMaps")
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2026},
-#>     note = {R package version 2.3.0},
+#>     note = {R package version 2.4.0},
 #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```

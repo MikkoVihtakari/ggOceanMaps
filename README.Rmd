@@ -45,8 +45,6 @@ Installation of the CRAN version:
 install.packages("ggOceanMaps")
 ```
 
-Note that >2.0 versions of ggOceanMaps do not require the ggOceanMapsData package any longer. Detailed map data are downloaded when needed from the [ggOceanMapsLargeData](#data-path) repository.
-
 ## Usage
 
 **ggOceanMaps** extends on [**ggplot2**](http://ggplot2.tidyverse.org/reference/). The package uses spatial ([**sf**](https://r-spatial.github.io/sf/)) shape- (e.g. vector) and ([**stars**](https://r-spatial.github.io/stars/)) raster files, [geospatial packages for R](https://cran.r-project.org/web/views/Spatial.html) to manipulate, and ggplot2 to plot these data. The vector and raster plotting is conducted internally in the `basemap` function, which uses [ggplot's sf object plotting capabilities](https://ggplot2.tidyverse.org/reference/ggsf.html). Maps are plotted using the `basemap()` or `qmap()` functions that work almost similarly to [`ggplot()` as a base](https://ggplot2.tidyverse.org/reference/index.html) for adding further layers to the plot using the `+` operator. The maps generated this way already contain multiple ggplot layers. Consequently, the [`data` argument](https://ggplot2.tidyverse.org/reference/ggplot.html) needs to be explicitly specified inside `geom_*` functions when adding `ggplot2` layers. Depending on the location of the map, the underlying coordinates may be projected. Decimal degree coordinates need to be transformed to the projected coordinates using the `transform_coord`, [ggspatial](https://paleolimbot.github.io/ggspatial/), or [`geom_sf` functions.](https://ggplot2.tidyverse.org/reference/ggsf.html)

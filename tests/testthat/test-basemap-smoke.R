@@ -71,6 +71,10 @@ test_that("antimeridian limits without rotate produce a plot (with message)", {
   expect_s3_class(basemap(limits = c(160, -160, 60, 80)), "gg")
 })
 
+test_that("wide antimeridian Arctic limits build", {
+  expect_s3_class(basemap(limits = c(120, -120, 60, 80)), "gg")
+})
+
 test_that("antimeridian limits with rotate build", {
   expect_s3_class(basemap(limits = c(160, -160, 60, 80), rotate = TRUE), "gg")
 })
@@ -155,6 +159,14 @@ test_that("data.frame antimeridian rectangle with rotate builds", {
   expect_s3_class(
     basemap(data.frame(lon = c(-160, 160, 160, -160),
                        lat = c(80, 80, 60, 60)), rotate = TRUE),
+    "gg"
+  )
+})
+
+test_that("data.frame dateline rectangle with rotate builds", {
+  expect_s3_class(
+    basemap(data.frame(lon = c(-180, -180, -160, -160),
+                       lat = c(63, 50, 50, 63)), rotate = TRUE),
     "gg"
   )
 })

@@ -236,23 +236,25 @@ basemap(limits = c(-125, -110, 25, 35), bathy.style = "rcb")
 
 ggOceanMaps supports five different bathymetry data sources:
 
-1. **Shipped low-resolution raster** — `"rbb"` / `"rbg"`. Default. No setup.
-2. **ggOceanMapsLargeData** higher-resolution rasters, polygon contours,
-   contour lines — `"rcb"`, `"pb"`, `"cb"`, …. One-time download per region.
-3. **Your own raster** (GEBCO, ETOPO, IBCAO, …) via
+1. **Shipped low-resolution raster** — `"rbb"` / `"rbg"`. Default. No
+   setup, works offline (downsampled from ETOPO 2022).
+2. **ggOceanMapsLargeData** higher-resolution data — a continuous raster
+   (`"rcb"`), filled polygon contours (`"pb"`), or contour lines
+   (`"cb"`). One-time download per region.
+3. **Live download from a Web Coverage Service** — `"wceb"` (ETOPO1,
+   ~1.85 km global) or `"wemb"` (EMODnet, ~115 m European waters). Tiles
+   are cached locally after the first fetch.
+4. **Your own raster** (GEBCO, ETOPO, IBCAO, …) via
    `options(ggOceanMaps.userpath = "...")` — `"rub"` / `"rug"`.
-4. **Live download from a Web Coverage Service** — `"wemb"` (EMODnet,
-   ~115 m European waters) or `"wceb"` (ETOPO1, ~1.85 km global).
-   Tiles are cached locally after the first fetch.
 5. **Build-your-own** with `raster_bathymetry()` →
    `vector_bathymetry()` / `vector_land()`.
 
 The `bathy.style` string follows the pattern `geometry_palette`. Add
 `_grays` (or change the final `b` → `g` in the abbreviation) for the
 greyscale variant of any style. The full reference table — every style,
-every abbreviation, what each one needs — lives in `?basemap` and is
-walked through with examples in the dedicated
-[Bathymetry vignette](bathymetry.html).
+every abbreviation, and what each one needs — lives in `?basemap`. Each
+source is walked through with examples, and the data sources to cite are
+listed, in the dedicated [Bathymetry vignette](bathymetry.html).
 
 The *default `bathy.style` can be changed by setting the `ggOceanMaps.bathy.style` option*. `options(ggOceanMaps.bathy.style = "poly_blues")` would make the style similar to older pre-2.0 versions of ggOceanMaps.
 

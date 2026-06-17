@@ -58,7 +58,7 @@ basemap(c(100, 160, -20, 30), bathy.style = "rcb")
 ```
 
 ![](new-features_files/figure-html/unnamed-chunk-3-1.png) Processing
-time: 8.8 sec
+time: 10.6 sec
 
 Then the best bit. If this resolution still is not enough, **you can use
 any bathymetry grid you want** as long as
@@ -81,7 +81,7 @@ basemap(c(100, 160, -20, 30), bathy.style = "rub")
 ```
 
 ![](new-features_files/figure-html/unnamed-chunk-4-1.png) Processing
-time: 18.9 sec
+time: 33.6 sec
 
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 now has `downsample` argument which can be used to reduce the resolution
@@ -94,7 +94,7 @@ basemap(c(100, 160, -20, 30), bathy.style = "rub", downsample = 10)
 ```
 
 ![](new-features_files/figure-html/unnamed-chunk-5-1.png) Processing
-time: 33.8 sec
+time: 38.8 sec
 
 Note how the processing time does not change in this case, but it seems
 to be shorter for smaller maps.
@@ -148,7 +148,7 @@ dt <- data.frame(
 dt <- get_depth(dt)
 ```
 
-Processing time: 15.4 sec
+Processing time: 7.7 sec
 
 ``` r
 

@@ -676,6 +676,20 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
       })
       
     } else {
+      dd_lims <- if(!is.null(x$limits) && is_decimal_limit(x$limits)) x$limits else NULL
+
+      antimeridian_risk <- x$rotate ||
+        (!is.null(dd_lims) && (dd_lims[1] > dd_lims[2] ||          # explicit crossing
+                               diff(dd_lims[1:2]) > 180))           # wide span
+
+      if(antimeridian_risk && !sf::st_is_longlat(x$clip_limits)) {
+        landBoundary <- clip_shapefile(
+          sf::st_transform(x$shapefiles$land, crs = x$crs),
+          limits = x$clip_limits,
+          return.boundary = TRUE,
+          extra.validate = TRUE
+        )
+      } else {
       # For non-antimeridian, non-rotated maps: densify the clip boundary
       # before back-projecting to WGS84 so that the curved projected edges are
       # properly represented. Without densification, the 5-point bbox polygon
@@ -697,10 +711,6 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
       # no densification is needed. Also skip densification for maps that cross
       # the antimeridian or use a rotated CRS: densifying near ±180° produces
       # topology-invalid WGS84 polygons that cause GEOS errors.
-      antimeridian_risk <- x$rotate ||
-        (!is.null(dd_lims) && (dd_lims[1] > dd_lims[2] ||          # explicit crossing
-                               diff(dd_lims[1:2]) > 180))           # wide span
-
       need_densify <- !sf::st_is_longlat(x$clip_limits) && !antimeridian_risk
 
       clip_in_land_crs <- if(need_densify) {
@@ -720,6 +730,7 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
 
       landBoundary$shapefile <- sf::st_transform(landBoundary$shapefile, crs = x$crs)
       landBoundary$boundary <- sf::st_transform(landBoundary$boundary, crs = x$crs)
+      }
     }
   }
   
