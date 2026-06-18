@@ -89,8 +89,8 @@ your region at the resolution you need, you can supply your own land,
 glacier, and bathymetry layers to <code><a href="../reference/basemap.html">basemap()</a></code>. This article
 covers four ways to build them: clipping an existing layer, deriving
 land and bathymetry from a raster, reading Norwegian Geonorge depth
-data, and vectorising a small WCS tile. The figures below are
-pre-rendered (see <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/dev/make_customising_shapefiles_vignette_figs.R" class="external-link">dev/make_customising_shapefiles_vignette_figs.R</a>)
+data, and pairing a WCS bathymetry fetch with shipped land. The figures
+below are pre-rendered (see <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/dev/make_customising_shapefiles_vignette_figs.R" class="external-link">dev/make_customising_shapefiles_vignette_figs.R</a>)
 so this article builds without downloading data or re-running heavy
 spatial operations.</p>
 <p>For <em>where the bathymetry data come from</em> (shipped,
@@ -154,14 +154,17 @@ the clipping polygon back for inspection.</p>
 <p>A single source grid (GEBCO, ETOPO, IBCAO, …) gives you a matched
 land and bathymetry pair. The pipeline is
 <code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code> first, then
-<code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> and/or <code><a href="../reference/vector_land.html">vector_land()</a></code>:</p>
+<code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> and/or <code><a href="../reference/vector_land.html">vector_land()</a></code>. This
+example reuses the North Sea region from the clipping example above,
+with depth breaks suited to its mostly-shallow shelf and the deeper
+Norwegian Trench along the Norwegian coast:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1. Read + crop + sign-flip the grid; bin to depth contours.</span></span>
 <span><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span></span>
 <span>  bathy <span class="op">=</span> <span class="st">"path/to/your/bathymetry.nc"</span>,</span>
-<span>  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">200</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">2000</span>, <span class="fl">4000</span><span class="op">)</span>,  <span class="co"># contour break points</span></span>
-<span>  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">11</span>, <span class="fl">59</span>, <span class="fl">60</span><span class="op">)</span>,                 <span class="co"># crop early to save memory</span></span>
-<span>  estimate.land <span class="op">=</span> <span class="cn">TRUE</span>                          <span class="co"># keep land cells for vector_land()</span></span>
+<span>  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">500</span><span class="op">)</span>,    <span class="co"># contour break points</span></span>
+<span>  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">60</span><span class="op">)</span>,          <span class="co"># crop early to save memory</span></span>
+<span>  estimate.land <span class="op">=</span> <span class="cn">TRUE</span>                   <span class="co"># keep land cells for vector_land()</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code> returns a <code>bathyRaster</code>:
 a list with the processed <code>raster</code> (a <code>stars</code>
@@ -182,13 +185,13 @@ vectorisers:</p>
 <span><span class="co"># 3. Plug both into basemap(). Vector bathymetry needs an explicit</span></span>
 <span><span class="co"># bathy.style ("pb" here); bathymetry = TRUE alone assumes a raster.</span></span>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
-<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">11</span>, <span class="fl">59</span>, <span class="fl">60</span><span class="op">)</span>,</span>
+<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">60</span><span class="op">)</span>,</span>
 <span>  shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">vl</span>, glacier <span class="op">=</span> <span class="cn">NULL</span>, bathy <span class="op">=</span> <span class="va">vb</span><span class="op">)</span>,</span>
 <span>  bathy.style <span class="op">=</span> <span class="st">"pb"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png" alt="Land and bathymetry vectorised from a GEBCO raster, Oslofjord approaches."><div class="figcaption">Land and bathymetry vectorised from a GEBCO
-raster, Oslofjord approaches.</div>
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png" alt="Land and bathymetry vectorised from a GEBCO raster, North Sea."><div class="figcaption">Land and bathymetry vectorised from a GEBCO
+raster, North Sea.</div>
 </div>
 <p><code><a href="../reference/vector_land.html">vector_land()</a></code> takes the same <code>bathyRaster</code> as
 <code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> and the same cleanup arguments
@@ -203,9 +206,9 @@ as <code>bathy</code> (skipping <code><a href="../reference/vector_bathymetry.ht
 <p><strong>Save the processed layers</strong> so you do not re-run the
 heavy raster step every session:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">vb</span>, <span class="va">vl</span>, file <span class="op">=</span> <span class="st">"oslofjord_shapes.rda"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">vb</span>, <span class="va">vl</span>, file <span class="op">=</span> <span class="st">"north_sea_shapes.rda"</span><span class="op">)</span></span>
 <span><span class="co"># later:</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"oslofjord_shapes.rda"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"north_sea_shapes.rda"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="reading-geonorge-depth-data">Reading Geonorge depth data<a class="anchor" aria-label="anchor" href="#reading-geonorge-depth-data"></a>
@@ -224,6 +227,12 @@ the land:</p>
 <span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">gb</span><span class="op">)</span></span>
 <span><span class="va">limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">bb</span><span class="op">[</span><span class="st">"xmin"</span><span class="op">]</span>, <span class="va">bb</span><span class="op">[</span><span class="st">"xmax"</span><span class="op">]</span>, <span class="va">bb</span><span class="op">[</span><span class="st">"ymin"</span><span class="op">]</span>, <span class="va">bb</span><span class="op">[</span><span class="st">"ymax"</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Geonorge's native depth classes are fine-grained (32 levels in this file) --</span></span>
+<span><span class="co"># collapse them to a handful of bins for a readable legend.</span></span>
+<span><span class="va">gb</span><span class="op">$</span><span class="va">depth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">gb</span><span class="op">$</span><span class="va">depth</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">50</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>                labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0-5"</span>, <span class="st">"5-10"</span>, <span class="st">"10-20"</span>, <span class="st">"20-50"</span>, <span class="st">"50+"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
 <span>  limits <span class="op">=</span> <span class="va">limits</span>,</span>
 <span>  shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">land</span>, glacier <span class="op">=</span> <span class="cn">NULL</span>, bathy <span class="op">=</span> <span class="va">gb</span><span class="op">)</span>,</span>
@@ -231,63 +240,49 @@ the land:</p>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span><span class="st">"Depth (m)"</span>, palette <span class="op">=</span> <span class="st">"Blues"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_geonorge_oslofjorden.png" alt="Geonorge depth data for the inner Oslofjord."><div class="figcaption">Geonorge depth data for the inner
-Oslofjord.</div>
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_geonorge_oslofjorden.png" alt="Geonorge depth data for Oslo municipality, showing the harbour, Bygdøy, and surrounding islands."><div class="figcaption">Geonorge depth data for Oslo municipality,
+showing the harbour, Bygdøy, and surrounding islands.</div>
 </div>
-<p>By default <code><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry()</a></code> reads the
+<p>This example uses Oslo municipality’s depth-area tile — a small
+dataset, but its native depth classes are still fine-grained, which is
+why the <code><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut()</a></code> step above is needed for a readable legend.
+By default <code><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry()</a></code> reads the
 <code>"dybdeareal"</code> layer; pass <code>layer =</code> if your file
 uses a different name, and <code>verbose = TRUE</code> to see the
-reading steps. Geonorge’s native depth classes are fine-grained (often
-20+ levels per tile) — collapse them with <code><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut()</a></code> on
-<code>as.numeric(as.character(gb$depth))</code> for a readable legend,
-as done for the map above.</p>
+reading steps.</p>
 </div>
 <div class="section level2">
-<h2 id="vectorising-a-small-wcs-tile">Vectorising a small WCS tile<a class="anchor" aria-label="anchor" href="#vectorising-a-small-wcs-tile"></a>
+<h2 id="pairing-a-wcs-fetch-with-shipped-land">Pairing a WCS fetch with shipped land<a class="anchor" aria-label="anchor" href="#pairing-a-wcs-fetch-with-shipped-land"></a>
 </h2>
-<p><a href="bathymetry.html"><code>wcs_bathymetry()</code></a> fetches a
-ready-binned raster from a Web Coverage Service, but it always discards
-land (it calls <code>raster_bathymetry(ras, depths = NULL)</code>
-internally). To get a matching land layer for a small area, fetch the
-raw elevation grid yourself and run it through the same
-<code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code> →
-<code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code>/<code><a href="../reference/vector_land.html">vector_land()</a></code> pipeline as
-above. The example below pulls an EMODnet (<code>"wemb"</code>) tile
-around Tromsø:</p>
+<p><a href="bathymetry.html"><code>wcs_bathymetry()</code></a> fetches
+bathymetry on demand from a Web Coverage Service and returns a
+continuous <code>bathyRaster</code>, but it always discards land (it
+calls <code>raster_bathymetry(ras, depths = NULL)</code> internally).
+For a quick map, the simplest fix is to pair its raster with the shipped
+<code>dd_land</code> rather than building a custom land layer —
+<code><a href="../reference/basemap.html">basemap()</a></code> crops <code>dd_land</code> to the requested
+limits for you. The example below fetches an EMODnet tile around Tromsø
+and plots it with the matching <code>"wemb"</code> style:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tromso</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18.85</span>, <span class="fl">19.05</span>, <span class="fl">69.60</span>, <span class="fl">69.72</span><span class="op">)</span>  <span class="co"># xmin, xmax, ymin, ymax</span></span>
-<span></span>
-<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
-<span>    <span class="st">"https://ows.emodnet-bathymetry.eu/wcs?SERVICE=WCS&amp;VERSION=2.0.1"</span>,</span>
-<span>    <span class="st">"&amp;REQUEST=GetCoverage&amp;CoverageId=emodnet__mean"</span>,</span>
-<span>    <span class="st">"&amp;SUBSET=Lat(%f,%f)&amp;SUBSET=Long(%f,%f)&amp;FORMAT=image/tiff"</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  <span class="va">tromso</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, <span class="va">tromso</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>, <span class="va">tromso</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">tromso</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">tif</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".tif"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">url</span>, <span class="va">tif</span>, mode <span class="op">=</span> <span class="st">"wb"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span><span class="va">tif</span>, depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">50</span><span class="op">)</span>, estimate.land <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">vb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span>, drop.crumbs <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>  <span class="co"># small area -&gt; small threshold</span></span>
-<span><span class="va">vl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_land.html">vector_land</a></span><span class="op">(</span><span class="va">rb</span>, drop.crumbs <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">vb</span> <span class="op">&lt;-</span> <span class="va">vb</span><span class="op">[</span><span class="va">vb</span><span class="op">$</span><span class="va">depth</span> <span class="op">!=</span> <span class="st">"land"</span>, <span class="op">]</span></span>
-<span><span class="va">vb</span><span class="op">$</span><span class="va">depth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">vb</span><span class="op">$</span><span class="va">depth</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">tromso</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18.6</span>, <span class="fl">19.3</span>, <span class="fl">69.58</span>, <span class="fl">69.78</span><span class="op">)</span>  <span class="co"># xmin, xmax, ymin, ymax</span></span>
+<span><span class="va">bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wcs_bathymetry.html">wcs_bathymetry</a></span><span class="op">(</span><span class="va">tromso</span>, source <span class="op">=</span> <span class="st">"emodnet"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
 <span>  limits <span class="op">=</span> <span class="va">tromso</span>,</span>
-<span>  shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">vl</span>, glacier <span class="op">=</span> <span class="cn">NULL</span>, bathy <span class="op">=</span> <span class="va">vb</span><span class="op">)</span>,</span>
-<span>  bathy.style <span class="op">=</span> <span class="st">"pb"</span></span>
-<span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span><span class="st">"Depth (m)"</span>, palette <span class="op">=</span> <span class="st">"Blues"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<span>  shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">dd_land</span>, glacier <span class="op">=</span> <span class="cn">NULL</span>, bathy <span class="op">=</span> <span class="va">bathy</span><span class="op">$</span><span class="va">raster</span><span class="op">)</span>,</span>
+<span>  bathy.style <span class="op">=</span> <span class="st">"wemb"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_tromso_wcs.png" alt="Bathymetry and land vectorised from a raw EMODnet tile, Tromsø strait."><div class="figcaption">Bathymetry and land vectorised from a raw
-EMODnet tile, Tromsø strait.</div>
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_tromso_wcs.png" alt="Bathymetry fetched live from EMODnet around Tromsø, with shipped land."><div class="figcaption">Bathymetry fetched live from EMODnet around
+Tromsø, with shipped land.</div>
 </div>
-<p>At this scale, <code>drop.crumbs</code> needs to shrink along with
-the area — the largest contiguous patch in a strait this size can be
-well under 1 km².</p>
+<p><code>dd_land</code>’s resolution is coarser than EMODnet’s ~115 m
+bathymetry, which is fine at this zoom level but will show as a mismatch
+if you zoom in much further. For a small area where the land needs to
+match the bathymetry’s resolution, fetch the raw elevation grid yourself
+and run it through <code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code> →
+<code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code>/<code><a href="../reference/vector_land.html">vector_land()</a></code> instead, as
+in the raster example above.</p>
 </div>
 <div class="section level2">
 <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a>

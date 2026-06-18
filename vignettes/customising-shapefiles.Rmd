@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 library(ggOceanMaps)
 ```
 
-When the [premade maps](premade-maps.html) do not cover your region at the resolution you need, you can supply your own land, glacier, and bathymetry layers to `basemap()`. This article covers four ways to build them: clipping an existing layer, deriving land and bathymetry from a raster, reading Norwegian Geonorge depth data, and vectorising a small WCS tile. The figures below are pre-rendered (see [dev/make_customising_shapefiles_vignette_figs.R](https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/dev/make_customising_shapefiles_vignette_figs.R)) so this article builds without downloading data or re-running heavy spatial operations.
+When the [premade maps](premade-maps.html) do not cover your region at the resolution you need, you can supply your own land, glacier, and bathymetry layers to `basemap()`. This article covers four ways to build them: clipping an existing layer, deriving land and bathymetry from a raster, reading Norwegian Geonorge depth data, and pairing a WCS bathymetry fetch with shipped land. The figures below are pre-rendered (see [dev/make_customising_shapefiles_vignette_figs.R](https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/dev/make_customising_shapefiles_vignette_figs.R)) so this article builds without downloading data or re-running heavy spatial operations.
 
 For *where the bathymetry data come from* (shipped, ggOceanMapsLargeData, your own raster, or live WCS), see the [Bathymetry article](bathymetry.html). This one is about turning data you already have into ggOceanMaps shapefiles.
 
@@ -70,15 +70,15 @@ basemap(limits = c(-5, 10, 50, 60),
 
 # Building land + bathymetry from a raster
 
-A single source grid (GEBCO, ETOPO, IBCAO, …) gives you a matched land and bathymetry pair. The pipeline is `raster_bathymetry()` first, then `vector_bathymetry()` and/or `vector_land()`:
+A single source grid (GEBCO, ETOPO, IBCAO, …) gives you a matched land and bathymetry pair. The pipeline is `raster_bathymetry()` first, then `vector_bathymetry()` and/or `vector_land()`. This example reuses the North Sea region from the clipping example above, with depth breaks suited to its mostly-shallow shelf and the deeper Norwegian Trench along the Norwegian coast:
 
 ```{r}
 # 1. Read + crop + sign-flip the grid; bin to depth contours.
 rb <- raster_bathymetry(
   bathy = "path/to/your/bathymetry.nc",
-  depths = c(50, 200, 500, 1000, 2000, 4000),  # contour break points
-  boundary = c(10, 11, 59, 60),                 # crop early to save memory
-  estimate.land = TRUE                          # keep land cells for vector_land()
+  depths = c(20, 50, 100, 200, 500),    # contour break points
+  boundary = c(-5, 10, 50, 60),          # crop early to save memory
+  estimate.land = TRUE                   # keep land cells for vector_land()
 )
 ```
 
@@ -99,22 +99,22 @@ vb$depth <- droplevels(vb$depth)
 # 3. Plug both into basemap(). Vector bathymetry needs an explicit
 # bathy.style ("pb" here); bathymetry = TRUE alone assumes a raster.
 basemap(
-  limits = c(10, 11, 59, 60),
+  limits = c(-5, 10, 50, 60),
   shapefiles = list(land = vl, glacier = NULL, bathy = vb),
   bathy.style = "pb"
 )
 ```
 
-![Land and bathymetry vectorised from a GEBCO raster, Oslofjord approaches.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png)
+![Land and bathymetry vectorised from a GEBCO raster, North Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png)
 
 `vector_land()` takes the same `bathyRaster` as `vector_bathymetry()` and the same cleanup arguments (`drop.crumbs`, `remove.holes`, `smooth`), so the land and bathymetry edges line up. `drop.crumbs` is in km², so scale it down for small regions — a city-block-scale area needs something like `0.01`, not `10`. To keep continuous (unbinned) raster bathymetry instead of depth-contour polygons, pass `depths = NULL` to `raster_bathymetry()` and use `rb$raster` directly as `bathy` (skipping `vector_bathymetry()`).
 
 **Save the processed layers** so you do not re-run the heavy raster step every session:
 
 ```{r}
-save(vb, vl, file = "oslofjord_shapes.rda")
+save(vb, vl, file = "north_sea_shapes.rda")
 # later:
-load("oslofjord_shapes.rda")
+load("north_sea_shapes.rda")
 ```
 
 # Reading Geonorge depth data
@@ -129,6 +129,12 @@ land <- sf::st_read("path/to/Dybdedata.gml", layer = "Landareal")
 bb <- sf::st_bbox(gb)
 limits <- c(bb["xmin"], bb["xmax"], bb["ymin"], bb["ymax"])
 
+# Geonorge's native depth classes are fine-grained (32 levels in this file) --
+# collapse them to a handful of bins for a readable legend.
+gb$depth <- cut(as.numeric(as.character(gb$depth)),
+                breaks = c(0, 5, 10, 20, 50, Inf),
+                labels = c("0-5", "5-10", "10-20", "20-50", "50+"))
+
 basemap(
   limits = limits,
   shapefiles = list(land = land, glacier = NULL, bathy = gb),
@@ -137,46 +143,28 @@ basemap(
   ggplot2::scale_fill_brewer("Depth (m)", palette = "Blues", direction = -1)
 ```
 
-![Geonorge depth data for the inner Oslofjord.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_geonorge_oslofjorden.png)
+![Geonorge depth data for Oslo municipality, showing the harbour, Bygdøy, and surrounding islands.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_geonorge_oslofjorden.png)
 
-By default `geonorge_bathymetry()` reads the `"dybdeareal"` layer; pass `layer =` if your file uses a different name, and `verbose = TRUE` to see the reading steps. Geonorge's native depth classes are fine-grained (often 20+ levels per tile) — collapse them with `cut()` on `as.numeric(as.character(gb$depth))` for a readable legend, as done for the map above.
+This example uses Oslo municipality's depth-area tile — a small dataset, but its native depth classes are still fine-grained, which is why the `cut()` step above is needed for a readable legend. By default `geonorge_bathymetry()` reads the `"dybdeareal"` layer; pass `layer =` if your file uses a different name, and `verbose = TRUE` to see the reading steps.
 
-# Vectorising a small WCS tile
+# Pairing a WCS fetch with shipped land
 
-[`wcs_bathymetry()`](bathymetry.html) fetches a ready-binned raster from a Web Coverage Service, but it always discards land (it calls `raster_bathymetry(ras, depths = NULL)` internally). To get a matching land layer for a small area, fetch the raw elevation grid yourself and run it through the same `raster_bathymetry()` → `vector_bathymetry()`/`vector_land()` pipeline as above. The example below pulls an EMODnet (`"wemb"`) tile around Tromsø:
+[`wcs_bathymetry()`](bathymetry.html) fetches bathymetry on demand from a Web Coverage Service and returns a continuous `bathyRaster`, but it always discards land (it calls `raster_bathymetry(ras, depths = NULL)` internally). For a quick map, the simplest fix is to pair its raster with the shipped `dd_land` rather than building a custom land layer — `basemap()` crops `dd_land` to the requested limits for you. The example below fetches an EMODnet tile around Tromsø and plots it with the matching `"wemb"` style:
 
 ```{r}
-tromso <- c(18.85, 19.05, 69.60, 69.72)  # xmin, xmax, ymin, ymax
-
-url <- sprintf(
-  paste0(
-    "https://ows.emodnet-bathymetry.eu/wcs?SERVICE=WCS&VERSION=2.0.1",
-    "&REQUEST=GetCoverage&CoverageId=emodnet__mean",
-    "&SUBSET=Lat(%f,%f)&SUBSET=Long(%f,%f)&FORMAT=image/tiff"
-  ),
-  tromso[3], tromso[4], tromso[1], tromso[2]
-)
-tif <- tempfile(fileext = ".tif")
-download.file(url, tif, mode = "wb")
-
-rb <- raster_bathymetry(tif, depths = c(10, 20, 50), estimate.land = TRUE)
-vb <- vector_bathymetry(rb, drop.crumbs = 0.01)  # small area -> small threshold
-vl <- vector_land(rb, drop.crumbs = 0.01)
-
-vb <- vb[vb$depth != "land", ]
-vb$depth <- droplevels(vb$depth)
+tromso <- c(18.6, 19.3, 69.58, 69.78)  # xmin, xmax, ymin, ymax
+bathy <- wcs_bathymetry(tromso, source = "emodnet")
 
 basemap(
   limits = tromso,
-  shapefiles = list(land = vl, glacier = NULL, bathy = vb),
-  bathy.style = "pb"
-) +
-  ggplot2::scale_fill_brewer("Depth (m)", palette = "Blues", direction = -1)
+  shapefiles = list(land = dd_land, glacier = NULL, bathy = bathy$raster),
+  bathy.style = "wemb"
+)
 ```
 
-![Bathymetry and land vectorised from a raw EMODnet tile, Tromsø strait.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_tromso_wcs.png)
+![Bathymetry fetched live from EMODnet around Tromsø, with shipped land.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_tromso_wcs.png)
 
-At this scale, `drop.crumbs` needs to shrink along with the area — the largest contiguous patch in a strait this size can be well under 1 km².
+`dd_land`'s resolution is coarser than EMODnet's ~115 m bathymetry, which is fine at this zoom level but will show as a mismatch if you zoom in much further. For a small area where the land needs to match the bathymetry's resolution, fetch the raw elevation grid yourself and run it through `raster_bathymetry()` → `vector_bathymetry()`/`vector_land()` instead, as in the raster example above.
 
 # See also
 
