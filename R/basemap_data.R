@@ -43,8 +43,15 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NU
   x <- basemap_define_grid_lines(x = x, lon.interval = lon.interval, lat.interval = lat.interval)
   
   # A temporary fix to make plotly::ggplotly work. Remove or move somewhere
-  
+
   if(!is.null(x$shapefiles$land)) {
+    # Cropping can leave degenerate GEOMETRYCOLLECTION slivers (e.g. a point or
+    # line from a boundary-edge intersection). st_cast() on those keeps only
+    # the first sub-geometry and crashes if that part is not a valid polygon,
+    # so extract the polygonal parts first when any are present.
+    if(any(sf::st_geometry_type(x$shapefiles$land) == "GEOMETRYCOLLECTION")) {
+      x$shapefiles$land <- sf::st_collection_extract(x$shapefiles$land, "POLYGON")
+    }
     x$shapefiles$land <- sf::st_cast(x$shapefiles$land, "MULTIPOLYGON")
   }
   
