@@ -302,6 +302,8 @@ The `transform_coord` function detects the projection automatically, given that 
 transform_coord(data.frame(lon = -80, lat = 25), bind = TRUE)
 ```
 
+Worked recipes that build on this — current arrows, velocity fields, pie charts, and recolouring bathymetry — are collected in the [Adding graphical elements](adding-graphical-elements.html) article.
+
 ## Rotating maps
 
 The stereographic maps can be rotated to point towards north using the `rotate` argument:
