@@ -39,6 +39,14 @@ save_fig(
 # 2. raster_bathymetry() -> vector_bathymetry()/vector_land() ---------------
 # Same North Sea domain as the clipping example above, with depth breaks
 # that suit its mostly-shallow shelf and the Norwegian Trench.
+#
+# drop.crumbs is left NULL here: the southern North Sea coast (Belgium,
+# the Netherlands) carries many sandbanks and islets close to the area
+# threshold, and vector_bathymetry()/vector_land() each apply drop.crumbs
+# independently. A shared non-NULL threshold drops a small island from one
+# layer without necessarily dropping the matching sliver of shallow water
+# from the other, leaving tiny gaps (neither land nor bathymetry) right at
+# the coast.
 north_sea <- c(-5, 10, 50, 60)
 rb <- raster_bathymetry(
   getOption("ggOceanMaps.userpath"),
@@ -47,8 +55,8 @@ rb <- raster_bathymetry(
   estimate.land = TRUE,
   verbose = FALSE
 )
-vb <- vector_bathymetry(rb, drop.crumbs = 10)
-vl <- vector_land(rb, drop.crumbs = 10)
+vb <- vector_bathymetry(rb, drop.crumbs = NULL)
+vl <- vector_land(rb, drop.crumbs = NULL)
 
 # vector_bathymetry() also polygonizes the "land" class added by
 # estimate.land -- drop it, it belongs in vl.
@@ -69,30 +77,39 @@ land_osl <- sf::st_read(gml, layer = "Landareal", quiet = TRUE)
 bb <- sf::st_bbox(gb)
 lims <- c(bb["xmin"], bb["xmax"], bb["ymin"], bb["ymax"])
 
-# Geonorge's native depth classes are fine-grained (32 levels in this file);
-# collapse them to a handful of bins for a readable legend.
-gb$depth <- cut(as.numeric(as.character(gb$depth)),
-                breaks = c(0, 5, 10, 20, 50, Inf),
-                labels = c("0-5", "5-10", "10-20", "20-50", "50+"))
-
 save_fig(
   basemap(limits = lims,
           shapefiles = list(land = land_osl, glacier = NULL, bathy = gb),
-          bathy.style = "pb") +
-    scale_fill_brewer("Depth (m)", palette = "Blues", direction = -1),
+          bathy.style = "pb"),
   "shapes_geonorge_oslofjorden.png"
 )
 
 # 4. wcs_bathymetry(): Tromsø --------------------------------------------------
-# wcs_bathymetry() returns a continuous bathyRaster and always discards land,
-# so pair it with the shipped dd_land instead of building a custom land layer.
-tromso <- c(18.6, 19.3, 69.58, 69.78)  # xmin, xmax, ymin, ymax
+# This example is about making new shapefiles, so vectorise the WCS fetch
+# instead of keeping it as a raw raster, and pair it with the premade
+# "Europe" land set instead of the coarser shipped dd_land.
+# wcs_bathymetry() always returns a continuous bathyRaster (it calls
+# raster_bathymetry(ras, depths = NULL) internally), so the depth binning
+# that raster_bathymetry() would otherwise do is repeated by hand here.
+tromso <- c(18, 20, 69.4, 69.9)  # xmin, xmax, ymin, ymax
 bathy <- wcs_bathymetry(tromso, source = "emodnet", verbose = FALSE)
+
+breaks <- c(-Inf, 20, 50, 100, 200, Inf)
+labels <- c("0-20", "20-50", "50-100", "100-200", "200-Inf")
+rb <- list(
+  raster = cut(bathy$raster, breaks, labels = labels),
+  depth.invervals = data.frame(from = breaks[-length(breaks)], to = breaks[-1], interval = labels)
+)
+class(rb) <- "bathyRaster"
+vb <- vector_bathymetry(rb, drop.crumbs = NULL)
+
+europe_land <- load_map_data(shapefile_list("Europe"))$land
+vb <- sf::st_transform(vb, sf::st_crs(europe_land))
 
 save_fig(
   basemap(limits = tromso,
-          shapefiles = list(land = dd_land, glacier = NULL, bathy = bathy$raster),
-          bathy.style = "wemb"),
+          shapefiles = list(land = europe_land, glacier = NULL, bathy = vb),
+          bathy.style = "pb"),
   "shapes_tromso_wcs.png"
 )
 
