@@ -1,14 +1,12 @@
-[.]DS_Store$
-\\.DS_Store$
-^.*\.DS_Store$
-^\.DS_Store$
-"(^|/)\\.DS_Store$"
+\.DS_Store$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.md$
 ^README\.Rmd$
 ^README\.html$
 ^README_files$
+^man/figures$
+^figure$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
@@ -22,6 +20,6 @@
 ^\.claude$
 ^memory$
 ^dev$
-
 ^\.positai$
+^cran-comments\.md$
 ^tests/testthat/_snaps/basemap-snapshots$
