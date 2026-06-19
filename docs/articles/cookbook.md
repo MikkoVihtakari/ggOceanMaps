@@ -5,6 +5,12 @@ tasks. Each recipe is meant to be copy-pasteable. For background and the
 conceptual walk-through, see the [user
 manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.md).
 
+Most recipes below run live and show their actual output; the first call
+for a polar or web-service region downloads or fetches data and caches
+it, so it may take a moment to build. The handful of recipes that need a
+file only you can supply (your own GEBCO/ETOPO/IBCAO grid) show a
+pre-rendered figure instead.
+
 ``` r
 
 library(ggOceanMaps)
@@ -31,14 +37,14 @@ latitude”:
 
 ``` r
 
-basemap(60)    # Arctic
+basemap(60) # Arctic
 ```
 
 ![](cookbook_files/figure-html/unnamed-chunk-3-1.png)
 
 ``` r
 
-basemap(-60)   # Antarctic
+basemap(-60) # Antarctic
 ```
 
 ![](cookbook_files/figure-html/unnamed-chunk-4-1.png)
@@ -73,7 +79,7 @@ basemap(data = dt, rotate = TRUE)
 ``` r
 
 dt <- data.frame(lon = c(0, 10, 20), lat = c(55, 60, 65))
-basemap(limits = c(-10, 30, 50, 70)) +
+basemap(limits = c(-10, 30, 50, 70), shapefiles = "DecimalDegree") +
   geom_point(data = dt, aes(x = lon, y = lat), color = "red", size = 3)
 ```
 
@@ -81,33 +87,66 @@ basemap(limits = c(-10, 30, 50, 70)) +
 
 ### How do I add points to a *projected* map?
 
+Note that the map above will get projected automatically if we do not
+define the shapefile argument and requires transforming the plotted
+coordinates:
+
+``` r
+
+basemap(limits = c(-10, 30, 50, 70)) +
+  geom_point(
+    data = transform_coord(dt),
+    aes(x = lon, y = lat),
+    color = "red",
+    size = 3
+  )
+```
+
+![](cookbook_files/figure-html/unnamed-chunk-8-1.png)
+
 Projected maps (polar, custom CRS) need the coordinates transformed
 first:
 
 ``` r
 
 dt <- data.frame(lon = c(0, 10, 20), lat = c(70, 75, 80))
-dt <- transform_coord(dt, bind = TRUE)   # adds lon.proj, lat.proj
+dt <- transform_coord(dt, bind = TRUE) # adds lon.proj, lat.proj
 basemap(60) +
-  geom_point(data = dt, aes(x = lon.proj, y = lat.proj),
-             color = "red", size = 3)
+  geom_point(
+    data = dt,
+    aes(x = lon.proj, y = lat.proj),
+    color = "red",
+    size = 3
+  )
 ```
+
+![](cookbook_files/figure-html/unnamed-chunk-9-1.png)
 
 Or let `ggspatial` handle the transform:
 
 ``` r
 
 basemap(60) +
-  ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat),
-                                crs = 4326, color = "red", size = 3)
+  ggspatial::geom_spatial_point(
+    data = dt,
+    aes(x = lon, y = lat),
+    crs = 4326,
+    color = "red",
+    size = 3
+  )
 ```
+
+![](cookbook_files/figure-html/unnamed-chunk-10-1.png)
 
 ### How do I quickly plot a data frame’s coordinates?
 
 ``` r
 
+dt <- data.frame(lon = c(0, 10, 20), lat = c(70, 75, 80))
 qmap(dt, color = I("red"))
 ```
+
+![](cookbook_files/figure-html/unnamed-chunk-11-1.png)
 
 [`qmap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/qmap.md)
 picks limits and projection automatically.
@@ -120,6 +159,8 @@ picks limits and projection automatically.
 
 basemap(limits = c(-20, 30, 50, 70), bathymetry = TRUE)
 ```
+
+![](cookbook_files/figure-html/unnamed-chunk-12-1.png)
 
 This uses the binned-blues raster shipped with the package.
 
@@ -149,10 +190,18 @@ re-downloaded each session.
 
 # Arctic raster bathymetry
 basemap(60, bathymetry = TRUE)
+```
+
+![](cookbook_files/figure-html/unnamed-chunk-14-1.png)
+
+``` r
+
 
 # North Sea with polygon bathymetry contours
 basemap(limits = c(-5, 10, 50, 60), bathy.style = "poly_blues")
 ```
+
+![](cookbook_files/figure-html/unnamed-chunk-14-2.png)
 
 On the first call you will be prompted to download the required `.rda`
 file (~15–100 MB per region). After that the file is reused from disk
@@ -172,10 +221,15 @@ save it as a NetCDF (`.nc`) or GeoTIFF (`.tif`).
 
 options(ggOceanMaps.userpath = "path/to/your/bathymetry.nc")
 
-basemap(limits = c(-5, 10, 50, 60), bathy.style = "raster_user_blues")
+basemap(limits = c(11, 16, 67.3, 68.6), bathy.style = "raster_user_blues")
 # or the abbreviation:
-basemap(limits = c(-5, 10, 50, 60), bathy.style = "rub")
+basemap(limits = c(11, 16, 67.3, 68.6), bathy.style = "rub")
 ```
+
+![User-supplied GEBCO raster (rub) off Lofoten, northern
+Norway.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_rub.png)
+
+User-supplied GEBCO raster (`rub`) off Lofoten, northern Norway.
 
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 crops to the plot extent, sign-flips (negative depths → positive), and
@@ -189,14 +243,16 @@ native grid is too fine for the plot size.
 
 rb <- raster_bathymetry(
   "path/to/your/bathymetry.nc",
-  depths = NULL,                # continuous raster; use a depth vector for polygons
-  boundary = c(-5, 10, 50, 60) # crop early to save memory
+  depths = NULL, # continuous raster; use a depth vector for polygons
+  boundary = c(11, 16, 67.3, 68.6) # crop early to save memory
 )
 
+# A raw continuous raster needs an explicit continuous style ("rcb"); the
+# bathymetry = TRUE default assumes pre-binned data like dd_rbathy.
 basemap(
-  limits = c(-5, 10, 50, 60),
+  limits = c(11, 16, 67.3, 68.6),
   shapefiles = list(land = dd_land, glacier = NULL, bathy = rb$raster),
-  bathymetry = TRUE
+  bathy.style = "rcb"
 )
 ```
 
@@ -221,30 +277,47 @@ Two WCS sources are wired into
 
 # North Sea — high resolution from EMODnet
 basemap(c(2, 3, 54, 55), bathy.style = "wemb")
+```
+
+![](cookbook_files/figure-html/unnamed-chunk-17-1.png)
+
+``` r
 
 # Hawaii — global coverage from ETOPO
 basemap(c(-160, -154, 18, 23), bathy.style = "wceb")
+```
+
+![](cookbook_files/figure-html/unnamed-chunk-18-1.png)
+
+``` r
 
 # Indonesia / Java Trench — also ETOPO (outside EMODnet)
-basemap(c(110, 120, -20, 30), bathy.style = "wceb")
+basemap(c(100, 130, -15, 10), bathy.style = "wceb")
 ```
+
+![](cookbook_files/figure-html/unnamed-chunk-19-1.png)
 
 For a manual fetch (e.g. to pass through
 [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
 for a custom shapefile workflow), call
 [`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md)
-directly:
+directly. As with the user-raster route above, a raw fetched raster is
+continuous, so pair it with an explicit `bathy.style = "rcb"` rather
+than `bathymetry = TRUE`:
 
 ``` r
 
-bathy_emo <- wcs_bathymetry(c(2, 3, 54, 55),   source = "emodnet")
-bathy_eto <- wcs_bathymetry(c(110, 120, -20, 30), source = "etopo")
+bathy <- wcs_bathymetry(c(2, 3, 54, 55), source = "emodnet")
+#>   |                                                                              |                                                                      |   0%  |                                                                              |=========                                                             |  12%  |                                                                              |==================                                                    |  25%  |                                                                              |==========================                                            |  38%  |                                                                              |===================================                                   |  50%  |                                                                              |============================================                          |  62%  |                                                                              |====================================================                  |  75%  |                                                                              |=============================================================         |  88%  |                                                                              |======================================================================| 100%
 
-basemap(c(110, 120, -20, 30),
-        shapefiles = list(land = dd_land, glacier = NULL,
-                          bathy = bathy_eto$raster),
-        bathymetry = TRUE)
+basemap(
+  c(2, 3, 54, 55),
+  shapefiles = list(land = dd_land, glacier = NULL, bathy = bathy$raster),
+  bathy.style = "rcb"
+)
 ```
+
+![](cookbook_files/figure-html/unnamed-chunk-20-1.png)
 
 Requirements / caveats:
 
@@ -275,38 +348,69 @@ to a matched land + bathymetry pair is:
 
 library(ggOceanMaps)
 
-# 1. Process the raster — crop, sign-flip, bin depth levels
+north_sea <- c(-5, 10, 50, 60)
+
+# 1. Process the raster — crop, sign-flip, bin depth levels.
+# drop.crumbs is left NULL: vector_bathymetry()/vector_land() each apply it
+# independently, so a shared non-NULL threshold can drop a small island from
+# one layer without dropping the matching sliver of shallow water from the
+# other, leaving tiny gaps right at the coast.
 rb <- raster_bathymetry(
   "path/to/your/bathymetry.nc",
-  depths = c(50, 200, 500, 1000, 2000, 4000),  # depth contour break points
-  boundary = c(-5, 10, 50, 60)
+  depths = c(20, 50, 100, 200, 500), # depth contour break points
+  boundary = north_sea,
+  estimate.land = TRUE # keep land cells for vector_land()
 )
 
 # 2a. Vectorize bathymetry to depth-polygon shapefile
-vb <- vector_bathymetry(rb, drop.crumbs = 10)   # drop islands < 10 km²
+vb <- vector_bathymetry(rb, drop.crumbs = NULL)
 
 # 2b. Vectorize land from the same raster
-vl <- vector_land(rb, drop.crumbs = 10)
+vl <- vector_land(rb, drop.crumbs = NULL)
 
-# 3. Plot — plug both into basemap()
+# 2c. GEBCO/ETOPO/IBCAO grids are read with a non-standard "unknown" CRS
+# (axis order lat/lon instead of lon/lat), which slants the clip box if left
+# as-is. Normalise both layers to plain EPSG:4326 before plotting.
+vb <- sf::st_transform(vb, 4326)
+vl <- sf::st_transform(vl, 4326)
+
+# estimate.land = TRUE adds a "land" class to vb -- drop it, it belongs in vl.
+vb <- vb[vb$depth != "land", ]
+vb$depth <- droplevels(vb$depth)
+
+# 3. Plot — plug both into basemap(). Vector bathymetry needs an explicit
+# bathy.style ("pb" here); bathymetry = TRUE alone assumes a raster.
 basemap(
-  limits = c(-5, 10, 50, 60),
+  limits = north_sea,
   shapefiles = list(land = vl, glacier = NULL, bathy = vb),
-  bathymetry = TRUE
+  bathy.style = "pb"
 )
 ```
 
+![Land and bathymetry vectorised from a GEBCO raster, North
+Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png)
+
+Land and bathymetry vectorised from a GEBCO raster, North Sea.
+
 Use `depths = NULL` instead of a depth vector to keep the raster as a
-continuous grid (skips vectorization, faster rendering):
+continuous grid (skips vectorization, faster rendering). Pass the result
+straight to
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+as the `bathy` shapefile, again with an explicit continuous style:
 
 ``` r
 
-rb_cont <- raster_bathymetry("path/to/your/bathymetry.nc",
-                             depths = NULL, boundary = c(-5, 10, 50, 60))
+rb_cont <- raster_bathymetry(
+  "path/to/your/bathymetry.nc",
+  depths = NULL,
+  boundary = north_sea
+)
 
-basemap(limits = c(-5, 10, 50, 60),
-        shapefiles = list(land = dd_land, glacier = NULL, bathy = rb_cont$raster),
-        bathymetry = TRUE)
+basemap(
+  limits = north_sea,
+  shapefiles = list(land = dd_land, glacier = NULL, bathy = rb_cont$raster),
+  bathy.style = "rcb"
+)
 ```
 
 **Tip**: save the processed objects as `.rda` files so you don’t have to
@@ -321,15 +425,17 @@ save(vb, vl, file = "north_sea_bathy.rda")
 
 Use
 [`clip_shapefile()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/clip_shapefile.md)
-to crop any sf polygon layer to a bounding box:
+to crop any sf polygon layer to a bounding box — here the shipped
+`dd_land`, cropped to the North Sea:
 
 ``` r
 
-clipped <- clip_shapefile(
-  my_sf_layer,
-  limits = c(-5, 10, 50, 60)   # c(xmin, xmax, ymin, ymax) decimal degrees
-)
+land <- clip_shapefile(dd_land, limits = c(-5, 10, 50, 60))
+
+basemap(shapefiles = list(land = land, glacier = NULL, bathy = NULL))
 ```
+
+![](cookbook_files/figure-html/unnamed-chunk-24-1.png)
 
 [`clip_shapefile()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/clip_shapefile.md)
 handles both decimal-degree and projected inputs. For projected data
@@ -340,64 +446,125 @@ the map’s native projection.
 
 ### How do I draw ocean current vectors over a map?
 
-The pattern is: load a velocity NetCDF, thin the grid to a drawable
-density, transform coordinates if on a projected map, then draw arrows
-with
+The pattern is: get u/v current components on a grid, thin it to a
+drawable density, transform coordinates to the map’s CRS, then draw
+arrows with
 [`geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html).
+The example below builds a small synthetic field with
+[`dist2land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/dist2land.md)
+filtering out land points, so it is fully self-contained; the same
+pattern applies after reading real `u`/`v` components from a NetCDF file
+with
+[`stars::read_stars()`](https://r-spatial.github.io/stars/reference/read_stars.html).
+
+[`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md)
+is needed below even though these limits look like an ordinary
+decimal-degree box: latitudes this far north (50–70°N) select the Arctic
+polar projection automatically (see
+[`?basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)),
+and [`coord_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html)
+still labels the axes in plain degrees, so the projection is easy to
+miss (see the [Adding graphical
+elements](https://mikkovihtakari.github.io/ggOceanMaps/articles/adding-graphical-elements.html#velocity-fields)
+article for more on this pattern):
 
 ``` r
 
-library(stars)
-library(dplyr)
+grd <- expand.grid(lon = seq(-14, 6, by = 4), lat = seq(57, 69, by = 3))
+grd <- dist2land(grd, binary = TRUE, dist.col = "ocean", verbose = FALSE)
+grd <- grd[grd$ocean, ] # drop points on land
 
-# 1. Load u/v current components from a NetCDF
-uv <- read_stars(c("u_current.nc", "v_current.nc"))
+grd$u <- 0.35 + 0.25 * cos((grd$lat - 58) / 4) # eastward component
+grd$v <- 0.20 * sin((grd$lon + 5) / 6) # northward component
 
-# 2. Convert to a data frame and thin to a manageable density
-df <- as.data.frame(uv) |>
-  na.omit() |>
-  filter(row_number() %% 5 == 0)   # keep every 5th grid point
+# Display scale only: a 1 m/s vector is drawn as 50 hours of drift.
+km_per_ms <- 50 * 3.6
+grd$lon_end <- grd$lon +
+  (grd$u * km_per_ms) / (111.32 * cos(grd$lat * pi / 180))
+grd$lat_end <- grd$lat + (grd$v * km_per_ms) / 110.57
 
-names(df)[1:4] <- c("lon", "lat", "u", "v")
+# Transform both ends of each arrow to the basemap's actual CRS.
+start <- transform_coord(
+  grd,
+  lon = "lon",
+  lat = "lat",
+  proj.out = 3995,
+  bind = TRUE
+)
+end <- transform_coord(
+  grd,
+  lon = "lon_end",
+  lat = "lat_end",
+  proj.out = 3995,
+  new.names = c("lon_end.proj", "lat_end.proj")
+)
+grd <- cbind(start, end)
 
-# 3. Scale arrow length so they look good on the plot
-scale <- 0.5   # degrees per m/s — tune to taste
-df <- df |>
-  mutate(lon_end = lon + u * scale,
-         lat_end = lat + v * scale)
-
-# 4. Plot
-basemap(limits = c(10, 40, 70, 80), bathymetry = TRUE) +
+basemap(
+  limits = c(-20, 30, 50, 70),
+  bathy.style = "rbg",
+  land.col = "grey86",
+  legends = FALSE
+) +
   geom_segment(
-    data = df,
-    aes(x = lon, y = lat, xend = lon_end, yend = lat_end),
-    arrow = arrow(length = unit(0.15, "cm")),
-    color = "steelblue", linewidth = 0.4
+    data = grd,
+    aes(x = lon.proj, y = lat.proj, xend = lon_end.proj, yend = lat_end.proj),
+    arrow = arrow(length = unit(0.12, "cm"), type = "open"),
+    colour = "#084d9a",
+    linewidth = 0.45
   )
 ```
 
-**On a projected (polar) map** the coordinates must be transformed
-before plotting (the map axes are in metres, not degrees):
+![](cookbook_files/figure-html/unnamed-chunk-25-1.png)
+
+**On an explicitly polar map** the pattern is identical — only the
+region and projection differ. The example below moves further north into
+the Arctic Ocean and uses a synthetic zonal (eastward) flow, which
+traces a clean circumpolar gyre around the pole;
+`bathy.style = "poly_greys"` keeps the background quiet so the arrows
+stand out:
 
 ``` r
 
-# transform_coord adds lon.proj / lat.proj columns in the map's CRS
-df <- transform_coord(df, proj = 3995, bind = TRUE)
-df <- df |>
-  mutate(
-    lon_end_proj = lon.proj + u * scale * 1e4,
-    lat_end_proj = lat.proj + v * scale * 1e4
-  )
+grd <- expand.grid(lon = seq(-180, 165, by = 15), lat = seq(81, 87, by = 3))
+grd <- dist2land(grd, binary = TRUE, dist.col = "ocean", verbose = FALSE)
+grd <- grd[grd$ocean, ]
 
-basemap(75, bathymetry = TRUE) +
+grd$u <- 0.4 # pure eastward flow traces a circle around the pole
+grd$v <- 0
+
+km_per_ms <- 80 * 3.6
+grd$lon_end <- grd$lon +
+  (grd$u * km_per_ms) / (111.32 * cos(grd$lat * pi / 180))
+grd$lat_end <- grd$lat + (grd$v * km_per_ms) / 110.57
+
+start <- transform_coord(
+  grd,
+  lon = "lon",
+  lat = "lat",
+  proj.out = 3995,
+  bind = TRUE
+)
+end <- transform_coord(
+  grd,
+  lon = "lon_end",
+  lat = "lat_end",
+  proj.out = 3995,
+  new.names = c("lon_end.proj", "lat_end.proj")
+)
+grd <- cbind(start, end)
+
+basemap(75, bathy.style = "poly_greys") +
   geom_segment(
-    data = df,
-    aes(x = lon.proj, y = lat.proj,
-        xend = lon_end_proj, yend = lat_end_proj),
+    data = grd,
+    aes(x = lon.proj, y = lat.proj, xend = lon_end.proj, yend = lat_end.proj),
     arrow = arrow(length = unit(0.15, "cm")),
-    color = "steelblue", linewidth = 0.4
+    color = "#0c5ba0",
+    linewidth = 0.5
   )
 ```
+
+![](cookbook_files/figure-html/unnamed-chunk-26-1.png)
 
 ### How do I add ICES or Norwegian fishery zones?
 
@@ -416,10 +583,24 @@ for automatic limits or overlaid with
 
 ``` r
 
-# Fit map to the extent of the ICES areas and draw them as outlines
-basemap(ices_areas) +
+# Fit map to the extent of the ICES areas and draw them as red outlines
+p <- basemap(ices_areas) +
   geom_sf(data = ices_areas, fill = NA, color = "red", linewidth = 0.4)
+
+# reorder_layers() pushes land/glacier/grid back on top of the outlines, and
+# geom_sf_text() labels each area at its centroid (Area_Full's "27." prefix
+# is common to all ICES areas, so it is stripped for shorter labels).
+reorder_layers(p) +
+  geom_sf_text(
+    data = suppressWarnings(sf::st_centroid(sf::st_make_valid(ices_areas))),
+    aes(label = gsub("27.", "", Area_Full)),
+    size = FS(8),
+    fontface = 2,
+    color = "red"
+  )
 ```
+
+![](cookbook_files/figure-html/unnamed-chunk-27-1.png)
 
 ``` r
 
@@ -429,10 +610,117 @@ basemap(fdir_main_areas, bathymetry = TRUE) +
   geom_sf_label(data = fdir_main_areas, aes(label = main_area))
 ```
 
+![](cookbook_files/figure-html/unnamed-chunk-28-1.png)
+
 Label columns: `ices_areas$Area_Full` (full area name),
 `ices_areas$SubArea`, `ices_areas$Major_FA`;
 `fdir_main_areas$main_area`; `fdir_sub_areas$main_area`,
 `fdir_sub_areas$sub_area`.
+
+## Customising appearance
+
+### How do I add a scale bar and north arrow?
+
+Use the [ggspatial](https://paleolimbot.github.io/ggspatial/)
+annotations:
+
+``` r
+
+basemap(limits = c(-75, -45, 62, 78), rotate = TRUE) +
+  ggspatial::annotation_scale(location = "br") +
+  ggspatial::annotation_north_arrow(location = "tr", which_north = "true")
+```
+
+![](cookbook_files/figure-html/unnamed-chunk-29-1.png)
+
+The north arrow points to true north where it sits, and the scale bar is
+exact at the projection’s reference latitude (71°N for Arctic
+stereographic maps).
+
+### How do I colour the ocean (panel background)?
+
+The ocean is the ggplot *panel*. Colour it via
+[`theme()`](https://ggplot2.tidyverse.org/reference/theme.html), and set
+`panel.ontop = FALSE` so the fill sits under the map:
+
+``` r
+
+basemap(c(-20, 15, 50, 70), grid.col = "red", grid.size = 0.5) +
+  theme(panel.background = element_rect(fill = "lightblue"),
+        panel.ontop = FALSE)
+```
+
+![](cookbook_files/figure-html/unnamed-chunk-30-1.png)
+
+### How do I put graticules below my data instead of on top?
+
+ggOceanMaps draws graticules on top by default (`panel.ontop = TRUE`).
+Flip it:
+
+``` r
+
+basemap(c(-20, 15, 50, 70), grid.col = "red", grid.size = 1) +
+  theme(panel.ontop = FALSE)
+```
+
+![](cookbook_files/figure-html/unnamed-chunk-31-1.png)
+
+### How do I add a second fill scale on top of bathymetry?
+
+Bathymetry already uses the `fill` aesthetic, so a second filled layer
+needs a fresh scale. The cleanest way is
+[ggnewscale](https://github.com/eliocamp/ggnewscale):
+
+``` r
+
+basemap(limits = c(-20, 15, 50, 70), bathymetry = TRUE,
+        bathy.style = "poly_greys") +
+  ggnewscale::new_scale_fill() +
+  ggspatial::annotation_spatial(ices_areas, aes(fill = Area_Full), alpha = 0.4) +
+  theme(legend.position = "none")
+```
+
+![](cookbook_files/figure-html/unnamed-chunk-32-1.png)
+
+Alternatively, use a non-fill bathymetry style
+(e.g. `bathy.style = "contour_blues"`) so the `fill` aesthetic stays
+free for your data.
+
+### How do I add longitude/latitude labels to a polar map?
+
+Polar maps need manual labels. Pull the grid lines from the map’s
+attributes, keep one meridian/parallel, project the label positions, and
+draw them:
+
+``` r
+
+p <- basemap(-60, shapefiles = "Antarctic")
+
+# Latitude labels along the 180° meridian
+lat_lab <- as.data.frame(
+  sf::st_coordinates(attributes(p)$map.grid$lat.grid.lines))
+lat_lab <- lat_lab[lat_lab$X == -180, ]
+lat_lab <- rbind(lat_lab, data.frame(X = -180, Y = -90, L1 = 3, L2 = 1))
+lat_lab <- transform_coord(lat_lab, proj.out = attributes(p)$crs, bind = TRUE)
+
+# Longitude labels just outside the -60° parallel
+lon_lab <- as.data.frame(
+  sf::st_coordinates(attributes(p)$map.grid$lon.grid.lines))
+lon_lab <- lon_lab[lon_lab$Y == -60, ]
+lon_lab$Y <- -63
+lon_lab <- transform_coord(lon_lab, proj.out = attributes(p)$crs, bind = TRUE)
+
+p +
+  geom_text(data = lat_lab,
+            aes(x = lon.proj, y = lat.proj, label = paste0(abs(Y), "\u00B0S"))) +
+  geom_text(data = lon_lab,
+            aes(x = lon.proj, y = lat.proj,
+                label = ifelse(sign(X) == 1, paste0(abs(X), "\u00B0E"),
+                               paste0(abs(X), "\u00B0W")))) +
+  theme(plot.margin = margin(0.25, 0.25, 0.25, 0.25, "cm"))
+```
+
+![](cookbook_files/figure-html/unnamed-chunk-33-1.png)
 
 ## Saving and exporting
 

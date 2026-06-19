@@ -1,271 +1,387 @@
 # Adding graphical elements
 
-A
-[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
-is an ordinary `ggplot2` object: anything you can add to a
-[`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html) with
-`+` works on a basemap too. This article collects two graphical elements
-that come up often in oceanography but need a little care on projected
-maps:
-
-1.  **Ocean-current arrows** drawn over a map.
-2.  **Pie charts (scatter pies)** placed at geographic positions.
-
-The recurring theme is **coordinates**. On a decimal-degree map you plot
-in longitude/latitude directly. On a *projected* map (polar regions,
-custom `crs`) the axes are in metres, so geographic coordinates must be
-transformed with
-[`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md)
-first. Every recipe below shows both cases.
-
 ``` r
 
 library(ggOceanMaps)
 library(ggplot2)
 ```
 
-## Ocean-current arrows
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+returns a standard `ggplot2` object, so points, paths, polygons, labels,
+and custom scales are added with `+`. The one thing to watch is the
+coordinate system: at high latitudes, and whenever `crs` is set, the map
+axes are projected metres rather than longitude and latitude. Add
+geographic coordinates to those maps through
+[`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md),
+`ggspatial::geom_spatial_*()`, or
+[`geom_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html), which
+reproject on the fly.
 
-There are two common situations: you have a **velocity field** (`u`/`v`
-components on a grid) and want a quiver plot, or you have **hand-drawn
-schematic arrows** (the “Figure 1” style arrows that summarise the
-general circulation of a region).
+## Schematic current arrows
 
-### A velocity field as a quiver plot
-
-The pattern is: thin the grid to a drawable density, scale the arrow
-length, and draw with
-[`geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html).
-The example uses a small synthetic field so it runs without any
-download.
-
-``` r
-
-set.seed(1)
-grd <- expand.grid(lon = seq(-15, 25, by = 4),
-                   lat = seq(52, 68, by = 2))
-grd$u <- 0.6 * cos(grd$lat / 8)          # eastward component (m/s)
-grd$v <- 0.3 * sin(grd$lon / 6)          # northward component (m/s)
-
-scale <- 2                                # degrees drawn per m/s -- tune to taste
-grd$lon_end <- grd$lon + grd$u * scale
-grd$lat_end <- grd$lat + grd$v * scale
-
-basemap(limits = c(-20, 30, 50, 70)) +
-  geom_segment(
-    data = grd,
-    aes(x = lon, y = lat, xend = lon_end, yend = lat_end),
-    arrow = arrow(length = unit(0.15, "cm")),
-    colour = "steelblue", linewidth = 0.4
-  )
-```
-
-![](adding-graphical-elements_files/figure-html/quiver-dd-1.png)
-
-On a **projected map** the axes are in metres, so transform the start
-points and add the velocity in projected units:
-
-``` r
-
-# transform_coord adds lon.proj / lat.proj in the map's CRS (metres)
-grd <- transform_coord(grd, proj.out = 3995, bind = TRUE)
-
-scale_m <- 1e5                            # metres drawn per m/s
-grd$lon_end_proj <- grd$lon.proj + grd$u * scale_m
-grd$lat_end_proj <- grd$lat.proj + grd$v * scale_m
-
-basemap(60) +
-  geom_segment(
-    data = grd,
-    aes(x = lon.proj, y = lat.proj, xend = lon_end_proj, yend = lat_end_proj),
-    arrow = arrow(length = unit(0.15, "cm")),
-    colour = "steelblue", linewidth = 0.4
-  )
-```
-
-If your field lives in a NetCDF, read it with
-[`stars::read_stars()`](https://r-spatial.github.io/stars/reference/read_stars.html),
-[`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html) it,
-rename the coordinate/velocity columns, and thin with
-`df[seq(1, nrow(df), by = n), ]` before the steps above.
-
-### Schematic “Figure 1” current arrows
-
-For publication-style arrows summarising the circulation of a region,
-the
+The
 [Barents-Sea-currents](https://github.com/MikkoVihtakari/Barents-Sea-currents)
-repository distributes ready-made, editable arrows for the Barents and
-Greenland Seas. The arrows are stored as a small set of nodes (decimal
-degrees) grouped per arrow, with a `type` column (`"Atlantic"` /
-`"Arctic"`).
-
-The nodes are sparse on purpose (easy to edit); run an X-spline through
-each arrow to smooth it before plotting. The recipe below reproduces the
-classic two-colour current map on a ggOceanMaps basemap:
+repository provides publication-style *“Figure 1”* current arrows for
+the Barents Sea and North Atlantic. The example below downloads the tidy
+Barents Sea CSV, builds one line per arrow, smooths it, and draws it
+with
+[`geom_path()`](https://ggplot2.tidyverse.org/reference/geom_path.html).
+Smoothing happens in projected metres rather than in longitude/latitude,
+which would exaggerate the curves near the pole.
 
 ``` r
 
-# 1. Read the editable node table (decimal degrees)
-cur <- read.csv(paste0(
+barents_url <- paste0(
   "https://raw.githubusercontent.com/MikkoVihtakari/",
   "Barents-Sea-currents/master/tabular/barents_currents.csv"
-))
+)
+barents_file <- file.path(tempdir(), "barents_currents.csv")
 
-# 2. Transform the nodes to the map projection (Arctic stereographic, metres)
-cur <- transform_coord(cur, lon = "long", lat = "lat",
-                       proj.out = 3995, bind = TRUE)
-
-# 3. Smooth each arrow with an X-spline through its nodes.
-#    xspline() needs an open graphics device even with draw = FALSE, so
-#    open a null device for the calculation.
-smooth_arrow <- function(d) {
-  grDevices::pdf(NULL); on.exit(grDevices::dev.off()); graphics::plot.new()
-  xs <- graphics::xspline(d$lon.proj, d$lat.proj, shape = -0.6, draw = FALSE)
-  data.frame(lon.proj = xs$x, lat.proj = xs$y,
-             group = unique(d$group), type = unique(d$type))
-}
-cur_smooth <- do.call(rbind, lapply(split(cur, cur$group), smooth_arrow))
-
-# 4. Plot, mapping arrow colour to current type
-basemap(limits = c(0, 50, 68, 83), shapefiles = "Arctic") +
-  geom_path(
-    data = cur_smooth,
-    aes(x = lon.proj, y = lat.proj, group = group, colour = type),
-    linewidth = 0.6,
-    arrow = arrow(type = "open", angle = 15, ends = "last",
-                  length = unit(0.3, "lines"))
-  ) +
-  scale_colour_manual(
-    name = "Current type",
-    values = c("Arctic" = "blue", "Atlantic" = "red")
+if (!file.exists(barents_file)) {
+  try(
+    download.file(barents_url, barents_file, quiet = TRUE, mode = "wb"),
+    silent = TRUE
   )
+}
+
+# Offline fallback bundled with the vignette.
+if (!file.exists(barents_file)) {
+  barents_file <- file.path("data", "barents_currents.csv")
+}
+
+cur <- read.csv(barents_file)
+head(cur)
+#>   id      long      lat order        group size     type
+#> 1  0  5.306694 66.34752     1 Atlantic_0.1    5 Atlantic
+#> 2  0  5.306694 66.34752     2 Atlantic_0.1    5 Atlantic
+#> 3  0  6.448918 66.73568     3 Atlantic_0.1    5 Atlantic
+#> 4  0  9.080173 67.53121     4 Atlantic_0.1    5 Atlantic
+#> 5  0 10.656624 68.29049     5 Atlantic_0.1    5 Atlantic
+#> 6  0 13.568487 69.01010     6 Atlantic_0.1    5 Atlantic
 ```
 
-Key points:
-
-- The CSV is in **decimal degrees**;
-  `transform_coord(..., proj.out = 3995)` moves it to the
-  Arctic-stereographic CRS that
-  [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
-  uses for this region. On a decimal-degree map skip the transform and
-  map `aes(x = long, y = lat)` directly.
-- `graphics::xspline(..., shape = -0.6, draw = FALSE)` returns smoothed
-  coordinates without drawing anything — exactly what we feed to
-  [`geom_path()`](https://ggplot2.tidyverse.org/reference/geom_path.html).
-- Smooth in the **projected** coordinates (after
-  [`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md)),
-  not in degrees, so the curvature matches the map.
-- If you cite these arrows, see the citation in the [source
-  repository](https://github.com/MikkoVihtakari/Barents-Sea-currents#citations).
-
-## Pie charts on maps (scatter pies)
-
-A frequent request is a small pie chart at each station summarising a
-composition (species proportions, water-mass fractions, …). The cleanest
-way to do this on a `ggplot2` map is the
-[**scatterpie**](https://cran.r-project.org/package=scatterpie) package,
-whose `geom_scatterpie()` draws one pie per row of a data frame from a
-set of value columns.
+Each arrow is a group of ordered nodes. Assemble them into one
+`LINESTRING` per arrow, reproject to the map CRS, and smooth the nodes
+into curves with
+[`smoothr::smooth()`](https://strimas.com/smoothr/reference/smooth.html).
 
 ``` r
 
-install.packages("scatterpie")
+library(sf)
+
+cur <- cur[order(cur$group, cur$order), ]
+parts <- split(cur, cur$group)
+
+arrows <- st_sf(
+  do.call(rbind, lapply(parts, function(d) d[1, c("group", "type", "size")])),
+  geometry = st_sfc(
+    lapply(parts, function(d) st_linestring(as.matrix(d[, c("long", "lat")]))),
+    crs = 4326
+  )
+)
+arrows <- smoothr::smooth(st_transform(arrows, 32633), method = "spline")
+
+# Tidy projected coordinates for geom_path().
+co <- as.data.frame(st_coordinates(arrows))
+cur_lines <- data.frame(
+  x = co$X,
+  y = co$Y,
+  group = arrows$group[co$L1],
+  type = arrows$type[co$L1],
+  size = arrows$size[co$L1]
+)
 ```
 
-Your data frame needs a position (`x`, `y`), an optional radius, and one
-column per pie slice:
+The arrows sit on top of the basemap, so they would otherwise be drawn
+over land.
+[`reorder_layers()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/reorder_layers.md)
+pushes the land, glacier, and grid layers back on top, tucking the
+arrows under the coastline.
+
+``` r
+
+current_arrow <- arrow(
+  type = "open",
+  angle = 15,
+  ends = "last",
+  length = unit(0.25, "lines")
+)
+
+reorder_layers(
+  basemap(
+    limits = c(5, 45, 68, 83.5),
+    crs = 32633,
+    bathy.style = "rbg",
+    land.col = "grey86",
+    legends = c(FALSE, TRUE)
+  ) +
+    geom_path(
+      data = cur_lines,
+      aes(x, y, group = group, colour = type, linewidth = size),
+      arrow = current_arrow
+    ) +
+    scale_colour_manual(
+      "Current type",
+      values = c(Atlantic = "#d7301f", Arctic = "#2166ac"),
+      labels = c(Atlantic = "Atlantic (warm)", Arctic = "Arctic (cold)")
+    ) +
+    scale_linewidth("Relative strength", range = c(0.3, 1.3))
+)
+```
+
+![](adding-graphical-elements_files/figure-html/barents-current-plot-1.png)
+
+## Velocity fields
+
+For a gridded velocity field, compute the arrow endpoints, transform
+both the start and end points to the basemap CRS, and draw the result
+with
+[`geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html).
+The example uses a small synthetic field filtered to ocean positions;
+the same pattern applies after reading `u` and `v` from a NetCDF file.
+
+``` r
+
+grd <- expand.grid(lon = seq(-14, 6, by = 4), lat = seq(57, 69, by = 3))
+grd <- dist2land(grd, binary = TRUE, dist.col = "ocean", verbose = FALSE)
+grd <- grd[grd$ocean, ]
+
+grd$u <- 0.35 + 0.25 * cos((grd$lat - 58) / 4) # eastward component
+grd$v <- 0.20 * sin((grd$lon + 5) / 6) # northward component
+
+# Display scale only: a 1 m/s vector is drawn as 50 hours of drift.
+km_per_ms <- 50 * 3.6
+grd$lon_end <- grd$lon +
+  (grd$u * km_per_ms) / (111.32 * cos(grd$lat * pi / 180))
+grd$lat_end <- grd$lat + (grd$v * km_per_ms) / 110.57
+
+# Transform both ends to the basemap projection.
+start <- transform_coord(
+  grd,
+  lon = "lon",
+  lat = "lat",
+  proj.out = 3995,
+  bind = TRUE
+)
+end <- transform_coord(
+  grd,
+  lon = "lon_end",
+  lat = "lat_end",
+  proj.out = 3995,
+  new.names = c("lon_end.proj", "lat_end.proj")
+)
+grd <- cbind(start, end)
+
+basemap(
+  limits = c(-20, 30, 50, 70),
+  bathy.style = "rbg",
+  land.col = "grey86",
+  legends = FALSE
+) +
+  geom_segment(
+    data = grd,
+    aes(x = lon.proj, y = lat.proj, xend = lon_end.proj, yend = lat_end.proj),
+    arrow = arrow(length = unit(0.12, "cm"), type = "open"),
+    colour = "#084d9a",
+    linewidth = 0.45
+  )
+```
+
+![](adding-graphical-elements_files/figure-html/quiver-projected-1.png)
+
+On a decimal-degree map the same code works without the
+[`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md)
+calls. Use those maps only when the basemap itself is in EPSG:4326; many
+high-latitude limits select a polar projection automatically.
+
+## Pie charts
+
+Pie charts can be drawn as ordinary polygons. This avoids an extra
+plotting dependency and keeps the coordinate units explicit: after
+projection the pie radius is in metres. The helper below turns a row of
+category counts into one polygon per slice.
+
+``` r
+
+pie_polygons <- function(data, cols, x, y, r, n = 60) {
+  out <- vector("list", nrow(data) * length(cols))
+  k <- 1
+
+  for (i in seq_len(nrow(data))) {
+    values <- as.numeric(data[i, cols])
+    values[is.na(values)] <- 0
+    prop <- values / sum(values)
+    starts <- c(0, cumsum(prop)[-length(prop)]) * 2 * pi
+    ends <- cumsum(prop) * 2 * pi
+
+    for (j in seq_along(cols)) {
+      theta <- seq(
+        starts[j],
+        ends[j],
+        length.out = max(2, ceiling(n * prop[j]))
+      )
+      out[[k]] <- data.frame(
+        id = data$id[i],
+        slice = cols[j],
+        x = c(
+          data[[x]][i],
+          data[[x]][i] + cos(theta) * data[[r]][i],
+          data[[x]][i]
+        ),
+        y = c(
+          data[[y]][i],
+          data[[y]][i] + sin(theta) * data[[r]][i],
+          data[[y]][i]
+        ),
+        part = paste(data$id[i], cols[j], sep = "_")
+      )
+      k <- k + 1
+    }
+  }
+
+  do.call(rbind, out)
+}
+```
 
 ``` r
 
 pies <- data.frame(
-  lon  = c(5, 15, 25),
-  lat  = c(56, 62, 68),
-  cod  = c(40, 10, 70),
-  haddock = c(35, 30, 20),
-  saithe  = c(25, 60, 10)
+  id = c("A", "B", "C", "D"),
+  lon = c(-8, 0, 4, 9),
+  lat = c(56.5, 60, 63.5, 67.5),
+  cod = c(45, 20, 60, 25),
+  haddock = c(30, 50, 15, 35),
+  saithe = c(25, 30, 25, 40)
 )
 slices <- c("cod", "haddock", "saithe")
-```
-
-### On a decimal-degree map
-
-Plot directly in longitude/latitude. `r` (the pie radius) is in
-**degrees** here, because that is the unit of the map axes:
-
-``` r
-
-library(scatterpie)
-
-basemap(limits = c(-5, 35, 52, 72)) +
-  geom_scatterpie(
-    data = pies,
-    aes(x = lon, y = lat, r = 1.5),   # radius in degrees
-    cols = slices,
-    colour = NA, alpha = 0.9
-  ) +
-  scale_fill_brewer(palette = "Set2", name = "Species")
-```
-
-### On a projected map
-
-Transform the pie centres first, and give `r` in the projected unit
-(**metres** for the polar projections):
-
-``` r
 
 pies <- transform_coord(pies, proj.out = 3995, bind = TRUE)
+pies$r <- 90000 # metres
+pie_df <- pie_polygons(pies, slices, x = "lon.proj", y = "lat.proj", r = "r")
 
-basemap(60) +
-  geom_scatterpie(
-    data = pies,
-    aes(x = lon.proj, y = lat.proj, r = 1.5e5),   # radius in metres
-    cols = slices,
-    colour = NA, alpha = 0.9
+basemap(
+  limits = c(-12, 16, 54, 70),
+  bathy.style = "rbg",
+  land.col = "grey86",
+  legends = FALSE
+) +
+  ggnewscale::new_scale_fill() +
+  geom_polygon(
+    data = pie_df,
+    aes(x = x, y = y, group = part, fill = slice),
+    colour = "white",
+    linewidth = 0.15,
+    alpha = 0.95
   ) +
-  scale_fill_brewer(palette = "Set2", name = "Species")
+  scale_fill_brewer("Species", palette = "Set2")
 ```
 
-### Scaling pies by a total and adding a size legend
+![](adding-graphical-elements_files/figure-html/pie-projected-1.png)
 
-Map the radius to a variable (e.g. total catch) and add a radius legend
-with `geom_scatterpie_legend()`:
+The basemap already maps bathymetry to `fill`, so insert
+[`ggnewscale::new_scale_fill()`](https://eliocamp.github.io/ggnewscale/reference/new_scale.html)
+between the basemap and the pie layer to give the slices an independent
+fill scale.
+
+## Recolouring bathymetry
+
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+maps the binned bathymetry styles to a discrete `fill` scale and the
+continuous styles (`rcb`, `rcg`) to a continuous one. Either is
+recoloured by adding a matching `ggplot2` fill scale after the basemap,
+exactly as in the
+[Appearance](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html#appearance)
+section of the User manual.
 
 ``` r
 
-pies$total <- rowSums(pies[, slices])
-pies$r <- 0.4 + 1.6 * pies$total / max(pies$total)   # degrees
-
-basemap(limits = c(-5, 35, 52, 72)) +
-  geom_scatterpie(
-    data = pies,
-    aes(x = lon, y = lat, r = r),
-    cols = slices, colour = NA, alpha = 0.9
-  ) +
-  geom_scatterpie_legend(pies$r, x = -2, y = 70, n = 3) +
-  scale_fill_brewer(palette = "Set2", name = "Species")
+basemap(c(11, 16, 67.3, 68.6), grid.col = NA, bathymetry = TRUE) +
+  scale_fill_viridis_d("Depth (m)")
 ```
 
-Tips:
+![](adding-graphical-elements_files/figure-html/recolour-binned-1.png)
 
-- Keep `colour = NA` (no slice borders) for small pies; borders dominate
-  at map scale.
-- `geom_scatterpie()` adds a `fill` aesthetic, so it composes with the
-  separate `fill` scale ggOceanMaps uses for bathymetry only if you add
-  the pies *after* the bathymetry. If you need two independent fill
-  scales (e.g. bathymetry **and** pie slices) use
-  [**ggnewscale**](https://cran.r-project.org/package=ggnewscale)’s
-  `new_scale_fill()` between the layers.
-- Choose the radius in the same unit as the map axes: degrees on a
-  decimal-degree map, metres on a projected map. A radius that looks
-  right on one map will be invisible (or fill the plot) on the other.
+For a continuous style, use a continuous fill scale instead.
+[`scale_fill_stepsn()`](https://ggplot2.tidyverse.org/reference/scale_steps.html)
+additionally lets you set your own breaks and a non-linear
+transformation, binning the continuous raster at plotting time without
+changing the data. (This example needs the higher-resolution continuous
+raster from
+[ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData);
+it is skipped when that file is not available.)
 
-## See also
+``` r
 
-- [Cookbook](https://mikkovihtakari.github.io/ggOceanMaps/articles/cookbook.md)
-  — short copy-pasteable recipes, including a compact version of the
-  current-arrow recipe.
-- [User
-  manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.md)
-  — projections and
-  [`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md)
-  in more depth.
+basemap(
+  c(11, 16, 67.3, 68.6),
+  grid.col = NA,
+  bathy.style = "rcb",
+  downsample = 5
+) +
+  scale_fill_stepsn(
+    name = "Depth (m)",
+    breaks = c(0, 50, 100, 200, 500, 1000),
+    limits = c(0, NA),
+    trans = "sqrt",
+    colours = colorRampPalette(
+      c("#F7FBFF", "#DEEBF7", "#9ECAE1", "#4292C6", "#08306B")
+    )(5),
+    na.value = "white"
+  )
+```
+
+## Custom depth bins with `raster_bathymetry()`
+
+The scales above recolour bathymetry that ggOceanMaps has already
+prepared. To bin a *raw* depth raster into classes of your own, re-bin
+it with
+[`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md):
+pass the cut points to `depths` and hand the returned binned raster
+straight to
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+through `shapefiles`. Any grid that
+[`stars::read_stars()`](https://r-spatial.github.io/stars/reference/read_stars.html)
+can open works — the example reads a local GEBCO file (see the [Your own
+raster](https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.md)
+section of the Bathymetry article), cropped to the shelf off Lofoten.
+
+``` r
+
+# Your local GEBCO/ETOPO/IBCAO grid, e.g. set once with
+# options(ggOceanMaps.userpath = "path/to/GEBCO_2025.nc")
+gebco <- getOption("ggOceanMaps.userpath")
+
+rb <- raster_bathymetry(
+  gebco,
+  depths = c(50, 100, 250, 500, 1000, 2000), # depth class boundaries
+  boundary = c(11, 16, 67.3, 68.6), # crop to the map region
+  verbose = FALSE
+)
+
+# Each depths value becomes a class boundary.
+levels(rb$raster[[1]])
+```
+
+The binned raster carries the depth classes as a factor, so it behaves
+like any binned bathymetry: switch it on with `bathymetry = TRUE` and
+recolour it with a discrete fill scale. Here we use a sequential
+ColorBrewer palette as an example.
+
+``` r
+
+basemap(
+  limits = c(11, 16, 67.3, 68.6),
+  shapefiles = list(land = dd_land, glacier = NULL, bathy = rb),
+  bathymetry = TRUE,
+  grid.col = NA
+) +
+  scale_fill_brewer("Depth (m)", palette = "YlGnBu", na.value = "white")
+```
+
+[`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
+reports the intervals in `rb$depth.invervals`. The same binned raster
+can be turned into depth-contour polygons with
+[`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
+for the pre-made-shapefile workflow described in the [Customising
+shapefiles](https://mikkovihtakari.github.io/ggOceanMaps/articles/customising-shapefiles.md)
+article.

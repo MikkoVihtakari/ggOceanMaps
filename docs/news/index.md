@@ -1,9 +1,15 @@
 # Changelog
 
-## ggOceanMaps 2.4 (development version on GitHub)
+## ggOceanMaps 3.0.0
 
-Bring ggOceanMaps to the AI age. Package improvements using AI (Claude
-Code, Github Copilot) and addition documentation files for AI agents.
+**Bringing ggOceanMaps to the AI age.** From this version on,
+ggOceanMaps focuses on helping AI agents better support their users, and
+is itself developed and tested with the help of AI (Claude Code, GitHub
+Copilot). The package now ships an `AGENTS.md` file with instructions
+for AI assistants, alongside a much expanded and reorganised set of
+articles and recipes. This is a major release with new on-demand
+bathymetry sources, build-your-own shapefile tools, a comprehensive
+automated test suite, and an overhauled documentation site.
 
 ### New features
 
@@ -25,16 +31,55 @@ Code, Github Copilot) and addition documentation files for AI agents.
   Pairs with
   [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
   for build-your-own shapefile workflows.
-- New `AGENTS.md` for AI assistants helping users *use* ggOceanMaps, and
-  a new
+
+### Documentation and AI support
+
+- New `AGENTS.md` with instructions for AI assistants helping users
+  *use* ggOceanMaps.
+- New
   [`vignette("cookbook")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/cookbook.md)
-  of short copy-pasteable recipes.
+  of short, copy-pasteable recipes.
 - New
   [`vignette("bathymetry")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.md)
-  covering all bathymetry sources, and a new
+  covering all bathymetry sources.
+- New
   [`vignette("adding-graphical-elements")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/adding-graphical-elements.md)
   covering ocean-current arrows (velocity quivers and schematic “Figure
   1” arrows) and pie charts on maps via `scatterpie::geom_scatterpie()`.
+- New
+  [`vignette("customising-shapefiles")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/customising-shapefiles.md)
+  covering
+  [`clip_shapefile()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/clip_shapefile.md),
+  the
+  [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
+  -\>
+  [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
+  /
+  [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md)
+  pipeline, and
+  [`geonorge_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/geonorge_bathymetry.md).
+- The “Premade maps” and “Premade shapefiles” articles were rewritten to
+  the current `sf`/`stars` toolchain and the current
+  [`shapefile_list()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md)
+  contents.
+- The user manual was slimmed to concise explanations that link out to
+  the in-depth articles, and the documentation site (navbar, reference
+  index) was reorganised.
+
+### Bug fixes
+
+- Fixed land being clipped too early on projected (polar-stereographic)
+  maps with decimal-degree limits, e.g. `basemap(c(-20, 30, 50, 70))`
+  cut off northern Norway. The land clip boundary is now densified
+  before back-projecting to WGS84.
+- Fixed antimeridian / wide-span land clipping by routing the clip
+  through the projected map CRS, fixing wrong land for
+  `basemap(c(120, -120, 60, 80))` and a topology crash for rotated
+  antimeridian data input.
+- Fixed a crash (`st_cast()` on a degenerate `GEOMETRYCOLLECTION`) for
+  some custom
+  [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md)
+  layers at some map limits.
 
 ### Testing
 
@@ -52,6 +97,10 @@ Code, Github Copilot) and addition documentation files for AI agents.
 
 ### Internal
 
+- [`load_map_data()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/load_map_data.md)
+  no longer calls [`menu()`](https://rdrr.io/r/utils/menu.html) in
+  non-interactive sessions, so data downloads work during automated/CI
+  documentation builds.
 - Performance: `basemap_data_crop()` now clips in native CRS before
   reprojecting, avoiding world-scale transforms for small map extents
   ([\#55](https://github.com/MikkoVihtakari/ggOceanMaps/pull/55)).

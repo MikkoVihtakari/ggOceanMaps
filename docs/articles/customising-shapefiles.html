@@ -10,7 +10,8 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Customising shapefiles">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Customising shapefiles">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -20,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,16 +35,19 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/bathymetry.html">Bathymetry</a></li>
-    <li><a class="dropdown-item" href="../articles/customising-shapefiles.html">Customising shapefiles</a></li>
+<li><h6 class="dropdown-header" data-toc-skip>Instructions</h6></li>
+    <li><a class="dropdown-item" href="../articles/bathymetry.html">Bathymetry</a></li>
     <li><a class="dropdown-item" href="../articles/adding-graphical-elements.html">Adding graphical elements</a></li>
+    <li><a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a></li>
+    <li><a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a></li>
+    <li><a class="dropdown-item" href="../articles/customising-shapefiles.html">Customising shapefiles</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Examples</h6></li>
     <li><a class="dropdown-item" href="../articles/cookbook.html">Cookbook</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>News</h6></li>
+    <li><a class="dropdown-item" href="../articles/new-features-v3.html">New features in version 3</a></li>
     <li><a class="dropdown-item" href="../articles/new-features.html">New features in version 2</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a></li>
-    <li><a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Presentations</h6></li>
     <li><a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a></li>
@@ -132,11 +136,10 @@ a larger one (e.g. the shipped <code>dd_land</code>):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clip_shapefile.html">clip_shapefile</a></span><span class="op">(</span></span>
 <span>  <span class="va">dd_land</span>,</span>
-<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">60</span><span class="op">)</span>   <span class="co"># c(xmin, xmax, ymin, ymax), decimal degrees</span></span>
+<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">60</span><span class="op">)</span> <span class="co"># c(xmin, xmax, ymin, ymax), decimal degrees</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">60</span><span class="op">)</span>,</span>
-<span>        shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">land</span>, glacier <span class="op">=</span> <span class="cn">NULL</span>, bathy <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">land</span>, glacier <span class="op">=</span> <span class="cn">NULL</span>, bathy <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_clip.png" alt="Land layer clipped to the North Sea."><div class="figcaption">Land layer clipped to the North Sea.</div>
 </div>
@@ -161,9 +164,9 @@ Norwegian Trench along the Norwegian coast:</p>
 <code class="sourceCode R"><span><span class="co"># 1. Read + crop + sign-flip the grid; bin to depth contours.</span></span>
 <span><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span></span>
 <span>  bathy <span class="op">=</span> <span class="st">"path/to/your/bathymetry.nc"</span>,</span>
-<span>  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">500</span><span class="op">)</span>,    <span class="co"># contour break points</span></span>
-<span>  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">60</span><span class="op">)</span>,          <span class="co"># crop early to save memory</span></span>
-<span>  estimate.land <span class="op">=</span> <span class="cn">TRUE</span>                   <span class="co"># keep land cells for vector_land()</span></span>
+<span>  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">500</span><span class="op">)</span>, <span class="co"># contour break points</span></span>
+<span>  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">60</span><span class="op">)</span>, <span class="co"># crop early to save memory</span></span>
+<span>  estimate.land <span class="op">=</span> <span class="cn">TRUE</span> <span class="co"># keep land cells for vector_land()</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code> returns a <code>bathyRaster</code>:
 a list with the processed <code>raster</code> (a <code>stars</code>
@@ -236,7 +239,7 @@ heavy raster step every session:</p>
 </h2>
 <p>For Norwegian waters, the <a href="https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a" class="external-link">Geonorge</a>
 depth-area vector shapefiles can be downloaded as <code>.gml</code> and
-includes a matching land layer in the same file, so both sit at the same
+include a matching land layer in the same file, so both sit at the same
 resolution and CRS. <code><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry()</a></code> reads the depth
 layer; <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::st_read()</a></code> with <code>layer = "Landareal"</code>
 reads the land:</p>
@@ -254,8 +257,7 @@ reads the land:</p>
 <span>  bathy.style <span class="op">=</span> <span class="st">"pb"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_geonorge_oslofjorden.png" alt="Geonorge depth data for Oslo municipality, showing the harbour, Bygdøy, and surrounding islands."><div class="figcaption">Geonorge depth data for Oslo municipality,
-showing the harbour, Bygdøy, and surrounding islands.</div>
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_geonorge_oslofjorden.png" alt="Geonorge depth data for Oslo municipality."><div class="figcaption">Geonorge depth data for Oslo municipality.</div>
 </div>
 <p>This example uses Oslo municipality’s depth-area tile, a small
 dataset showing the harbour, Bygdøy, and the surrounding islands. By
@@ -279,8 +281,8 @@ and pairs it with the premade <code>"Europe"</code> land set, which is a
 better match for EMODnet’s ~115 m resolution than the shipped
 <code>dd_land</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tromso</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">20</span>, <span class="fl">69.4</span>, <span class="fl">69.9</span><span class="op">)</span>    <span class="co"># area to display</span></span>
-<span><span class="va">fetch</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17.5</span>, <span class="fl">20.5</span>, <span class="fl">69.3</span>, <span class="fl">70</span><span class="op">)</span>  <span class="co"># slightly wider fetch box (see note below)</span></span>
+<code class="sourceCode R"><span><span class="va">tromso</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">20</span>, <span class="fl">69.4</span>, <span class="fl">69.9</span><span class="op">)</span> <span class="co"># area to display</span></span>
+<span><span class="va">fetch</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17.5</span>, <span class="fl">20.5</span>, <span class="fl">69.3</span>, <span class="fl">70</span><span class="op">)</span> <span class="co"># slightly wider fetch box (see note below)</span></span>
 <span><span class="va">bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wcs_bathymetry.html">wcs_bathymetry</a></span><span class="op">(</span><span class="va">fetch</span>, source <span class="op">=</span> <span class="st">"emodnet"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># wcs_bathymetry() always returns depths = NULL (continuous), so bin it</span></span>

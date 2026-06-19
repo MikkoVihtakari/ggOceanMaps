@@ -6,31 +6,42 @@ library(ggOceanMaps)
 library(ggplot2)
 ```
 
-ggOceanMaps can plot bathymetry from five different kinds of data
-source. Each source has a sweet spot: some need nothing but the package
-itself, others require an internet connection or a permanent download.
-This vignette walks through all five in order of increasing setup cost.
+ggOceanMaps plots bathymetry from five kinds of data source. They differ
+mainly in resolution and in how much setup they require: the shipped
+raster works offline with no preparation, while the higher-resolution
+options need either an internet connection or a one-time download. This
+vignette describes each source and shows the `bathy.style` argument that
+selects it.
+
+The examples that download or fetch data are not evaluated when the
+vignette is built; the figures shown for them were rendered beforehand.
 
 ## Quick decision guide
 
-| Need | Recommended source | `bathy.style` |
+| Need | Source | `bathy.style` |
 |----|----|----|
-| Anything, anywhere, no setup | Shipped low-res raster | `"rbb"` (default) |
-| Higher detail, polar / global maps | ggOceanMapsLargeData | `"rcb"`, `"pb"`, `"cb"` |
+| Works offline, no setup (default) | Shipped low-resolution raster | `"rbb"` |
+| Higher detail, global and polar maps | ggOceanMapsLargeData continuous raster | `"rcb"` |
+| Filled depth-band contours | ggOceanMapsLargeData polygon contours | `"pb"` |
+| Contour lines only | ggOceanMapsLargeData contour lines | `"cb"` |
+| Anywhere on the globe, ~1.85 km | ETOPO1 Web Coverage Service (live) | `"wceb"` |
+| European waters, ~115 m | EMODnet Web Coverage Service (live) | `"wemb"` |
 | Your own GEBCO / ETOPO / IBCAO file | Local raster via `userpath` | `"rub"` |
-| European waters, ~115 m | EMODnet WCS (live) | `"wemb"` |
-| Anywhere on the globe, ~1.85 km | ETOPO1 WCS (live) | `"wceb"` |
-| Custom contour polygons / land | [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md) + [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md) / [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md) | `shapefiles = list(...)` |
+| Custom contour polygons or land | [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md) + [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md) / [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md) | `shapefiles = list(...)` |
 
-Substitute `g` for the final `b` in any abbreviation to get the grey
-variant (`rbb` → `rbg`, `wemb` → `wemg`, …). For the full alias list see
+Substitute `g` for the final `b` in any abbreviation to get the
+greyscale variant (`rbb` → `rbg`, `wemb` → `wemg`, and so on). The full
+alias list is in
 [`?basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md).
 
 ## 1. Shipped low-resolution raster (no setup)
 
-The package bundles a coarse global bathymetry raster (`dd_rbathy`)
-that’s always available. This is the default — just toggle
-`bathymetry = TRUE`:
+The package bundles a coarse global bathymetry raster, `dd_rbathy`,
+which is always available and needs no download. It is downsampled from
+the ETOPO 2022 15 arc-second global relief model (NOAA National Centers
+for Environmental Information, <https://doi.org/10.25921/fd45-gt74>) and
+binned into depth bands. This is the default source, so it is enough to
+set `bathymetry = TRUE`:
 
 ``` r
 
@@ -39,7 +50,8 @@ basemap(limits = c(-20, 30, 50, 70), bathymetry = TRUE)
 
 ![](bathymetry_files/figure-html/unnamed-chunk-2-1.png)
 
-Or set the style explicitly:
+The style can also be set explicitly with `bathy.style = "rbb"` (raster,
+binned, blues):
 
 ``` r
 
@@ -48,7 +60,7 @@ basemap(c(11, 16, 67.3, 68.6), bathy.style = "rbb")
 
 ![](bathymetry_files/figure-html/unnamed-chunk-3-1.png)
 
-Greyscale variant:
+The greyscale variant is `"rbg"`:
 
 ``` r
 
@@ -57,118 +69,120 @@ basemap(c(11, 16, 67.3, 68.6), bathy.style = "rbg")
 
 ![](bathymetry_files/figure-html/unnamed-chunk-4-1.png)
 
-The shipped raster is intentionally coarse so the package stays under
-CRAN’s size cap. It’s fine for overview maps and quick exploratory
-plots; for publication maps you’ll usually want one of the higher-detail
-options below.
+The shipped raster is kept coarse to keep the package within CRAN’s size
+limit. It is well suited to overview maps and exploratory plots; for
+publication maps one of the higher-resolution sources below is usually
+preferable.
 
 ## 2. ggOceanMapsLargeData (one-time download per region)
 
 The companion repository
 [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)
-hosts higher-resolution rasters, polygon-contour bathymetries, and
-contour lines for the supported regions (Decimal Degree, Arctic
-Stereographic, Antarctic Stereographic, plus several pre-made regional
-shapefile sets).
+hosts higher-resolution data for the supported regions (Decimal Degree,
+Arctic Stereographic, Antarctic Stereographic, and several pre-made
+regional shapefile sets). It provides three styles: a continuous raster,
+filled polygon contours, and contour lines.
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 downloads what it needs on first use and caches it locally.
 
-**One-time setup.** Pick a permanent directory (so files don’t vanish
-between R sessions) and add this line to `~/.Rprofile`:
+**One-time setup.** Choose a permanent directory so the files persist
+between R sessions, and add this line to `~/.Rprofile`:
 
 ``` r
 
 options(ggOceanMaps.datapath = "~/ggOceanMaps_data")
 ```
 
-Then any high-res style will download into that directory and reuse it:
+On the first call for a region a prompt asks you to confirm the download
+(roughly 15–100 MB depending on the region). Subsequent calls read from
+the cache and are immediate.
+
+### Continuous raster (`rcb`)
+
+The recommended high-resolution source for most maps. `downsample = n`
+reduces the rendering cost at the expense of detail.
 
 ``` r
 
-# Continuous raster — recommended for most maps
 basemap(c(11, 16, 67.3, 68.6), bathy.style = "rcb")
-
-# downsample = n speeds up rendering at the cost of detail
 basemap(c(11, 16, 67.3, 68.6), bathy.style = "rcb", downsample = 10)
+basemap(c(11, 16, 67.3, 68.6), bathy.style = "rcg") # greyscale
+```
 
-# Greyscale variant
-basemap(c(11, 16, 67.3, 68.6), bathy.style = "rcg")
+![Continuous raster bathymetry (rcb) off Lofoten, northern
+Norway.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_rcb.png)
 
-# Polygon contours (pre-2.0 default)
+Continuous raster bathymetry (`rcb`) off Lofoten, northern Norway.
+
+### Polygon contours (`pb`)
+
+Filled depth bands stored as polygons. This was the default before
+version 2.0.
+
+``` r
+
 basemap(c(11, 16, 67.3, 68.6), bathy.style = "pb")
-basemap(c(11, 16, 67.3, 68.6), bathy.style = "pg")
+basemap(c(11, 16, 67.3, 68.6), bathy.style = "pg") # greyscale
+```
 
-# Plain contour lines
+![Polygon-contour bathymetry (pb) showing filled depth
+bands.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_pb.png)
+
+Polygon-contour bathymetry (`pb`) showing filled depth bands.
+
+### Contour lines (`cb`)
+
+Depth contours drawn as lines, with no fill. Useful when the bathymetry
+should not compete visually with overplotted data.
+
+``` r
+
 basemap(c(11, 16, 67.3, 68.6), bathy.style = "cb")
-basemap(c(11, 16, 67.3, 68.6), bathy.style = "cg")
+basemap(c(11, 16, 67.3, 68.6), bathy.style = "cg") # greyscale
 ```
 
-On the first call a menu asks you to confirm the download (~15–100 MB
-depending on the region). Subsequent calls are instant.
+![Contour-line bathymetry (cb), lines
+only.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_cb.png)
 
-## 3. Your own raster (GEBCO, ETOPO, IBCAO, …)
+Contour-line bathymetry (`cb`), lines only.
 
-Sometimes you want a specific dataset — the latest GEBCO grid, an ETOPO
-2022 variant, a regional IBCAO compilation, or a custom-processed file
-from your group. Download the file once, point ggOceanMaps at it through
-`ggOceanMaps.userpath`, and use the `rub` / `rug` styles:
+## 3. Live download from a Web Coverage Service (WCS)
 
-``` r
-
-# Set once (in .Rprofile for persistence):
-options(ggOceanMaps.userpath = "path/to/your/bathymetry.nc")
-
-# Then any basemap call uses your file:
-basemap(c(11, 16, 67.3, 68.6), bathy.style = "rub")
-basemap(c(11, 16, 67.3, 68.6), bathy.style = "rub", downsample = 10)
-basemap(c(11, 16, 67.3, 68.6), bathy.style = "rug")
-```
-
-Any file format
-[`stars::read_stars()`](https://r-spatial.github.io/stars/reference/read_stars.html)
-can open is accepted (NetCDF `.nc`, GeoTIFF `.tif`, GMT `.grd`, …). The
-file is read fully every time, so the user-raster route can be slower
-than a pre-processed ggOceanMapsLargeData object for the same region.
-Use `downsample` to trade resolution for speed.
-
-`ggOceanMaps.userpath` can also be used by
-[`get_depth()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/get_depth.md)
-to look up point depths from your raster:
-
-``` r
-
-dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
-dt <- get_depth(dt, bathy.style = "ru")
-qmap(dt, color = depth) + scale_color_viridis_c()
-```
-
-## 4. Live download from a Web Coverage Service (WCS)
-
-For one-off maps or workflows where you don’t want to manage local
+For one-off maps, or workflows where you would rather not manage local
 files, ggOceanMaps can fetch bathymetry on demand from two OGC Web
-Coverage Services. No pre-download needed; downloaded tiles are cached
-under `getOption("ggOceanMaps.datapath")` so subsequent calls for the
-same bbox are instant.
+Coverage Services. No pre-download is required; fetched tiles are cached
+under `getOption("ggOceanMaps.datapath")`, so repeated calls for the
+same bounding box are immediate.
 
 | Source | Style | Coverage | Resolution |
 |----|----|----|----|
-| **EMODnet** | `wcs_emodnet_blues` (`wemb`) | European waters | ~115 m |
 | **ETOPO1 (NOAA NCEI)** | `wcs_etopo_blues` (`wceb`) | Global | ~1.85 km |
+| **EMODnet** | `wcs_emodnet_blues` (`wemb`) | European waters | ~115 m |
+
+``` r
+
+# Hawaii — global coverage from ETOPO
+basemap(c(-160, -154, 18, 23), bathy.style = "wceb")
+```
+
+![Global ETOPO1 bathymetry (wceb) around the Hawaiian
+Islands.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_wceb.png)
+
+Global ETOPO1 bathymetry (`wceb`) around the Hawaiian Islands.
 
 ``` r
 
 # North Sea — high-resolution European waters from EMODnet
 basemap(c(2, 3, 54, 55), bathy.style = "wemb")
-
-# Hawaii — global coverage from ETOPO
-basemap(c(-160, -154, 18, 23), bathy.style = "wceb")
-
-# Indonesia / Java Trench — outside EMODnet, also ETOPO
-basemap(c(110, 120, -20, 30), bathy.style = "wceb")
 ```
 
-If you pick EMODnet for an area outside its European coverage, you get a
-clear error pointing you to ETOPO:
+![High-resolution EMODnet bathymetry (wemb) in the North
+Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_wemb.png)
+
+High-resolution EMODnet bathymetry (`wemb`) in the North Sea.
+
+If you request EMODnet for an area outside its European coverage, the
+error message points you to ETOPO:
 
 ``` r
 
@@ -181,14 +195,14 @@ basemap(c(110, 120, -20, 30), bathy.style = "wemb")
 #> global WCS source to be added to ggOceanMaps.
 ```
 
-(Replace `wemb` with `wceb` and the same call works.)
+Replacing `wemb` with `wceb` makes the same call work.
 
 ### Manual fetch with `wcs_bathymetry()`
 
-The `bathy.style` route is the simplest, but for full control — passing
-the raster into
+The `bathy.style` route is the simplest option, but for full control —
+passing the raster into
 [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md),
-combining multiple regions, sharing a cache with other tools — call
+combining regions, or sharing a cache with other tools — call
 [`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md)
 directly:
 
@@ -205,23 +219,59 @@ basemap(c(2, 3, 54, 55),
 ### WCS caveats
 
 - **Decimal-degree limits only.** Polar maps and projected-CRS limits
-  are not supported (yet).
+  are not yet supported.
 - **Per-source size caps.** EMODnet defaults to a 50 deg² maximum
-  bounding box (it reads 8-byte doubles internally and a 4° tile already
-  exceeds its read cap); ETOPO defaults to 2000 deg² because the
+  bounding box (it reads 8-byte doubles internally, and a 4° tile
+  already exceeds its read cap); ETOPO defaults to 2000 deg² because the
   underlying grid is much coarser. Override either with
   `max_area_deg2 = ...` in
   [`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md).
   Larger boxes are tiled and mosaicked automatically.
-- **Citation.** EMODnet is CC-BY
-  (<https://emodnet.ec.europa.eu/en/bathymetry>); ETOPO1 is Amante &
-  Eakins 2009, NOAA NGDC
-  (<https://www.ncei.noaa.gov/products/etopo-global-relief-model>). Cite
-  the source when publishing figures.
+
+## 4. Your own raster (GEBCO, ETOPO, IBCAO, …)
+
+When you need a specific dataset — the latest GEBCO grid, an ETOPO 2022
+variant, a regional IBCAO compilation, or a file processed by your own
+group — download it once, point ggOceanMaps at it through
+`ggOceanMaps.userpath`, and use the `rub` / `rug` styles:
+
+``` r
+
+# Set once (in .Rprofile for persistence):
+options(ggOceanMaps.userpath = "path/to/your/bathymetry.nc")
+
+# Then any basemap call uses your file:
+basemap(c(11, 16, 67.3, 68.6), bathy.style = "rub")
+basemap(c(11, 16, 67.3, 68.6), bathy.style = "rub", downsample = 10)
+basemap(c(11, 16, 67.3, 68.6), bathy.style = "rug") # greyscale
+```
+
+![User-supplied GEBCO raster (rub) off
+Lofoten.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_rub.png)
+
+User-supplied GEBCO raster (`rub`) off Lofoten.
+
+Any format that
+[`stars::read_stars()`](https://r-spatial.github.io/stars/reference/read_stars.html)
+can open is accepted (NetCDF `.nc`, GeoTIFF `.tif`, GMT `.grd`, and so
+on). The file is read in full on every call, so the user-raster route
+can be slower than a pre-processed ggOceanMapsLargeData object for the
+same region. Use `downsample` to trade resolution for speed.
+
+`ggOceanMaps.userpath` is also used by
+[`get_depth()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/get_depth.md)
+to look up point depths from your raster:
+
+``` r
+
+dt <- data.frame(lon = seq(-20, 80, length.out = 41), lat = 50:90)
+dt <- get_depth(dt, bathy.style = "ru")
+qmap(dt, color = depth) + scale_color_viridis_c()
+```
 
 ## 5. Build your own shapefiles
 
-If you need contour polygons, your own depth bins, or a matched land +
+When you need contour polygons, custom depth bins, or a matched land +
 bathymetry pair, the
 [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
 /
@@ -251,28 +301,50 @@ basemap(c(-5, 10, 50, 60),
         bathymetry = TRUE)
 ```
 
-`depths = NULL` skips the binning step and gives you a continuous raster
-— useful for `geom_raster`-style fills without vectorization overhead.
+Setting `depths = NULL` skips the binning step and returns a continuous
+raster — useful for `geom_raster`-style fills without the vectorization
+overhead.
 
-Save the processed objects so you don’t pay the processing cost again:
+Save the processed objects so the processing cost is paid only once:
 
 ``` r
 
 save(vb, vl, file = "my_region_bathy.rda")
 ```
 
-## Picking a style at the bbox level
+## Mixing styles across a multi-panel figure
 
-Switching `bathy.style` between maps in a multi-panel figure works as
-expected; each panel uses its own source:
+`bathy.style` is set per call, so each panel of a multi-panel figure can
+use its own source:
 
 ``` r
 
 library(patchwork)
-p1 <- basemap(c(2, 3, 54, 55), bathy.style = "wemb") + ggtitle("EMODnet (115 m)")
-p2 <- basemap(c(-160, -154, 18, 23), bathy.style = "wceb") + ggtitle("ETOPO (1.85 km)")
+p1 <- basemap(c(-160, -154, 18, 23), bathy.style = "wceb") + ggtitle("ETOPO (1.85 km)")
+p2 <- basemap(c(2, 3, 54, 55), bathy.style = "wemb") + ggtitle("EMODnet (115 m)")
 p1 + p2
 ```
+
+## Citing the data sources
+
+The bathymetry data are not the property of ggOceanMaps or the Institute
+of Marine Research. Cite the source of any bathymetry you publish:
+
+- **Shipped raster (`rbb`) and ggOceanMapsLargeData rasters / contours
+  (`rcb`, `pb`, `cb`)** derive from the ETOPO 2022 15 arc-second global
+  relief model (NOAA National Centers for Environmental Information,
+  <https://doi.org/10.25921/fd45-gt74>).
+- **ETOPO1 Web Coverage Service (`wceb`)** is Amante & Eakins 2009, NOAA
+  NGDC (<https://www.ncei.noaa.gov/products/etopo-global-relief-model>).
+- **EMODnet Web Coverage Service (`wemb`)** is distributed under CC-BY
+  (<https://emodnet.ec.europa.eu/en/bathymetry>).
+- **User raster (`rub`)** — cite whatever dataset you supplied (GEBCO,
+  ETOPO, IBCAO, …).
+
+The land and glacier polygons, and the regional pre-made shapefiles,
+have their own sources. See the [Citations and data
+sources](https://github.com/MikkoVihtakari/ggOceanMaps#citations-and-data-sources)
+section of the README for the full list.
 
 ## See also
 
@@ -285,6 +357,6 @@ p1 + p2
   [`?vector_land`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md)
   for the build-your-own pipeline.
 - [`vignette("cookbook")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/cookbook.md)
-  for short copy-pasteable recipes.
+  for short, copy-pasteable recipes.
 - The user manual:
   [`vignette("ggOceanMaps")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.md).

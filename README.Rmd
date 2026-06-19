@@ -49,17 +49,17 @@ install.packages("ggOceanMaps")
 
 **ggOceanMaps** extends on [**ggplot2**](http://ggplot2.tidyverse.org/reference/). The package uses spatial ([**sf**](https://r-spatial.github.io/sf/)) shape- (e.g. vector) and ([**stars**](https://r-spatial.github.io/stars/)) raster files, [geospatial packages for R](https://cran.r-project.org/web/views/Spatial.html) to manipulate, and ggplot2 to plot these data. The vector and raster plotting is conducted internally in the `basemap` function, which uses [ggplot's sf object plotting capabilities](https://ggplot2.tidyverse.org/reference/ggsf.html). Maps are plotted using the `basemap()` or `qmap()` functions that work almost similarly to [`ggplot()` as a base](https://ggplot2.tidyverse.org/reference/index.html) for adding further layers to the plot using the `+` operator. The maps generated this way already contain multiple ggplot layers. Consequently, the [`data` argument](https://ggplot2.tidyverse.org/reference/ggplot.html) needs to be explicitly specified inside `geom_*` functions when adding `ggplot2` layers. Depending on the location of the map, the underlying coordinates may be projected. Decimal degree coordinates need to be transformed to the projected coordinates using the `transform_coord`, [ggspatial](https://paleolimbot.github.io/ggspatial/), or [`geom_sf` functions.](https://ggplot2.tidyverse.org/reference/ggsf.html)
 
-```{r}
+```{r, fig.alt = "Bathymetric basemap of the North Atlantic and Arctic with a red rectangle outlining a data box, illustrating basemap() with bathymetry and transform_coord()."}
 library(ggOceanMaps)
 
 dt <- data.frame(lon = c(-30, -30, 30, 30), lat = c(50, 80, 80, 50))
 
-basemap(data = dt, bathymetry = TRUE) + 
+basemap(data = dt, bathymetry = TRUE) +
   geom_polygon(data = transform_coord(dt), aes(x = lon, y = lat), 
                color = "red", fill = NA)
 ```
 
-See the [ggOceanMaps website](https://mikkovihtakari.github.io/ggOceanMaps/index.html), [function reference](https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html), and the [user manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html) for how to use and modify the maps plotted by the package. You may also find [these slides about the package](https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html#1) useful. 
+See the [ggOceanMaps website](https://mikkovihtakari.github.io/ggOceanMaps/index.html), [function reference](https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html), and the [user manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html) for how to use and modify the maps plotted by the package.
 
 ## Data path
 

@@ -10,7 +10,8 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Premade maps">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Premade maps">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -20,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,16 +35,19 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/bathymetry.html">Bathymetry</a></li>
-    <li><a class="dropdown-item" href="../articles/customising-shapefiles.html">Customising shapefiles</a></li>
+<li><h6 class="dropdown-header" data-toc-skip>Instructions</h6></li>
+    <li><a class="dropdown-item" href="../articles/bathymetry.html">Bathymetry</a></li>
     <li><a class="dropdown-item" href="../articles/adding-graphical-elements.html">Adding graphical elements</a></li>
+    <li><a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a></li>
+    <li><a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a></li>
+    <li><a class="dropdown-item" href="../articles/customising-shapefiles.html">Customising shapefiles</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Examples</h6></li>
     <li><a class="dropdown-item" href="../articles/cookbook.html">Cookbook</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>News</h6></li>
+    <li><a class="dropdown-item" href="../articles/new-features-v3.html">New features in version 3</a></li>
     <li><a class="dropdown-item" href="../articles/new-features.html">New features in version 2</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a></li>
-    <li><a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Presentations</h6></li>
     <li><a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a></li>
@@ -73,7 +77,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">29 May, 2026</h4>
+            <h4 data-toc-skip class="date">19 June, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/premade-maps.Rmd" class="external-link"><code>vignettes/premade-maps.Rmd</code></a></small>
       <div class="d-none name"><code>premade-maps.Rmd</code></div>
@@ -100,23 +104,23 @@ and the projection each uses.</p>
 <span><span class="co">#&gt; 4               Svalbard</span></span>
 <span><span class="co">#&gt; 5                 Europe</span></span>
 <span><span class="co">#&gt;                                                                          land</span></span>
-<span><span class="co">#&gt; 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/arctic_land</span></span>
-<span><span class="co">#&gt; 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/antarctic_land</span></span>
+<span><span class="co">#&gt; 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_land</span></span>
+<span><span class="co">#&gt; 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_land</span></span>
 <span><span class="co">#&gt; 3                                                                     dd_land</span></span>
-<span><span class="co">#&gt; 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/svalbard_land</span></span>
-<span><span class="co">#&gt; 5    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/europe_land</span></span>
+<span><span class="co">#&gt; 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_land</span></span>
+<span><span class="co">#&gt; 5    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/europe_land</span></span>
 <span><span class="co">#&gt;                                                                          glacier</span></span>
-<span><span class="co">#&gt; 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/arctic_glacier</span></span>
-<span><span class="co">#&gt; 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/antarctic_glacier</span></span>
-<span><span class="co">#&gt; 3        /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_glacier</span></span>
-<span><span class="co">#&gt; 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/svalbard_glacier</span></span>
+<span><span class="co">#&gt; 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_glacier</span></span>
+<span><span class="co">#&gt; 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_glacier</span></span>
+<span><span class="co">#&gt; 3        /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_glacier</span></span>
+<span><span class="co">#&gt; 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_glacier</span></span>
 <span><span class="co">#&gt; 5                                                                           &lt;NA&gt;</span></span>
 <span><span class="co">#&gt;                                                                                                                                                                bathy</span></span>
-<span><span class="co">#&gt; 1    dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/arctic_bathy</span></span>
-<span><span class="co">#&gt; 2 dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/antarctic_bathy</span></span>
-<span><span class="co">#&gt; 3        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_bathy</span></span>
-<span><span class="co">#&gt; 4  dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/svalbard_bathy</span></span>
-<span><span class="co">#&gt; 5        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_bathy</span></span>
+<span><span class="co">#&gt; 1    dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_bathy</span></span>
+<span><span class="co">#&gt; 2 dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_bathy</span></span>
+<span><span class="co">#&gt; 3        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_bathy</span></span>
+<span><span class="co">#&gt; 4  dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_bathy</span></span>
+<span><span class="co">#&gt; 5        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_bathy</span></span>
 <span><span class="co">#&gt;     crs                                      limits</span></span>
 <span><span class="co">#&gt; 1  3995                                       c(30)</span></span>
 <span><span class="co">#&gt; 2  3031                                      c(-35)</span></span>
@@ -198,6 +202,12 @@ are downloaded from ggOceanMapsLargeData when first requested. The
 detailed shapefiles can be <strong>large</strong>: find your limits with
 the standard maps first, and export to a file rather than plotting into
 the screen device for big extents.</p>
+<p>Only a handful of regions have a dedicated high-resolution set. If
+your area of interest is not in the list above — or you need finer land
+or bathymetry than the standard maps provide — you can build your own
+land and bathymetry shapefiles and pass them to <code><a href="../reference/basemap.html">basemap()</a></code>
+via the <code>shapefiles</code> argument. See the <a href="customising-shapefiles.html">Customising shapefiles</a> article
+for the full workflow.</p>
 <div class="section level3">
 <h3 id="svalbard">Svalbard<a class="anchor" aria-label="anchor" href="#svalbard"></a>
 </h3>

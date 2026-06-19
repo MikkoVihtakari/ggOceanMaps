@@ -2,7 +2,7 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-2.4.0**
+3.0.0**
 
 <!-- badges: start -->
 
@@ -81,12 +81,12 @@ library(ggOceanMaps)
 
 dt <- data.frame(lon = c(-30, -30, 30, 30), lat = c(50, 80, 80, 50))
 
-basemap(data = dt, bathymetry = TRUE) + 
+basemap(data = dt, bathymetry = TRUE) +
   geom_polygon(data = transform_coord(dt), aes(x = lon, y = lat), 
                color = "red", fill = NA)
 ```
 
-![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->
+<img src="man/figures/README-unnamed-chunk-4-1.png" alt="Bathymetric basemap of the North Atlantic and Arctic with a red rectangle outlining a data box, illustrating basemap() with bathymetry and transform_coord()."  />
 
 See the [ggOceanMaps
 website](https://mikkovihtakari.github.io/ggOceanMaps/index.html),
@@ -94,10 +94,7 @@ website](https://mikkovihtakari.github.io/ggOceanMaps/index.html),
 reference](https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html),
 and the [user
 manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html)
-for how to use and modify the maps plotted by the package. You may also
-find [these slides about the
-package](https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html#1)
-useful.
+for how to use and modify the maps plotted by the package.
 
 ## Data path
 
@@ -181,7 +178,7 @@ citation("ggOceanMaps")
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Vihtakari M (2026). _ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'_. R package version 2.4.0,
+#>   using 'ggplot2'_. R package version 3.0.0,
 #>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -190,7 +187,7 @@ citation("ggOceanMaps")
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2026},
-#>     note = {R package version 2.4.0},
+#>     note = {R package version 3.0.0},
 #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```

@@ -22,23 +22,23 @@ shapefile_list("all")
 #> 4               Svalbard
 #> 5                 Europe
 #>                                                                          land
-#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/arctic_land
-#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/antarctic_land
+#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_land
+#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_land
 #> 3                                                                     dd_land
-#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/svalbard_land
-#> 5    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/europe_land
+#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_land
+#> 5    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/europe_land
 #>                                                                          glacier
-#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/arctic_glacier
-#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/antarctic_glacier
-#> 3        /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_glacier
-#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/svalbard_glacier
+#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_glacier
+#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_glacier
+#> 3        /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_glacier
+#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_glacier
 #> 5                                                                           <NA>
 #>                                                                                                                                                                bathy
-#> 1    dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/arctic_bathy
-#> 2 dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/antarctic_bathy
-#> 3        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_bathy
-#> 4  dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/svalbard_bathy
-#> 5        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmp4uvJqL/dd_bathy
+#> 1    dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_bathy
+#> 2 dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_bathy
+#> 3        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_bathy
+#> 4  dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_bathy
+#> 5        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_bathy
 #>     crs                                      limits
 #> 1  3995                                       c(30)
 #> 2  3031                                      c(-35)
@@ -139,6 +139,15 @@ downloaded from ggOceanMapsLargeData when first requested. The detailed
 shapefiles can be **large**: find your limits with the standard maps
 first, and export to a file rather than plotting into the screen device
 for big extents.
+
+Only a handful of regions have a dedicated high-resolution set. If your
+area of interest is not in the list above — or you need finer land or
+bathymetry than the standard maps provide — you can build your own land
+and bathymetry shapefiles and pass them to
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+via the `shapefiles` argument. See the [Customising
+shapefiles](https://mikkovihtakari.github.io/ggOceanMaps/articles/customising-shapefiles.md)
+article for the full workflow.
 
 ### Svalbard
 

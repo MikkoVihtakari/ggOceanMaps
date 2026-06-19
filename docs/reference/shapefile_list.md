@@ -72,23 +72,23 @@ shapefile_list("all")
 #> 4               Svalbard
 #> 5                 Europe
 #>                                                                          land
-#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/arctic_land
-#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/antarctic_land
+#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/arctic_land
+#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/antarctic_land
 #> 3                                                                     dd_land
-#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/svalbard_land
-#> 5    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/europe_land
+#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/svalbard_land
+#> 5    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/europe_land
 #>                                                                          glacier
-#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/arctic_glacier
-#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/antarctic_glacier
-#> 3        /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/dd_glacier
-#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/svalbard_glacier
+#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/arctic_glacier
+#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/antarctic_glacier
+#> 3        /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/dd_glacier
+#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/svalbard_glacier
 #> 5                                                                           <NA>
 #>                                                                                                                                                                bathy
-#> 1    dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/arctic_bathy
-#> 2 dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/antarctic_bathy
-#> 3        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/dd_bathy
-#> 4  dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/svalbard_bathy
-#> 5        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/dd_bathy
+#> 1    dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/arctic_bathy
+#> 2 dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/antarctic_bathy
+#> 3        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/dd_bathy
+#> 4  dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/svalbard_bathy
+#> 5        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/dd_bathy
 #>     crs                                      limits
 #> 1  3995                                       c(30)
 #> 2  3031                                      c(-35)
@@ -106,18 +106,18 @@ shapefile_list("Arctic") # partial matching
 #> [1] "ArcticStereographic"
 #> 
 #> $land
-#> [1] "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/arctic_land"
+#> [1] "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/arctic_land"
 #> 
 #> $glacier
-#> [1] "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/arctic_glacier"
+#> [1] "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/arctic_glacier"
 #> 
 #> $bathy
 #>                                                                 raster_binned 
 #>                                                                   "dd_rbathy" 
 #>                                                             raster_continuous 
-#> "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/dd_rbathy_cont" 
+#> "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/dd_rbathy_cont" 
 #>                                                                        vector 
-#>   "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmplbPw9z/arctic_bathy" 
+#>   "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpFLZ1Xs/arctic_bathy" 
 #> 
 #> $crs
 #> [1] 3995

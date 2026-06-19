@@ -598,11 +598,11 @@ lon_lab <- transform_coord(lon_lab, proj.out = attributes(p)$crs, bind = TRUE)
 
 p +
   geom_text(data = lat_lab,
-            aes(x = lon.proj, y = lat.proj, label = paste0(abs(Y), "°S"))) +
+            aes(x = lon.proj, y = lat.proj, label = paste0(abs(Y), "\u00B0S"))) +
   geom_text(data = lon_lab,
             aes(x = lon.proj, y = lat.proj,
-                label = ifelse(sign(X) == 1, paste0(abs(X), "°E"),
-                               paste0(abs(X), "°W")))) +
+                label = ifelse(sign(X) == 1, paste0(abs(X), "\u00B0E"),
+                               paste0(abs(X), "\u00B0W")))) +
   theme(plot.margin = margin(0.25, 0.25, 0.25, 0.25, "cm"))
 ```
 

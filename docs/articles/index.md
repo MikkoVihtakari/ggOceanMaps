@@ -13,6 +13,8 @@
 - [ggOceanMaps User
   Manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.md):
 - [New features in ggOceanMaps version
+  3](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features-v3.md):
+- [New features in ggOceanMaps version
   2](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.md):
 - [SI2022
   poster](https://mikkovihtakari.github.io/ggOceanMaps/articles/poster.md):
