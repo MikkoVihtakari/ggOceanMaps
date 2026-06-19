@@ -91,6 +91,10 @@ vb <- vector_bathymetry(rb, drop.crumbs = NULL)
 # 2b. Land polygons extracted from the same grid
 vl <- vector_land(rb, drop.crumbs = NULL)
 
+# 2c. Normalise the CRS to plain EPSG:4326 (see note below).
+vb <- sf::st_transform(vb, 4326)
+vl <- sf::st_transform(vl, 4326)
+
 # vector_bathymetry() also polygonizes the "land" class added by
 # estimate.land -- drop it, it belongs in vl.
 vb <- vb[vb$depth != "land", ]
@@ -107,6 +111,8 @@ basemap(
 
 ![Land and bathymetry vectorised from a GEBCO raster, North Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png)
 
+**Normalise the CRS** (step 2c). GEBCO, ETOPO and IBCAO NetCDF grids are read with a non-standard *"unknown"* geographic CRS — an unnamed datum with latitude/longitude (rather than longitude/latitude) axis order. `basemap()` clips and renders the map in the land layer's CRS, and that axis-swapped CRS makes the rectangular clip box slant slightly, leaving a thin uncovered wedge along the southern map edge. Transforming `vb` and `vl` to plain `EPSG:4326` before plotting removes it. Do this on the vectorised layers, not via `proj.out` in `raster_bathymetry()`: reprojecting the raster there turns it into a curvilinear grid that `vector_bathymetry()` cannot polygonise.
+
 `vector_land()` takes the same `bathyRaster` as `vector_bathymetry()` and the same cleanup arguments (`drop.crumbs`, `remove.holes`, `smooth`). Leave `drop.crumbs` at `NULL` when you need `vl` and `vb` to share a coastline: the two functions apply it independently, so a shared non-`NULL` threshold can drop a small island from one layer without dropping the matching sliver of shallow water from the other, leaving tiny gaps at the coast. `drop.crumbs` is still useful to shrink file size when you don't need the two layers to line up exactly — it is in km², so scale it down for small regions; a city-block-scale area needs something like `0.01`, not `10`. To keep continuous (unbinned) raster bathymetry instead of depth-contour polygons, pass `depths = NULL` to `raster_bathymetry()` and use `rb$raster` directly as `bathy` (skipping `vector_bathymetry()`).
 
 **Save the processed layers** so you do not re-run the heavy raster step every session:
@@ -119,7 +125,7 @@ load("north_sea_shapes.rda")
 
 # Reading Geonorge depth data
 
-For Norwegian waters, the [Geonorge](https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a) depth-area product comes as `.gml` and includes a matching land layer in the same file, so both sit at the same resolution and CRS. `geonorge_bathymetry()` reads the depth layer; `sf::st_read()` with `layer = "Landareal"` reads the land:
+For Norwegian waters, the [Geonorge](https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a) depth-area vector shapefiles can be downloaded as `.gml` and includes a matching land layer in the same file, so both sit at the same resolution and CRS. `geonorge_bathymetry()` reads the depth layer; `sf::st_read()` with `layer = "Landareal"` reads the land:
 
 ```{r}
 gb <- geonorge_bathymetry("path/to/Dybdedata.gml")
@@ -145,8 +151,9 @@ This example uses Oslo municipality's depth-area tile, a small dataset showing t
 [`wcs_bathymetry()`](bathymetry.html) fetches bathymetry on demand from a Web Coverage Service and returns a continuous `bathyRaster`, but it always discards land (it calls `raster_bathymetry(ras, depths = NULL)` internally). Since this section is about *making new shapefiles* rather than just plotting a raster, the example below vectorises the fetched bathymetry into depth-contour polygons — the same `cut()` + `vector_bathymetry()` pattern as the raster section above — and pairs it with the premade `"Europe"` land set, which is a better match for EMODnet's ~115 m resolution than the shipped `dd_land`:
 
 ```{r}
-tromso <- c(18, 20, 69.4, 69.9)  # xmin, xmax, ymin, ymax
-bathy <- wcs_bathymetry(tromso, source = "emodnet")
+tromso <- c(18, 20, 69.4, 69.9)    # area to display
+fetch  <- c(17.5, 20.5, 69.3, 70)  # slightly wider fetch box (see note below)
+bathy <- wcs_bathymetry(fetch, source = "emodnet")
 
 # wcs_bathymetry() always returns depths = NULL (continuous), so bin it
 # into depth-contour classes by hand before vectorising.
@@ -156,18 +163,22 @@ rb <- list(raster = cut(bathy$raster, breaks, labels = labels))
 class(rb) <- "bathyRaster"
 vb <- vector_bathymetry(rb, drop.crumbs = NULL)
 
-# Reproject to match the "Europe" land set's CRS (EPSG:3035).
+# Reproject the bathymetry to the "Europe" land set's CRS (EPSG:3035) and clip
+# the land to the bathymetry extent, so both are in the plotted projection.
 europe_land <- load_map_data(shapefile_list("Europe"))$land
 vb <- sf::st_transform(vb, sf::st_crs(europe_land))
+land <- sf::st_crop(sf::st_make_valid(europe_land), sf::st_bbox(vb))
 
 basemap(
   limits = tromso,
-  shapefiles = list(land = europe_land, glacier = NULL, bathy = vb),
+  shapefiles = list(land = land, glacier = NULL, bathy = vb),
   bathy.style = "pb"
 )
 ```
 
 ![Bathymetry fetched live from EMODnet around Tromsø, vectorised and paired with the premade Europe land set.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_tromso_wcs.png)
+
+**Fetch a little wider than you display.** The map is plotted in the `"Europe"` land set's CRS (`EPSG:3035`), but a WCS request is a decimal-degree (`EPSG:4326`) box. Its straight lat/lon edges slant once reprojected to 3035, so a fetch box exactly equal to the map `limits` leaves uncovered slivers in the projected map's corners. Requesting a slightly larger `fetch` box than the `tromso` area you display covers the whole panel. Clipping the land to `st_bbox(vb)` keeps it in the same projection as the bathymetry and the map, so the clipping happens in the plotted CRS rather than across a reprojection.
 
 `load_map_data()` is the internal helper `basemap()` itself uses to load and, if needed, download a premade set's layers — calling it directly here gets just the `"Europe"` land polygons without its default bathymetry. For a quick look at a raw WCS fetch without vectorising, pair `bathy$raster` directly with `dd_land` and use `bathymetry = TRUE` instead, as in `wcs_bathymetry()`'s own examples.
 

@@ -74,7 +74,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">18 June, 2026</h4>
+            <h4 data-toc-skip class="date">19 June, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/customising-shapefiles.Rmd" class="external-link"><code>vignettes/customising-shapefiles.Rmd</code></a></small>
       <div class="d-none name"><code>customising-shapefiles.Rmd</code></div>
@@ -177,6 +177,10 @@ vectorisers:</p>
 <span><span class="co"># 2b. Land polygons extracted from the same grid</span></span>
 <span><span class="va">vl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_land.html">vector_land</a></span><span class="op">(</span><span class="va">rb</span>, drop.crumbs <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># 2c. Normalise the CRS to plain EPSG:4326 (see note below).</span></span>
+<span><span class="va">vb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vb</span>, <span class="fl">4326</span><span class="op">)</span></span>
+<span><span class="va">vl</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vl</span>, <span class="fl">4326</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># vector_bathymetry() also polygonizes the "land" class added by</span></span>
 <span><span class="co"># estimate.land -- drop it, it belongs in vl.</span></span>
 <span><span class="va">vb</span> <span class="op">&lt;-</span> <span class="va">vb</span><span class="op">[</span><span class="va">vb</span><span class="op">$</span><span class="va">depth</span> <span class="op">!=</span> <span class="st">"land"</span>, <span class="op">]</span></span>
@@ -193,6 +197,18 @@ vectorisers:</p>
 <img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png" alt="Land and bathymetry vectorised from a GEBCO raster, North Sea."><div class="figcaption">Land and bathymetry vectorised from a GEBCO
 raster, North Sea.</div>
 </div>
+<p><strong>Normalise the CRS</strong> (step 2c). GEBCO, ETOPO and IBCAO
+NetCDF grids are read with a non-standard <em>“unknown”</em> geographic
+CRS — an unnamed datum with latitude/longitude (rather than
+longitude/latitude) axis order. <code><a href="../reference/basemap.html">basemap()</a></code> clips and renders
+the map in the land layer’s CRS, and that axis-swapped CRS makes the
+rectangular clip box slant slightly, leaving a thin uncovered wedge
+along the southern map edge. Transforming <code>vb</code> and
+<code>vl</code> to plain <code>EPSG:4326</code> before plotting removes
+it. Do this on the vectorised layers, not via <code>proj.out</code> in
+<code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code>: reprojecting the raster there turns it
+into a curvilinear grid that <code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> cannot
+polygonise.</p>
 <p><code><a href="../reference/vector_land.html">vector_land()</a></code> takes the same <code>bathyRaster</code> as
 <code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> and the same cleanup arguments
 (<code>drop.crumbs</code>, <code>remove.holes</code>,
@@ -220,11 +236,11 @@ heavy raster step every session:</p>
 <h2 id="reading-geonorge-depth-data">Reading Geonorge depth data<a class="anchor" aria-label="anchor" href="#reading-geonorge-depth-data"></a>
 </h2>
 <p>For Norwegian waters, the <a href="https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a" class="external-link">Geonorge</a>
-depth-area product comes as <code>.gml</code> and includes a matching
-land layer in the same file, so both sit at the same resolution and CRS.
-<code><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry()</a></code> reads the depth layer;
-<code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::st_read()</a></code> with <code>layer = "Landareal"</code> reads
-the land:</p>
+depth-area vector shapefiles can be downloaded as <code>.gml</code> and
+includes a matching land layer in the same file, so both sit at the same
+resolution and CRS. <code><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry()</a></code> reads the depth
+layer; <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::st_read()</a></code> with <code>layer = "Landareal"</code>
+reads the land:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry</a></span><span class="op">(</span><span class="st">"path/to/Dybdedata.gml"</span><span class="op">)</span></span>
 <span><span class="va">land</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"path/to/Dybdedata.gml"</span>, layer <span class="op">=</span> <span class="st">"Landareal"</span><span class="op">)</span></span>
@@ -264,8 +280,9 @@ and pairs it with the premade <code>"Europe"</code> land set, which is a
 better match for EMODnet’s ~115 m resolution than the shipped
 <code>dd_land</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tromso</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">20</span>, <span class="fl">69.4</span>, <span class="fl">69.9</span><span class="op">)</span>  <span class="co"># xmin, xmax, ymin, ymax</span></span>
-<span><span class="va">bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wcs_bathymetry.html">wcs_bathymetry</a></span><span class="op">(</span><span class="va">tromso</span>, source <span class="op">=</span> <span class="st">"emodnet"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">tromso</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">20</span>, <span class="fl">69.4</span>, <span class="fl">69.9</span><span class="op">)</span>    <span class="co"># area to display</span></span>
+<span><span class="va">fetch</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17.5</span>, <span class="fl">20.5</span>, <span class="fl">69.3</span>, <span class="fl">70</span><span class="op">)</span>  <span class="co"># slightly wider fetch box (see note below)</span></span>
+<span><span class="va">bathy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wcs_bathymetry.html">wcs_bathymetry</a></span><span class="op">(</span><span class="va">fetch</span>, source <span class="op">=</span> <span class="st">"emodnet"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># wcs_bathymetry() always returns depths = NULL (continuous), so bin it</span></span>
 <span><span class="co"># into depth-contour classes by hand before vectorising.</span></span>
@@ -275,19 +292,32 @@ better match for EMODnet’s ~115 m resolution than the shipped
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"bathyRaster"</span></span>
 <span><span class="va">vb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span>, drop.crumbs <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Reproject to match the "Europe" land set's CRS (EPSG:3035).</span></span>
+<span><span class="co"># Reproject the bathymetry to the "Europe" land set's CRS (EPSG:3035) and clip</span></span>
+<span><span class="co"># the land to the bathymetry extent, so both are in the plotted projection.</span></span>
 <span><span class="va">europe_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_map_data.html">load_map_data</a></span><span class="op">(</span><span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Europe"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">land</span></span>
 <span><span class="va">vb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vb</span>, <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">europe_land</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">land</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">st_make_valid</a></span><span class="op">(</span><span class="va">europe_land</span><span class="op">)</span>, <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">vb</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
 <span>  limits <span class="op">=</span> <span class="va">tromso</span>,</span>
-<span>  shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">europe_land</span>, glacier <span class="op">=</span> <span class="cn">NULL</span>, bathy <span class="op">=</span> <span class="va">vb</span><span class="op">)</span>,</span>
+<span>  shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">land</span>, glacier <span class="op">=</span> <span class="cn">NULL</span>, bathy <span class="op">=</span> <span class="va">vb</span><span class="op">)</span>,</span>
 <span>  bathy.style <span class="op">=</span> <span class="st">"pb"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_tromso_wcs.png" alt="Bathymetry fetched live from EMODnet around Tromsø, vectorised and paired with the premade Europe land set."><div class="figcaption">Bathymetry fetched live from EMODnet around
 Tromsø, vectorised and paired with the premade Europe land set.</div>
 </div>
+<p><strong>Fetch a little wider than you display.</strong> The map is
+plotted in the <code>"Europe"</code> land set’s CRS
+(<code>EPSG:3035</code>), but a WCS request is a decimal-degree
+(<code>EPSG:4326</code>) box. Its straight lat/lon edges slant once
+reprojected to 3035, so a fetch box exactly equal to the map
+<code>limits</code> leaves uncovered slivers in the projected map’s
+corners. Requesting a slightly larger <code>fetch</code> box than the
+<code>tromso</code> area you display covers the whole panel. Clipping
+the land to <code>st_bbox(vb)</code> keeps it in the same projection as
+the bathymetry and the map, so the clipping happens in the plotted CRS
+rather than across a reprojection.</p>
 <p><code><a href="../reference/load_map_data.html">load_map_data()</a></code> is the internal helper
 <code><a href="../reference/basemap.html">basemap()</a></code> itself uses to load and, if needed, download a
 premade set’s layers — calling it directly here gets just the

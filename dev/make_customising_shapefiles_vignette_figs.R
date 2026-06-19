@@ -58,6 +58,14 @@ rb <- raster_bathymetry(
 vb <- vector_bathymetry(rb, drop.crumbs = NULL)
 vl <- vector_land(rb, drop.crumbs = NULL)
 
+# GEBCO/ETOPO NetCDF grids are read with a non-standard "unknown" geographic
+# CRS (unnamed datum, latitude/longitude axis order). basemap() clips and
+# renders the map in the land layer's CRS, and that axis-swapped CRS makes the
+# clip-box edges slant, leaving a thin uncovered wedge along the southern map
+# edge. Normalise both layers to plain EPSG:4326 to fix it.
+vb <- sf::st_transform(vb, 4326)
+vl <- sf::st_transform(vl, 4326)
+
 # vector_bathymetry() also polygonizes the "land" class added by
 # estimate.land -- drop it, it belongs in vl.
 vb <- vb[vb$depth != "land", ]
@@ -91,8 +99,15 @@ save_fig(
 # wcs_bathymetry() always returns a continuous bathyRaster (it calls
 # raster_bathymetry(ras, depths = NULL) internally), so the depth binning
 # that raster_bathymetry() would otherwise do is repeated by hand here.
-tromso <- c(18, 20, 69.4, 69.9)  # xmin, xmax, ymin, ymax
-bathy <- wcs_bathymetry(tromso, source = "emodnet", verbose = FALSE)
+#
+# The map is plotted in the "Europe" land set's CRS (EPSG:3035). A WCS fetch is
+# a decimal-degree (EPSG:4326) box, and its straight lat/lon edges slant once
+# reprojected to 3035, so a fetch box exactly equal to the map limits would
+# leave uncovered slivers in the projected map's corners. Fetch a little wider
+# than the area to display so the whole panel is covered.
+tromso <- c(18, 20, 69.4, 69.9)    # area to display
+fetch  <- c(17.5, 20.5, 69.3, 70)  # slightly wider fetch box
+bathy <- wcs_bathymetry(fetch, source = "emodnet", verbose = FALSE)
 
 breaks <- c(-Inf, 20, 50, 100, 200, Inf)
 labels <- c("0-20", "20-50", "50-100", "100-200", "200-Inf")
@@ -103,12 +118,15 @@ rb <- list(
 class(rb) <- "bathyRaster"
 vb <- vector_bathymetry(rb, drop.crumbs = NULL)
 
+# Reproject the bathymetry to the land set's CRS and clip the land to the
+# bathymetry extent (both now in EPSG:3035, the plotted projection).
 europe_land <- load_map_data(shapefile_list("Europe"))$land
 vb <- sf::st_transform(vb, sf::st_crs(europe_land))
+land <- sf::st_crop(sf::st_make_valid(europe_land), sf::st_bbox(vb))
 
 save_fig(
   basemap(limits = tromso,
-          shapefiles = list(land = europe_land, glacier = NULL, bathy = vb),
+          shapefiles = list(land = land, glacier = NULL, bathy = vb),
           bathy.style = "pb"),
   "shapes_tromso_wcs.png"
 )
