@@ -137,6 +137,8 @@ navbar:
       href: articles/cookbook.html
     - text: -------
     - text: News
+    - text: New features in version 3
+      href: articles/new-features-v3.html
     - text: New features in version 2
       href: articles/new-features.html
     - text: -------
