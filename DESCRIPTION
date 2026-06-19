@@ -28,12 +28,8 @@ Depends: R (>= 3.5.0), ggplot2 (>= 3.4.0)
 Imports: sf, stars, methods, utils, smoothr, units, grDevices, stats, tools
 Suggests:
     ggspatial,
-    cowplot,
     knitr,
     rmarkdown,
-    scales,
-    ggnewscale,
-    scatterpie,
     testthat (>= 3.0.0),
     vdiffr (>= 1.0.0),
     sp,
