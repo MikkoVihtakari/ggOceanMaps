@@ -109,6 +109,13 @@ shapefiles can be **large**: find your limits with the standard maps first,
 and export to a file rather than plotting into the screen device for big
 extents.
 
+Only a handful of regions have a dedicated high-resolution set. If your area of
+interest is not in the list above — or you need finer land or bathymetry than
+the standard maps provide — you can build your own land and bathymetry
+shapefiles and pass them to `basemap()` via the `shapefiles` argument. See the
+[Customising shapefiles](customising-shapefiles.html) article for the full
+workflow.
+
 ## Svalbard
 
 A detailed Svalbard map (EPSG:32633), originally from the

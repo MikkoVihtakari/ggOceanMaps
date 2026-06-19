@@ -47,7 +47,6 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Presentations</h6></li>
     <li><a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a></li>
-    <li><a class="external-link dropdown-item" href="https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html">AeN workshop slides</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -74,7 +73,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">29 May, 2026</h4>
+            <h4 data-toc-skip class="date">18 June, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/adding-graphical-elements.Rmd" class="external-link"><code>vignettes/adding-graphical-elements.Rmd</code></a></small>
       <div class="d-none name"><code>adding-graphical-elements.Rmd</code></div>
@@ -82,250 +81,326 @@
 
     
     
-<p>A <code><a href="../reference/basemap.html">basemap()</a></code> is an ordinary <code>ggplot2</code> object:
-anything you can add to a <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot()</a></code> with <code>+</code>
-works on a basemap too. This article collects two graphical elements
-that come up often in oceanography but need a little care on projected
-maps:</p>
-<ol style="list-style-type: decimal">
-<li>
-<strong>Ocean-current arrows</strong> drawn over a map.</li>
-<li>
-<strong>Pie charts (scatter pies)</strong> placed at geographic
-positions.</li>
-</ol>
-<p>The recurring theme is <strong>coordinates</strong>. On a
-decimal-degree map you plot in longitude/latitude directly. On a
-<em>projected</em> map (polar regions, custom <code>crs</code>) the axes
-are in metres, so geographic coordinates must be transformed with
-<code><a href="../reference/transform_coord.html">transform_coord()</a></code> first. Every recipe below shows both
-cases.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/">ggOceanMaps</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="../reference/basemap.html">basemap()</a></code> returns a standard <code>ggplot2</code>
+object, so points, paths, polygons, labels, and custom scales are added
+with <code>+</code>. The one thing to watch is the coordinate system: at
+high latitudes, and whenever <code>crs</code> is set, the map axes are
+projected metres rather than longitude and latitude. Add geographic
+coordinates to those maps through <code><a href="../reference/transform_coord.html">transform_coord()</a></code>,
+<code>ggspatial::geom_spatial_*()</code>, or <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf()</a></code>,
+which reproject on the fly.</p>
 <div class="section level2">
-<h2 id="ocean-current-arrows">Ocean-current arrows<a class="anchor" aria-label="anchor" href="#ocean-current-arrows"></a>
+<h2 id="schematic-current-arrows">Schematic current arrows<a class="anchor" aria-label="anchor" href="#schematic-current-arrows"></a>
 </h2>
-<p>There are two common situations: you have a <strong>velocity
-field</strong> (<code>u</code>/<code>v</code> components on a grid) and
-want a quiver plot, or you have <strong>hand-drawn schematic
-arrows</strong> (the “Figure 1” style arrows that summarise the general
-circulation of a region).</p>
-<div class="section level3">
-<h3 id="a-velocity-field-as-a-quiver-plot">A velocity field as a quiver plot<a class="anchor" aria-label="anchor" href="#a-velocity-field-as-a-quiver-plot"></a>
-</h3>
-<p>The pattern is: thin the grid to a drawable density, scale the arrow
-length, and draw with <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code>. The example uses a
-small synthetic field so it runs without any download.</p>
+<p>The <a href="https://github.com/MikkoVihtakari/Barents-Sea-currents" class="external-link">Barents-Sea-currents</a>
+repository provides publication-style <em>“Figure 1”</em> current arrows
+for the Barents Sea and North Atlantic. The example below downloads the
+tidy Barents Sea CSV, builds one line per arrow, smooths it, and draws
+it with <code><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path()</a></code>. Smoothing happens in projected metres
+rather than in longitude/latitude, which would exaggerate the curves
+near the pole.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">grd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">15</span>, <span class="fl">25</span>, by <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,</span>
-<span>                   lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">52</span>, <span class="fl">68</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">grd</span><span class="op">$</span><span class="va">u</span> <span class="op">&lt;-</span> <span class="fl">0.6</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">grd</span><span class="op">$</span><span class="va">lat</span> <span class="op">/</span> <span class="fl">8</span><span class="op">)</span>          <span class="co"># eastward component (m/s)</span></span>
-<span><span class="va">grd</span><span class="op">$</span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fl">0.3</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="va">grd</span><span class="op">$</span><span class="va">lon</span> <span class="op">/</span> <span class="fl">6</span><span class="op">)</span>          <span class="co"># northward component (m/s)</span></span>
-<span></span>
-<span><span class="va">scale</span> <span class="op">&lt;-</span> <span class="fl">2</span>                                <span class="co"># degrees drawn per m/s -- tune to taste</span></span>
-<span><span class="va">grd</span><span class="op">$</span><span class="va">lon_end</span> <span class="op">&lt;-</span> <span class="va">grd</span><span class="op">$</span><span class="va">lon</span> <span class="op">+</span> <span class="va">grd</span><span class="op">$</span><span class="va">u</span> <span class="op">*</span> <span class="va">scale</span></span>
-<span><span class="va">grd</span><span class="op">$</span><span class="va">lat_end</span> <span class="op">&lt;-</span> <span class="va">grd</span><span class="op">$</span><span class="va">lat</span> <span class="op">+</span> <span class="va">grd</span><span class="op">$</span><span class="va">v</span> <span class="op">*</span> <span class="va">scale</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">grd</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span>, xend <span class="op">=</span> <span class="va">lon_end</span>, yend <span class="op">=</span> <span class="va">lat_end</span><span class="op">)</span>,</span>
-<span>    arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.15</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    colour <span class="op">=</span> <span class="st">"steelblue"</span>, linewidth <span class="op">=</span> <span class="fl">0.4</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="adding-graphical-elements_files/figure-html/quiver-dd-1.png" class="r-plt" alt="" width="576"></p>
-<p>On a <strong>projected map</strong> the axes are in metres, so
-transform the start points and add the velocity in projected units:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># transform_coord adds lon.proj / lat.proj in the map's CRS (metres)</span></span>
-<span><span class="va">grd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="va">grd</span>, proj.out <span class="op">=</span> <span class="fl">3995</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">scale_m</span> <span class="op">&lt;-</span> <span class="fl">1e5</span>                            <span class="co"># metres drawn per m/s</span></span>
-<span><span class="va">grd</span><span class="op">$</span><span class="va">lon_end_proj</span> <span class="op">&lt;-</span> <span class="va">grd</span><span class="op">$</span><span class="va">lon.proj</span> <span class="op">+</span> <span class="va">grd</span><span class="op">$</span><span class="va">u</span> <span class="op">*</span> <span class="va">scale_m</span></span>
-<span><span class="va">grd</span><span class="op">$</span><span class="va">lat_end_proj</span> <span class="op">&lt;-</span> <span class="va">grd</span><span class="op">$</span><span class="va">lat.proj</span> <span class="op">+</span> <span class="va">grd</span><span class="op">$</span><span class="va">v</span> <span class="op">*</span> <span class="va">scale_m</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fl">60</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">grd</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon.proj</span>, y <span class="op">=</span> <span class="va">lat.proj</span>, xend <span class="op">=</span> <span class="va">lon_end_proj</span>, yend <span class="op">=</span> <span class="va">lat_end_proj</span><span class="op">)</span>,</span>
-<span>    arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.15</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    colour <span class="op">=</span> <span class="st">"steelblue"</span>, linewidth <span class="op">=</span> <span class="fl">0.4</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
-<p>If your field lives in a NetCDF, read it with
-<code><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">stars::read_stars()</a></code>, <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> it,
-rename the coordinate/velocity columns, and thin with
-<code>df[seq(1, nrow(df), by = n), ]</code> before the steps above.</p>
-</div>
-<div class="section level3">
-<h3 id="schematic-figure-1-current-arrows">Schematic “Figure 1” current arrows<a class="anchor" aria-label="anchor" href="#schematic-figure-1-current-arrows"></a>
-</h3>
-<p>For publication-style arrows summarising the circulation of a region,
-the <a href="https://github.com/MikkoVihtakari/Barents-Sea-currents" class="external-link">Barents-Sea-currents</a>
-repository distributes ready-made, editable arrows for the Barents and
-Greenland Seas. The arrows are stored as a small set of nodes (decimal
-degrees) grouped per arrow, with a <code>type</code> column
-(<code>"Atlantic"</code> / <code>"Arctic"</code>).</p>
-<p>The nodes are sparse on purpose (easy to edit); run an X-spline
-through each arrow to smooth it before plotting. The recipe below
-reproduces the classic two-colour current map on a ggOceanMaps
-basemap:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 1. Read the editable node table (decimal degrees)</span></span>
-<span><span class="va">cur</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">barents_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
 <span>  <span class="st">"https://raw.githubusercontent.com/MikkoVihtakari/"</span>,</span>
 <span>  <span class="st">"Barents-Sea-currents/master/tabular/barents_currents.csv"</span></span>
-<span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 2. Transform the nodes to the map projection (Arctic stereographic, metres)</span></span>
-<span><span class="va">cur</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="va">cur</span>, lon <span class="op">=</span> <span class="st">"long"</span>, lat <span class="op">=</span> <span class="st">"lat"</span>,</span>
-<span>                       proj.out <span class="op">=</span> <span class="fl">3995</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 3. Smooth each arrow with an X-spline through its nodes.</span></span>
-<span><span class="co">#    xspline() needs an open graphics device even with draw = FALSE, so</span></span>
-<span><span class="co">#    open a null device for the calculation.</span></span>
-<span><span class="va">smooth_arrow</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit</a></span><span class="op">(</span><span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>; <span class="fu">graphics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/graphics/frame.html" class="external-link">plot.new</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="va">xs</span> <span class="op">&lt;-</span> <span class="fu">graphics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/graphics/xspline.html" class="external-link">xspline</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">lon.proj</span>, <span class="va">d</span><span class="op">$</span><span class="va">lat.proj</span>, shape <span class="op">=</span> <span class="op">-</span><span class="fl">0.6</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon.proj <span class="op">=</span> <span class="va">xs</span><span class="op">$</span><span class="va">x</span>, lat.proj <span class="op">=</span> <span class="va">xs</span><span class="op">$</span><span class="va">y</span>,</span>
-<span>             group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">group</span><span class="op">)</span>, type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">type</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="va">cur_smooth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">cur</span>, <span class="va">cur</span><span class="op">$</span><span class="va">group</span><span class="op">)</span>, <span class="va">smooth_arrow</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 4. Plot, mapping arrow colour to current type</span></span>
-<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">68</span>, <span class="fl">83</span><span class="op">)</span>, shapefiles <span class="op">=</span> <span class="st">"Arctic"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">cur_smooth</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon.proj</span>, y <span class="op">=</span> <span class="va">lat.proj</span>, group <span class="op">=</span> <span class="va">group</span>, colour <span class="op">=</span> <span class="va">type</span><span class="op">)</span>,</span>
-<span>    linewidth <span class="op">=</span> <span class="fl">0.6</span>,</span>
-<span>    arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"open"</span>, angle <span class="op">=</span> <span class="fl">15</span>, ends <span class="op">=</span> <span class="st">"last"</span>,</span>
-<span>                  length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="st">"lines"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span></span>
-<span>    name <span class="op">=</span> <span class="st">"Current type"</span>,</span>
-<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Arctic"</span> <span class="op">=</span> <span class="st">"blue"</span>, <span class="st">"Atlantic"</span> <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
-<p>Key points:</p>
-<ul>
-<li>The CSV is in <strong>decimal degrees</strong>;
-<code>transform_coord(..., proj.out = 3995)</code> moves it to the
-Arctic-stereographic CRS that <code><a href="../reference/basemap.html">basemap()</a></code> uses for this
-region. On a decimal-degree map skip the transform and map
-<code>aes(x = long, y = lat)</code> directly.</li>
-<li>
-<code>graphics::xspline(..., shape = -0.6, draw = FALSE)</code>
-returns smoothed coordinates without drawing anything — exactly what we
-feed to <code><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path()</a></code>.</li>
-<li>Smooth in the <strong>projected</strong> coordinates (after
-<code><a href="../reference/transform_coord.html">transform_coord()</a></code>), not in degrees, so the curvature
-matches the map.</li>
-<li>If you cite these arrows, see the citation in the <a href="https://github.com/MikkoVihtakari/Barents-Sea-currents#citations" class="external-link">source
-repository</a>.</li>
-</ul>
-</div>
-</div>
-<div class="section level2">
-<h2 id="pie-charts-on-maps-scatter-pies">Pie charts on maps (scatter pies)<a class="anchor" aria-label="anchor" href="#pie-charts-on-maps-scatter-pies"></a>
-</h2>
-<p>A frequent request is a small pie chart at each station summarising a
-composition (species proportions, water-mass fractions, …). The cleanest
-way to do this on a <code>ggplot2</code> map is the <a href="https://cran.r-project.org/package=scatterpie" class="external-link"><strong>scatterpie</strong></a>
-package, whose <code>geom_scatterpie()</code> draws one pie per row of a
-data frame from a set of value columns.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"scatterpie"</span><span class="op">)</span></span></code></pre></div>
-<p>Your data frame needs a position (<code>x</code>, <code>y</code>), an
-optional radius, and one column per pie slice:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  lon  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">15</span>, <span class="fl">25</span><span class="op">)</span>,</span>
-<span>  lat  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">56</span>, <span class="fl">62</span>, <span class="fl">68</span><span class="op">)</span>,</span>
-<span>  cod  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">10</span>, <span class="fl">70</span><span class="op">)</span>,</span>
-<span>  haddock <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">30</span>, <span class="fl">20</span><span class="op">)</span>,</span>
-<span>  saithe  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">60</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">slices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cod"</span>, <span class="st">"haddock"</span>, <span class="st">"saithe"</span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="on-a-decimal-degree-map">On a decimal-degree map<a class="anchor" aria-label="anchor" href="#on-a-decimal-degree-map"></a>
-</h3>
-<p>Plot directly in longitude/latitude. <code>r</code> (the pie radius)
-is in <strong>degrees</strong> here, because that is the unit of the map
-axes:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scatterpie</span><span class="op">)</span></span>
+<span><span class="va">barents_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"barents_currents.csv"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">35</span>, <span class="fl">52</span>, <span class="fl">72</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_scatterpie</span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">pies</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span>, r <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span>,   <span class="co"># radius in degrees</span></span>
-<span>    cols <span class="op">=</span> <span class="va">slices</span>,</span>
-<span>    colour <span class="op">=</span> <span class="cn">NA</span>, alpha <span class="op">=</span> <span class="fl">0.9</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set2"</span>, name <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="on-a-projected-map">On a projected map<a class="anchor" aria-label="anchor" href="#on-a-projected-map"></a>
-</h3>
-<p>Transform the pie centres first, and give <code>r</code> in the
-projected unit (<strong>metres</strong> for the polar projections):</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="va">pies</span>, proj.out <span class="op">=</span> <span class="fl">3995</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">barents_file</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">barents_url</span>, <span class="va">barents_file</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>, mode <span class="op">=</span> <span class="st">"wb"</span><span class="op">)</span>,</span>
+<span>    silent <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fl">60</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_scatterpie</span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">pies</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon.proj</span>, y <span class="op">=</span> <span class="va">lat.proj</span>, r <span class="op">=</span> <span class="fl">1.5e5</span><span class="op">)</span>,   <span class="co"># radius in metres</span></span>
-<span>    cols <span class="op">=</span> <span class="va">slices</span>,</span>
-<span>    colour <span class="op">=</span> <span class="cn">NA</span>, alpha <span class="op">=</span> <span class="fl">0.9</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set2"</span>, name <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="scaling-pies-by-a-total-and-adding-a-size-legend">Scaling pies by a total and adding a size legend<a class="anchor" aria-label="anchor" href="#scaling-pies-by-a-total-and-adding-a-size-legend"></a>
-</h3>
-<p>Map the radius to a variable (e.g. total catch) and add a radius
-legend with <code>geom_scatterpie_legend()</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pies</span><span class="op">$</span><span class="va">total</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">pies</span><span class="op">[</span>, <span class="va">slices</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">pies</span><span class="op">$</span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">0.4</span> <span class="op">+</span> <span class="fl">1.6</span> <span class="op">*</span> <span class="va">pies</span><span class="op">$</span><span class="va">total</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">pies</span><span class="op">$</span><span class="va">total</span><span class="op">)</span>   <span class="co"># degrees</span></span>
+<span><span class="co"># Offline fallback bundled with the vignette.</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">barents_file</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">barents_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"data"</span>, <span class="st">"barents_currents.csv"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">35</span>, <span class="fl">52</span>, <span class="fl">72</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_scatterpie</span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">pies</span>,</span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon</span>, y <span class="op">=</span> <span class="va">lat</span>, r <span class="op">=</span> <span class="va">r</span><span class="op">)</span>,</span>
-<span>    cols <span class="op">=</span> <span class="va">slices</span>, colour <span class="op">=</span> <span class="cn">NA</span>, alpha <span class="op">=</span> <span class="fl">0.9</span></span>
+<span><span class="va">cur</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">barents_file</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cur</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   id      long      lat order        group size     type</span></span>
+<span><span class="co">#&gt; 1  0  5.306694 66.34752     1 Atlantic_0.1    5 Atlantic</span></span>
+<span><span class="co">#&gt; 2  0  5.306694 66.34752     2 Atlantic_0.1    5 Atlantic</span></span>
+<span><span class="co">#&gt; 3  0  6.448918 66.73568     3 Atlantic_0.1    5 Atlantic</span></span>
+<span><span class="co">#&gt; 4  0  9.080173 67.53121     4 Atlantic_0.1    5 Atlantic</span></span>
+<span><span class="co">#&gt; 5  0 10.656624 68.29049     5 Atlantic_0.1    5 Atlantic</span></span>
+<span><span class="co">#&gt; 6  0 13.568487 69.01010     6 Atlantic_0.1    5 Atlantic</span></span></code></pre></div>
+<p>Each arrow is a group of ordered nodes. Assemble them into one
+<code>LINESTRING</code> per arrow, reproject to the map CRS, and smooth
+the nodes into curves with <code><a href="https://strimas.com/smoothr/reference/smooth.html" class="external-link">smoothr::smooth()</a></code>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cur</span> <span class="op">&lt;-</span> <span class="va">cur</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">cur</span><span class="op">$</span><span class="va">group</span>, <span class="va">cur</span><span class="op">$</span><span class="va">order</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="va">parts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">cur</span>, <span class="va">cur</span><span class="op">$</span><span class="va">group</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">arrows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">parts</span>, <span class="kw">function</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="va">d</span><span class="op">[</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"type"</span>, <span class="st">"size"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  geometry <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">parts</span>, <span class="kw">function</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"long"</span>, <span class="st">"lat"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    crs <span class="op">=</span> <span class="fl">4326</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">arrows</span> <span class="op">&lt;-</span> <span class="fu">smoothr</span><span class="fu">::</span><span class="fu"><a href="https://strimas.com/smoothr/reference/smooth.html" class="external-link">smooth</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">arrows</span>, <span class="fl">32633</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"spline"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Tidy projected coordinates for geom_path().</span></span>
+<span><span class="va">co</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">arrows</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cur_lines</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">co</span><span class="op">$</span><span class="va">X</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">co</span><span class="op">$</span><span class="va">Y</span>,</span>
+<span>  group <span class="op">=</span> <span class="va">arrows</span><span class="op">$</span><span class="va">group</span><span class="op">[</span><span class="va">co</span><span class="op">$</span><span class="va">L1</span><span class="op">]</span>,</span>
+<span>  type <span class="op">=</span> <span class="va">arrows</span><span class="op">$</span><span class="va">type</span><span class="op">[</span><span class="va">co</span><span class="op">$</span><span class="va">L1</span><span class="op">]</span>,</span>
+<span>  size <span class="op">=</span> <span class="va">arrows</span><span class="op">$</span><span class="va">size</span><span class="op">[</span><span class="va">co</span><span class="op">$</span><span class="va">L1</span><span class="op">]</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The arrows sit on top of the basemap, so they would otherwise be
+drawn over land. <code><a href="../reference/reorder_layers.html">reorder_layers()</a></code> pushes the land, glacier,
+and grid layers back on top, tucking the arrows under the coastline.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">current_arrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span></span>
+<span>  type <span class="op">=</span> <span class="st">"open"</span>,</span>
+<span>  angle <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  ends <span class="op">=</span> <span class="st">"last"</span>,</span>
+<span>  length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="st">"lines"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/reorder_layers.html">reorder_layers</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
+<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">45</span>, <span class="fl">68</span>, <span class="fl">83.5</span><span class="op">)</span>,</span>
+<span>    crs <span class="op">=</span> <span class="fl">32633</span>,</span>
+<span>    bathy.style <span class="op">=</span> <span class="st">"rbg"</span>,</span>
+<span>    land.col <span class="op">=</span> <span class="st">"grey86"</span>,</span>
+<span>    legends <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_scatterpie_legend</span><span class="op">(</span><span class="va">pies</span><span class="op">$</span><span class="va">r</span>, x <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, y <span class="op">=</span> <span class="fl">70</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set2"</span>, name <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span></code></pre></div>
-<p>Tips:</p>
-<ul>
-<li>Keep <code>colour = NA</code> (no slice borders) for small pies;
-borders dominate at map scale.</li>
-<li>
-<code>geom_scatterpie()</code> adds a <code>fill</code> aesthetic,
-so it composes with the separate <code>fill</code> scale ggOceanMaps
-uses for bathymetry only if you add the pies <em>after</em> the
-bathymetry. If you need two independent fill scales (e.g. bathymetry
-<strong>and</strong> pie slices) use <a href="https://cran.r-project.org/package=ggnewscale" class="external-link"><strong>ggnewscale</strong></a>’s
-<code>new_scale_fill()</code> between the layers.</li>
-<li>Choose the radius in the same unit as the map axes: degrees on a
-decimal-degree map, metres on a projected map. A radius that looks right
-on one map will be invisible (or fill the plot) on the other.</li>
-</ul>
-</div>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path</a></span><span class="op">(</span></span>
+<span>      data <span class="op">=</span> <span class="va">cur_lines</span>,</span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, group <span class="op">=</span> <span class="va">group</span>, colour <span class="op">=</span> <span class="va">type</span>, linewidth <span class="op">=</span> <span class="va">size</span><span class="op">)</span>,</span>
+<span>      arrow <span class="op">=</span> <span class="va">current_arrow</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Current type"</span>,</span>
+<span>      values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Atlantic <span class="op">=</span> <span class="st">"#d7301f"</span>, Arctic <span class="op">=</span> <span class="st">"#2166ac"</span><span class="op">)</span>,</span>
+<span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Atlantic <span class="op">=</span> <span class="st">"Atlantic (warm)"</span>, Arctic <span class="op">=</span> <span class="st">"Arctic (cold)"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linewidth.html" class="external-link">scale_linewidth</a></span><span class="op">(</span><span class="st">"Relative strength"</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">1.3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="adding-graphical-elements_files/figure-html/barents-current-plot-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level2">
-<h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a>
+<h2 id="velocity-fields">Velocity fields<a class="anchor" aria-label="anchor" href="#velocity-fields"></a>
 </h2>
-<ul>
-<li>
-<a href="cookbook.html">Cookbook</a> — short copy-pasteable recipes,
-including a compact version of the current-arrow recipe.</li>
-<li>
-<a href="ggOceanMaps.html">User manual</a> — projections and
-<code><a href="../reference/transform_coord.html">transform_coord()</a></code> in more depth.</li>
-</ul>
+<p>For a gridded velocity field, compute the arrow endpoints, transform
+both the start and end points to the basemap CRS, and draw the result
+with <code><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment()</a></code>. The example uses a small synthetic
+field filtered to ocean positions; the same pattern applies after
+reading <code>u</code> and <code>v</code> from a NetCDF file.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">grd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">14</span>, <span class="fl">6</span>, by <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">57</span>, <span class="fl">69</span>, by <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">grd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dist2land.html">dist2land</a></span><span class="op">(</span><span class="va">grd</span>, binary <span class="op">=</span> <span class="cn">TRUE</span>, dist.col <span class="op">=</span> <span class="st">"ocean"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">grd</span> <span class="op">&lt;-</span> <span class="va">grd</span><span class="op">[</span><span class="va">grd</span><span class="op">$</span><span class="va">ocean</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="va">grd</span><span class="op">$</span><span class="va">u</span> <span class="op">&lt;-</span> <span class="fl">0.35</span> <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="op">(</span><span class="va">grd</span><span class="op">$</span><span class="va">lat</span> <span class="op">-</span> <span class="fl">58</span><span class="op">)</span> <span class="op">/</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># eastward component</span></span>
+<span><span class="va">grd</span><span class="op">$</span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fl">0.20</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="op">(</span><span class="va">grd</span><span class="op">$</span><span class="va">lon</span> <span class="op">+</span> <span class="fl">5</span><span class="op">)</span> <span class="op">/</span> <span class="fl">6</span><span class="op">)</span> <span class="co"># northward component</span></span>
+<span></span>
+<span><span class="co"># Display scale only: a 1 m/s vector is drawn as 50 hours of drift.</span></span>
+<span><span class="va">km_per_ms</span> <span class="op">&lt;-</span> <span class="fl">50</span> <span class="op">*</span> <span class="fl">3.6</span></span>
+<span><span class="va">grd</span><span class="op">$</span><span class="va">lon_end</span> <span class="op">&lt;-</span> <span class="va">grd</span><span class="op">$</span><span class="va">lon</span> <span class="op">+</span></span>
+<span>  <span class="op">(</span><span class="va">grd</span><span class="op">$</span><span class="va">u</span> <span class="op">*</span> <span class="va">km_per_ms</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">111.32</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">grd</span><span class="op">$</span><span class="va">lat</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">/</span> <span class="fl">180</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">grd</span><span class="op">$</span><span class="va">lat_end</span> <span class="op">&lt;-</span> <span class="va">grd</span><span class="op">$</span><span class="va">lat</span> <span class="op">+</span> <span class="op">(</span><span class="va">grd</span><span class="op">$</span><span class="va">v</span> <span class="op">*</span> <span class="va">km_per_ms</span><span class="op">)</span> <span class="op">/</span> <span class="fl">110.57</span></span>
+<span></span>
+<span><span class="co"># Transform both ends to the basemap projection.</span></span>
+<span><span class="va">start</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transform_coord.html">transform_coord</a></span><span class="op">(</span></span>
+<span>  <span class="va">grd</span>,</span>
+<span>  lon <span class="op">=</span> <span class="st">"lon"</span>,</span>
+<span>  lat <span class="op">=</span> <span class="st">"lat"</span>,</span>
+<span>  proj.out <span class="op">=</span> <span class="fl">3995</span>,</span>
+<span>  bind <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transform_coord.html">transform_coord</a></span><span class="op">(</span></span>
+<span>  <span class="va">grd</span>,</span>
+<span>  lon <span class="op">=</span> <span class="st">"lon_end"</span>,</span>
+<span>  lat <span class="op">=</span> <span class="st">"lat_end"</span>,</span>
+<span>  proj.out <span class="op">=</span> <span class="fl">3995</span>,</span>
+<span>  new.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lon_end.proj"</span>, <span class="st">"lat_end.proj"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">grd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">start</span>, <span class="va">end</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
+<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>,</span>
+<span>  bathy.style <span class="op">=</span> <span class="st">"rbg"</span>,</span>
+<span>  land.col <span class="op">=</span> <span class="st">"grey86"</span>,</span>
+<span>  legends <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">grd</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon.proj</span>, y <span class="op">=</span> <span class="va">lat.proj</span>, xend <span class="op">=</span> <span class="va">lon_end.proj</span>, yend <span class="op">=</span> <span class="va">lat_end.proj</span><span class="op">)</span>,</span>
+<span>    arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.12</span>, <span class="st">"cm"</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"open"</span><span class="op">)</span>,</span>
+<span>    colour <span class="op">=</span> <span class="st">"#084d9a"</span>,</span>
+<span>    linewidth <span class="op">=</span> <span class="fl">0.45</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="adding-graphical-elements_files/figure-html/quiver-projected-1.png" class="r-plt" alt="" width="576"></p>
+<p>On a decimal-degree map the same code works without the
+<code><a href="../reference/transform_coord.html">transform_coord()</a></code> calls. Use those maps only when the
+basemap itself is in EPSG:4326; many high-latitude limits select a polar
+projection automatically.</p>
+</div>
+<div class="section level2">
+<h2 id="pie-charts">Pie charts<a class="anchor" aria-label="anchor" href="#pie-charts"></a>
+</h2>
+<p>Pie charts can be drawn as ordinary polygons. This avoids an extra
+plotting dependency and keeps the coordinate units explicit: after
+projection the pie radius is in metres. The helper below turns a row of
+category counts into one polygon per slice.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pie_polygons</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">cols</span>, <span class="va">x</span>, <span class="va">y</span>, <span class="va">r</span>, <span class="va">n</span> <span class="op">=</span> <span class="fl">60</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span><span class="va">i</span>, <span class="va">cols</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="va">values</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span>    <span class="va">prop</span> <span class="op">&lt;-</span> <span class="va">values</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span></span>
+<span>    <span class="va">starts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">prop</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prop</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">pi</span></span>
+<span>    <span class="va">ends</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">prop</span><span class="op">)</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">pi</span></span>
+<span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">starts</span><span class="op">[</span><span class="va">j</span><span class="op">]</span>, <span class="va">ends</span><span class="op">[</span><span class="va">j</span><span class="op">]</span>,</span>
+<span>                   length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">n</span> <span class="op">*</span> <span class="va">prop</span><span class="op">[</span><span class="va">j</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="va">out</span><span class="op">[[</span><span class="va">k</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>        id <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>        slice <span class="op">=</span> <span class="va">cols</span><span class="op">[</span><span class="va">j</span><span class="op">]</span>,</span>
+<span>        x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">x</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">data</span><span class="op">[[</span><span class="va">x</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span> <span class="op">*</span> <span class="va">data</span><span class="op">[[</span><span class="va">r</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>              <span class="va">data</span><span class="op">[[</span><span class="va">x</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>        y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">y</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">data</span><span class="op">[[</span><span class="va">y</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span> <span class="op">*</span> <span class="va">data</span><span class="op">[[</span><span class="va">r</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>              <span class="va">data</span><span class="op">[[</span><span class="va">y</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>        part <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">cols</span><span class="op">[</span><span class="va">j</span><span class="op">]</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>      <span class="va">k</span> <span class="op">&lt;-</span> <span class="va">k</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">out</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span><span class="op">)</span>,</span>
+<span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">8</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">9</span><span class="op">)</span>,</span>
+<span>  lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">56.5</span>, <span class="fl">60</span>, <span class="fl">63.5</span>, <span class="fl">67.5</span><span class="op">)</span>,</span>
+<span>  cod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span>, <span class="fl">20</span>, <span class="fl">60</span>, <span class="fl">25</span><span class="op">)</span>,</span>
+<span>  haddock <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">50</span>, <span class="fl">15</span>, <span class="fl">35</span><span class="op">)</span>,</span>
+<span>  saithe <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">30</span>, <span class="fl">25</span>, <span class="fl">40</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">slices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cod"</span>, <span class="st">"haddock"</span>, <span class="st">"saithe"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="va">pies</span>, proj.out <span class="op">=</span> <span class="fl">3995</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">pies</span><span class="op">$</span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">90000</span> <span class="co"># metres</span></span>
+<span><span class="va">pie_df</span> <span class="op">&lt;-</span> <span class="fu">pie_polygons</span><span class="op">(</span><span class="va">pies</span>, <span class="va">slices</span>, x <span class="op">=</span> <span class="st">"lon.proj"</span>, y <span class="op">=</span> <span class="st">"lat.proj"</span>, r <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
+<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">12</span>, <span class="fl">16</span>, <span class="fl">54</span>, <span class="fl">70</span><span class="op">)</span>,</span>
+<span>  bathy.style <span class="op">=</span> <span class="st">"rbg"</span>,</span>
+<span>  land.col <span class="op">=</span> <span class="st">"grey86"</span>,</span>
+<span>  legends <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggnewscale</span><span class="fu">::</span><span class="fu"><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">new_scale_fill</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_polygon.html" class="external-link">geom_polygon</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">pie_df</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, group <span class="op">=</span> <span class="va">part</span>, fill <span class="op">=</span> <span class="va">slice</span><span class="op">)</span>,</span>
+<span>    colour <span class="op">=</span> <span class="st">"white"</span>,</span>
+<span>    linewidth <span class="op">=</span> <span class="fl">0.15</span>,</span>
+<span>    alpha <span class="op">=</span> <span class="fl">0.95</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span><span class="st">"Species"</span>, palette <span class="op">=</span> <span class="st">"Set2"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="adding-graphical-elements_files/figure-html/pie-projected-1.png" class="r-plt" alt="" width="576"></p>
+<p>The basemap already maps bathymetry to <code>fill</code>, so insert
+<code><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">ggnewscale::new_scale_fill()</a></code> between the basemap and the
+pie layer to give the slices an independent fill scale.</p>
+</div>
+<div class="section level2">
+<h2 id="recolouring-bathymetry">Recolouring bathymetry<a class="anchor" aria-label="anchor" href="#recolouring-bathymetry"></a>
+</h2>
+<p><code><a href="../reference/basemap.html">basemap()</a></code> maps the binned bathymetry styles to a
+discrete <code>fill</code> scale and the continuous styles
+(<code>rcb</code>, <code>rcg</code>) to a continuous one. Either is
+recoloured by adding a matching <code>ggplot2</code> fill scale after
+the basemap, exactly as in the <a href="ggOceanMaps.html#appearance">Appearance</a> section of the User
+manual.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">16</span>, <span class="fl">67.3</span>, <span class="fl">68.6</span><span class="op">)</span>, grid.col <span class="op">=</span> <span class="cn">NA</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_d</a></span><span class="op">(</span><span class="st">"Depth (m)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="adding-graphical-elements_files/figure-html/recolour-binned-1.png" class="r-plt" alt="" width="576"></p>
+<p>For a continuous style, use a continuous fill scale instead.
+<code><a href="https://ggplot2.tidyverse.org/reference/scale_steps.html" class="external-link">scale_fill_stepsn()</a></code> additionally lets you set your own
+breaks and a non-linear transformation, binning the continuous raster at
+plotting time without changing the data. (This example needs the
+higher-resolution continuous raster from <a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData" class="external-link">ggOceanMapsLargeData</a>;
+it is skipped when that file is not available.)</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">16</span>, <span class="fl">67.3</span>, <span class="fl">68.6</span><span class="op">)</span>,</span>
+<span>        grid.col <span class="op">=</span> <span class="cn">NA</span>, bathy.style <span class="op">=</span> <span class="st">"rcb"</span>, downsample <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_steps.html" class="external-link">scale_fill_stepsn</a></span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="st">"Depth (m)"</span>,</span>
+<span>    breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">500</span>, <span class="fl">1000</span><span class="op">)</span>,</span>
+<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>    trans <span class="op">=</span> <span class="st">"sqrt"</span>,</span>
+<span>    colours <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#F7FBFF"</span>, <span class="st">"#DEEBF7"</span>, <span class="st">"#9ECAE1"</span>, <span class="st">"#4292C6"</span>, <span class="st">"#08306B"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span>
+<span>    na.value <span class="op">=</span> <span class="st">"white"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="adding-graphical-elements_files/figure-html/manual-continuous-bins-1.png" class="r-plt" alt="" width="576"></p>
+</div>
+<div class="section level2">
+<h2 id="custom-depth-bins-with-raster_bathymetry">Custom depth bins with <code>raster_bathymetry()</code><a class="anchor" aria-label="anchor" href="#custom-depth-bins-with-raster_bathymetry"></a>
+</h2>
+<p>The scales above recolour bathymetry that ggOceanMaps has already
+prepared. To bin a <em>raw</em> depth raster into classes of your own,
+re-bin it with <code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code>: pass the cut points to
+<code>depths</code> and hand the returned binned raster straight to
+<code><a href="../reference/basemap.html">basemap()</a></code> through <code>shapefiles</code>. Any grid that
+<code><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">stars::read_stars()</a></code> can open works — the example reads a
+local GEBCO file (see the <a href="bathymetry.html">Your own raster</a>
+section of the Bathymetry article), cropped to the shelf off
+Lofoten.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Your local GEBCO/ETOPO/IBCAO grid, e.g. set once with</span></span>
+<span><span class="co"># options(ggOceanMaps.userpath = "path/to/GEBCO_2025.nc")</span></span>
+<span><span class="va">gebco</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ggOceanMaps.userpath"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span></span>
+<span>  <span class="va">gebco</span>,</span>
+<span>  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">250</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">2000</span><span class="op">)</span>, <span class="co"># depth class boundaries</span></span>
+<span>  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">16</span>, <span class="fl">67.3</span>, <span class="fl">68.6</span><span class="op">)</span>, <span class="co"># crop to the map region</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Each depths value becomes a class boundary.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">rb</span><span class="op">$</span><span class="va">raster</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "0-50"      "50-100"    "100-250"   "250-500"   "500-1000"  "1000-2000"</span></span>
+<span><span class="co">#&gt; [7] "2000-Inf"</span></span></code></pre></div>
+<p>The binned raster carries the depth classes as a factor, so it
+behaves like any binned bathymetry: switch it on with
+<code>bathymetry = TRUE</code> and recolour it with a discrete fill
+scale. Here a sequential ColorBrewer palette stands in for the viridis
+scale used above.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
+<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">16</span>, <span class="fl">67.3</span>, <span class="fl">68.6</span><span class="op">)</span>,</span>
+<span>  shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>land <span class="op">=</span> <span class="va">dd_land</span>, glacier <span class="op">=</span> <span class="cn">NULL</span>, bathy <span class="op">=</span> <span class="va">rb</span><span class="op">)</span>,</span>
+<span>  bathymetry <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  grid.col <span class="op">=</span> <span class="cn">NA</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span><span class="st">"Depth (m)"</span>, palette <span class="op">=</span> <span class="st">"YlGnBu"</span>, na.value <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="adding-graphical-elements_files/figure-html/raster-bathymetry-plot-1.png" class="r-plt" alt="" width="576"></p>
+<p><code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code> reports the intervals in
+<code>rb$depth.invervals</code>. The same binned raster can be turned
+into depth-contour polygons with <code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> for
+the pre-made-shapefile workflow described in the <a href="customising-shapefiles.html">Customising shapefiles</a>
+article.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

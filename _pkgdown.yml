@@ -120,12 +120,19 @@ navbar:
    articles:
     text: Articles
     menu:
+    - text: Instructions
     - text: Bathymetry
       href: articles/bathymetry.html
-    - text: Customising shapefiles
-      href: articles/customising-shapefiles.html
     - text: Adding graphical elements
       href: articles/adding-graphical-elements.html
+    - text: Premade shapefiles
+      href: articles/premade-shapefiles.html
+    - text: Premade maps
+      href: articles/premade-maps.html
+    - text: Customising shapefiles
+      href: articles/customising-shapefiles.html
+    - text: -------
+    - text: Examples
     - text: Cookbook
       href: articles/cookbook.html
     - text: -------
@@ -133,13 +140,6 @@ navbar:
     - text: New features in version 2
       href: articles/new-features.html
     - text: -------
-    - text: Premade maps
-      href: articles/premade-maps.html
-    - text: Premade shapefiles
-      href: articles/premade-shapefiles.html
-    - text: -------
     - text: Presentations
     - text: SI2022 poster
       href: articles/poster.html
-    - text: AeN workshop slides
-      href: https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html

@@ -57,14 +57,14 @@ All three must share **one projection**. `basemap()` uses that CRS for the map, 
 ```{r}
 land <- clip_shapefile(
   dd_land,
-  limits = c(-5, 10, 50, 60)   # c(xmin, xmax, ymin, ymax), decimal degrees
+  limits = c(-5, 10, 50, 60) # c(xmin, xmax, ymin, ymax), decimal degrees
 )
 
-basemap(limits = c(-5, 10, 50, 60),
-        shapefiles = list(land = land, glacier = NULL, bathy = NULL))
+basemap(shapefiles = list(land = land, glacier = NULL, bathy = NULL))
 ```
 
 ![Land layer clipped to the North Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_clip.png)
+
 
 `limits` are interpreted with `proj.limits` (decimal degrees by default). For a projected input layer, pass the limits in that projection's units and set `proj.limits` to its CRS, or keep `limits` in degrees and let the function reproject the clip box. Use `return.boundary = TRUE` to get the clipping polygon back for inspection.
 
@@ -76,9 +76,9 @@ A single source grid (GEBCO, ETOPO, IBCAO, …) gives you a matched land and bat
 # 1. Read + crop + sign-flip the grid; bin to depth contours.
 rb <- raster_bathymetry(
   bathy = "path/to/your/bathymetry.nc",
-  depths = c(20, 50, 100, 200, 500),    # contour break points
-  boundary = c(-5, 10, 50, 60),          # crop early to save memory
-  estimate.land = TRUE                   # keep land cells for vector_land()
+  depths = c(20, 50, 100, 200, 500), # contour break points
+  boundary = c(-5, 10, 50, 60), # crop early to save memory
+  estimate.land = TRUE # keep land cells for vector_land()
 )
 ```
 
@@ -111,6 +111,7 @@ basemap(
 
 ![Land and bathymetry vectorised from a GEBCO raster, North Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png)
 
+
 **Normalise the CRS** (step 2c). GEBCO, ETOPO and IBCAO NetCDF grids are read with a non-standard *"unknown"* geographic CRS — an unnamed datum with latitude/longitude (rather than longitude/latitude) axis order. `basemap()` clips and renders the map in the land layer's CRS, and that axis-swapped CRS makes the rectangular clip box slant slightly, leaving a thin uncovered wedge along the southern map edge. Transforming `vb` and `vl` to plain `EPSG:4326` before plotting removes it. Do this on the vectorised layers, not via `proj.out` in `raster_bathymetry()`: reprojecting the raster there turns it into a curvilinear grid that `vector_bathymetry()` cannot polygonise.
 
 `vector_land()` takes the same `bathyRaster` as `vector_bathymetry()` and the same cleanup arguments (`drop.crumbs`, `remove.holes`, `smooth`). Leave `drop.crumbs` at `NULL` when you need `vl` and `vb` to share a coastline: the two functions apply it independently, so a shared non-`NULL` threshold can drop a small island from one layer without dropping the matching sliver of shallow water from the other, leaving tiny gaps at the coast. `drop.crumbs` is still useful to shrink file size when you don't need the two layers to line up exactly — it is in km², so scale it down for small regions; a city-block-scale area needs something like `0.01`, not `10`. To keep continuous (unbinned) raster bathymetry instead of depth-contour polygons, pass `depths = NULL` to `raster_bathymetry()` and use `rb$raster` directly as `bathy` (skipping `vector_bathymetry()`).
@@ -125,7 +126,7 @@ load("north_sea_shapes.rda")
 
 # Reading Geonorge depth data
 
-For Norwegian waters, the [Geonorge](https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a) depth-area vector shapefiles can be downloaded as `.gml` and includes a matching land layer in the same file, so both sit at the same resolution and CRS. `geonorge_bathymetry()` reads the depth layer; `sf::st_read()` with `layer = "Landareal"` reads the land:
+For Norwegian waters, the [Geonorge](https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a) depth-area vector shapefiles can be downloaded as `.gml` and include a matching land layer in the same file, so both sit at the same resolution and CRS. `geonorge_bathymetry()` reads the depth layer; `sf::st_read()` with `layer = "Landareal"` reads the land:
 
 ```{r}
 gb <- geonorge_bathymetry("path/to/Dybdedata.gml")
@@ -142,7 +143,8 @@ basemap(
 )
 ```
 
-![Geonorge depth data for Oslo municipality, showing the harbour, Bygdøy, and surrounding islands.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_geonorge_oslofjorden.png)
+![Geonorge depth data for Oslo municipality.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_geonorge_oslofjorden.png)
+
 
 This example uses Oslo municipality's depth-area tile, a small dataset showing the harbour, Bygdøy, and the surrounding islands. By default `geonorge_bathymetry()` reads the `"dybdeareal"` layer; pass `layer =` if your file uses a different name, and `verbose = TRUE` to see the reading steps.
 
@@ -151,8 +153,8 @@ This example uses Oslo municipality's depth-area tile, a small dataset showing t
 [`wcs_bathymetry()`](bathymetry.html) fetches bathymetry on demand from a Web Coverage Service and returns a continuous `bathyRaster`, but it always discards land (it calls `raster_bathymetry(ras, depths = NULL)` internally). Since this section is about *making new shapefiles* rather than just plotting a raster, the example below vectorises the fetched bathymetry into depth-contour polygons — the same `cut()` + `vector_bathymetry()` pattern as the raster section above — and pairs it with the premade `"Europe"` land set, which is a better match for EMODnet's ~115 m resolution than the shipped `dd_land`:
 
 ```{r}
-tromso <- c(18, 20, 69.4, 69.9)    # area to display
-fetch  <- c(17.5, 20.5, 69.3, 70)  # slightly wider fetch box (see note below)
+tromso <- c(18, 20, 69.4, 69.9) # area to display
+fetch <- c(17.5, 20.5, 69.3, 70) # slightly wider fetch box (see note below)
 bathy <- wcs_bathymetry(fetch, source = "emodnet")
 
 # wcs_bathymetry() always returns depths = NULL (continuous), so bin it
@@ -177,6 +179,7 @@ basemap(
 ```
 
 ![Bathymetry fetched live from EMODnet around Tromsø, vectorised and paired with the premade Europe land set.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_tromso_wcs.png)
+
 
 **Fetch a little wider than you display.** The map is plotted in the `"Europe"` land set's CRS (`EPSG:3035`), but a WCS request is a decimal-degree (`EPSG:4326`) box. Its straight lat/lon edges slant once reprojected to 3035, so a fetch box exactly equal to the map `limits` leaves uncovered slivers in the projected map's corners. Requesting a slightly larger `fetch` box than the `tromso` area you display covers the whole panel. Clipping the land to `st_bbox(vb)` keeps it in the same projection as the bathymetry and the map, so the clipping happens in the plotted CRS rather than across a reprojection.
 

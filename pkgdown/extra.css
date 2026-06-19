@@ -1,0 +1,9 @@
+/* Bootstrap 5.3's .dropdown-menu inherits --bs-dropdown-bg from --bs-body-bg,
+   which the navbar's data-bs-theme="dark" sets to a dark colour. But
+   --bs-dropdown-link-color/--bs-dropdown-header-color are hardcoded greys
+   that don't adapt to the dark theme, leaving dark-grey text on a dark
+   background in the navbar's "Articles" menu. Lighten them for readability. */
+.navbar[data-bs-theme="dark"] .dropdown-menu {
+  --bs-dropdown-link-color: #e9ecef;
+  --bs-dropdown-header-color: #adb5bd;
+}

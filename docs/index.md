@@ -98,7 +98,6 @@ and the [user
 manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html)
 for how to use and modify the maps plotted by the package. You may also
 find [these slides about the
-package](https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html#1)
 useful.
 
 ## Data path

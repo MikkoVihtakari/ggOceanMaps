@@ -47,7 +47,6 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Presentations</h6></li>
     <li><a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a></li>
-    <li><a class="external-link dropdown-item" href="https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html">AeN workshop slides</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -74,7 +73,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">29 May, 2026</h4>
+            <h4 data-toc-skip class="date">18 June, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/ggOceanMaps.Rmd" class="external-link"><code>vignettes/ggOceanMaps.Rmd</code></a></small>
       <div class="d-none name"><code>ggOceanMaps.Rmd</code></div>
@@ -295,20 +294,22 @@ higher-resolution continuous raster (first call downloads it from <a href="https
 <ol style="list-style-type: decimal">
 <li>
 <strong>Shipped low-resolution raster</strong> — <code>"rbb"</code>
-/ <code>"rbg"</code>. Default. No setup.</li>
+/ <code>"rbg"</code>. Default. No setup, works offline (downsampled from
+ETOPO 2022).</li>
 <li>
-<strong>ggOceanMapsLargeData</strong> higher-resolution rasters,
-polygon contours, contour lines — <code>"rcb"</code>, <code>"pb"</code>,
-<code>"cb"</code>, …. One-time download per region.</li>
+<strong>ggOceanMapsLargeData</strong> higher-resolution data — a
+continuous raster (<code>"rcb"</code>), filled polygon contours
+(<code>"pb"</code>), or contour lines (<code>"cb"</code>). One-time
+download per region.</li>
+<li>
+<strong>Live download from a Web Coverage Service</strong> —
+<code>"wceb"</code> (ETOPO1, ~1.85 km global) or <code>"wemb"</code>
+(EMODnet, ~115 m European waters). Tiles are cached locally after the
+first fetch.</li>
 <li>
 <strong>Your own raster</strong> (GEBCO, ETOPO, IBCAO, …) via
 <code>options(ggOceanMaps.userpath = "...")</code> — <code>"rub"</code>
 / <code>"rug"</code>.</li>
-<li>
-<strong>Live download from a Web Coverage Service</strong> —
-<code>"wemb"</code> (EMODnet, ~115 m European waters) or
-<code>"wceb"</code> (ETOPO1, ~1.85 km global). Tiles are cached locally
-after the first fetch.</li>
 <li>
 <strong>Build-your-own</strong> with
 <code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code> → <code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> /
@@ -318,8 +319,9 @@ after the first fetch.</li>
 <code>geometry_palette</code>. Add <code>_grays</code> (or change the
 final <code>b</code> → <code>g</code> in the abbreviation) for the
 greyscale variant of any style. The full reference table — every style,
-every abbreviation, what each one needs — lives in <code><a href="../reference/basemap.html">?basemap</a></code>
-and is walked through with examples in the dedicated <a href="bathymetry.html">Bathymetry vignette</a>.</p>
+every abbreviation, and what each one needs — lives in
+<code><a href="../reference/basemap.html">?basemap</a></code>. Each source is walked through with examples, and
+the data sources to cite are listed, in the dedicated <a href="bathymetry.html">Bathymetry vignette</a>.</p>
 <p>The <em>default <code>bathy.style</code> can be changed by setting
 the <code>ggOceanMaps.bathy.style</code> option</em>.
 <code>options(ggOceanMaps.bathy.style = "poly_blues")</code> would make
@@ -384,6 +386,9 @@ demonstrated above whenever using standard ggplot layers.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/transform_coord.html">transform_coord</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="op">-</span><span class="fl">80</span>, lat <span class="op">=</span> <span class="fl">25</span><span class="op">)</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;   lon lat lon.proj lat.proj</span></span>
 <span><span class="co">#&gt; 1 -80  25      -80       25</span></span></code></pre>
+<p>Worked recipes that build on this — current arrows, velocity fields,
+pie charts, and recolouring bathymetry — are collected in the <a href="adding-graphical-elements.html">Adding graphical elements</a>
+article.</p>
 </div>
 <div class="section level3">
 <h3 id="rotating-maps">Rotating maps<a class="anchor" aria-label="anchor" href="#rotating-maps"></a>
