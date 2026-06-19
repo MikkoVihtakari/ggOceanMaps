@@ -523,6 +523,89 @@ Label columns: `ices_areas$Area_Full` (full area name), `ices_areas$SubArea`,
 `ices_areas$Major_FA`; `fdir_main_areas$main_area`;
 `fdir_sub_areas$main_area`, `fdir_sub_areas$sub_area`.
 
+# Customising appearance
+
+## How do I add a scale bar and north arrow?
+
+Use the [ggspatial](https://paleolimbot.github.io/ggspatial/) annotations:
+
+```{r}
+basemap(limits = c(-75, -45, 62, 78), rotate = TRUE) +
+  ggspatial::annotation_scale(location = "br") +
+  ggspatial::annotation_north_arrow(location = "tr", which_north = "true")
+```
+
+The north arrow points to true north where it sits, and the scale bar is exact
+at the projection's reference latitude (71°N for Arctic stereographic maps).
+
+## How do I colour the ocean (panel background)?
+
+The ocean is the ggplot *panel*. Colour it via `theme()`, and set
+`panel.ontop = FALSE` so the fill sits under the map:
+
+```{r}
+basemap(c(-20, 15, 50, 70), grid.col = "red", grid.size = 0.5) +
+  theme(panel.background = element_rect(fill = "lightblue"),
+        panel.ontop = FALSE)
+```
+
+## How do I put graticules below my data instead of on top?
+
+ggOceanMaps draws graticules on top by default (`panel.ontop = TRUE`). Flip it:
+
+```{r}
+basemap(c(-20, 15, 50, 70), grid.col = "red", grid.size = 1) +
+  theme(panel.ontop = FALSE)
+```
+
+## How do I add a second fill scale on top of bathymetry?
+
+Bathymetry already uses the `fill` aesthetic, so a second filled layer needs a
+fresh scale. The cleanest way is [ggnewscale](https://github.com/eliocamp/ggnewscale):
+
+```{r}
+basemap(limits = c(-20, 15, 50, 70), bathymetry = TRUE,
+        bathy.style = "poly_greys") +
+  ggnewscale::new_scale_fill() +
+  ggspatial::annotation_spatial(ices_areas, aes(fill = Area_Full), alpha = 0.4) +
+  theme(legend.position = "none")
+```
+
+Alternatively, use a non-fill bathymetry style (e.g. `bathy.style = "contour_blues"`)
+so the `fill` aesthetic stays free for your data.
+
+## How do I add longitude/latitude labels to a polar map?
+
+Polar maps need manual labels. Pull the grid lines from the map's attributes,
+keep one meridian/parallel, project the label positions, and draw them:
+
+```{r}
+p <- basemap(-60, shapefiles = "Antarctic")
+
+# Latitude labels along the 180° meridian
+lat_lab <- as.data.frame(
+  sf::st_coordinates(attributes(p)$map.grid$lat.grid.lines))
+lat_lab <- lat_lab[lat_lab$X == -180, ]
+lat_lab <- rbind(lat_lab, data.frame(X = -180, Y = -90, L1 = 3, L2 = 1))
+lat_lab <- transform_coord(lat_lab, proj.out = attributes(p)$crs, bind = TRUE)
+
+# Longitude labels just outside the -60° parallel
+lon_lab <- as.data.frame(
+  sf::st_coordinates(attributes(p)$map.grid$lon.grid.lines))
+lon_lab <- lon_lab[lon_lab$Y == -60, ]
+lon_lab$Y <- -63
+lon_lab <- transform_coord(lon_lab, proj.out = attributes(p)$crs, bind = TRUE)
+
+p +
+  geom_text(data = lat_lab,
+            aes(x = lon.proj, y = lat.proj, label = paste0(abs(Y), "°S"))) +
+  geom_text(data = lon_lab,
+            aes(x = lon.proj, y = lat.proj,
+                label = ifelse(sign(X) == 1, paste0(abs(X), "°E"),
+                               paste0(abs(X), "°W")))) +
+  theme(plot.margin = margin(0.25, 0.25, 0.25, 0.25, "cm"))
+```
+
 # Saving and exporting
 
 ## How do I save the map to PNG/PDF?
