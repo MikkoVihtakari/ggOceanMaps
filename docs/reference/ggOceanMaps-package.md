@@ -11,8 +11,8 @@ This function creates a "canvas" on which research data can be plotted.
 The
 [`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 function is analogous to
-[`ggplot`](https://rdrr.io/pkg/ggplot2/man/ggplot.html) function from
-the ggplot2 package. Remember to use `data = <<NAMEOFDATASET>>` for
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html) function
+from the ggplot2 package. Remember to use `data = <<NAMEOFDATASET>>` for
 additional geometries you plot on `basemaps`
 (`basemap(60) + geom_point(data = data.frame(lon = 50, lat = 70), aes(x = lon, y = lat))`
 as an example). As a shortcut, you may also use qmap(data.frame(lon =

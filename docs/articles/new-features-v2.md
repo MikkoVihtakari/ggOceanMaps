@@ -39,7 +39,7 @@ basemap(c(100, 160, -20, 30), bathymetry = TRUE)
 ```
 
 ![](new-features-v2_files/figure-html/unnamed-chunk-2-1.png) Processing
-time: 1.4 sec
+time: 2.5 sec
 
 The **low-resolution default bathymetry is optimized for processing
 time** and **there are higher-resolution datasets available** but you’ll
@@ -58,12 +58,12 @@ basemap(c(100, 160, -20, 30), bathy.style = "rcb")
 ```
 
 ![](new-features-v2_files/figure-html/unnamed-chunk-3-1.png) Processing
-time: 9.3 sec
+time: 23.1 sec
 
 Then the best bit. If this resolution still is not enough, **you can use
 any bathymetry grid you want** as long as
-[`stars::read_stars`](https://rdrr.io/pkg/stars/man/read_stars.html) can
-open it. First, we’ll download the entire [GEBCO 15 arc-second
+[`stars::read_stars`](https://r-spatial.github.io/stars/reference/read_stars.html)
+can open it. First, we’ll download the entire [GEBCO 15 arc-second
 grid](https://www.gebco.net/data_and_products/gridded_bathymetry_data/)
 (click
 [this-](https://www.bodc.ac.uk/data/open_download/gebco/gebco_2023/zip/)
@@ -80,8 +80,7 @@ Now we can make maps using 15 arc-second GEBCO data:
 basemap(c(100, 160, -20, 30), bathy.style = "rub")
 ```
 
-![](new-features-v2_files/figure-html/unnamed-chunk-4-1.png) Processing
-time: 19 sec
+Processing time: 0 sec
 
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 now has `downsample` argument which can be used to reduce the resolution
@@ -93,8 +92,7 @@ lower the resolution, the smaller the file size):
 basemap(c(100, 160, -20, 30), bathy.style = "rub", downsample = 10)
 ```
 
-![](new-features-v2_files/figure-html/unnamed-chunk-5-1.png) Processing
-time: 19 sec
+Processing time: 0 sec
 
 Note how the processing time does not change in this case, but it seems
 to be shorter for smaller maps.
@@ -178,8 +176,6 @@ to flat-Earth on the fly while plotting maps:
 basemap(c(-20, 15, 50, 70), bathy.style = "rub")
 ```
 
-![](new-features-v2_files/figure-html/unnamed-chunk-9-1.png)
-
 The map above is entirely produced from decimal degree data, which are
 transformed during plotting. Doing such transformation within a
 reasonable time (and quality) was not possible when using old geospatial
@@ -239,13 +235,6 @@ cowplot::plot_grid(
 )
 ```
 
-![Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b)
-3995, i.e. Arctic stereographic and c) 32633, i.e. UTM zone
-33N.](new-features-v2_files/figure-html/unnamed-chunk-13-1.png)
-
-Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b) 3995,
-i.e. Arctic stereographic and c) 32633, i.e. UTM zone 33N.
-
 ## Tweaks to qmap
 
 Don’t forget
@@ -284,7 +273,7 @@ dt <- data.frame(
 dt <- dist2land(dt, verbose = FALSE)
 ```
 
-Processing time: 1.3 sec
+Processing time: 1 sec
 
 ``` r
 
@@ -313,5 +302,3 @@ cowplot::plot_grid(
   basemap(c(18.65,19.2,69.58,69.8), shapefiles = "Europe", bathy.style = "rub", legends = FALSE) + ggtitle("shapefiles = 'Europe'")
 )
 ```
-
-![](new-features-v2_files/figure-html/unnamed-chunk-17-1.png)

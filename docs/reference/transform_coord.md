@@ -49,15 +49,17 @@ transform_coord(
 
 - proj.in:
 
-  The original [`CRS`](https://rdrr.io/pkg/sf/man/st_crs.html). If
+  The original
+  [`CRS`](https://r-spatial.github.io/sf/reference/st_crs.html). If
   `NULL`, the projection is taken from `x`. `x` must be a
-  [spatial](https://rdrr.io/pkg/sf/man/st.html) object in that case.
+  [spatial](https://r-spatial.github.io/sf/reference/st.html) object in
+  that case.
 
 - proj.out:
 
   Character. Either `NULL`,
-  [`CRS`](https://rdrr.io/pkg/sf/man/st_crs.html) the coordinates should
-  be transformed to or a name of shapefiles in
+  [`CRS`](https://r-spatial.github.io/sf/reference/st_crs.html) the
+  coordinates should be transformed to or a name of shapefiles in
   [`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md).
   If `NULL`, the output projection will be automatically determined from
   data. This option requires decimal degrees as input option.

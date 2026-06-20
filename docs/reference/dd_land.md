@@ -10,7 +10,8 @@ dd_land
 
 ## Format
 
-[Simple feature collection](https://rdrr.io/pkg/sf/man/sf.html) land
+[Simple feature
+collection](https://r-spatial.github.io/sf/reference/sf.html) land
 shapes in decimal degrees (EPSG:4326). Obtained from Natural Earth Data
 (10m vectors). Includes the islands dataset.
 

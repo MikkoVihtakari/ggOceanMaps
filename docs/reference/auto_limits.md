@@ -33,8 +33,8 @@ auto_limits(
 
 - proj.in:
 
-  Original [`CRS`](https://rdrr.io/pkg/sf/man/st_crs.html) projection.
-  Must be defined as character argument.
+  Original [`CRS`](https://r-spatial.github.io/sf/reference/st_crs.html)
+  projection. Must be defined as character argument.
 
 - proj.out:
 
@@ -173,7 +173,7 @@ auto_limits(data = expand.grid(lon = c(-120, 180, 120),
 #>             LENGTHUNIT["metre",1]],
 #>     USAGE[
 #>         SCOPE["Polar research."],
-#>         AREA["Northern hemisphere - north of 60°N onshore and offshore, including Arctic."],
+#>         AREA["Northern hemisphere - north of 60N onshore and offshore, including Arctic."],
 #>         BBOX[60,-180,90,180]],
 #>     ID["EPSG",3995]]
 #> 

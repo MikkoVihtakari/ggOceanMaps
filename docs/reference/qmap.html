@@ -54,7 +54,7 @@
     </div>
 
     <div class="ref-description section level2">
-    <p><code>qmap</code> is a shortcut similar to ggplot2's <code><a href="https://rdrr.io/pkg/ggplot2/man/qplot.html" class="external-link">qplot</a></code> designed to quickly plot data with a limited range of options.</p>
+    <p><code>qmap</code> is a shortcut similar to ggplot2's <code><a href="https://ggplot2.tidyverse.org/reference/qplot.html" class="external-link">qplot</a></code> designed to quickly plot data with a limited range of options.</p>
     </div>
 
     <div class="section level2">
@@ -112,7 +112,7 @@
 
 
 <dt id="arg-limits">limits<a class="anchor" aria-label="anchor" href="#arg-limits"></a></dt>
-<dd><p>Map limits. One of the following:</p><ul><li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude, and the fourth element the maximum latitude of the bounding box. Also accepts <code><a href="https://rdrr.io/pkg/sf/man/st_bbox.html" class="external-link">sf::st_bbox</a></code> type named vectors with limits in any order. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
+<dd><p>Map limits. One of the following:</p><ul><li><p><strong>numeric vector</strong> of length 4: The first element defines the start longitude, the second element the end longitude (counter-clockwise), the third element the minimum latitude, and the fourth element the maximum latitude of the bounding box. Also accepts <code><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">sf::st_bbox</a></code> type named vectors with limits in any order. The coordinates can be given as decimal degrees or coordinate units for shapefiles used by a projected map. Produces a rectangular map. Latitude limits not given in min-max order are automatically ordered to respect this requirement.</p></li>
 <li><p><strong>single integer</strong> between 30 and 88 or -88 and -30 produces a polar map for the Arctic or Antarctic, respectively.</p></li>
 </ul><p>Can be omitted if <code>data</code> or <code>shapefiles</code> are defined.</p></dd>
 
@@ -122,7 +122,7 @@
 
 
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
-<dd><p><a href="https://rdrr.io/pkg/sf/man/st_crs.html" class="external-link">Coordinate reference system</a> (CRS) for the map. If <code>NULL</code> (default), the CRS is selected automatically based on <code>limits</code>, <code>data</code>, or <code>shapefiles</code>. Passed to <code><a href="https://rdrr.io/pkg/sf/man/st_crs.html" class="external-link">st_crs</a></code>. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with <code>rotate</code>.</p></dd>
+<dd><p><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">Coordinate reference system</a> (CRS) for the map. If <code>NULL</code> (default), the CRS is selected automatically based on <code>limits</code>, <code>data</code>, or <code>shapefiles</code>. Passed to <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></code>. Typically integers giving the EPGS code are the easiest. Cannot be used simultaneously with <code>rotate</code>.</p></dd>
 
 
 <dt id="arg-bathymetry">bathymetry<a class="anchor" aria-label="anchor" href="#arg-bathymetry"></a></dt>
@@ -142,7 +142,7 @@
 
 
 <dt id="arg-legend-position">legend.position<a class="anchor" aria-label="anchor" href="#arg-legend-position"></a></dt>
-<dd><p>The position for ggplot2 legend. See the argument with the same name in <a href="https://rdrr.io/pkg/ggplot2/man/theme.html" class="external-link">theme</a>.</p></dd>
+<dd><p>The position for ggplot2 legend. See the argument with the same name in <a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a>.</p></dd>
 
 
 <dt id="arg-lon-interval-lat-interval">lon.interval, lat.interval<a class="anchor" aria-label="anchor" href="#arg-lon-interval-lat-interval"></a></dt>
@@ -154,11 +154,11 @@
 
 
 <dt id="arg-downsample">downsample<a class="anchor" aria-label="anchor" href="#arg-downsample"></a></dt>
-<dd><p>Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See <code><a href="https://rdrr.io/pkg/stars/man/geom_stars.html" class="external-link">geom_stars</a></code></p></dd>
+<dd><p>Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See <code><a href="https://r-spatial.github.io/stars/reference/geom_stars.html" class="external-link">geom_stars</a></code></p></dd>
 
 
 <dt id="arg-bathy-alpha">bathy.alpha<a class="anchor" aria-label="anchor" href="#arg-bathy-alpha"></a></dt>
-<dd><p>Transparency parameter for the bathymetry fill color. See <a href="https://rdrr.io/pkg/ggplot2/man/scale_alpha.html" class="external-link">scale_alpha</a>.</p></dd>
+<dd><p>Transparency parameter for the bathymetry fill color. See <a href="https://ggplot2.tidyverse.org/reference/scale_alpha.html" class="external-link">scale_alpha</a>.</p></dd>
 
 
 <dt id="arg-land-col-gla-col-grid-col">land.col, gla.col, grid.col<a class="anchor" aria-label="anchor" href="#arg-land-col-gla-col-grid-col"></a></dt>
@@ -191,7 +191,7 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Returns a <a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html" class="external-link">ggplot</a> map, which can be assigned to an object and modified as any ggplot object.</p>
+    <p>Returns a <a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a> map, which can be assigned to an object and modified as any ggplot object.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

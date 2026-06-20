@@ -10,8 +10,8 @@ ices_areas
 
 ## Format
 
-[`sf object`](https://rdrr.io/pkg/sf/man/sf.html) containing ICES
-Advisory Areas.
+[`sf object`](https://r-spatial.github.io/sf/reference/sf.html)
+containing ICES Advisory Areas.
 
 ## Source
 

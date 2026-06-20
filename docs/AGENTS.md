@@ -81,7 +81,7 @@ basemap(limits = c(-20, 30, 50, 70)) +
 ```
 
 For unprojected (decimal-degree) maps you can use
-[`geom_point()`](https://rdrr.io/pkg/ggplot2/man/geom_point.html)
+[`geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html)
 directly with `x = lon, y = lat`.
 
 ### Add bathymetry
@@ -164,7 +164,7 @@ basemap(limits = c(0, 15, 55, 65), crs = 32631)   # UTM zone 31N
 ### Save the figure
 
 It’s a ggplot, so
-[`ggsave()`](https://rdrr.io/pkg/ggplot2/man/ggsave.html) works:
+[`ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html) works:
 
 ``` r
 
@@ -185,7 +185,7 @@ ggsave("arctic.png", p, width = 6, height = 6, dpi = 300)
     basemap places points at the wrong location.
     `transform_coord(data, bind = TRUE)` adds `lon.proj` and `lat.proj`
     columns; plot those. Or use
-    [`ggspatial::geom_spatial_point()`](https://rdrr.io/pkg/ggspatial/man/stat_spatial_identity.html).
+    [`ggspatial::geom_spatial_point()`](https://paleolimbot.github.io/ggspatial/reference/stat_spatial_identity.html).
 
 3.  **Antimeridian crossing**: limits like `c(160, -160, 60, 80)` work,
     but use `rotate = TRUE` to get a sensible-looking map. Without
@@ -201,9 +201,9 @@ ggsave("arctic.png", p, width = 6, height = 6, dpi = 300)
 5.  **Don’t add `+ coord_sf()` manually.**
     [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
     already sets up
-    [`coord_sf()`](https://rdrr.io/pkg/ggplot2/man/ggsf.html) with the
-    right projection and limits. Adding another will reset what the
-    package did and usually clip the map incorrectly.
+    [`coord_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html)
+    with the right projection and limits. Adding another will reset what
+    the package did and usually clip the map incorrectly.
 
 6.  **`shapefiles` vs `shape`**: `shapefiles` (plural) selects the
     underlying spatial dataset (`"Arctic"`, `"Europe"`, …). `shape` is a

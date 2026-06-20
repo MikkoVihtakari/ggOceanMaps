@@ -33,11 +33,11 @@ basemap_data(
     longitude, the second element the end longitude (counter-clockwise),
     the third element the minimum latitude, and the fourth element the
     maximum latitude of the bounding box. Also accepts
-    [`sf::st_bbox`](https://rdrr.io/pkg/sf/man/st_bbox.html) type named
-    vectors with limits in any order. The coordinates can be given as
-    decimal degrees or coordinate units for shapefiles used by a
-    projected map. Produces a rectangular map. Latitude limits not given
-    in min-max order are automatically ordered to respect this
+    [`sf::st_bbox`](https://r-spatial.github.io/sf/reference/st_bbox.html)
+    type named vectors with limits in any order. The coordinates can be
+    given as decimal degrees or coordinate units for shapefiles used by
+    a projected map. Produces a rectangular map. Latitude limits not
+    given in min-max order are automatically ordered to respect this
     requirement.
 
   - **single integer** between 30 and 88 or -88 and -30 produces a polar
@@ -47,7 +47,8 @@ basemap_data(
 
 - data:
 
-  A data frame, sp, or [sf](https://rdrr.io/pkg/sf/man/sf.html) shape
+  A data frame, sp, or
+  [sf](https://r-spatial.github.io/sf/reference/sf.html) shape
   containing longitude and latitude coordinates. If a data frame, the
   coordinates have to be given in decimal degrees. The limits are
   extracted from these coordinates and produce a rectangular map. Suited
@@ -69,12 +70,13 @@ basemap_data(
 
 - crs:
 
-  [Coordinate reference system](https://rdrr.io/pkg/sf/man/st_crs.html)
-  (CRS) for the map. If `NULL` (default), the CRS is selected
-  automatically based on `limits`, `data`, or `shapefiles`. Passed to
-  [`st_crs`](https://rdrr.io/pkg/sf/man/st_crs.html). Typically integers
-  giving the EPGS code are the easiest. Cannot be used simultaneously
-  with `rotate`.
+  [Coordinate reference
+  system](https://r-spatial.github.io/sf/reference/st_crs.html) (CRS)
+  for the map. If `NULL` (default), the CRS is selected automatically
+  based on `limits`, `data`, or `shapefiles`. Passed to
+  [`st_crs`](https://r-spatial.github.io/sf/reference/st_crs.html).
+  Typically integers giving the EPGS code are the easiest. Cannot be
+  used simultaneously with `rotate`.
 
 - bathymetry:
 
@@ -86,7 +88,7 @@ basemap_data(
   Integer defining the downsampling rate for raster bathymetries. A
   value of 0 (default) does not downsample, 1 skips every second row, 2
   every second and third. See
-  [`geom_stars`](https://rdrr.io/pkg/stars/man/geom_stars.html)
+  [`geom_stars`](https://r-spatial.github.io/stars/reference/geom_stars.html)
 
 - glaciers:
 

@@ -21,10 +21,10 @@ repository and downloaded automatically as needed.
 > article is built. It uses the current `sf`/`stars` toolchain. Earlier
 > versions used `sp`/`rgeos`; those packages are retired and the
 > equivalents here are
-> [`sf::st_transform()`](https://rdrr.io/pkg/sf/man/st_transform.html)
+> [`sf::st_transform()`](https://r-spatial.github.io/sf/reference/st_transform.html)
 > (reproject) and
-> [`sf::st_make_valid()`](https://rdrr.io/pkg/sf/man/valid.html) (fix
-> geometries).
+> [`sf::st_make_valid()`](https://r-spatial.github.io/sf/reference/valid.html)
+> (fix geometries).
 
 ## Setup
 
@@ -129,9 +129,9 @@ save(arctic_bathy, file = file.path(outPath, "arctic_bathy.rda"), compress = "xz
 ```
 
 Land and glaciers — reproject the global layers with
-[`sf::st_transform()`](https://rdrr.io/pkg/sf/man/st_transform.html) and
-repair geometries with
-[`sf::st_make_valid()`](https://rdrr.io/pkg/sf/man/valid.html):
+[`sf::st_transform()`](https://r-spatial.github.io/sf/reference/st_transform.html)
+and repair geometries with
+[`sf::st_make_valid()`](https://r-spatial.github.io/sf/reference/valid.html):
 
 ``` r
 
@@ -191,7 +191,7 @@ save(europe_land,
 The Svalbard land, glacier, and bathymetry layers (EPSG:32633) follow
 the same pattern: clip the source rasters/polygons to the Svalbard
 extent (`shapefile_list("Svalbard")$limits`), reproject with
-[`sf::st_transform()`](https://rdrr.io/pkg/sf/man/st_transform.html),
+[`sf::st_transform()`](https://r-spatial.github.io/sf/reference/st_transform.html),
 and
 [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
 the binned raster. They originate from the

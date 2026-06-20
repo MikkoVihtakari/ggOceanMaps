@@ -252,7 +252,7 @@ Lofoten.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/
 User-supplied GEBCO raster (`rub`) off Lofoten.
 
 Any format that
-[`stars::read_stars()`](https://rdrr.io/pkg/stars/man/read_stars.html)
+[`stars::read_stars()`](https://r-spatial.github.io/stars/reference/read_stars.html)
 can open is accepted (NetCDF `.nc`, GeoTIFF `.tif`, GMT `.grd`, and so
 on). The file is read in full on every call, so the user-raster route
 can be slower than a pre-processed ggOceanMapsLargeData object for the

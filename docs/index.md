@@ -109,7 +109,7 @@ shapefiles every time they restart R. This limitation is set by [CRAN
 policies](https://cran.r-project.org/web/packages/policies.html). You
 can define a custom folder for high-resolution shapefiles on your
 computer by modifying your .Rprofile file
-(e.g. [`usethis::edit_r_profile()`](https://rdrr.io/pkg/usethis/man/edit.html)).
+(e.g. [`usethis::edit_r_profile()`](https://usethis.r-lib.org/reference/edit.html)).
 Add the following lines to the file:
 
 ``` r

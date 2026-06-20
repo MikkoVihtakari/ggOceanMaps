@@ -45,6 +45,9 @@ datapath <- Sys.getenv("GGOCEANMAPS_DATAPATH")
 userpath <- Sys.getenv("GGOCEANMAPS_USERPATH")
 if (nzchar(datapath)) options(ggOceanMaps.datapath = datapath)
 if (nzchar(userpath)) options(ggOceanMaps.userpath = userpath)
+# The user-raster ("rub") examples only run when a local GEBCO/ETOPO grid is
+# available (set GGOCEANMAPS_USERPATH); otherwise they are skipped at build time.
+have_gebco <- file.exists(getOption("ggOceanMaps.userpath", ""))
 ```
 
 The old GIS packages for R (`sp`, `raster` and `rgeos`) as the engine for ggOceanMaps have been replaced by newer ones: `sf` handling vector data and `stars` handling rasters. This allowed more efficient use of the geospatial data while plotting maps and led to multiple improvements.
@@ -71,13 +74,13 @@ basemap(c(100, 160, -20, 30), bathy.style = "rcb")
 
 Then the best bit. If this resolution still is not enough, **you can use any bathymetry grid you want** as long as `stars::read_stars` can open it. First, we'll download the entire [GEBCO 15 arc-second grid](https://www.gebco.net/data_and_products/gridded_bathymetry_data/) (click [this-](https://www.bodc.ac.uk/data/open_download/gebco/gebco_2023/zip/) or the netCDF link for "GEBCO_2023 Grid (ice surface elevation)" in the table on the website). This dataset is 7.5 Gb in size, so you'll need a good internet connection. Unzip the dataset to the downloads folder, and define this option either at the beginning of your R session or in your Rprofile: `options(ggOceanMaps.userpath = "~/Downloads/gebco_2023/GEBCO_2023.nc")`. Now we can make maps using 15 arc-second GEBCO data:
 
-```{r, timeit = TRUE}
+```{r, timeit = TRUE, eval = have_gebco}
 basemap(c(100, 160, -20, 30), bathy.style = "rub")
 ```
 
 `basemap()` now has `downsample` argument which can be used to reduce the resolution of excessively large custom raster datasets for a given region (the lower the resolution, the smaller the file size):
 
-```{r, timeit = TRUE}
+```{r, timeit = TRUE, eval = have_gebco}
 basemap(c(100, 160, -20, 30), bathy.style = "rub", downsample = 10)
 ```
 
@@ -124,7 +127,7 @@ qmap(dt, color = depth) +
 
 The [sf package uses round-Earth model](https://cran.r-project.org/web/packages/sf/vignettes/sf7.html) ([s2](https://CRAN.R-project.org/package=s2) package) instead of the flat-Earth model used by geos. While thinking round can be challenging when making polygons, ggOceanMaps attempts to use the s2 capabilities as much as possible - and you might encounter unexpected "features" as a consequence. The benefit of going round-Earth is that we can now use only one land polygon shapefile in decimal degrees, which gets projected to flat-Earth on the fly while plotting maps:
 
-```{r}
+```{r, eval = have_gebco}
 basemap(c(-20, 15, 50, 70), bathy.style = "rub")
 ```
 
@@ -154,7 +157,7 @@ If someone has an idea how to fix this dissolve issue, please contact the develo
 
 A limitation with pre-2.0 ggOceanMaps was that you could not change the coordinate reference system (CRS), but you'd have to change the CRS of your data instead. This was problematic in some cases when wanting to plot spatial model results that were computed using a certain CRS. Thanks to round-Earth model, sf and stars, now you can **change the CRS of maps produced by ggOceanMaps on the fly**:
 
-```{r, fig.cap = "Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b) 3995, i.e. Arctic stereographic and c) 32633, i.e. UTM zone 33N."}
+```{r, eval = have_gebco, fig.cap = "Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b) 3995, i.e. Arctic stereographic and c) 32633, i.e. UTM zone 33N."}
 cowplot::plot_grid(
   basemap(c(11,16,67.3,68.6), bathy.style = "rub", crs = 4326, legends = FALSE),
   basemap(c(11,16,67.3,68.6), bathy.style = "rub", legends = FALSE),
@@ -194,7 +197,7 @@ The function is still somewhat slow for large datasets and there currently is no
 
 Thanks to European Environment Agency, it is now possible to plot detailed land in Europe allowing plotting fjords. The bathymetry is still too low quality for most fjords, however. Here the Tromsø region:
 
-```{r}
+```{r, eval = have_gebco}
 cowplot::plot_grid(
   basemap(c(18.65,19.2,69.58,69.8), bathy.style = "rub", legends = FALSE) + ggtitle("Default"),
   basemap(c(18.65,19.2,69.58,69.8), shapefiles = "Europe", bathy.style = "rub", legends = FALSE) + ggtitle("shapefiles = 'Europe'")

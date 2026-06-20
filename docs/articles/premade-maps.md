@@ -38,12 +38,12 @@ shapes
 #> 3        <ggOceanMaps.datapath>/dd_glacier
 #> 4  <ggOceanMaps.datapath>/svalbard_glacier
 #> 5                                     <NA>
-#>                                                                                                           bathy
-#> 1    dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.userpath>|<ggOceanMaps.datapath>/arctic_bathy
-#> 2 dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.userpath>|<ggOceanMaps.datapath>/antarctic_bathy
-#> 3        dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.userpath>|<ggOceanMaps.datapath>/dd_bathy
-#> 4  dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.userpath>|<ggOceanMaps.datapath>/svalbard_bathy
-#> 5        dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.userpath>|<ggOceanMaps.datapath>/dd_bathy
+#>                                                                                    bathy
+#> 1    dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.datapath>/arctic_bathy
+#> 2 dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.datapath>/antarctic_bathy
+#> 3        dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.datapath>/dd_bathy
+#> 4  dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.datapath>/svalbard_bathy
+#> 5        dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.datapath>/dd_bathy
 #>     crs                                      limits
 #> 1  3995                                       c(30)
 #> 2  3031                                      c(-35)

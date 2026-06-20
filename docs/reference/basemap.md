@@ -53,11 +53,11 @@ basemap(
     longitude, the second element the end longitude (counter-clockwise),
     the third element the minimum latitude, and the fourth element the
     maximum latitude of the bounding box. Also accepts
-    [`sf::st_bbox`](https://rdrr.io/pkg/sf/man/st_bbox.html) type named
-    vectors with limits in any order. The coordinates can be given as
-    decimal degrees or coordinate units for shapefiles used by a
-    projected map. Produces a rectangular map. Latitude limits not given
-    in min-max order are automatically ordered to respect this
+    [`sf::st_bbox`](https://r-spatial.github.io/sf/reference/st_bbox.html)
+    type named vectors with limits in any order. The coordinates can be
+    given as decimal degrees or coordinate units for shapefiles used by
+    a projected map. Produces a rectangular map. Latitude limits not
+    given in min-max order are automatically ordered to respect this
     requirement.
 
   - **single integer** between 30 and 88 or -88 and -30 produces a polar
@@ -67,7 +67,8 @@ basemap(
 
 - data:
 
-  A data frame, sp, or [sf](https://rdrr.io/pkg/sf/man/sf.html) shape
+  A data frame, sp, or
+  [sf](https://r-spatial.github.io/sf/reference/sf.html) shape
   containing longitude and latitude coordinates. If a data frame, the
   coordinates have to be given in decimal degrees. The limits are
   extracted from these coordinates and produce a rectangular map. Suited
@@ -89,12 +90,13 @@ basemap(
 
 - crs:
 
-  [Coordinate reference system](https://rdrr.io/pkg/sf/man/st_crs.html)
-  (CRS) for the map. If `NULL` (default), the CRS is selected
-  automatically based on `limits`, `data`, or `shapefiles`. Passed to
-  [`st_crs`](https://rdrr.io/pkg/sf/man/st_crs.html). Typically integers
-  giving the EPGS code are the easiest. Cannot be used simultaneously
-  with `rotate`.
+  [Coordinate reference
+  system](https://r-spatial.github.io/sf/reference/st_crs.html) (CRS)
+  for the map. If `NULL` (default), the CRS is selected automatically
+  based on `limits`, `data`, or `shapefiles`. Passed to
+  [`st_crs`](https://r-spatial.github.io/sf/reference/st_crs.html).
+  Typically integers giving the EPGS code are the easiest. Cannot be
+  used simultaneously with `rotate`.
 
 - bathymetry:
 
@@ -118,7 +120,7 @@ basemap(
 - legend.position:
 
   The position for ggplot2 legend. See the argument with the same name
-  in [theme](https://rdrr.io/pkg/ggplot2/man/theme.html).
+  in [theme](https://ggplot2.tidyverse.org/reference/theme.html).
 
 - lon.interval, lat.interval:
 
@@ -137,12 +139,12 @@ basemap(
   Integer defining the downsampling rate for raster bathymetries. A
   value of 0 (default) does not downsample, 1 skips every second row, 2
   every second and third. See
-  [`geom_stars`](https://rdrr.io/pkg/stars/man/geom_stars.html)
+  [`geom_stars`](https://r-spatial.github.io/stars/reference/geom_stars.html)
 
 - bathy.alpha:
 
   Transparency parameter for the bathymetry fill color. See
-  [scale_alpha](https://rdrr.io/pkg/ggplot2/man/scale_alpha.html).
+  [scale_alpha](https://ggplot2.tidyverse.org/reference/scale_alpha.html).
 
 - land.col, gla.col, grid.col:
 
@@ -186,16 +188,17 @@ basemap(
 
 ## Value
 
-Returns a [ggplot](https://rdrr.io/pkg/ggplot2/man/ggplot.html) map,
-which can be assigned to an object and modified as any ggplot object.
+Returns a [ggplot](https://ggplot2.tidyverse.org/reference/ggplot.html)
+map, which can be assigned to an object and modified as any ggplot
+object.
 
 ## Details
 
 The function uses
-[ggplot2](https://rdrr.io/pkg/ggplot2/man/ggplot2-package.html),
-[sf](https://rdrr.io/pkg/sf/man/sf.html),
-[stars](https://rdrr.io/pkg/stars/man/st_as_stars.html) and spatial
-files to plot maps of the world's oceans.
+[ggplot2](https://ggplot2.tidyverse.org/reference/ggplot2-package.html),
+[sf](https://r-spatial.github.io/sf/reference/sf.html),
+[stars](https://r-spatial.github.io/stars/reference/st_as_stars.html)
+and spatial files to plot maps of the world's oceans.
 
 **Limits**
 
@@ -301,24 +304,24 @@ Custom shapefiles have to be a named list containing at least the
 following elements:
 
 - **land** Object name of the [spatial
-  polygon](https://rdrr.io/pkg/sf/man/sf.html) containing land.
-  Required.
+  polygon](https://r-spatial.github.io/sf/reference/sf.html) containing
+  land. Required.
 
 - **glacier** Object name of the [spatial
-  polygon](https://rdrr.io/pkg/sf/man/sf.html) containing glaciers. Not
-  required if glaciers are not needed.
+  polygon](https://r-spatial.github.io/sf/reference/sf.html) containing
+  glaciers. Not required if glaciers are not needed.
 
 - **bathy** Object name of the [spatial
-  polygon](https://rdrr.io/pkg/sf/man/sf.html) or
-  [raster](https://rdrr.io/pkg/stars/man/st_as_stars.html) containing
-  bathymetry data. Not required if bathymetry is not needed.
+  polygon](https://r-spatial.github.io/sf/reference/sf.html) or
+  [raster](https://r-spatial.github.io/stars/reference/st_as_stars.html)
+  containing bathymetry data. Not required if bathymetry is not needed.
 
 See Examples.
 
 **Line width and font size**
 
 The line size aesthetics in
-[ggplot2](https://rdrr.io/pkg/ggplot2/man/ggplot2-package.html)
+[ggplot2](https://ggplot2.tidyverse.org/reference/ggplot2-package.html)
 generates approximately 2.13 wider lines measured in pt than the given
 values. If you want a specific line width in pt, use the internal
 function
@@ -357,7 +360,7 @@ function have been acquired from the following sources:
 
 ## See also
 
-[`ggplot`](https://rdrr.io/pkg/ggplot2/man/ggplot.html)
+[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)
 
 Other basemap functions:
 [`qmap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/qmap.md),

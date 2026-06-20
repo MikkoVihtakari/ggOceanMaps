@@ -77,7 +77,7 @@
 
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><p>Data frame or <a href="https://rdrr.io/pkg/sf/man/sf.html" class="external-link">sf</a> object containing geographic coordinates.</p></dd>
+<dd><p>Data frame or <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a> object containing geographic coordinates.</p></dd>
 
 
 <dt id="arg-bathy-style">bathy.style<a class="anchor" aria-label="anchor" href="#arg-bathy-style"></a></dt>
@@ -89,11 +89,11 @@
 
 
 <dt id="arg-shapefile">shapefile<a class="anchor" aria-label="anchor" href="#arg-shapefile"></a></dt>
-<dd><p>Land shape to which distances should be calculated. Either a character argument referring to a name of pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code>, a single <a href="https://rdrr.io/pkg/sf/man/sf.html" class="external-link">sf</a> or <code>sp</code> polygons object object or <code>NULL</code> to enable automatic definition of the land shapes based on <code>data</code>. Set to <code>"DecimalDegree"</code> by default which enables great circle distances using <a href="https://rdrr.io/pkg/sf/man/s2.html" class="external-link">s2</a> features assuming a spherical Earth (as a contrast to earlier versions of the function which used flat Earth).</p></dd>
+<dd><p>Land shape to which distances should be calculated. Either a character argument referring to a name of pre-made shapefiles in <code><a href="shapefile_list.html">shapefile_list</a></code>, a single <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf</a> or <code>sp</code> polygons object object or <code>NULL</code> to enable automatic definition of the land shapes based on <code>data</code>. Set to <code>"DecimalDegree"</code> by default which enables great circle distances using <a href="https://r-spatial.github.io/sf/reference/s2.html" class="external-link">s2</a> features assuming a spherical Earth (as a contrast to earlier versions of the function which used flat Earth).</p></dd>
 
 
 <dt id="arg-proj-in">proj.in<a class="anchor" aria-label="anchor" href="#arg-proj-in"></a></dt>
-<dd><p><code><a href="https://rdrr.io/pkg/sf/man/st_crs.html" class="external-link">coordinate reference system</a></code> of <code>data</code>.</p></dd>
+<dd><p><code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">coordinate reference system</a></code> of <code>data</code>.</p></dd>
 
 
 <dt id="arg-bind">bind<a class="anchor" aria-label="anchor" href="#arg-bind"></a></dt>
@@ -114,7 +114,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Uses the <code><a href="https://rdrr.io/pkg/stars/man/st_extract.html" class="external-link">st_extract</a></code> function to extract values from <a href="basemap.html">basemap</a> bathymetry raster grids. Does not work for vector bathymetries.</p>
+    <p>Uses the <code><a href="https://r-spatial.github.io/stars/reference/st_extract.html" class="external-link">st_extract</a></code> function to extract values from <a href="basemap.html">basemap</a> bathymetry raster grids. Does not work for vector bathymetries.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -126,7 +126,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">80</span>, length.out <span class="op">=</span> <span class="fl">41</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fl">50</span><span class="op">:</span><span class="fl">90</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu">get_depth</span><span class="op">(</span><span class="va">dt</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="va">depth</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/scale_viridis.html" class="external-link">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="va">depth</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

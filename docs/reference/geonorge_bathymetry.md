@@ -28,9 +28,9 @@ geonorge_bathymetry(filepath, layer = NULL, verbose = FALSE)
 
 ## Value
 
-An [sf](https://rdrr.io/pkg/sf/man/st.html) object containing the depth
-polygons. Uses same projection than `bathy` (see
-[`CRS`](https://rdrr.io/pkg/sf/man/st_crs.html)).
+An [sf](https://r-spatial.github.io/sf/reference/st.html) object
+containing the depth polygons. Uses same projection than `bathy` (see
+[`CRS`](https://r-spatial.github.io/sf/reference/st_crs.html)).
 
 ## Details
 

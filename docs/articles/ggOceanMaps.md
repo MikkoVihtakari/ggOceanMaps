@@ -331,7 +331,8 @@ The `basemap(...)` function works almost similarly to the `ggplot(...)`
 function as a base for adding further layers to the plot. The difference
 between the
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
-and the [`ggplot()`](https://rdrr.io/pkg/ggplot2/man/ggplot.html) is
+and the
+[`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html) is
 that the
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 plot already contains multiple ggplot layers. All layers except
@@ -415,8 +416,8 @@ basemap(limits = c(-160, -80, 60, 85), rotate = TRUE)
 
 Note that rotation changes the underlying CRS and data need to be added
 using `ggspatial::geom_spatial_*`,
-[`ggplot2::geom_sf()`](https://rdrr.io/pkg/ggplot2/man/ggsf.html) or
-`transform_coord(rotate = TRUE)` functions.
+[`ggplot2::geom_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html)
+or `transform_coord(rotate = TRUE)` functions.
 
 ### Quick map
 

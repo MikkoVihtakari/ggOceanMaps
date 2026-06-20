@@ -28,7 +28,7 @@ load_map_data(x, force = FALSE, downsample = 0)
   Integer defining the downsampling rate for raster bathymetries. A
   value of 0 (default) does not downsample, 1 skips every second row, 2
   every second and third. See
-  [`geom_stars`](https://rdrr.io/pkg/stars/man/geom_stars.html)
+  [`geom_stars`](https://r-spatial.github.io/stars/reference/geom_stars.html)
 
 ## Value
 

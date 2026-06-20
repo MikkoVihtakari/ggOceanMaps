@@ -25,8 +25,8 @@ raster_bathymetry(
 
 - bathy:
 
-  A [stars](https://rdrr.io/pkg/stars/man/read_stars.html) object or a
-  string giving the path to a bathymetry NetCDF or grd file
+  A [stars](https://r-spatial.github.io/stars/reference/read_stars.html)
+  object or a string giving the path to a bathymetry NetCDF or grd file
 
 - depths:
 
@@ -38,8 +38,9 @@ raster_bathymetry(
 - proj.out:
 
   A character string specifying the [coordinate reference
-  system](https://rdrr.io/pkg/sf/man/st_crs.html) (CRS) argument for the
-  output. See [`st_crs`](https://rdrr.io/pkg/sf/man/st_crs.html) and
+  system](https://r-spatial.github.io/sf/reference/st_crs.html) (CRS)
+  argument for the output. See
+  [`st_crs`](https://r-spatial.github.io/sf/reference/st_crs.html) and
   [proj.org](https://proj.org/). If `NULL`, the projection is retrieved
   from `bathy` and the output will not be reprojected saving processing
   time (since `proj.out` and `proj.bathy` would match.
@@ -47,31 +48,31 @@ raster_bathymetry(
 - proj.bathy:
 
   A character string specifying the
-  [`CRS`](https://rdrr.io/pkg/sf/man/st_crs.html) for the input
-  (`bathy`). Only required if `bathy` lacks CRS information. If `NULL`,
-  `"EPSG:4326"` is assumed.
+  [`CRS`](https://r-spatial.github.io/sf/reference/st_crs.html) for the
+  input (`bathy`). Only required if `bathy` lacks CRS information. If
+  `NULL`, `"EPSG:4326"` is assumed.
 
 - boundary:
 
-  A [st_polygon](https://rdrr.io/pkg/sf/man/st.html) object, text string
-  defining the file path to a spatial polygon, [bounding
-  box](https://rdrr.io/pkg/sf/man/st_bbox.html), or a numeric vector of
-  length 4 giving the boundaries for which `bathy` should be cut to.
-  Should be given as **decimal degrees**. If unnamed numeric vector, the
-  first element defines the minimum longitude, the second element the
-  maximum longitude, the third element the minimum latitude and the
-  fourth element the maximum latitude of the bounding box. You can also
-  use the sf bounding box format as named vector. Use `NULL` not to cut
-  `bathy`.
+  A [st_polygon](https://r-spatial.github.io/sf/reference/st.html)
+  object, text string defining the file path to a spatial polygon,
+  [bounding box](https://r-spatial.github.io/sf/reference/st_bbox.html),
+  or a numeric vector of length 4 giving the boundaries for which
+  `bathy` should be cut to. Should be given as **decimal degrees**. If
+  unnamed numeric vector, the first element defines the minimum
+  longitude, the second element the maximum longitude, the third element
+  the minimum latitude and the fourth element the maximum latitude of
+  the bounding box. You can also use the sf bounding box format as named
+  vector. Use `NULL` not to cut `bathy`.
 
 - warp:
 
   Logical indicating whether the resulting grid should be resampled to a
   new CRS if `proj.out != proj.bathy` using the
-  [`st_warp`](https://rdrr.io/pkg/stars/man/st_warp.html) function. A
-  time-consuming operation, but necessary when CRS changes in raster
-  bathymetries. Not required if the next step is to vectorise the
-  bathymetry.
+  [`st_warp`](https://r-spatial.github.io/stars/reference/st_warp.html)
+  function. A time-consuming operation, but necessary when CRS changes
+  in raster bathymetries. Not required if the next step is to vectorise
+  the bathymetry.
 
 - estimate.land:
 
@@ -85,7 +86,7 @@ raster_bathymetry(
   An integer defining how many rows in `bathy` should be skipped to
   reduce the size (and resolution). 1 skips every second row, 2 every
   second and third. See
-  [`st_downsample`](https://rdrr.io/pkg/stars/man/st_downsample.html).
+  [`st_downsample`](https://r-spatial.github.io/stars/reference/st_downsample.html).
   Set to `NULL` (default) to skip downsampling.
 
 - verbose:
@@ -96,7 +97,8 @@ raster_bathymetry(
 
 ## Value
 
-A list with a [stars](https://rdrr.io/pkg/stars/man/read_stars.html)
+A list with a
+[stars](https://r-spatial.github.io/stars/reference/read_stars.html)
 object the containing projected bathymetry defined by the `proj.out`
 argument and a data frame of depth intervals.
 
@@ -108,7 +110,8 @@ You can use
 [ETOPO](https://www.ncei.noaa.gov/products/etopo-global-relief-model)
 bathymetry grids downloaded from respective sources as the `bathy`
 argument. The bathymetry grids read from files must be in any format
-read by [`read_stars`](https://rdrr.io/pkg/stars/man/read_stars.html).
+read by
+[`read_stars`](https://r-spatial.github.io/stars/reference/read_stars.html).
 Alternatively use the
 [`marmap::getNOAA.bathy`](https://rdrr.io/pkg/marmap/man/getNOAA.bathy.html)
 function to download ETOPO1 bathymetry and convert it to a raster object

@@ -68,10 +68,24 @@ users and contributors work with ggOceanMaps.
   through the projected map CRS, fixing wrong land for
   `basemap(c(120, -120, 60, 80))` and a topology crash for rotated
   antimeridian data input.
-- Fixed a crash (`st_cast()` on a degenerate `GEOMETRYCOLLECTION`) for
-  some custom
+- Fixed a crash
+  ([`st_cast()`](https://r-spatial.github.io/sf/reference/st_cast.html)
+  on a degenerate `GEOMETRYCOLLECTION`) for some custom
   [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md)
   layers at some map limits.
+- Fixed rotated antimeridian maps drawing no land, e.g.
+  `basemap(c(100, -120, -12, -57), rotate = TRUE)` and
+  `basemap(c(40, -70, -37, 40), rotate = TRUE)`. A landmass crossing the
+  rotated antimeridian (even off-screen, such as Antarctica) was
+  “unwrapped” into a degenerate \>180-degree polygon during projection,
+  which made ggplot2 skip the whole land layer. Such polygons are now
+  split along the seam before projection (issue
+  [\#44](https://github.com/MikkoVihtakari/ggOceanMaps/issues/44)).
+- Fixed the default bathymetry being heavily downsampled. The raster was
+  warped onto a coarse ~256-cell grid regardless of the source
+  resolution, so e.g. `basemap(60, bathymetry = TRUE)` lost most of its
+  detail. The warp now keeps the source resolution by default; use the
+  `downsample` argument to reduce it.
 - Fixed a WCS `bathy.style` (`"wemb"` / `"wceb"`, etc.) failing with
   “st_transform applied to an object of class ‘logical’” when combined
   with an explicitly named premade shapefile set, e.g.
@@ -126,6 +140,8 @@ users and contributors work with ggOceanMaps.
 
 ## ggOceanMaps 2.3.0
 
+CRAN release: 2026-02-10
+
 - Fixed anti-meridian crossing land clipping in rotated basemaps
   ([\#53](https://github.com/MikkoVihtakari/ggOceanMaps/pull/53))
 - Fixed bugs and package incompatibilities, including TopologyException
@@ -146,6 +162,8 @@ users and contributors work with ggOceanMaps.
 
 ## ggOceanMaps 2.2.0
 
+CRAN release: 2024-01-15
+
 - Added tests better explaining wrongly specified arguments
 - Updated the user manual
 - Fixed an issue with certain `bathy.style` abbreviations
@@ -162,8 +180,8 @@ users and contributors work with ggOceanMaps.
 - Fixed `basemap(c(-180, 180, -90, 90))` case and turned off automatic
   rotation when crossing the anti-meridian. A message is shown instead.
 - Turned off `expand` in
-  [`ggplot2::coord_sf()`](https://rdrr.io/pkg/ggplot2/man/ggsf.html) to
-  avoid an error when having map border at 0 meridian.
+  [`ggplot2::coord_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html)
+  to avoid an error when having map border at 0 meridian.
 - Fixed a case where data argument produced too wide boundaries
 - [`expand.factor` should work now as
   designed](https://github.com/MikkoVihtakari/ggOceanMaps/issues/33)
@@ -175,6 +193,8 @@ users and contributors work with ggOceanMaps.
 
 ## ggOceanMaps 2.1.1
 
+CRAN release: 2023-08-30
+
 - Fixed a bug in bathy.style wording.
 - Added
   [`get_depth()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/get_depth.html)
@@ -184,6 +204,8 @@ users and contributors work with ggOceanMaps.
   `basemap(shapefiles = "Europe")`
 
 ## ggOceanMaps 2.0.0
+
+CRAN release: 2023-07-04
 
 - Full [sf](https://r-spatial.github.io/sf/) integration. Old GIS
   packages for R and ggspatial dependencies removed. Since this change
@@ -210,6 +232,8 @@ users and contributors work with ggOceanMaps.
 
 ## ggOceanMaps 1.3.4
 
+CRAN release: 2022-09-26
+
 - Added shapefiles to the `x` argument shortcut in
   [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md).
 - Added limits to premade shapefiles to make visualization easier.
@@ -227,6 +251,8 @@ users and contributors work with ggOceanMaps.
 - Added ICES and Norwegian directorate of fisheries areas.
 
 ## ggOceanMaps 1.2.6
+
+CRAN release: 2022-01-08
 
 - [added `x` argument to `basemap()` and
   `qmap()`](https://github.com/MikkoVihtakari/ggOceanMaps/issues/11)
@@ -253,12 +279,16 @@ users and contributors work with ggOceanMaps.
 
 ## ggOceanMaps 1.1
 
+CRAN release: 2021-05-21
+
 - Started replacing the [PROJ4 system by the PROJ6 wkt based
   system](https://www.earthdatascience.org/courses/use-data-open-source-python/intro-vector-data-python/spatial-data-vector-shapefiles/epsg-proj4-coordinate-reference-system-formats-python/)
   by replacing “+init=epsg:NNNN” strings by “EPSG:NNNN”. Did not finish
   the conversion.
 
 ## ggOceanMaps 1.0.9
+
+CRAN release: 2021-01-14
 
 - First CRAN release. Contains the core of the package code rewritten
   from [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard/)

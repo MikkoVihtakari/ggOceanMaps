@@ -46,7 +46,8 @@ basemap(
 All three must share **one projection**.
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 uses that CRS for the map, so there is no need to call
-[`coord_sf()`](https://rdrr.io/pkg/ggplot2/man/ggsf.html) yourself.
+[`coord_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html)
+yourself.
 [`shapefile_list()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md)
 shows the same structure for the built-in sets and is a good template.
 
@@ -188,8 +189,8 @@ matching land layer in the same file, so both sit at the same resolution
 and CRS.
 [`geonorge_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/geonorge_bathymetry.md)
 reads the depth layer;
-[`sf::st_read()`](https://rdrr.io/pkg/sf/man/st_read.html) with
-`layer = "Landareal"` reads the land:
+[`sf::st_read()`](https://r-spatial.github.io/sf/reference/st_read.html)
+with `layer = "Landareal"` reads the land:
 
 ``` r
 

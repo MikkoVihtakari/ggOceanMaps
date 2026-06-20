@@ -10,8 +10,9 @@ fdir_sub_areas
 
 ## Format
 
-[`sf object`](https://rdrr.io/pkg/sf/man/sf.html) containing major
-fishing zones defined by the Norwegian Directorate of Fisheries.
+[`sf object`](https://r-spatial.github.io/sf/reference/sf.html)
+containing major fishing zones defined by the Norwegian Directorate of
+Fisheries.
 
 ## Source
 

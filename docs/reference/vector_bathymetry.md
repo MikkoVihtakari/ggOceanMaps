@@ -29,28 +29,28 @@ vector_bathymetry(
   Single numeric value specifying a threshold (area in km2) for
   disconnected polygons which should be removed. Set to `NULL` to bypass
   the removal. Uses the
-  [drop_crumbs](https://rdrr.io/pkg/smoothr/man/drop_crumbs.html)
+  [drop_crumbs](https://strimas.com/smoothr/reference/drop_crumbs.html)
   function.
 
 - remove.holes:
 
   Single numeric value specifying a threshold (area in km2) for holes
   which should be removed. Set to `NULL` to bypass the removal. Uses the
-  [fill_holes](https://rdrr.io/pkg/smoothr/man/fill_holes.html)
+  [fill_holes](https://strimas.com/smoothr/reference/fill_holes.html)
   function. Currently VERY slow.
 
 - smooth:
 
   Logical indicating whether the pixelated contours should be smoothed.
   Uses the
-  [smooth_ksmooth](https://rdrr.io/pkg/smoothr/man/smooth_ksmooth.html)
+  [smooth_ksmooth](https://strimas.com/smoothr/reference/smooth_ksmooth.html)
   function.
 
 ## Value
 
-An [sf](https://rdrr.io/pkg/sf/man/st.html) object containing the depth
-polygons. Uses same projection than `bathy` (see
-[`CRS`](https://rdrr.io/pkg/sf/man/st_crs.html)).
+An [sf](https://r-spatial.github.io/sf/reference/st.html) object
+containing the depth polygons. Uses same projection than `bathy` (see
+[`CRS`](https://r-spatial.github.io/sf/reference/st_crs.html)).
 
 ## Details
 

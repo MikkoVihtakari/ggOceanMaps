@@ -14,7 +14,7 @@ axes are projected metres rather than longitude and latitude. Add
 geographic coordinates to those maps through
 [`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md),
 `ggspatial::geom_spatial_*()`, or
-[`geom_sf()`](https://rdrr.io/pkg/ggplot2/man/ggsf.html), which
+[`geom_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html), which
 reproject on the fly.
 
 ## Schematic current arrows
@@ -24,7 +24,8 @@ The
 repository provides publication-style *“Figure 1”* current arrows for
 the Barents Sea and North Atlantic. The example below downloads the tidy
 Barents Sea CSV, builds one line per arrow, smooths it, and draws it
-with [`geom_path()`](https://rdrr.io/pkg/ggplot2/man/geom_path.html).
+with
+[`geom_path()`](https://ggplot2.tidyverse.org/reference/geom_path.html).
 Smoothing happens in projected metres rather than in longitude/latitude,
 which would exaggerate the curves near the pole.
 
@@ -62,7 +63,7 @@ head(cur)
 Each arrow is a group of ordered nodes. Assemble them into one
 `LINESTRING` per arrow, reproject to the map CRS, and smooth the nodes
 into curves with
-[`smoothr::smooth()`](https://rdrr.io/pkg/smoothr/man/smooth.html).
+[`smoothr::smooth()`](https://strimas.com/smoothr/reference/smooth.html).
 
 ``` r
 
@@ -135,7 +136,7 @@ reorder_layers(
 For a gridded velocity field, compute the arrow endpoints, transform
 both the start and end points to the basemap CRS, and draw the result
 with
-[`geom_segment()`](https://rdrr.io/pkg/ggplot2/man/geom_segment.html).
+[`geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html).
 The example uses a small synthetic field filtered to ocean positions;
 the same pattern applies after reading `u` and `v` from a NetCDF file.
 
@@ -278,7 +279,7 @@ basemap(
 ![](adding-graphical-elements_files/figure-html/pie-projected-1.png)
 
 The basemap already maps bathymetry to `fill`, so insert
-[`ggnewscale::new_scale_fill()`](https://rdrr.io/pkg/ggnewscale/man/new_scale.html)
+[`ggnewscale::new_scale_fill()`](https://eliocamp.github.io/ggnewscale/reference/new_scale.html)
 between the basemap and the pie layer to give the slices an independent
 fill scale.
 
@@ -301,7 +302,7 @@ basemap(c(11, 16, 67.3, 68.6), grid.col = NA, bathymetry = TRUE) +
 ![](adding-graphical-elements_files/figure-html/recolour-binned-1.png)
 
 For a continuous style, use a continuous fill scale instead.
-[`scale_fill_stepsn()`](https://rdrr.io/pkg/ggplot2/man/scale_steps.html)
+[`scale_fill_stepsn()`](https://ggplot2.tidyverse.org/reference/scale_steps.html)
 additionally lets you set your own breaks and a non-linear
 transformation, binning the continuous raster at plotting time without
 changing the data. (This example needs the higher-resolution continuous
@@ -339,7 +340,7 @@ pass the cut points to `depths` and hand the returned binned raster
 straight to
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 through `shapefiles`. Any grid that
-[`stars::read_stars()`](https://rdrr.io/pkg/stars/man/read_stars.html)
+[`stars::read_stars()`](https://r-spatial.github.io/stars/reference/read_stars.html)
 can open works — the example reads a local GEBCO file (see the [Your own
 raster](https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.md)
 section of the Bathymetry article), cropped to the shelf off Lofoten.
@@ -359,8 +360,6 @@ rb <- raster_bathymetry(
 
 # Each depths value becomes a class boundary.
 levels(rb$raster[[1]])
-#> [1] "0-50"      "50-100"    "100-250"   "250-500"   "500-1000"  "1000-2000"
-#> [7] "2000-Inf"
 ```
 
 The binned raster carries the depth classes as a factor, so it behaves
@@ -378,8 +377,6 @@ basemap(
 ) +
   scale_fill_brewer("Depth (m)", palette = "YlGnBu", na.value = "white")
 ```
-
-![](adding-graphical-elements_files/figure-html/raster-bathymetry-plot-1.png)
 
 [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
 reports the intervals in `rb$depth.invervals`. The same binned raster

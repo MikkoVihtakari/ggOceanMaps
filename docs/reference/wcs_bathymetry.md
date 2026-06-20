@@ -89,9 +89,9 @@ wcs_bathymetry(
 ## Value
 
 A `bathyRaster` object: a list with elements `raster` (a
-[`read_stars`](https://rdrr.io/pkg/stars/man/read_stars.html) object
-with positive depth values) and `depth.invervals` (a length-2 numeric
-range).
+[`read_stars`](https://r-spatial.github.io/stars/reference/read_stars.html)
+object with positive depth values) and `depth.invervals` (a length-2
+numeric range).
 
 ## Details
 
