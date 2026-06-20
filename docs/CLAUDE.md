@@ -15,6 +15,26 @@ data and downloads high-resolution files on demand from
 [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData).
 Documentation: <https://mikkovihtakari.github.io/ggOceanMaps/>
 
+## Project memory
+
+The [`memory/`](https://mikkovihtakari.github.io/ggOceanMaps/memory/)
+folder is this project’s persistent memory: the long-form development
+plan, architecture notes, established conventions, and feedback. **Read
+it before starting work** to get oriented, and **keep it up to date** as
+the project evolves.
+[`memory/MEMORY.md`](https://mikkovihtakari.github.io/ggOceanMaps/memory/MEMORY.md)
+is the one-line-per-entry index — start there, then open the files it
+points to.
+
+**Do not put personal information into the memory files, this file, or
+`AGENTS.md`.** The whole repository (including `memory/`) is public on
+GitHub. In particular, never commit absolute local paths
+(e.g. `/Users/<name>/...`), machine-specific filenames, dataset versions
+tied to one computer, or contact details beyond the maintainer’s public
+package metadata. Use generic placeholders instead: `~/...`,
+`path/to/your/file.nc`, `<your-data-folder>`. This applies to any agent
+editing these files.
+
 ## Common commands
 
 ``` r

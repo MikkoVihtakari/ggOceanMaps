@@ -186,3 +186,16 @@ ggsave("arctic.png", p, width = 6, height = 6, dpi = 300)
 - Cookbook of recipes: `vignette("cookbook")`
 - Function reference: <https://mikkovihtakari.github.io/ggOceanMaps/reference/>
 - Issues / bug reports: <https://github.com/MikkoVihtakari/ggOceanMaps/issues>
+
+## For agents developing the package
+
+If you are helping work on the package source (not just using it), start with
+[CLAUDE.md](CLAUDE.md) and the [`memory/`](memory/) folder. `memory/` is the
+project's persistent memory — the development plan, architecture notes, and
+conventions; [`memory/MEMORY.md`](memory/MEMORY.md) is the index.
+
+**Do not put personal information into `memory/`, `AGENTS.md`, or `CLAUDE.md`.**
+The whole repository, `memory/` included, is public on GitHub. Never commit
+absolute local paths (e.g. `/Users/<name>/...`), machine-specific filenames, or
+contact details beyond the maintainer's public package metadata; use generic
+placeholders such as `~/...` or `path/to/your/file.nc`.

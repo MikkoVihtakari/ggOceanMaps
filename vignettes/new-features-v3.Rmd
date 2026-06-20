@@ -30,11 +30,11 @@ knitr::opts_chunk$set(
 library(ggOceanMaps)
 ```
 
-# Bringing ggOceanMaps to the AI age
+# ggOceanMaps enters the AI age
 
-Version 3 marks a change in direction. From now on, ggOceanMaps is developed with the help of AI coding assistants (Claude Code, GitHub Copilot), and a core goal of the package is to **help AI agents make good maps on behalf of their users**. Plotting oceanographic data should be a one-sentence request, whether you type it yourself or ask an assistant to do it for you.
+Version 3 marks a change. From now on, ggOceanMaps will be developed with the help of AI coding assistants (Claude Code, Codex), meaning the code will no longer necessarily be written by the developer (but it will still be reviewed by the developer). There's an increased focus on writing documentation so that AI agents can better assist their users. Plotting maps with ggOceanMaps data should be a one-sentence request, whether you type it yourself or ask an assistant to do it for you.
 
-The most visible part of this shift is a new [`AGENTS.md`](https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/AGENTS.md) file shipped with the package. It gives AI assistants concise, accurate instructions for *using* ggOceanMaps — the projection rules, the `shapefiles` contract, how `transform_coord()` works, and the common pitfalls — so they spend less time guessing and more time helping. The documentation site was also reorganised around this idea: a short [user manual](ggOceanMaps.html) that links out to focused, in-depth articles.
+The most visible part of this shift is the new AI-focused files in the GitHub version for the package [`AGENTS.md`](https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/AGENTS.md), CLAUDE.md, and the memory folder. It gives AI assistants concise, accurate instructions for *using* ggOceanMaps — the projection rules, the `shapefiles` contract, how `transform_coord()` works, and the common pitfalls — so they spend less time guessing and more time helping. Further, these files should help the AI agents of contributors get their bearings and develop new features for ggOceanMaps. The documentation site was also reorganized to accommodate AI agents: a short [user manual](ggOceanMaps.html) that links to focused, in-depth articles.
 
 Everything below is new or substantially improved in version 3.
 

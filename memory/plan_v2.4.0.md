@@ -137,6 +137,13 @@ Awaiting the user's pkgdown site rebuild + review. Done items:
 - Bump nothing (already 2.4.0); spell-check README/NEWS; `urlchecker::url_check()`; win-builder; rhub; final `--as-cran`.
 - **User reviews new features first, then merges PR #67. Do not merge or submit without explicit go-ahead.**
 
+**TODO — unwrap hard-wrapped vignette prose** (user reminded 2026-06-20: no hard
+wrapping in Rmd; one line per paragraph). Already-unwrapped: README.Rmd,
+ggOceanMaps.Rmd, new-features-v3.Rmd, bathymetry citation list. **Still wrapped
+(authored this release, pending):** `bathymetry.Rmd`, `cookbook.Rmd`,
+`premade-maps.Rmd`, `premade-shapefiles.Rmd`. Reflow prose to single lines while
+preserving code fences, tables, and list items; then rebuild site.
+
 **Park notes**:
 - BSBD helper still needs user input on file format.
 - All Phase 3 docs items below 3.B are independent of each other — can be tackled in any order.
