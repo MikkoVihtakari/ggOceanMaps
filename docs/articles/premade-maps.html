@@ -77,7 +77,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">19 June, 2026</h4>
+            <h4 data-toc-skip class="date">20 June, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/premade-maps.Rmd" class="external-link"><code>vignettes/premade-maps.Rmd</code></a></small>
       <div class="d-none name"><code>premade-maps.Rmd</code></div>
@@ -96,31 +96,36 @@ shows the maps that ship with — or are downloadable for — the package,
 and the projection each uses.</p>
 <p>The available sets are listed by <code><a href="../reference/shapefile_list.html">shapefile_list()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"all"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                     name</span></span>
-<span><span class="co">#&gt; 1    ArcticStereographic</span></span>
-<span><span class="co">#&gt; 2 AntarcticStereographic</span></span>
-<span><span class="co">#&gt; 3          DecimalDegree</span></span>
-<span><span class="co">#&gt; 4               Svalbard</span></span>
-<span><span class="co">#&gt; 5                 Europe</span></span>
-<span><span class="co">#&gt;                                                                          land</span></span>
-<span><span class="co">#&gt; 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_land</span></span>
-<span><span class="co">#&gt; 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_land</span></span>
-<span><span class="co">#&gt; 3                                                                     dd_land</span></span>
-<span><span class="co">#&gt; 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_land</span></span>
-<span><span class="co">#&gt; 5    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/europe_land</span></span>
-<span><span class="co">#&gt;                                                                          glacier</span></span>
-<span><span class="co">#&gt; 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_glacier</span></span>
-<span><span class="co">#&gt; 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_glacier</span></span>
-<span><span class="co">#&gt; 3        /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_glacier</span></span>
-<span><span class="co">#&gt; 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_glacier</span></span>
-<span><span class="co">#&gt; 5                                                                           &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;                                                                                                                                                                bathy</span></span>
-<span><span class="co">#&gt; 1    dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_bathy</span></span>
-<span><span class="co">#&gt; 2 dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_bathy</span></span>
-<span><span class="co">#&gt; 3        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_bathy</span></span>
-<span><span class="co">#&gt; 4  dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_bathy</span></span>
-<span><span class="co">#&gt; 5        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_bathy</span></span>
+<code class="sourceCode R"><span><span class="va">shapes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"all"</span><span class="op">)</span></span>
+<span><span class="va">datapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/path.expand.html" class="external-link">path.expand</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ggOceanMaps.datapath"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">userpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/path.expand.html" class="external-link">path.expand</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ggOceanMaps.userpath"</span>, <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">shapes</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">shapes</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="va">datapath</span>, <span class="st">"&lt;ggOceanMaps.datapath&gt;"</span>, <span class="va">x</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="va">userpath</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="va">userpath</span>, <span class="st">"&lt;ggOceanMaps.userpath&gt;"</span>, <span class="va">x</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">x</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="va">shapes</span></span>
+<span><span class="co">#&gt;                     name                                  land</span></span>
+<span><span class="co">#&gt; 1    ArcticStereographic    &lt;ggOceanMaps.datapath&gt;/arctic_land</span></span>
+<span><span class="co">#&gt; 2 AntarcticStereographic &lt;ggOceanMaps.datapath&gt;/antarctic_land</span></span>
+<span><span class="co">#&gt; 3          DecimalDegree                               dd_land</span></span>
+<span><span class="co">#&gt; 4               Svalbard  &lt;ggOceanMaps.datapath&gt;/svalbard_land</span></span>
+<span><span class="co">#&gt; 5                 Europe    &lt;ggOceanMaps.datapath&gt;/europe_land</span></span>
+<span><span class="co">#&gt;                                    glacier</span></span>
+<span><span class="co">#&gt; 1    &lt;ggOceanMaps.datapath&gt;/arctic_glacier</span></span>
+<span><span class="co">#&gt; 2 &lt;ggOceanMaps.datapath&gt;/antarctic_glacier</span></span>
+<span><span class="co">#&gt; 3        &lt;ggOceanMaps.datapath&gt;/dd_glacier</span></span>
+<span><span class="co">#&gt; 4  &lt;ggOceanMaps.datapath&gt;/svalbard_glacier</span></span>
+<span><span class="co">#&gt; 5                                     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;                                                                                                           bathy</span></span>
+<span><span class="co">#&gt; 1    dd_rbathy|&lt;ggOceanMaps.datapath&gt;/dd_rbathy_cont|&lt;ggOceanMaps.userpath&gt;|&lt;ggOceanMaps.datapath&gt;/arctic_bathy</span></span>
+<span><span class="co">#&gt; 2 dd_rbathy|&lt;ggOceanMaps.datapath&gt;/dd_rbathy_cont|&lt;ggOceanMaps.userpath&gt;|&lt;ggOceanMaps.datapath&gt;/antarctic_bathy</span></span>
+<span><span class="co">#&gt; 3        dd_rbathy|&lt;ggOceanMaps.datapath&gt;/dd_rbathy_cont|&lt;ggOceanMaps.userpath&gt;|&lt;ggOceanMaps.datapath&gt;/dd_bathy</span></span>
+<span><span class="co">#&gt; 4  dd_rbathy|&lt;ggOceanMaps.datapath&gt;/dd_rbathy_cont|&lt;ggOceanMaps.userpath&gt;|&lt;ggOceanMaps.datapath&gt;/svalbard_bathy</span></span>
+<span><span class="co">#&gt; 5        dd_rbathy|&lt;ggOceanMaps.datapath&gt;/dd_rbathy_cont|&lt;ggOceanMaps.userpath&gt;|&lt;ggOceanMaps.datapath&gt;/dd_bathy</span></span>
 <span><span class="co">#&gt;     crs                                      limits</span></span>
 <span><span class="co">#&gt; 1  3995                                       c(30)</span></span>
 <span><span class="co">#&gt; 2  3031                                      c(-35)</span></span>

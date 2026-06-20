@@ -10,9 +10,8 @@ dd_rbathy
 
 ## Format
 
-[Raster](https://r-spatial.github.io/stars/reference/read_stars.html)
-bathymetry in decimal degrees (EPSG:4326). Downsampled from ETOPO 60
-arc-second grid.
+[Raster](https://rdrr.io/pkg/stars/man/read_stars.html) bathymetry in
+decimal degrees (EPSG:4326). Downsampled from ETOPO 60 arc-second grid.
 
 ## Source
 

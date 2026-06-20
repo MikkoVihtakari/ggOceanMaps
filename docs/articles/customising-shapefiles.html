@@ -77,7 +77,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">19 June, 2026</h4>
+            <h4 data-toc-skip class="date">20 June, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/customising-shapefiles.Rmd" class="external-link"><code>vignettes/customising-shapefiles.Rmd</code></a></small>
       <div class="d-none name"><code>customising-shapefiles.Rmd</code></div>
@@ -123,7 +123,7 @@ contours (vector styles), or <code>NULL</code>.</li>
 </ul>
 <p>All three must share <strong>one projection</strong>.
 <code><a href="../reference/basemap.html">basemap()</a></code> uses that CRS for the map, so there is no need to
-call <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf()</a></code> yourself. <code><a href="../reference/shapefile_list.html">shapefile_list()</a></code>
+call <code><a href="https://rdrr.io/pkg/ggplot2/man/ggsf.html" class="external-link">coord_sf()</a></code> yourself. <code><a href="../reference/shapefile_list.html">shapefile_list()</a></code>
 shows the same structure for the built-in sets and is a good
 template.</p>
 </div>
@@ -180,8 +180,8 @@ vectorisers:</p>
 <span><span class="va">vl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vector_land.html">vector_land</a></span><span class="op">(</span><span class="va">rb</span>, drop.crumbs <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 2c. Normalise the CRS to plain EPSG:4326 (see note below).</span></span>
-<span><span class="va">vb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vb</span>, <span class="fl">4326</span><span class="op">)</span></span>
-<span><span class="va">vl</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vl</span>, <span class="fl">4326</span><span class="op">)</span></span>
+<span><span class="va">vb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vb</span>, <span class="fl">4326</span><span class="op">)</span></span>
+<span><span class="va">vl</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vl</span>, <span class="fl">4326</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># vector_bathymetry() also polygonizes the "land" class added by</span></span>
 <span><span class="co"># estimate.land -- drop it, it belongs in vl.</span></span>
@@ -241,14 +241,14 @@ heavy raster step every session:</p>
 depth-area vector shapefiles can be downloaded as <code>.gml</code> and
 include a matching land layer in the same file, so both sit at the same
 resolution and CRS. <code><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry()</a></code> reads the depth
-layer; <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::st_read()</a></code> with <code>layer = "Landareal"</code>
+layer; <code><a href="https://rdrr.io/pkg/sf/man/st_read.html" class="external-link">sf::st_read()</a></code> with <code>layer = "Landareal"</code>
 reads the land:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry</a></span><span class="op">(</span><span class="st">"path/to/Dybdedata.gml"</span><span class="op">)</span></span>
-<span><span class="va">land</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"path/to/Dybdedata.gml"</span>, layer <span class="op">=</span> <span class="st">"Landareal"</span><span class="op">)</span></span>
+<span><span class="va">land</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"path/to/Dybdedata.gml"</span>, layer <span class="op">=</span> <span class="st">"Landareal"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Use the data's own extent and projection.</span></span>
-<span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">gb</span><span class="op">)</span></span>
+<span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">gb</span><span class="op">)</span></span>
 <span><span class="va">limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">bb</span><span class="op">[</span><span class="st">"xmin"</span><span class="op">]</span>, <span class="va">bb</span><span class="op">[</span><span class="st">"xmax"</span><span class="op">]</span>, <span class="va">bb</span><span class="op">[</span><span class="st">"ymin"</span><span class="op">]</span>, <span class="va">bb</span><span class="op">[</span><span class="st">"ymax"</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
@@ -296,8 +296,8 @@ better match for EMODnet’s ~115 m resolution than the shipped
 <span><span class="co"># Reproject the bathymetry to the "Europe" land set's CRS (EPSG:3035) and clip</span></span>
 <span><span class="co"># the land to the bathymetry extent, so both are in the plotted projection.</span></span>
 <span><span class="va">europe_land</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_map_data.html">load_map_data</a></span><span class="op">(</span><span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"Europe"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">land</span></span>
-<span><span class="va">vb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vb</span>, <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">europe_land</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">land</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">st_make_valid</a></span><span class="op">(</span><span class="va">europe_land</span><span class="op">)</span>, <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">vb</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">vb</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">vb</span>, <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">europe_land</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">land</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/valid.html" class="external-link">st_make_valid</a></span><span class="op">(</span><span class="va">europe_land</span><span class="op">)</span>, <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">vb</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
 <span>  limits <span class="op">=</span> <span class="va">tromso</span>,</span>

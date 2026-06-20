@@ -64,31 +64,29 @@ Mikko Vihtakari
 ## Examples
 
 ``` r
+old_options <- options(
+  ggOceanMaps.datapath = "path/to/ggOceanMapsLargeData",
+  ggOceanMaps.userpath = "path/to/your/bathymetry.nc"
+)
 shapefile_list("all")
-#>                     name
-#> 1    ArcticStereographic
-#> 2 AntarcticStereographic
-#> 3          DecimalDegree
-#> 4               Svalbard
-#> 5                 Europe
-#>                                                                          land
-#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/arctic_land
-#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/antarctic_land
-#> 3                                                                     dd_land
-#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/svalbard_land
-#> 5    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/europe_land
-#>                                                                          glacier
-#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/arctic_glacier
-#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/antarctic_glacier
-#> 3        /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/dd_glacier
-#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/svalbard_glacier
-#> 5                                                                           <NA>
-#>                                                                                                                                                                bathy
-#> 1    dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/arctic_bathy
-#> 2 dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/antarctic_bathy
-#> 3        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/dd_bathy
-#> 4  dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/svalbard_bathy
-#> 5        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/dd_bathy
+#>                     name                                        land
+#> 1    ArcticStereographic    path/to/ggOceanMapsLargeData/arctic_land
+#> 2 AntarcticStereographic path/to/ggOceanMapsLargeData/antarctic_land
+#> 3          DecimalDegree                                     dd_land
+#> 4               Svalbard  path/to/ggOceanMapsLargeData/svalbard_land
+#> 5                 Europe    path/to/ggOceanMapsLargeData/europe_land
+#>                                          glacier
+#> 1    path/to/ggOceanMapsLargeData/arctic_glacier
+#> 2 path/to/ggOceanMapsLargeData/antarctic_glacier
+#> 3        path/to/ggOceanMapsLargeData/dd_glacier
+#> 4  path/to/ggOceanMapsLargeData/svalbard_glacier
+#> 5                                           <NA>
+#>                                                                                                                           bathy
+#> 1    dd_rbathy|path/to/ggOceanMapsLargeData/dd_rbathy_cont|path/to/your/bathymetry.nc|path/to/ggOceanMapsLargeData/arctic_bathy
+#> 2 dd_rbathy|path/to/ggOceanMapsLargeData/dd_rbathy_cont|path/to/your/bathymetry.nc|path/to/ggOceanMapsLargeData/antarctic_bathy
+#> 3        dd_rbathy|path/to/ggOceanMapsLargeData/dd_rbathy_cont|path/to/your/bathymetry.nc|path/to/ggOceanMapsLargeData/dd_bathy
+#> 4  dd_rbathy|path/to/ggOceanMapsLargeData/dd_rbathy_cont|path/to/your/bathymetry.nc|path/to/ggOceanMapsLargeData/svalbard_bathy
+#> 5        dd_rbathy|path/to/ggOceanMapsLargeData/dd_rbathy_cont|path/to/your/bathymetry.nc|path/to/ggOceanMapsLargeData/dd_bathy
 #>     crs                                      limits
 #> 1  3995                                       c(30)
 #> 2  3031                                      c(-35)
@@ -106,18 +104,20 @@ shapefile_list("Arctic") # partial matching
 #> [1] "ArcticStereographic"
 #> 
 #> $land
-#> [1] "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/arctic_land"
+#> [1] "path/to/ggOceanMapsLargeData/arctic_land"
 #> 
 #> $glacier
-#> [1] "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/arctic_glacier"
+#> [1] "path/to/ggOceanMapsLargeData/arctic_glacier"
 #> 
 #> $bathy
-#>                                                                 raster_binned 
-#>                                                                   "dd_rbathy" 
-#>                                                             raster_continuous 
-#> "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/dd_rbathy_cont" 
-#>                                                                        vector 
-#>   "/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmppcDrFF/arctic_bathy" 
+#>                                 raster_binned 
+#>                                   "dd_rbathy" 
+#>                             raster_continuous 
+#> "path/to/ggOceanMapsLargeData/dd_rbathy_cont" 
+#>                                   raster_user 
+#>                  "path/to/your/bathymetry.nc" 
+#>                                        vector 
+#>   "path/to/ggOceanMapsLargeData/arctic_bathy" 
 #> 
 #> $crs
 #> [1] 3995
@@ -129,4 +129,5 @@ shapefile_list("Arctic") # partial matching
 #>                                                      ggOceanMapsLargeData 
 #> "https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/" 
 #> 
+options(old_options)
 ```

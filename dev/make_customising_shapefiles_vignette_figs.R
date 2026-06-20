@@ -11,16 +11,21 @@
 #                            municipality, from
 #                            https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a
 
-options(
-  ggOceanMaps.datapath = "~/Documents/ggOceanMapsLargeData",
-  ggOceanMaps.userpath = Sys.getenv("GGOCEANMAPS_USERPATH")
-)
+datapath <- Sys.getenv("GGOCEANMAPS_DATAPATH")
+userpath <- Sys.getenv("GGOCEANMAPS_USERPATH")
+outdir <- Sys.getenv("GGOCEANMAPS_LARGEDATA_DOCS")
+geonorge_path <- Sys.getenv("GEONORGE_OSLO_GML")
+
+if(!nzchar(datapath) || !dir.exists(datapath)) stop("Set GGOCEANMAPS_DATAPATH to the ggOceanMapsLargeData cache.")
+if(!nzchar(userpath) || !file.exists(userpath)) stop("Set GGOCEANMAPS_USERPATH to a local GEBCO/ETOPO/IBCAO raster.")
+if(!nzchar(outdir) || !dir.exists(outdir)) stop("Set GGOCEANMAPS_LARGEDATA_DOCS to the ggOceanMapsLargeData docs directory.")
+if(!nzchar(geonorge_path) || !file.exists(geonorge_path)) stop("Set GEONORGE_OSLO_GML to the Oslo Geonorge GML file.")
+
+options(ggOceanMaps.datapath = datapath, ggOceanMaps.userpath = userpath)
 
 devtools::load_all(".")
 library(ggplot2)
 library(sf)
-
-outdir <- "/Users/a22357/ownCloud/Workstuff/R/Github/ggOceanMapsLargeData/docs"
 
 save_fig <- function(p, name, w = 6, h = 5, dpi = 150) {
   ggsave(file.path(outdir, name), plot = p, width = w, height = h,
@@ -79,7 +84,7 @@ save_fig(
 )
 
 # 3. Geonorge depth data: Oslo municipality ----------------------------------
-gml <- Sys.getenv("GEONORGE_OSLO_GML")
+gml <- geonorge_path
 gb <- geonorge_bathymetry(gml)
 land_osl <- sf::st_read(gml, layer = "Landareal", quiet = TRUE)
 bb <- sf::st_bbox(gb)

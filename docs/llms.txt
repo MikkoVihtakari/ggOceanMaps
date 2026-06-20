@@ -109,7 +109,7 @@ shapefiles every time they restart R. This limitation is set by [CRAN
 policies](https://cran.r-project.org/web/packages/policies.html). You
 can define a custom folder for high-resolution shapefiles on your
 computer by modifying your .Rprofile file
-(e.g. [`usethis::edit_r_profile()`](https://usethis.r-lib.org/reference/edit.html)).
+(e.g. [`usethis::edit_r_profile()`](https://rdrr.io/pkg/usethis/man/edit.html)).
 Add the following lines to the file:
 
 ``` r
@@ -201,13 +201,13 @@ citation("ggOceanMaps")
 ## Getting help
 
 ggOceanMaps is designed to be used with the help of AI assistants. Often
-the quickest way to get help is to **ask your AI agent** (ChatGPT,
-Claude, GitHub Copilot, and the like): paste the link to the ggOceanMaps
-website, <https://mikkovihtakari.github.io/ggOceanMaps/>, and ask the
-agent to familiarise itself with the site before answering your
-question. The website contains the full user manual, the in-depth
-articles, the cookbook, and the function reference, and the package
-ships an
+the quickest way to get help is to **ask your AI agent** (Claude Code,
+Codex, Copilot, ChatGPT, Claude.ai, GitHub Copilot, Mistral, and the
+like): paste the link to the ggOceanMaps GitHub site,
+<https://github.com/MikkoVihtakari/ggOceanMaps/>, and ask the agent to
+familiarize itself with the site before answering your question. The
+website contains the full user manual, the in-depth articles, the
+cookbook, and the function reference, and the repository includes an
 [`AGENTS.md`](https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/AGENTS.md)
 file written specifically to help agents use it correctly. Pointing the
 agent at these resources first leads to much better answers than asking

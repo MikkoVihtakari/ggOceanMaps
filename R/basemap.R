@@ -368,6 +368,7 @@ basemap <- function(
   ## Bathymetry data
 
   if (bathymetry & !is.null(X$shapefiles$bathy)) {
+    plot.downsample <- if(isTRUE(attr(X$shapefiles$bathy, "downsampled"))) 0 else downsample
     bathy.legend <- ifelse(length(legends) == 1, legends, legends[1])
 
     if (bathy_cmd == "bathy_cg" & is.na(bathy.border.col)) {

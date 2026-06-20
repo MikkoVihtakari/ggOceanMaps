@@ -15,6 +15,11 @@ pre-rendered figure instead.
 
 library(ggOceanMaps)
 library(ggplot2)
+
+datapath <- Sys.getenv("GGOCEANMAPS_DATAPATH")
+userpath <- Sys.getenv("GGOCEANMAPS_USERPATH")
+if (nzchar(datapath)) options(ggOceanMaps.datapath = datapath)
+if (nzchar(userpath)) options(ggOceanMaps.userpath = userpath)
 ```
 
 ## Choosing a region
@@ -279,23 +284,17 @@ Two WCS sources are wired into
 basemap(c(2, 3, 54, 55), bathy.style = "wemb")
 ```
 
-![](cookbook_files/figure-html/unnamed-chunk-17-1.png)
-
 ``` r
 
 # Hawaii — global coverage from ETOPO
 basemap(c(-160, -154, 18, 23), bathy.style = "wceb")
 ```
 
-![](cookbook_files/figure-html/unnamed-chunk-18-1.png)
-
 ``` r
 
 # Indonesia / Java Trench — also ETOPO (outside EMODnet)
 basemap(c(100, 130, -15, 10), bathy.style = "wceb")
 ```
-
-![](cookbook_files/figure-html/unnamed-chunk-19-1.png)
 
 For a manual fetch (e.g. to pass through
 [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
@@ -308,7 +307,6 @@ than `bathymetry = TRUE`:
 ``` r
 
 bathy <- wcs_bathymetry(c(2, 3, 54, 55), source = "emodnet")
-#>   |                                                                              |                                                                      |   0%  |                                                                              |=========                                                             |  12%  |                                                                              |==================                                                    |  25%  |                                                                              |==========================                                            |  38%  |                                                                              |===================================                                   |  50%  |                                                                              |============================================                          |  62%  |                                                                              |====================================================                  |  75%  |                                                                              |=============================================================         |  88%  |                                                                              |======================================================================| 100%
 
 basemap(
   c(2, 3, 54, 55),
@@ -316,8 +314,6 @@ basemap(
   bathy.style = "rcb"
 )
 ```
-
-![](cookbook_files/figure-html/unnamed-chunk-20-1.png)
 
 Requirements / caveats:
 
@@ -449,22 +445,22 @@ the map’s native projection.
 The pattern is: get u/v current components on a grid, thin it to a
 drawable density, transform coordinates to the map’s CRS, then draw
 arrows with
-[`geom_segment()`](https://ggplot2.tidyverse.org/reference/geom_segment.html).
+[`geom_segment()`](https://rdrr.io/pkg/ggplot2/man/geom_segment.html).
 The example below builds a small synthetic field with
 [`dist2land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/dist2land.md)
 filtering out land points, so it is fully self-contained; the same
 pattern applies after reading real `u`/`v` components from a NetCDF file
 with
-[`stars::read_stars()`](https://r-spatial.github.io/stars/reference/read_stars.html).
+[`stars::read_stars()`](https://rdrr.io/pkg/stars/man/read_stars.html).
 
 [`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md)
 is needed below even though these limits look like an ordinary
 decimal-degree box: latitudes this far north (50–70°N) select the Arctic
 polar projection automatically (see
 [`?basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)),
-and [`coord_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html)
-still labels the axes in plain degrees, so the projection is easy to
-miss (see the [Adding graphical
+and [`coord_sf()`](https://rdrr.io/pkg/ggplot2/man/ggsf.html) still
+labels the axes in plain degrees, so the projection is easy to miss (see
+the [Adding graphical
 elements](https://mikkovihtakari.github.io/ggOceanMaps/articles/adding-graphical-elements.html#velocity-fields)
 article for more on this pattern):
 
@@ -579,7 +575,7 @@ ggOceanMaps ships three zone datasets:
 All three are sf polygon objects and can be passed straight to
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 for automatic limits or overlaid with
-[`geom_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html):
+[`geom_sf()`](https://rdrr.io/pkg/ggplot2/man/ggsf.html):
 
 ``` r
 
@@ -640,7 +636,7 @@ stereographic maps).
 ### How do I colour the ocean (panel background)?
 
 The ocean is the ggplot *panel*. Colour it via
-[`theme()`](https://ggplot2.tidyverse.org/reference/theme.html), and set
+[`theme()`](https://rdrr.io/pkg/ggplot2/man/theme.html), and set
 `panel.ontop = FALSE` so the fill sits under the map:
 
 ``` r

@@ -1,7 +1,6 @@
 # ggOceanMaps 3.0.0
 
-**Bringing ggOceanMaps to the AI age.** From this version on, ggOceanMaps
-attempts to help AI agents better support their users, and is itself developed and tested with the help of AI (Claude Code, Codex), enabling a faster development cycle and more robust code. The package now ships an `AGENTS.md` file and memory folder with instructions for AI assistants, alongside a much expanded and reorganised set of articles and recipes. This is a major release with new on-demand bathymetry sources, build-your-own shapefile tools, a comprehensive automated test suite, and an overhauled documentation site.
+This major release adds on-demand bathymetry sources, build-your-own shapefile tools, automated tests, and a reorganised documentation site. The repository also includes instructions for AI assistants that help users and contributors work with ggOceanMaps.
 
 ## New features
 
@@ -24,14 +23,13 @@ attempts to help AI agents better support their users, and is itself developed a
 
 ## Documentation and AI support
 
-* New `AGENTS.md` with instructions for AI assistants helping users *use*
-  ggOceanMaps.
-* New `vignette("cookbook")` of short, copy-pasteable recipes.
-* New `vignette("bathymetry")` covering all bathymetry sources.
-* New `vignette("adding-graphical-elements")` covering ocean-current arrows
+* New repository-level `AGENTS.md` with instructions for AI assistants helping users *use* ggOceanMaps.
+* New website Cookbook of short, copy-pasteable recipes.
+* New website Bathymetry article covering all bathymetry sources.
+* New website Adding graphical elements article covering ocean-current arrows
   (velocity quivers and schematic "Figure 1" arrows) and pie charts on maps
   via `scatterpie::geom_scatterpie()`.
-* New `vignette("customising-shapefiles")` covering `clip_shapefile()`, the
+* New website Customising shapefiles article covering `clip_shapefile()`, the
   `raster_bathymetry()` -> `vector_bathymetry()` / `vector_land()` pipeline,
   and `geonorge_bathymetry()`.
 * The "Premade maps" and "Premade shapefiles" articles were rewritten to the
@@ -60,12 +58,19 @@ attempts to help AI agents better support their users, and is itself developed a
   (e.g. on the Svalbard or Europe CRS). The coverage is now requested for the
   full projected, expand-factor-padded map area rather than the raw
   decimal-degree limits, so it fills the whole panel.
+* WCS `downsample` is now applied by the remote service, reducing transfer size
+  and memory use. Raster cropping preserves the downloaded cell resolution and
+  no longer applies a second implicit reduction before plotting.
+* WCS downloads now use validated temporary files and atomic cache updates.
+  Invalid cache entries are replaced automatically, and multipart responses
+  are split using their complete MIME boundary rather than a generic byte
+  sequence that can occur inside a GeoTIFF.
 
 ## Testing
 
-* Comprehensive testthat suite added: smoke tests covering the historical
-  regression corpus run everywhere; vdiffr SVG snapshot tests catch
-  "code runs but wrong map" regressions locally.
+* A local testthat suite covers the historical regression corpus; vdiffr SVG
+  snapshot tests catch "code runs but wrong map" regressions. Tests are run
+  during development and excluded from the CRAN source package.
 * Unit tests for `transform_coord()`, `auto_limits()`,
   `guess_coordinate_columns()`, `LS()`, `quiet()`, `vector_land()`,
   `wcs_bathymetry()`.

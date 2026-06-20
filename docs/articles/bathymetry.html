@@ -364,7 +364,7 @@ own group — download it once, point ggOceanMaps at it through
 <img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_rub.png" alt="User-supplied GEBCO raster (rub) off Lofoten."><div class="figcaption">User-supplied GEBCO raster (<code>rub</code>)
 off Lofoten.</div>
 </div>
-<p>Any format that <code><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">stars::read_stars()</a></code> can open is accepted
+<p>Any format that <code><a href="https://rdrr.io/pkg/stars/man/read_stars.html" class="external-link">stars::read_stars()</a></code> can open is accepted
 (NetCDF <code>.nc</code>, GeoTIFF <code>.tif</code>, GMT
 <code>.grd</code>, and so on). The file is read in full on every call,
 so the user-raster route can be slower than a pre-processed
@@ -375,7 +375,7 @@ ggOceanMapsLargeData object for the same region. Use
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">80</span>, length.out <span class="op">=</span> <span class="fl">41</span><span class="op">)</span>, lat <span class="op">=</span> <span class="fl">50</span><span class="op">:</span><span class="fl">90</span><span class="op">)</span></span>
 <span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_depth.html">get_depth</a></span><span class="op">(</span><span class="va">dt</span>, bathy.style <span class="op">=</span> <span class="st">"ru"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="va">depth</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/qmap.html">qmap</a></span><span class="op">(</span><span class="va">dt</span>, color <span class="op">=</span> <span class="va">depth</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/scale_viridis.html" class="external-link">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="build-your-own-shapefiles">5. Build your own shapefiles<a class="anchor" aria-label="anchor" href="#build-your-own-shapefiles"></a>
@@ -416,9 +416,9 @@ once:</p>
 <p><code>bathy.style</code> is set per call, so each panel of a
 multi-panel figure can use its own source:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>, <span class="op">-</span><span class="fl">154</span>, <span class="fl">18</span>, <span class="fl">23</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"wceb"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"ETOPO (1.85 km)"</span><span class="op">)</span></span>
-<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">54</span>, <span class="fl">55</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"wemb"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"EMODnet (115 m)"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cran.r-project.org/package=patchwork" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>, <span class="op">-</span><span class="fl">154</span>, <span class="fl">18</span>, <span class="fl">23</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"wceb"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"ETOPO (1.85 km)"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">54</span>, <span class="fl">55</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"wemb"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"EMODnet (115 m)"</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -469,9 +469,10 @@ reference table.</li>
 <code><a href="../reference/raster_bathymetry.html">?raster_bathymetry</a></code>, <code><a href="../reference/vector_bathymetry.html">?vector_bathymetry</a></code>,
 <code><a href="../reference/vector_land.html">?vector_land</a></code> for the build-your-own pipeline.</li>
 <li>
-<code><a href="../articles/cookbook.html">vignette("cookbook")</a></code> for short, copy-pasteable
+<a href="cookbook.html">Cookbook</a> for short, copy-pasteable
 recipes.</li>
-<li>The user manual: <code><a href="../articles/ggOceanMaps.html">vignette("ggOceanMaps")</a></code>.</li>
+<li>
+<a href="ggOceanMaps.html">User manual</a>.</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

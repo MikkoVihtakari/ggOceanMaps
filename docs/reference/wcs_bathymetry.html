@@ -135,19 +135,16 @@ so larger tiles are fine.</p></dd>
 
 
 <dt id="arg-downsample">downsample<a class="anchor" aria-label="anchor" href="#arg-downsample"></a></dt>
-<dd><p>Integer. Number of grid cells to skip when reducing the
-raster after download. <code>0</code> (default) keeps the native ~115 m
-resolution; <code>1</code> keeps every second cell (~230 m); <code>n</code> keeps
-every <code>(n+1)</code>-th cell. Applied client-side via
-<code><a href="https://r-spatial.github.io/stars/reference/st_downsample.html" class="external-link">st_downsample</a></code> – the server still ships native data
-(no WCS-side resampling is honoured before the read cap), so the
-bandwidth saving is in the resulting object's in-memory size, not the
-download itself. Useful for wider maps where native resolution is
-overkill for screen rendering.</p></dd>
+<dd><p>Non-negative integer. Number of grid cells to skip when
+requesting the raster. <code>0</code> (default) keeps the source resolution;
+<code>1</code> requests half the rows and columns; <code>n</code> requests every
+<code>(n+1)</code>-th cell. Downsampling is performed by the WCS server, reducing
+both transfer size and memory use.</p></dd>
 
 
 <dt id="arg-timeout">timeout<a class="anchor" aria-label="anchor" href="#arg-timeout"></a></dt>
-<dd><p>Numeric. HTTP timeout in seconds.</p></dd>
+<dd><p>Positive numeric. Minimum HTTP timeout in seconds. A larger
+existing global <code>timeout</code> option is respected.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -157,7 +154,7 @@ overkill for screen rendering.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A <code>bathyRaster</code> object: a list with elements <code>raster</code>
-  (a <code><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></code> object with positive depth values) and
+  (a <code><a href="https://rdrr.io/pkg/stars/man/read_stars.html" class="external-link">read_stars</a></code> object with positive depth values) and
   <code>depth.invervals</code> (a length-2 numeric range).</p>
     </div>
     <div class="section level2">

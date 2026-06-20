@@ -20,8 +20,7 @@ dd_clip_boundary(limits, crs, expand.factor = NULL)
 - crs:
 
   Coordinate reference system in
-  [`st_crs`](https://r-spatial.github.io/sf/reference/st_crs.html)
-  format.
+  [`st_crs`](https://rdrr.io/pkg/sf/man/st_crs.html) format.
 
 - expand.factor:
 

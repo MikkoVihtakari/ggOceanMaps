@@ -39,7 +39,7 @@ basemap(c(100, 160, -20, 30), bathymetry = TRUE)
 ```
 
 ![](new-features-v2_files/figure-html/unnamed-chunk-2-1.png) Processing
-time: 1.5 sec
+time: 1.4 sec
 
 The **low-resolution default bathymetry is optimized for processing
 time** and **there are higher-resolution datasets available** but you’ll
@@ -58,12 +58,12 @@ basemap(c(100, 160, -20, 30), bathy.style = "rcb")
 ```
 
 ![](new-features-v2_files/figure-html/unnamed-chunk-3-1.png) Processing
-time: 10.2 sec
+time: 9.3 sec
 
 Then the best bit. If this resolution still is not enough, **you can use
 any bathymetry grid you want** as long as
-[`stars::read_stars`](https://r-spatial.github.io/stars/reference/read_stars.html)
-can open it. First, we’ll download the entire [GEBCO 15 arc-second
+[`stars::read_stars`](https://rdrr.io/pkg/stars/man/read_stars.html) can
+open it. First, we’ll download the entire [GEBCO 15 arc-second
 grid](https://www.gebco.net/data_and_products/gridded_bathymetry_data/)
 (click
 [this-](https://www.bodc.ac.uk/data/open_download/gebco/gebco_2023/zip/)
@@ -81,7 +81,7 @@ basemap(c(100, 160, -20, 30), bathy.style = "rub")
 ```
 
 ![](new-features-v2_files/figure-html/unnamed-chunk-4-1.png) Processing
-time: 19.3 sec
+time: 19 sec
 
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 now has `downsample` argument which can be used to reduce the resolution
@@ -94,7 +94,7 @@ basemap(c(100, 160, -20, 30), bathy.style = "rub", downsample = 10)
 ```
 
 ![](new-features-v2_files/figure-html/unnamed-chunk-5-1.png) Processing
-time: 21.6 sec
+time: 19 sec
 
 Note how the processing time does not change in this case, but it seems
 to be shorter for smaller maps.
@@ -118,8 +118,6 @@ bathy <- raster_bathymetry(stars::st_as_stars(marmap::as.raster(mar_bathy)),
 
 basemap(dt, shapefiles = list(land = dd_land, bathy = bathy), bathy.style = "rcb")
 ```
-
-![](new-features-v2_files/figure-html/unnamed-chunk-6-1.png)
 
 Note that shapefiles providing better polygon bathymetry resolution in
 ggOceanMapsLargeData have been deprecated for now. Remaking all
@@ -148,7 +146,7 @@ dt <- data.frame(
 dt <- get_depth(dt)
 ```
 
-Processing time: 8.4 sec
+Processing time: 9.5 sec
 
 ``` r
 
@@ -286,7 +284,7 @@ dt <- data.frame(
 dt <- dist2land(dt, verbose = FALSE)
 ```
 
-Processing time: 0.9 sec
+Processing time: 1.3 sec
 
 ``` r
 

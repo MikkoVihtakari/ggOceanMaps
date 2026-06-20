@@ -2,9 +2,8 @@
 
 Extracts the land area from a `bathyRaster` object produced by
 [`raster_bathymetry`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
-and returns it as an
-[sf](https://r-spatial.github.io/sf/reference/st.html) polygon layer
-suitable for use in the `shapefiles` argument of
+and returns it as an [sf](https://rdrr.io/pkg/sf/man/st.html) polygon
+layer suitable for use in the `shapefiles` argument of
 [`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md).
 Warning: processing may take a long time if the bathymetry raster is
 large.
@@ -30,27 +29,27 @@ vector_land(bathy, drop.crumbs = NULL, remove.holes = NULL, smooth = FALSE)
   Single numeric value specifying a threshold (area in km2) for
   disconnected polygons which should be removed. Set to `NULL` to bypass
   the removal. Uses the
-  [drop_crumbs](https://strimas.com/smoothr/reference/drop_crumbs.html)
+  [drop_crumbs](https://rdrr.io/pkg/smoothr/man/drop_crumbs.html)
   function.
 
 - remove.holes:
 
   Single numeric value specifying a threshold (area in km2) for holes
   which should be removed. Set to `NULL` to bypass the removal. Uses the
-  [fill_holes](https://strimas.com/smoothr/reference/fill_holes.html)
+  [fill_holes](https://rdrr.io/pkg/smoothr/man/fill_holes.html)
   function. Currently VERY slow.
 
 - smooth:
 
   Logical indicating whether the pixelated contours should be smoothed.
   Uses the
-  [smooth_ksmooth](https://strimas.com/smoothr/reference/smooth_ksmooth.html)
+  [smooth_ksmooth](https://rdrr.io/pkg/smoothr/man/smooth_ksmooth.html)
   function.
 
 ## Value
 
-An [sf](https://r-spatial.github.io/sf/reference/st.html) object
-containing the land polygons in the same projection as `bathy$raster`.
+An [sf](https://rdrr.io/pkg/sf/man/st.html) object containing the land
+polygons in the same projection as `bathy$raster`.
 
 ## Details
 

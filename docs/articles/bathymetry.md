@@ -252,7 +252,7 @@ Lofoten.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/
 User-supplied GEBCO raster (`rub`) off Lofoten.
 
 Any format that
-[`stars::read_stars()`](https://r-spatial.github.io/stars/reference/read_stars.html)
+[`stars::read_stars()`](https://rdrr.io/pkg/stars/man/read_stars.html)
 can open is accepted (NetCDF `.nc`, GeoTIFF `.tif`, GMT `.grd`, and so
 on). The file is read in full on every call, so the user-raster route
 can be slower than a pre-processed ggOceanMapsLargeData object for the
@@ -364,7 +364,7 @@ section of the README for the full list.
   [`?vector_bathymetry`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md),
   [`?vector_land`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md)
   for the build-your-own pipeline.
-- [`vignette("cookbook")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/cookbook.md)
+- [Cookbook](https://mikkovihtakari.github.io/ggOceanMaps/articles/cookbook.md)
   for short, copy-pasteable recipes.
-- The user manual:
-  [`vignette("ggOceanMaps")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.md).
+- [User
+  manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.md).

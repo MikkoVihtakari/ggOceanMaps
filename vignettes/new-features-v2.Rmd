@@ -41,8 +41,10 @@ knitr::knit_hooks$set(timeit = local({
   }})
 )
 
-options(ggOceanMaps.datapath = "~/Documents/ggOceanMapsLargeData")
-options(ggOceanMaps.userpath = "~/Downloads/gebco_2025/GEBCO_2025.nc")
+datapath <- Sys.getenv("GGOCEANMAPS_DATAPATH")
+userpath <- Sys.getenv("GGOCEANMAPS_USERPATH")
+if (nzchar(datapath)) options(ggOceanMaps.datapath = datapath)
+if (nzchar(userpath)) options(ggOceanMaps.userpath = userpath)
 ```
 
 The old GIS packages for R (`sp`, `raster` and `rgeos`) as the engine for ggOceanMaps have been replaced by newer ones: `sf` handling vector data and `stars` handling rasters. This allowed more efficient use of the geospatial data while plotting maps and led to multiple improvements.
@@ -83,7 +85,7 @@ Note how the processing time does not change in this case, but it seems to be sh
 
 You can also use custom bathymetries from other packages, such as **marmap**, but you'll have to specify correct `bathy.style` for the data (this should be improved in future versions of the package):
 
-```{r}
+```{r, eval = FALSE}
 library(marmap)
 
 dt <- data.frame(lon = c(-125, -125, -111, -111), lat = c(28, 37, 37, 28))

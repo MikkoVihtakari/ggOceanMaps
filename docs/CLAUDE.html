@@ -69,22 +69,22 @@
 <h2 id="common-commands">Common commands<a class="anchor" aria-label="anchor" href="#common-commands"></a></h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load package for interactive development</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Regenerate documentation (roxygen2)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run R CMD CHECK</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">check</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/check.html" class="external-link">check</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run tests only</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/test.html" class="external-link">test</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run a single test file</span></span>
-<span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_file.html" class="external-link">test_file</a></span><span class="op">(</span><span class="st">"tests/testthat/test-basemap.R"</span><span class="op">)</span></span>
+<span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/testthat/man/test_file.html" class="external-link">test_file</a></span><span class="op">(</span><span class="st">"tests/testthat/test-basemap.R"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Build pkgdown website</span></span>
-<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pkgdown/man/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>From the terminal:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">R</span> CMD build .</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="ex">R</span> CMD check ggOceanMaps_<span class="pp">*</span>.tar.gz <span class="at">--as-cran</span></span></code></pre></div>
@@ -92,7 +92,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>RSTUDIO_PANDOC <span class="op">=</span> <span class="st">"/Applications/quarto/bin/tools/aarch64"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>ggOceanMaps.datapath <span class="op">=</span> <span class="st">"~/Documents/ggOceanMapsLargeData"</span><span class="op">)</span></span>
-<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_articles.html" class="external-link">build_article</a></span><span class="op">(</span><span class="st">"adding-graphical-elements"</span>, pkg <span class="op">=</span> <span class="st">"."</span>, new_process <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pkgdown/man/build_articles.html" class="external-link">build_article</a></span><span class="op">(</span><span class="st">"adding-graphical-elements"</span>, pkg <span class="op">=</span> <span class="st">"."</span>, new_process <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>CI runs R CMD CHECK on macOS, Windows, and Ubuntu (devel, release, oldrel-1) via <code>.github/workflows/R-CMD-check.yaml</code>.</p>
 </div>
 <div class="section level2">
@@ -161,7 +161,7 @@
 <p>Recent overlay-vignette note: <a href="vignettes/adding-graphical-elements.Rmd">vignettes/adding-graphical-elements.Rmd</a> now contains working rendered examples for:</p>
 <ul><li>Barents Sea schematic current arrows, sourced from the <code>Barents-Sea-currents</code> repo</li>
 <li>projected velocity fields with transformed start/end points</li>
-<li>projected pie charts with a second fill scale via <code><a href="https://eliocamp.github.io/ggnewscale/reference/new_scale.html" class="external-link">ggnewscale::new_scale_fill()</a></code>
+<li>projected pie charts with a second fill scale via <code><a href="https://rdrr.io/pkg/ggnewscale/man/new_scale.html" class="external-link">ggnewscale::new_scale_fill()</a></code>
 </li>
 <li>manual bathymetry bin examples</li>
 <li>a synthetic <code><a href="reference/raster_bathymetry.html">raster_bathymetry()</a></code> workflow example</li>
@@ -174,7 +174,7 @@
 <code><a href="reference/geonorge_bathymetry.html">geonorge_bathymetry()</a></code> paired with the <code>"Landareal"</code> layer of the same <code>.gml</code>, for an Oslofjord example</li>
 <li>vectorising a raw EMODnet (<code>"wemb"</code>) WCS tile around Tromsø, since <code><a href="reference/wcs_bathymetry.html">wcs_bathymetry()</a></code> always discards land</li>
 </ul><p>The generator is <a href="dev/make_customising_shapefiles_vignette_figs.R">dev/make_customising_shapefiles_vignette_figs.R</a>. It needs a local GEBCO/ETOPO/IBCAO grid and a local Geonorge “Dybdedata” <code>.gml</code> file (e.g. for an Oslofjord municipality); both paths are read from environment variables (<code>GGOCEANMAPS_USERPATH</code>, <code>GEONORGE_OSLO_GML</code>) rather than hardcoded, so no personal path is committed.</p>
-<p>Fixed bug found while building that vignette: <code>basemap_data.R</code> unconditionally ran <code>sf::st_cast(x$shapefiles$land, "MULTIPOLYGON")</code> on the already-cropped custom land layer (a “temporary fix to make plotly::ggplotly work”). For some custom <code><a href="reference/vector_land.html">vector_land()</a></code> layers at some map limits, the cropped geometry contained a degenerate <code>GEOMETRYCOLLECTION</code> sliver, and <code>st_cast()</code> crashed with <code>Error in ClosePol(unclass(x)) : polygons require at least 4 points</code> (confirmed for <code>c(-5, 10, 50, 60)</code> and <code>c(11, 16, 67.3, 68.6)</code> with a custom land layer). Fixed by extracting the polygonal parts with <code>sf::st_collection_extract(..., "POLYGON")</code> before the cast, but only when a <code>GEOMETRYCOLLECTION</code> is actually present (checked via <code><a href="https://r-spatial.github.io/sf/reference/st_geometry_type.html" class="external-link">sf::st_geometry_type()</a></code>), to avoid a benign-but-noisy “x is already of type POLYGON” warning on every normal <code><a href="reference/basemap.html">basemap()</a></code> call.</p>
+<p>Fixed bug found while building that vignette: <code>basemap_data.R</code> unconditionally ran <code>sf::st_cast(x$shapefiles$land, "MULTIPOLYGON")</code> on the already-cropped custom land layer (a “temporary fix to make plotly::ggplotly work”). For some custom <code><a href="reference/vector_land.html">vector_land()</a></code> layers at some map limits, the cropped geometry contained a degenerate <code>GEOMETRYCOLLECTION</code> sliver, and <code>st_cast()</code> crashed with <code>Error in ClosePol(unclass(x)) : polygons require at least 4 points</code> (confirmed for <code>c(-5, 10, 50, 60)</code> and <code>c(11, 16, 67.3, 68.6)</code> with a custom land layer). Fixed by extracting the polygonal parts with <code>sf::st_collection_extract(..., "POLYGON")</code> before the cast, but only when a <code>GEOMETRYCOLLECTION</code> is actually present (checked via <code><a href="https://rdrr.io/pkg/sf/man/st_geometry_type.html" class="external-link">sf::st_geometry_type()</a></code>), to avoid a benign-but-noisy “x is already of type POLYGON” warning on every normal <code><a href="reference/basemap.html">basemap()</a></code> call.</p>
 </div>
 <div class="section level3">
 <h3 id="bundled-datasets">Bundled datasets<a class="anchor" aria-label="anchor" href="#bundled-datasets"></a></h3>
@@ -203,7 +203,7 @@
 <li><code>basemap(data.frame(lon = c(-180, -180, -160, -160), lat = c(63, 50, 50, 63)), rotate = TRUE)</code></li>
 </ul><p>Useful focused verification command:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span>filter <span class="op">=</span> <span class="st">"basemap-smoke"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/test.html" class="external-link">test</a></span><span class="op">(</span>filter <span class="op">=</span> <span class="st">"basemap-smoke"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 

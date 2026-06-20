@@ -28,16 +28,13 @@
 #'   EMODnet, 30 for ETOPO). EMODnet reads 8-byte doubles internally so a
 #'   4-degree tile already exceeds its ~98 MB read cap; ETOPO is much coarser
 #'   so larger tiles are fine.
-#' @param downsample Integer. Number of grid cells to skip when reducing the
-#'   raster after download. \code{0} (default) keeps the native ~115 m
-#'   resolution; \code{1} keeps every second cell (~230 m); \code{n} keeps
-#'   every \code{(n+1)}-th cell. Applied client-side via
-#'   \code{\link[stars]{st_downsample}} -- the server still ships native data
-#'   (no WCS-side resampling is honoured before the read cap), so the
-#'   bandwidth saving is in the resulting object's in-memory size, not the
-#'   download itself. Useful for wider maps where native resolution is
-#'   overkill for screen rendering.
-#' @param timeout Numeric. HTTP timeout in seconds.
+#' @param downsample Non-negative integer. Number of grid cells to skip when
+#'   requesting the raster. \code{0} (default) keeps the source resolution;
+#'   \code{1} requests half the rows and columns; \code{n} requests every
+#'   \code{(n+1)}-th cell. Downsampling is performed by the WCS server, reducing
+#'   both transfer size and memory use.
+#' @param timeout Positive numeric. Minimum HTTP timeout in seconds. A larger
+#'   existing global \code{timeout} option is respected.
 #' @param verbose Logical. Print download progress and informational messages.
 #' @details \strong{EMODnet} serves the European-waters bathymetric DTM at
 #'   ~115 m native resolution (~0.00104 deg) in EPSG:4326 GeoTIFF format. The
@@ -108,6 +105,9 @@ wcs_bathymetry <- function(
   if(!(is.numeric(limits) && length(limits) == 4)) {
     stop("limits must be a numeric vector of length 4: c(xmin, xmax, ymin, ymax).")
   }
+  if(anyNA(limits) || any(!is.finite(limits))) {
+    stop("limits must contain four finite, non-missing values.")
+  }
 
   bbox <- stats::setNames(limits, c("xmin", "xmax", "ymin", "ymax"))
 
@@ -116,6 +116,35 @@ wcs_bathymetry <- function(
   }
   if(bbox["ymin"] >= bbox["ymax"]) {
     stop("limits[3] (ymin) must be less than limits[4] (ymax).")
+  }
+  if(any(bbox[c("xmin", "xmax")] < -180 | bbox[c("xmin", "xmax")] > 180)) {
+    stop("Longitude limits must be between -180 and 180 degrees.")
+  }
+  if(any(bbox[c("ymin", "ymax")] < -90 | bbox[c("ymin", "ymax")] > 90)) {
+    stop("Latitude limits must be between -90 and 90 degrees.")
+  }
+
+  if(!(is.character(source) && length(source) == 1L && !is.na(source) && nzchar(source))) {
+    stop("source must be one non-empty character value.")
+  }
+  if(!is.null(coverage) && !(is.character(coverage) && length(coverage) == 1L &&
+                             !is.na(coverage) && nzchar(coverage))) {
+    stop("coverage must be NULL or one non-empty character value.")
+  }
+  if(!(is.logical(force) && length(force) == 1L && !is.na(force))) {
+    stop("force must be TRUE or FALSE.")
+  }
+  if(!(is.logical(verbose) && length(verbose) == 1L && !is.na(verbose))) {
+    stop("verbose must be TRUE or FALSE.")
+  }
+  if(!(is.numeric(downsample) && length(downsample) == 1L && !is.na(downsample) &&
+       is.finite(downsample) && downsample >= 0 && downsample == as.integer(downsample))) {
+    stop("downsample must be one non-negative integer.")
+  }
+  downsample <- as.integer(downsample)
+  if(!(is.numeric(timeout) && length(timeout) == 1L && !is.na(timeout) &&
+       is.finite(timeout) && timeout > 0)) {
+    stop("timeout must be one positive finite number.")
   }
 
   src <- wcs_source_info(match.arg(source, names(wcs_registry())), coverage)
@@ -126,6 +155,14 @@ wcs_bathymetry <- function(
   }
   if(is.null(tile_size_deg)) {
     tile_size_deg <- if(!is.null(src$default_tile_size_deg)) src$default_tile_size_deg else 3
+  }
+  if(!(is.numeric(max_area_deg2) && length(max_area_deg2) == 1L &&
+       !is.na(max_area_deg2) && is.finite(max_area_deg2) && max_area_deg2 > 0)) {
+    stop("max_area_deg2 must be one positive finite number.")
+  }
+  if(!(is.numeric(tile_size_deg) && length(tile_size_deg) == 1L &&
+       !is.na(tile_size_deg) && is.finite(tile_size_deg) && tile_size_deg > 0)) {
+    stop("tile_size_deg must be one positive finite number.")
   }
 
   ## Check whether the bbox lies entirely outside the source's known coverage ----
@@ -162,8 +199,15 @@ wcs_bathymetry <- function(
   if(is.null(cache_dir)) {
     cache_dir <- getOption("ggOceanMaps.datapath", tempdir())
   }
+  if(!(is.character(cache_dir) && length(cache_dir) == 1L &&
+       !is.na(cache_dir) && nzchar(cache_dir))) {
+    stop("cache_dir must be one non-empty character path.")
+  }
   if(!dir.exists(cache_dir)) {
-    dir.create(cache_dir, recursive = TRUE, showWarnings = FALSE)
+    created <- dir.create(cache_dir, recursive = TRUE, showWarnings = FALSE)
+    if(!created && !dir.exists(cache_dir)) {
+      stop("Could not create WCS cache directory: ", cache_dir)
+    }
   }
 
   ## Decide on tiling ----
@@ -176,7 +220,7 @@ wcs_bathymetry <- function(
   dy <- unname(bbox["ymax"] - bbox["ymin"])
 
   if(dx <= tile_size_deg && dy <= tile_size_deg) {
-    cache_file <- wcs_fetch_tile(src, bbox, cache_dir, force, verbose)
+    cache_file <- wcs_fetch_tile(src, bbox, cache_dir, force, verbose, downsample)
     ras <- stars::read_stars(cache_file, quiet = !verbose)
   } else {
     ## Tile and mosaic ----
@@ -198,7 +242,7 @@ wcs_bathymetry <- function(
         c(x_breaks[i], x_breaks[i + 1L], y_breaks[j], y_breaks[j + 1L]),
         c("xmin", "xmax", "ymin", "ymax")
       )
-      wcs_fetch_tile(src, tile_bbox, cache_dir, force, verbose)
+      wcs_fetch_tile(src, tile_bbox, cache_dir, force, verbose, downsample)
     }, character(1))
 
     # GDAL doesn't expand "~"; normalise paths before passing in.
@@ -209,13 +253,6 @@ wcs_bathymetry <- function(
     ras <- stars::read_stars(vrt_path, quiet = !verbose)
   }
 
-  ## Optionally downsample before further processing ----
-
-  if(!is.null(downsample) && downsample > 0) {
-    if(verbose) message("ggOceanMaps: downsampling raster by n = ", downsample, ".")
-    ras <- stars::st_downsample(ras, n = downsample)
-  }
-
   ## Convert to bathyRaster ----
 
   raster_bathymetry(ras, depths = NULL, verbose = verbose)
@@ -224,25 +261,34 @@ wcs_bathymetry <- function(
 
 # Internal: fetch a single tile (returns path to cached GeoTIFF) ----------
 
-wcs_fetch_tile <- function(src, bbox, cache_dir, force, verbose) {
-  cache_file <- wcs_cache_path(cache_dir, src, bbox)
+wcs_fetch_tile <- function(src, bbox, cache_dir, force, verbose, downsample = 0L) {
+  cache_file <- wcs_cache_path(cache_dir, src, bbox, downsample)
 
   if(!force && file.exists(cache_file)) {
-    if(verbose) message("ggOceanMaps: using cached WCS tile: ", basename(cache_file))
-    return(cache_file)
+    if(.is_valid_tiff(cache_file)) {
+      if(verbose) message("ggOceanMaps: using cached WCS tile: ", basename(cache_file))
+      return(cache_file)
+    }
+    if(verbose) message("ggOceanMaps: removing invalid cached WCS tile: ", basename(cache_file))
+    unlink(cache_file)
   }
 
-  url <- wcs_build_url(src, bbox)
+  url <- wcs_build_url(src, bbox, downsample)
   if(verbose) message("ggOceanMaps: downloading ", basename(cache_file), " from ", src$label, " WCS...")
 
+  download_file <- tempfile(
+    pattern = paste0(basename(cache_file), "-"),
+    tmpdir = cache_dir
+  )
+  on.exit(unlink(download_file), add = TRUE)
+
   result <- tryCatch(
-    utils::download.file(url, destfile = cache_file, mode = "wb", quiet = !verbose),
+    wcs_download_file(url, destfile = download_file, quiet = !verbose),
     error = function(e) e,
     warning = function(w) w
   )
 
-  if(inherits(result, c("error", "warning")) || !file.exists(cache_file) || file.size(cache_file) < 1000) {
-    if(file.exists(cache_file)) unlink(cache_file)
+  if(inherits(result, c("error", "warning")) || !file.exists(download_file) || file.size(download_file) < 1000) {
     err_detail <- if(inherits(result, "condition")) paste0(" Original error: ", conditionMessage(result)) else ""
     stop("WCS download failed. Check internet connectivity and that ", src$label, " is reachable.", err_detail)
   }
@@ -250,9 +296,8 @@ wcs_fetch_tile <- function(src, bbox, cache_dir, force, verbose) {
   ## Some servers (NCEI/ArcGIS) wrap the GeoTIFF in a multipart/related MIME
   ## envelope. Extract the binary part in-place before validation.
   if(isTRUE(src$multipart)) {
-    extracted <- .extract_tiff_from_multipart(cache_file)
+    extracted <- .extract_tiff_from_multipart(download_file)
     if(!extracted) {
-      unlink(cache_file)
       stop(sprintf(
         "Could not extract a GeoTIFF from the multipart response from %s. The requested area may be outside coverage.",
         src$label
@@ -260,8 +305,7 @@ wcs_fetch_tile <- function(src, bbox, cache_dir, force, verbose) {
     }
   }
 
-  if(!.is_valid_tiff(cache_file)) {
-    unlink(cache_file)
+  if(!.is_valid_tiff(download_file)) {
     stop(sprintf(paste0(
       "Downloaded file from %s is not a valid GeoTIFF ",
       "(the server likely returned an XML error document). ",
@@ -270,7 +314,18 @@ wcs_fetch_tile <- function(src, bbox, cache_dir, force, verbose) {
     ), src$label, src$url))
   }
 
+  if(file.exists(cache_file)) unlink(cache_file)
+  if(!file.rename(download_file, cache_file)) {
+    # Another process may have completed the same tile first.
+    if(file.exists(cache_file) && .is_valid_tiff(cache_file)) return(cache_file)
+    stop("Could not move the validated WCS tile into the cache: ", cache_file)
+  }
+
   cache_file
+}
+
+wcs_download_file <- function(url, destfile, quiet) {
+  utils::download.file(url, destfile = destfile, mode = "wb", quiet = quiet)
 }
 
 
@@ -297,7 +352,9 @@ wcs_registry <- function() {
       multipart = FALSE,
       # Source-specific size guards
       default_max_area_deg2 = 50,
-      default_tile_size_deg = 3
+      default_tile_size_deg = 3,
+      # GeoServer follows OGC scaling semantics: values below one reduce size.
+      scale_factor = function(downsample) 1 / (downsample + 1)
     ),
     etopo = list(
       label = "ETOPO1 (NOAA NCEI)",
@@ -316,7 +373,9 @@ wcs_registry <- function() {
       multipart = TRUE,
       # Much coarser than EMODnet -> larger areas / tiles are fine
       default_max_area_deg2 = 2000,
-      default_tile_size_deg = 30
+      default_tile_size_deg = 30,
+      # ArcGIS WCS uses the reciprocal convention: values above one reduce size.
+      scale_factor = function(downsample) downsample + 1
     )
   )
 }
@@ -324,31 +383,37 @@ wcs_registry <- function() {
 wcs_source_info <- function(source, coverage = NULL) {
   src <- wcs_registry()[[source]]
   if(is.null(src)) stop("Unknown WCS source: ", source)
+  src$name <- source
   if(!is.null(coverage)) src$coverage <- coverage
   src
 }
 
-wcs_build_url <- function(src, bbox) {
+wcs_build_url <- function(src, bbox, downsample = 0L) {
   q <- sprintf(
     "%s?SERVICE=WCS&VERSION=%s&REQUEST=GetCoverage&CoverageId=%s&SUBSET=%s(%f,%f)&SUBSET=%s(%f,%f)&FORMAT=%s",
-    src$url, src$version, utils::URLencode(src$coverage),
+    src$url, src$version, utils::URLencode(src$coverage, reserved = TRUE),
     src$axis_lat, bbox["ymin"], bbox["ymax"],
     src$axis_lon, bbox["xmin"], bbox["xmax"],
-    utils::URLencode(src$format)
+    utils::URLencode(src$format, reserved = TRUE)
   )
+  if(downsample > 0L) {
+    q <- paste0(q, "&SCALEFACTOR=", format(src$scale_factor(downsample), scientific = FALSE, trim = TRUE))
+  }
   q
 }
 
-wcs_cache_path <- function(cache_dir, src, bbox) {
+wcs_cache_path <- function(cache_dir, src, bbox, downsample = 0L) {
   # Deterministic filename so repeated calls hit the cache.
   key <- sprintf(
-    "wcs_%s_%s_%s_%s_%s_%s.tif",
+    "wcs_%s_%s_%s_%s_%s_%s_%s_ds%s.tif",
+    src$name,
     gsub("[^A-Za-z0-9]+", "-", src$coverage),
     formatC(bbox["xmin"], digits = 6, format = "f"),
     formatC(bbox["xmax"], digits = 6, format = "f"),
     formatC(bbox["ymin"], digits = 6, format = "f"),
     formatC(bbox["ymax"], digits = 6, format = "f"),
-    gsub("\\.", "-", as.character(src$version))
+    gsub("\\.", "-", as.character(src$version)),
+    downsample
   )
   file.path(cache_dir, key)
 }
@@ -363,6 +428,16 @@ wcs_cache_path <- function(cache_dir, src, bbox) {
 
 .extract_tiff_from_multipart <- function(path) {
   rb <- readBin(path, raw(), n = file.size(path))
+
+  first_crlf <- grepRaw(as.raw(c(0x0D, 0x0A)), rb, all = FALSE)
+  first_lf <- grepRaw(as.raw(0x0A), rb, all = FALSE)
+  line_ends <- c(first_crlf, first_lf)
+  if(length(line_ends) == 0L) return(FALSE)
+  first_line_end <- min(line_ends)
+  boundary <- rb[seq_len(first_line_end - 1L)]
+  if(length(boundary) < 3L || !identical(boundary[1:2], as.raw(c(0x2D, 0x2D)))) {
+    return(FALSE)
+  }
 
   ct_marker <- charToRaw("Content-Type: image/tiff")
   ct_pos <- grepRaw(ct_marker, rb, all = FALSE)
@@ -381,16 +456,17 @@ wcs_cache_path <- function(cache_dir, src, bbox) {
     return(FALSE)
   }
 
-  # Find the next boundary marker after the binary body: "\n--"
+  # Match the complete MIME boundary, not a generic "\n--" byte sequence that
+  # can occur naturally inside compressed TIFF data.
   body_rb <- rb[body_start:length(rb)]
-  bdy <- grepRaw(as.raw(c(0x0A, 0x2D, 0x2D)), body_rb, all = FALSE)
+  bdy_marker <- c(as.raw(0x0A), boundary)
+  bdy <- grepRaw(bdy_marker, body_rb, all = FALSE)
   if(length(bdy) == 0L) {
-    body_end <- length(rb)
-  } else {
-    body_end <- body_start + bdy[1L] - 2L  # one before the \n
-    # Strip preceding \r if present (\r\n line ending)
-    if(body_end >= 1L && rb[body_end] == as.raw(0x0D)) body_end <- body_end - 1L
+    return(FALSE)
   }
+  body_end <- body_start + bdy[1L] - 2L  # one before the \n
+  # Strip preceding \r if present (\r\n line ending)
+  if(body_end >= 1L && rb[body_end] == as.raw(0x0D)) body_end <- body_end - 1L
 
   if(body_end <= body_start) return(FALSE)
 
@@ -410,7 +486,9 @@ wcs_cache_path <- function(cache_dir, src, bbox) {
   # Little-endian TIFF / BigTIFF: "II" (0x49 0x49) then 0x2A or 0x2B
   le <- magic[1L] == as.raw(0x49L) && magic[2L] == as.raw(0x49L) &&
         (magic[3L] == as.raw(0x2AL) || magic[3L] == as.raw(0x2BL))
-  # Big-endian TIFF / BigTIFF: "MM" (0x4D 0x4D)
-  be <- magic[1L] == as.raw(0x4DL) && magic[2L] == as.raw(0x4DL)
+  # Big-endian TIFF / BigTIFF: "MM" followed by 0x002A or 0x002B.
+  be <- magic[1L] == as.raw(0x4DL) && magic[2L] == as.raw(0x4DL) &&
+        magic[3L] == as.raw(0x00L) &&
+        (magic[4L] == as.raw(0x2AL) || magic[4L] == as.raw(0x2BL))
   le || be
 }

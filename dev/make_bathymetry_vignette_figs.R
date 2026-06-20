@@ -4,15 +4,18 @@
 #
 #   Rscript dev/make_bathymetry_vignette_figs.R
 
-options(
-  ggOceanMaps.datapath = "~/Documents/ggOceanMapsLargeData",
-  ggOceanMaps.userpath = "/Users/a22357/Downloads/gebco_2025/GEBCO_2025.nc"
-)
+datapath <- Sys.getenv("GGOCEANMAPS_DATAPATH")
+userpath <- Sys.getenv("GGOCEANMAPS_USERPATH")
+outdir <- Sys.getenv("GGOCEANMAPS_LARGEDATA_DOCS")
+
+if(!nzchar(datapath) || !dir.exists(datapath)) stop("Set GGOCEANMAPS_DATAPATH to the ggOceanMapsLargeData cache.")
+if(!nzchar(userpath) || !file.exists(userpath)) stop("Set GGOCEANMAPS_USERPATH to a local GEBCO/ETOPO/IBCAO raster.")
+if(!nzchar(outdir) || !dir.exists(outdir)) stop("Set GGOCEANMAPS_LARGEDATA_DOCS to the ggOceanMapsLargeData docs directory.")
+
+options(ggOceanMaps.datapath = datapath, ggOceanMaps.userpath = userpath)
 
 devtools::load_all(".")
 library(ggplot2)
-
-outdir <- "/Users/a22357/ownCloud/Workstuff/R/Github/ggOceanMapsLargeData/docs"
 
 save_fig <- function(p, name, w = 6, h = 5, dpi = 150) {
   ggsave(file.path(outdir, name), plot = p, width = w, height = h,

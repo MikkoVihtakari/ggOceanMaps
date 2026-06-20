@@ -54,7 +54,7 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.0.0" id="ggoceanmaps-300">ggOceanMaps 3.0.0<a class="anchor" aria-label="anchor" href="#ggoceanmaps-300"></a></h2>
-<p><strong>Bringing ggOceanMaps to the AI age.</strong> From this version on, ggOceanMaps attempts to help AI agents better support their users, and is itself developed and tested with the help of AI (Claude Code, Codex), enabling a faster development cycle and more robust code. The package now ships an <code>AGENTS.md</code> file and memory folder with instructions for AI assistants, alongside a much expanded and reorganised set of articles and recipes. This is a major release with new on-demand bathymetry sources, build-your-own shapefile tools, a comprehensive automated test suite, and an overhauled documentation site.</p>
+<p>This major release adds on-demand bathymetry sources, build-your-own shapefile tools, automated tests, and a reorganised documentation site. The repository also includes instructions for AI assistants that help users and contributors work with ggOceanMaps.</p>
 <div class="section level3">
 <h3 id="new-features-3-0-0">New features<a class="anchor" aria-label="anchor" href="#new-features-3-0-0"></a></h3>
 <ul><li>On-demand WCS bathymetry via the new <code><a href="../reference/wcs_bathymetry.html">wcs_bathymetry()</a></code> function with two sources:
@@ -67,11 +67,11 @@
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-and-ai-support-3-0-0">Documentation and AI support<a class="anchor" aria-label="anchor" href="#documentation-and-ai-support-3-0-0"></a></h3>
-<ul><li>New <code>AGENTS.md</code> with instructions for AI assistants helping users <em>use</em> ggOceanMaps.</li>
-<li>New <code><a href="../articles/cookbook.html">vignette("cookbook")</a></code> of short, copy-pasteable recipes.</li>
-<li>New <code><a href="../articles/bathymetry.html">vignette("bathymetry")</a></code> covering all bathymetry sources.</li>
-<li>New <code><a href="../articles/adding-graphical-elements.html">vignette("adding-graphical-elements")</a></code> covering ocean-current arrows (velocity quivers and schematic “Figure 1” arrows) and pie charts on maps via <code>scatterpie::geom_scatterpie()</code>.</li>
-<li>New <code><a href="../articles/customising-shapefiles.html">vignette("customising-shapefiles")</a></code> covering <code><a href="../reference/clip_shapefile.html">clip_shapefile()</a></code>, the <code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code> -&gt; <code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> / <code><a href="../reference/vector_land.html">vector_land()</a></code> pipeline, and <code><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry()</a></code>.</li>
+<ul><li>New repository-level <code>AGENTS.md</code> with instructions for AI assistants helping users <em>use</em> ggOceanMaps.</li>
+<li>New website Cookbook of short, copy-pasteable recipes.</li>
+<li>New website Bathymetry article covering all bathymetry sources.</li>
+<li>New website Adding graphical elements article covering ocean-current arrows (velocity quivers and schematic “Figure 1” arrows) and pie charts on maps via <code>scatterpie::geom_scatterpie()</code>.</li>
+<li>New website Customising shapefiles article covering <code><a href="../reference/clip_shapefile.html">clip_shapefile()</a></code>, the <code><a href="../reference/raster_bathymetry.html">raster_bathymetry()</a></code> -&gt; <code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> / <code><a href="../reference/vector_land.html">vector_land()</a></code> pipeline, and <code><a href="../reference/geonorge_bathymetry.html">geonorge_bathymetry()</a></code>.</li>
 <li>The “Premade maps” and “Premade shapefiles” articles were rewritten to the current <code>sf</code>/<code>stars</code> toolchain and the current <code><a href="../reference/shapefile_list.html">shapefile_list()</a></code> contents.</li>
 <li>The user manual was slimmed to concise explanations that link out to the in-depth articles, and the documentation site (navbar, reference index) was reorganised.</li>
 </ul></div>
@@ -82,10 +82,12 @@
 <li>Fixed a crash (<code>st_cast()</code> on a degenerate <code>GEOMETRYCOLLECTION</code>) for some custom <code><a href="../reference/vector_land.html">vector_land()</a></code> layers at some map limits.</li>
 <li>Fixed a WCS <code>bathy.style</code> (<code>"wemb"</code> / <code>"wceb"</code>, etc.) failing with “st_transform applied to an object of class ‘logical’” when combined with an explicitly named premade shapefile set, e.g. <code>basemap(..., bathy.style = "wemb", shapefiles = "Svalbard")</code>. The on-demand bathymetry is now fetched in that case too.</li>
 <li>Fixed WCS bathymetry leaving white gaps around the edges of projected maps (e.g. on the Svalbard or Europe CRS). The coverage is now requested for the full projected, expand-factor-padded map area rather than the raw decimal-degree limits, so it fills the whole panel.</li>
+<li>WCS <code>downsample</code> is now applied by the remote service, reducing transfer size and memory use. Raster cropping preserves the downloaded cell resolution and no longer applies a second implicit reduction before plotting.</li>
+<li>WCS downloads now use validated temporary files and atomic cache updates. Invalid cache entries are replaced automatically, and multipart responses are split using their complete MIME boundary rather than a generic byte sequence that can occur inside a GeoTIFF.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="testing-3-0-0">Testing<a class="anchor" aria-label="anchor" href="#testing-3-0-0"></a></h3>
-<ul><li>Comprehensive testthat suite added: smoke tests covering the historical regression corpus run everywhere; vdiffr SVG snapshot tests catch “code runs but wrong map” regressions locally.</li>
+<ul><li>A local testthat suite covers the historical regression corpus; vdiffr SVG snapshot tests catch “code runs but wrong map” regressions. Tests are run during development and excluded from the CRAN source package.</li>
 <li>Unit tests for <code><a href="../reference/transform_coord.html">transform_coord()</a></code>, <code><a href="../reference/auto_limits.html">auto_limits()</a></code>, <code><a href="../reference/guess_coordinate_columns.html">guess_coordinate_columns()</a></code>, <code><a href="../reference/LS.html">LS()</a></code>, <code><a href="../reference/quiet.html">quiet()</a></code>, <code><a href="../reference/vector_land.html">vector_land()</a></code>, <code><a href="../reference/wcs_bathymetry.html">wcs_bathymetry()</a></code>.</li>
 </ul></div>
 <div class="section level3">
@@ -98,7 +100,7 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.3.0" id="ggoceanmaps-230">ggOceanMaps 2.3.0<a class="anchor" aria-label="anchor" href="#ggoceanmaps-230"></a></h2><p class="text-muted">CRAN release: 2026-02-10</p>
+<h2 class="pkg-version" data-toc-text="2.3.0" id="ggoceanmaps-230">ggOceanMaps 2.3.0<a class="anchor" aria-label="anchor" href="#ggoceanmaps-230"></a></h2>
 <ul><li>Fixed anti-meridian crossing land clipping in rotated basemaps (<a href="https://github.com/MikkoVihtakari/ggOceanMaps/pull/53" class="external-link">#53</a>)</li>
 <li>Fixed bugs and package incompatibilities, including TopologyException (<a href="https://github.com/MikkoVihtakari/ggOceanMaps/pull/52" class="external-link">#52</a>, <a href="https://github.com/MikkoVihtakari/ggOceanMaps/issues/40" class="external-link">#40</a>)</li>
 <li>Fixed issue with plotting Indian and Pacific Ocean (<a href="https://github.com/MikkoVihtakari/ggOceanMaps/pull/51" class="external-link">#51</a>, <a href="https://github.com/MikkoVihtakari/ggOceanMaps/issues/44" class="external-link">#44</a>)</li>
@@ -109,7 +111,7 @@
 <li>Fixed a bug where both <code>load_map_data(shapefile_list("Arctic"))</code> and <code>shapefile_list("Arctic", get.data = TRUE)</code> would cause error due to changed bathymetry system.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.2.0" id="ggoceanmaps-220">ggOceanMaps 2.2.0<a class="anchor" aria-label="anchor" href="#ggoceanmaps-220"></a></h2><p class="text-muted">CRAN release: 2024-01-15</p>
+<h2 class="pkg-version" data-toc-text="2.2.0" id="ggoceanmaps-220">ggOceanMaps 2.2.0<a class="anchor" aria-label="anchor" href="#ggoceanmaps-220"></a></h2>
 <ul><li>Added tests better explaining wrongly specified arguments</li>
 <li>Updated the user manual</li>
 <li>Fixed an issue with certain <code>bathy.style</code> abbreviations</li>
@@ -121,7 +123,7 @@
 <li>Fixed <a href="https://github.com/MikkoVihtakari/ggOceanMaps/issues/34" class="external-link">an issue when plotting singular points</a>
 </li>
 <li>Fixed <code>basemap(c(-180, 180, -90, 90))</code> case and turned off automatic rotation when crossing the anti-meridian. A message is shown instead.</li>
-<li>Turned off <code>expand</code> in <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::coord_sf()</a></code> to avoid an error when having map border at 0 meridian.</li>
+<li>Turned off <code>expand</code> in <code><a href="https://rdrr.io/pkg/ggplot2/man/ggsf.html" class="external-link">ggplot2::coord_sf()</a></code> to avoid an error when having map border at 0 meridian.</li>
 <li>Fixed a case where data argument produced too wide boundaries</li>
 <li><a href="https://github.com/MikkoVihtakari/ggOceanMaps/issues/33" class="external-link"><code>expand.factor</code> should work now as designed</a></li>
 <li>Fixed an error in <code>dist2land(binary = TRUE)</code>
@@ -131,7 +133,7 @@
 <li>Fixed an issue where land boundaries did not get clipped correctly when using custom crs</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.1.1" id="ggoceanmaps-211">ggOceanMaps 2.1.1<a class="anchor" aria-label="anchor" href="#ggoceanmaps-211"></a></h2><p class="text-muted">CRAN release: 2023-08-30</p>
+<h2 class="pkg-version" data-toc-text="2.1.1" id="ggoceanmaps-211">ggOceanMaps 2.1.1<a class="anchor" aria-label="anchor" href="#ggoceanmaps-211"></a></h2>
 <ul><li>Fixed a bug in bathy.style wording.</li>
 <li>Added <a href="https://mikkovihtakari.github.io/ggOceanMaps/reference/get_depth.html"><code>get_depth()</code></a> function.</li>
 <li>Fixed a critical issue with downloads failing on Windows.</li>
@@ -139,7 +141,7 @@
 </li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.0.0" id="ggoceanmaps-200">ggOceanMaps 2.0.0<a class="anchor" aria-label="anchor" href="#ggoceanmaps-200"></a></h2><p class="text-muted">CRAN release: 2023-07-04</p>
+<h2 class="pkg-version" data-toc-text="2.0.0" id="ggoceanmaps-200">ggOceanMaps 2.0.0<a class="anchor" aria-label="anchor" href="#ggoceanmaps-200"></a></h2>
 <ul><li>Full <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> integration. Old GIS packages for R and ggspatial dependencies removed. Since this change required rewriting of most functions, new bugs have almost certainly been introduced.</li>
 <li>Bathymetry system redesigned (see <a href="https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features-v2.html">this</a>)</li>
 <li>Decimal degree maps can now be plotted across the antimeridian.</li>
@@ -155,7 +157,7 @@
 <li>Fixed a bug where shapefile_list(“all”) would return multiple rows per shapefile name.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.3.4" id="ggoceanmaps-134">ggOceanMaps 1.3.4<a class="anchor" aria-label="anchor" href="#ggoceanmaps-134"></a></h2><p class="text-muted">CRAN release: 2022-09-26</p>
+<h2 class="pkg-version" data-toc-text="1.3.4" id="ggoceanmaps-134">ggOceanMaps 1.3.4<a class="anchor" aria-label="anchor" href="#ggoceanmaps-134"></a></h2>
 <ul><li>Added shapefiles to the <code>x</code> argument shortcut in <code><a href="../reference/basemap.html">basemap()</a></code>.</li>
 <li>Added limits to premade shapefiles to make visualization easier.</li>
 <li>Removed many CRS warning from sp and rgdal</li>
@@ -171,7 +173,7 @@
 <li>Added ICES and Norwegian directorate of fisheries areas.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.2.6" id="ggoceanmaps-126">ggOceanMaps 1.2.6<a class="anchor" aria-label="anchor" href="#ggoceanmaps-126"></a></h2><p class="text-muted">CRAN release: 2022-01-08</p>
+<h2 class="pkg-version" data-toc-text="1.2.6" id="ggoceanmaps-126">ggOceanMaps 1.2.6<a class="anchor" aria-label="anchor" href="#ggoceanmaps-126"></a></h2>
 <ul><li><a href="https://github.com/MikkoVihtakari/ggOceanMaps/issues/11" class="external-link">added <code>x</code> argument to <code>basemap()</code> and <code>qmap()</code></a></li>
 <li>Conversion from PROJ4 to PROJ6. This change will make the old ggOceanMapsData files incompatible with ggOceanMaps 1.2 and vice versa. Changed most functions.</li>
 <li>Added NEWS.md</li>
@@ -189,11 +191,11 @@
 <li><a href="https://github.com/MikkoVihtakari/ggOceanMaps/issues/3" class="external-link">Fixed an issue with ggplot2 (&gt;=3.3.4)</a></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1" id="ggoceanmaps-11">ggOceanMaps 1.1<a class="anchor" aria-label="anchor" href="#ggoceanmaps-11"></a></h2><p class="text-muted">CRAN release: 2021-05-21</p>
+<h2 class="pkg-version" data-toc-text="1.1" id="ggoceanmaps-11">ggOceanMaps 1.1<a class="anchor" aria-label="anchor" href="#ggoceanmaps-11"></a></h2>
 <ul><li>Started replacing the <a href="https://www.earthdatascience.org/courses/use-data-open-source-python/intro-vector-data-python/spatial-data-vector-shapefiles/epsg-proj4-coordinate-reference-system-formats-python/" class="external-link">PROJ4 system by the PROJ6 wkt based system</a> by replacing “+init=epsg:NNNN” strings by “EPSG:NNNN”. Did not finish the conversion.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.9" id="ggoceanmaps-109">ggOceanMaps 1.0.9<a class="anchor" aria-label="anchor" href="#ggoceanmaps-109"></a></h2><p class="text-muted">CRAN release: 2021-01-14</p>
+<h2 class="pkg-version" data-toc-text="1.0.9" id="ggoceanmaps-109">ggOceanMaps 1.0.9<a class="anchor" aria-label="anchor" href="#ggoceanmaps-109"></a></h2>
 <ul><li>First CRAN release. Contains the core of the package code rewritten from <a href="https://github.com/MikkoVihtakari/PlotSvalbard/" class="external-link">PlotSvalbard</a>
 </li>
 </ul></div>

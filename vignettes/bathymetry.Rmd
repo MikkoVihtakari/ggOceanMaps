@@ -318,5 +318,5 @@ section of the README for the full list.
 - `?wcs_bathymetry` for the live download function.
 - `?raster_bathymetry`, `?vector_bathymetry`, `?vector_land` for the
   build-your-own pipeline.
-- `vignette("cookbook")` for short, copy-pasteable recipes.
-- The user manual: `vignette("ggOceanMaps")`.
+- [Cookbook](cookbook.html) for short, copy-pasteable recipes.
+- [User manual](ggOceanMaps.html).

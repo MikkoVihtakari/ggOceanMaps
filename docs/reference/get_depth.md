@@ -24,8 +24,8 @@ get_depth(
 
 - data:
 
-  Data frame or [sf](https://r-spatial.github.io/sf/reference/sf.html)
-  object containing geographic coordinates.
+  Data frame or [sf](https://rdrr.io/pkg/sf/man/sf.html) object
+  containing geographic coordinates.
 
 - bathy.style:
 
@@ -47,17 +47,17 @@ get_depth(
   Land shape to which distances should be calculated. Either a character
   argument referring to a name of pre-made shapefiles in
   [`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md),
-  a single [sf](https://r-spatial.github.io/sf/reference/sf.html) or
-  `sp` polygons object object or `NULL` to enable automatic definition
-  of the land shapes based on `data`. Set to `"DecimalDegree"` by
-  default which enables great circle distances using
-  [s2](https://r-spatial.github.io/sf/reference/s2.html) features
-  assuming a spherical Earth (as a contrast to earlier versions of the
-  function which used flat Earth).
+  a single [sf](https://rdrr.io/pkg/sf/man/sf.html) or `sp` polygons
+  object object or `NULL` to enable automatic definition of the land
+  shapes based on `data`. Set to `"DecimalDegree"` by default which
+  enables great circle distances using
+  [s2](https://rdrr.io/pkg/sf/man/s2.html) features assuming a spherical
+  Earth (as a contrast to earlier versions of the function which used
+  flat Earth).
 
 - proj.in:
 
-  [`coordinate reference system`](https://r-spatial.github.io/sf/reference/st_crs.html)
+  [`coordinate reference system`](https://rdrr.io/pkg/sf/man/st_crs.html)
   of `data`.
 
 - bind:
@@ -84,8 +84,7 @@ on land.
 
 ## Details
 
-Uses the
-[`st_extract`](https://r-spatial.github.io/stars/reference/st_extract.html)
+Uses the [`st_extract`](https://rdrr.io/pkg/stars/man/st_extract.html)
 function to extract values from
 [basemap](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 bathymetry raster grids. Does not work for vector bathymetries.

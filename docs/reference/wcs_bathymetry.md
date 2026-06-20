@@ -71,19 +71,16 @@ wcs_bathymetry(
 
 - downsample:
 
-  Integer. Number of grid cells to skip when reducing the raster after
-  download. `0` (default) keeps the native ~115 m resolution; `1` keeps
-  every second cell (~230 m); `n` keeps every `(n+1)`-th cell. Applied
-  client-side via
-  [`st_downsample`](https://r-spatial.github.io/stars/reference/st_downsample.html)
-  – the server still ships native data (no WCS-side resampling is
-  honoured before the read cap), so the bandwidth saving is in the
-  resulting object's in-memory size, not the download itself. Useful for
-  wider maps where native resolution is overkill for screen rendering.
+  Non-negative integer. Number of grid cells to skip when requesting the
+  raster. `0` (default) keeps the source resolution; `1` requests half
+  the rows and columns; `n` requests every `(n+1)`-th cell. Downsampling
+  is performed by the WCS server, reducing both transfer size and memory
+  use.
 
 - timeout:
 
-  Numeric. HTTP timeout in seconds.
+  Positive numeric. Minimum HTTP timeout in seconds. A larger existing
+  global `timeout` option is respected.
 
 - verbose:
 
@@ -92,9 +89,9 @@ wcs_bathymetry(
 ## Value
 
 A `bathyRaster` object: a list with elements `raster` (a
-[`read_stars`](https://r-spatial.github.io/stars/reference/read_stars.html)
-object with positive depth values) and `depth.invervals` (a length-2
-numeric range).
+[`read_stars`](https://rdrr.io/pkg/stars/man/read_stars.html) object
+with positive depth values) and `depth.invervals` (a length-2 numeric
+range).
 
 ## Details
 

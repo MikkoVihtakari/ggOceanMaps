@@ -11,6 +11,21 @@ test_that("wcs_bathymetry rejects malformed limits", {
   expect_error(wcs_bathymetry(c(1, 2, 3)), "length 4")
   expect_error(wcs_bathymetry(c(2, 1, 54, 55)), "xmin.*less than.*xmax")
   expect_error(wcs_bathymetry(c(1, 2, 55, 54)), "ymin.*less than.*ymax")
+  expect_error(wcs_bathymetry(c(NA, 2, 54, 55)), "finite")
+  expect_error(wcs_bathymetry(c(Inf, 2, 54, 55)), "finite")
+  expect_error(wcs_bathymetry(c(-181, 2, 54, 55)), "Longitude")
+  expect_error(wcs_bathymetry(c(1, 2, -91, 55)), "Latitude")
+})
+
+test_that("wcs_bathymetry validates scalar controls", {
+  limits <- c(2, 3, 54, 55)
+  expect_error(wcs_bathymetry(limits, downsample = -1), "non-negative integer")
+  expect_error(wcs_bathymetry(limits, downsample = 0.5), "non-negative integer")
+  expect_error(wcs_bathymetry(limits, tile_size_deg = 0), "positive finite")
+  expect_error(wcs_bathymetry(limits, max_area_deg2 = Inf), "positive finite")
+  expect_error(wcs_bathymetry(limits, timeout = 0), "positive finite")
+  expect_error(wcs_bathymetry(limits, coverage = c("a", "b")), "coverage")
+  expect_error(wcs_bathymetry(limits, cache_dir = character()), "cache_dir")
 })
 
 test_that("wcs_bathymetry enforces max_area_deg2", {
@@ -36,6 +51,22 @@ test_that("wcs_build_url produces a well-formed GetCoverage URL", {
   expect_match(url, "SUBSET=Long\\(2")
 })
 
+test_that("wcs_build_url requests server-side downsampling", {
+  emodnet <- wcs_source_info("emodnet")
+  etopo <- wcs_source_info("etopo")
+  bbox <- c(xmin = 2, xmax = 3, ymin = 54, ymax = 55)
+
+  expect_match(wcs_build_url(emodnet, bbox, downsample = 1), "SCALEFACTOR=0.5$")
+  expect_match(wcs_build_url(etopo, bbox, downsample = 1), "SCALEFACTOR=2$")
+  expect_false(grepl("SCALEFACTOR", wcs_build_url(emodnet, bbox, downsample = 0)))
+})
+
+test_that("wcs_build_url escapes coverage query characters", {
+  src <- wcs_source_info("emodnet", "coverage&FORMAT=text/xml")
+  url <- wcs_build_url(src, c(xmin = 2, xmax = 3, ymin = 54, ymax = 55))
+  expect_match(url, "CoverageId=coverage%26FORMAT%3Dtext%2Fxml")
+})
+
 test_that("wcs_cache_path is deterministic and bbox-keyed", {
   src <- wcs_source_info("emodnet")
   p1 <- wcs_cache_path(tempdir(), src, c(xmin = 2, xmax = 3, ymin = 54, ymax = 55))
@@ -43,7 +74,31 @@ test_that("wcs_cache_path is deterministic and bbox-keyed", {
   p3 <- wcs_cache_path(tempdir(), src, c(xmin = 2, xmax = 4, ymin = 54, ymax = 55))
   expect_identical(p1, p2)
   expect_false(identical(p1, p3))
+  expect_false(identical(p1, wcs_cache_path(tempdir(), src,
+                                            c(xmin = 2, xmax = 3, ymin = 54, ymax = 55),
+                                            downsample = 1)))
   expect_match(p1, "\\.tif$")
+})
+
+test_that("wcs_fetch_tile replaces invalid cache entries atomically", {
+  cache <- tempfile("wcs-cache-")
+  dir.create(cache)
+  src <- wcs_source_info("emodnet")
+  bbox <- c(xmin = 2, xmax = 3, ymin = 54, ymax = 55)
+  path <- wcs_cache_path(cache, src, bbox)
+  writeBin(as.raw(rep(0, 1200)), path)
+
+  testthat::local_mocked_bindings(
+    wcs_download_file = function(url, destfile, quiet) {
+      writeBin(c(as.raw(c(0x49, 0x49, 0x2A, 0x00)), as.raw(rep(0, 1200))), destfile)
+      0L
+    },
+    .package = "ggOceanMaps"
+  )
+
+  expect_identical(wcs_fetch_tile(src, bbox, cache, FALSE, FALSE), path)
+  expect_true(.is_valid_tiff(path))
+  expect_length(list.files(cache), 1L)
 })
 
 # Live network tests -----------------------------------------------------
@@ -137,19 +192,15 @@ test_that("wcs_bathymetry errors for bbox entirely outside EMODnet coverage", {
   )
 })
 
-test_that("wcs_bathymetry does NOT error for bbox inside EMODnet coverage (network not called)", {
-  # This just checks the extent logic — the request would need a network call
-  # to actually proceed, so we expect *any* error *other* than the extent error.
-  # We trigger the cache_dir initialisation stage so the extent check must pass.
-  result <- tryCatch(
-    wcs_bathymetry(c(2, 3, 54, 55), cache_dir = tempfile("no-net-"), timeout = 0.001),
-    error = function(e) e
+test_that("wcs_bathymetry accepts a bbox inside EMODnet coverage without live network", {
+  testthat::local_mocked_bindings(
+    wcs_fetch_tile = function(...) stop("fetch reached"),
+    .package = "ggOceanMaps"
   )
-  # Whatever happens next (timeout, connection refused, etc.) is fine;
-  # the important thing is no "entirely outside" error.
-  if(inherits(result, "error")) {
-    expect_false(grepl("entirely outside", conditionMessage(result)))
-  }
+  expect_error(
+    wcs_bathymetry(c(2, 3, 54, 55), cache_dir = tempfile("no-net-")),
+    "fetch reached"
+  )
 })
 
 test_that(".is_valid_tiff correctly identifies TIFF and non-TIFF files", {
@@ -197,17 +248,17 @@ test_that("ETOPO default_max_area_deg2 (2000) > EMODnet default (50)", {
     wcs_bathymetry(c(0, 10, 50, 60), source = "emodnet"),  # 100 deg^2 > 50
     "exceeds max_area_deg2"
   )
-  # ETOPO covers Hawaii (outside EMODnet), 5x5=25 deg^2 — neither guard fires.
-  # Stop at the timeout/network stage which is fine.
-  result <- tryCatch(
-    wcs_bathymetry(c(-160, -155, 18, 23), source = "etopo",
-                   cache_dir = tempfile("no-net-"), timeout = 0.001),
-    error = function(e) e
+  # ETOPO covers Hawaii (outside EMODnet), 5x5=25 deg^2. The request should
+  # reach the mocked fetch rather than either local guard.
+  testthat::local_mocked_bindings(
+    wcs_fetch_tile = function(...) stop("fetch reached"),
+    .package = "ggOceanMaps"
   )
-  if(inherits(result, "error")) {
-    expect_false(grepl("exceeds max_area_deg2|entirely outside",
-                       conditionMessage(result)))
-  }
+  expect_error(
+    wcs_bathymetry(c(-160, -155, 18, 23), source = "etopo",
+                   cache_dir = tempfile("no-net-")),
+    "fetch reached"
+  )
 })
 
 test_that("define_bathy_style accepts wcs_etopo_* and abbreviations", {
@@ -241,6 +292,7 @@ test_that(".extract_tiff_from_multipart pulls TIFF out of MIME envelope", {
   ))
   fake_tiff <- as.raw(c(0x49, 0x49, 0x2A, 0x00,
                         0x10, 0x00, 0x00, 0x00,  # arbitrary "body" bytes
+                        0x0A, 0x2D, 0x2D,        # not the MIME boundary
                         0xDE, 0xAD, 0xBE, 0xEF))
   trailer <- charToRaw("\r\n--wcs--\r\n")
 
@@ -263,6 +315,21 @@ test_that(".extract_tiff_from_multipart returns FALSE for malformed input", {
   writeBin(charToRaw("No Content-Type header here, just text."), path)
   expect_false(.extract_tiff_from_multipart(path))
   unlink(path)
+})
+
+test_that(".extract_tiff_from_multipart accepts LF-only MIME headers", {
+  fake_tiff <- as.raw(c(0x49, 0x49, 0x2A, 0x00, 0xDE, 0xAD, 0xBE, 0xEF))
+  envelope <- c(
+    charToRaw("--wcs\nContent-Type: text/xml\n\n<dummy/>\n"),
+    charToRaw("--wcs\nContent-Type: image/tiff\n\n"),
+    fake_tiff,
+    charToRaw("\n--wcs--\n")
+  )
+  path <- tempfile(fileext = ".tif")
+  writeBin(envelope, path)
+
+  expect_true(.extract_tiff_from_multipart(path))
+  expect_identical(readBin(path, raw(), n = file.size(path)), fake_tiff)
 })
 
 # Live network test (ETOPO) ----------------------------------------------

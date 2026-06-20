@@ -2,15 +2,10 @@
 
 ## ggOceanMaps 3.0.0
 
-**Bringing ggOceanMaps to the AI age.** From this version on,
-ggOceanMaps attempts to help AI agents better support their users, and
-is itself developed and tested with the help of AI (Claude Code, Codex),
-enabling a faster development cycle and more robust code. The package
-now ships an `AGENTS.md` file and memory folder with instructions for AI
-assistants, alongside a much expanded and reorganised set of articles
-and recipes. This is a major release with new on-demand bathymetry
-sources, build-your-own shapefile tools, a comprehensive automated test
-suite, and an overhauled documentation site.
+This major release adds on-demand bathymetry sources, build-your-own
+shapefile tools, automated tests, and a reorganised documentation site.
+The repository also includes instructions for AI assistants that help
+users and contributors work with ggOceanMaps.
 
 ### New features
 
@@ -38,21 +33,14 @@ suite, and an overhauled documentation site.
 
 ### Documentation and AI support
 
-- New `AGENTS.md` with instructions for AI assistants helping users
-  *use* ggOceanMaps.
-- New
-  [`vignette("cookbook")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/cookbook.md)
-  of short, copy-pasteable recipes.
-- New
-  [`vignette("bathymetry")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.md)
-  covering all bathymetry sources.
-- New
-  [`vignette("adding-graphical-elements")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/adding-graphical-elements.md)
-  covering ocean-current arrows (velocity quivers and schematic “Figure
-  1” arrows) and pie charts on maps via `scatterpie::geom_scatterpie()`.
-- New
-  [`vignette("customising-shapefiles")`](https://mikkovihtakari.github.io/ggOceanMaps/articles/customising-shapefiles.md)
-  covering
+- New repository-level `AGENTS.md` with instructions for AI assistants
+  helping users *use* ggOceanMaps.
+- New website Cookbook of short, copy-pasteable recipes.
+- New website Bathymetry article covering all bathymetry sources.
+- New website Adding graphical elements article covering ocean-current
+  arrows (velocity quivers and schematic “Figure 1” arrows) and pie
+  charts on maps via `scatterpie::geom_scatterpie()`.
+- New website Customising shapefiles article covering
   [`clip_shapefile()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/clip_shapefile.md),
   the
   [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
@@ -93,12 +81,20 @@ suite, and an overhauled documentation site.
   maps (e.g. on the Svalbard or Europe CRS). The coverage is now
   requested for the full projected, expand-factor-padded map area rather
   than the raw decimal-degree limits, so it fills the whole panel.
+- WCS `downsample` is now applied by the remote service, reducing
+  transfer size and memory use. Raster cropping preserves the downloaded
+  cell resolution and no longer applies a second implicit reduction
+  before plotting.
+- WCS downloads now use validated temporary files and atomic cache
+  updates. Invalid cache entries are replaced automatically, and
+  multipart responses are split using their complete MIME boundary
+  rather than a generic byte sequence that can occur inside a GeoTIFF.
 
 ### Testing
 
-- Comprehensive testthat suite added: smoke tests covering the
-  historical regression corpus run everywhere; vdiffr SVG snapshot tests
-  catch “code runs but wrong map” regressions locally.
+- A local testthat suite covers the historical regression corpus; vdiffr
+  SVG snapshot tests catch “code runs but wrong map” regressions. Tests
+  are run during development and excluded from the CRAN source package.
 - Unit tests for
   [`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md),
   [`auto_limits()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/auto_limits.md),
@@ -130,8 +126,6 @@ suite, and an overhauled documentation site.
 
 ## ggOceanMaps 2.3.0
 
-CRAN release: 2026-02-10
-
 - Fixed anti-meridian crossing land clipping in rotated basemaps
   ([\#53](https://github.com/MikkoVihtakari/ggOceanMaps/pull/53))
 - Fixed bugs and package incompatibilities, including TopologyException
@@ -152,8 +146,6 @@ CRAN release: 2026-02-10
 
 ## ggOceanMaps 2.2.0
 
-CRAN release: 2024-01-15
-
 - Added tests better explaining wrongly specified arguments
 - Updated the user manual
 - Fixed an issue with certain `bathy.style` abbreviations
@@ -170,8 +162,8 @@ CRAN release: 2024-01-15
 - Fixed `basemap(c(-180, 180, -90, 90))` case and turned off automatic
   rotation when crossing the anti-meridian. A message is shown instead.
 - Turned off `expand` in
-  [`ggplot2::coord_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html)
-  to avoid an error when having map border at 0 meridian.
+  [`ggplot2::coord_sf()`](https://rdrr.io/pkg/ggplot2/man/ggsf.html) to
+  avoid an error when having map border at 0 meridian.
 - Fixed a case where data argument produced too wide boundaries
 - [`expand.factor` should work now as
   designed](https://github.com/MikkoVihtakari/ggOceanMaps/issues/33)
@@ -183,8 +175,6 @@ CRAN release: 2024-01-15
 
 ## ggOceanMaps 2.1.1
 
-CRAN release: 2023-08-30
-
 - Fixed a bug in bathy.style wording.
 - Added
   [`get_depth()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/get_depth.html)
@@ -194,8 +184,6 @@ CRAN release: 2023-08-30
   `basemap(shapefiles = "Europe")`
 
 ## ggOceanMaps 2.0.0
-
-CRAN release: 2023-07-04
 
 - Full [sf](https://r-spatial.github.io/sf/) integration. Old GIS
   packages for R and ggspatial dependencies removed. Since this change
@@ -222,8 +210,6 @@ CRAN release: 2023-07-04
 
 ## ggOceanMaps 1.3.4
 
-CRAN release: 2022-09-26
-
 - Added shapefiles to the `x` argument shortcut in
   [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md).
 - Added limits to premade shapefiles to make visualization easier.
@@ -241,8 +227,6 @@ CRAN release: 2022-09-26
 - Added ICES and Norwegian directorate of fisheries areas.
 
 ## ggOceanMaps 1.2.6
-
-CRAN release: 2022-01-08
 
 - [added `x` argument to `basemap()` and
   `qmap()`](https://github.com/MikkoVihtakari/ggOceanMaps/issues/11)
@@ -269,16 +253,12 @@ CRAN release: 2022-01-08
 
 ## ggOceanMaps 1.1
 
-CRAN release: 2021-05-21
-
 - Started replacing the [PROJ4 system by the PROJ6 wkt based
   system](https://www.earthdatascience.org/courses/use-data-open-source-python/intro-vector-data-python/spatial-data-vector-shapefiles/epsg-proj4-coordinate-reference-system-formats-python/)
   by replacing “+init=epsg:NNNN” strings by “EPSG:NNNN”. Did not finish
   the conversion.
 
 ## ggOceanMaps 1.0.9
-
-CRAN release: 2021-01-14
 
 - First CRAN release. Contains the core of the package code rewritten
   from [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard/)

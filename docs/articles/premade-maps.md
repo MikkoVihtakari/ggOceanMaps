@@ -14,31 +14,36 @@ The available sets are listed by
 
 ``` r
 
-shapefile_list("all")
-#>                     name
-#> 1    ArcticStereographic
-#> 2 AntarcticStereographic
-#> 3          DecimalDegree
-#> 4               Svalbard
-#> 5                 Europe
-#>                                                                          land
-#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_land
-#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_land
-#> 3                                                                     dd_land
-#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_land
-#> 5    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/europe_land
-#>                                                                          glacier
-#> 1    /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_glacier
-#> 2 /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_glacier
-#> 3        /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_glacier
-#> 4  /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_glacier
-#> 5                                                                           <NA>
-#>                                                                                                                                                                bathy
-#> 1    dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/arctic_bathy
-#> 2 dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/antarctic_bathy
-#> 3        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_bathy
-#> 4  dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/svalbard_bathy
-#> 5        dd_rbathy|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_rbathy_cont|/var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//Rtmpu0Q0Vv/dd_bathy
+shapes <- shapefile_list("all")
+datapath <- path.expand(getOption("ggOceanMaps.datapath"))
+userpath <- path.expand(getOption("ggOceanMaps.userpath", ""))
+shapes[] <- lapply(shapes, function(x) {
+  if (!is.character(x)) return(x)
+  x <- gsub(datapath, "<ggOceanMaps.datapath>", x, fixed = TRUE)
+  if (nzchar(userpath)) {
+    x <- gsub(userpath, "<ggOceanMaps.userpath>", x, fixed = TRUE)
+  }
+  x
+})
+shapes
+#>                     name                                  land
+#> 1    ArcticStereographic    <ggOceanMaps.datapath>/arctic_land
+#> 2 AntarcticStereographic <ggOceanMaps.datapath>/antarctic_land
+#> 3          DecimalDegree                               dd_land
+#> 4               Svalbard  <ggOceanMaps.datapath>/svalbard_land
+#> 5                 Europe    <ggOceanMaps.datapath>/europe_land
+#>                                    glacier
+#> 1    <ggOceanMaps.datapath>/arctic_glacier
+#> 2 <ggOceanMaps.datapath>/antarctic_glacier
+#> 3        <ggOceanMaps.datapath>/dd_glacier
+#> 4  <ggOceanMaps.datapath>/svalbard_glacier
+#> 5                                     <NA>
+#>                                                                                                           bathy
+#> 1    dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.userpath>|<ggOceanMaps.datapath>/arctic_bathy
+#> 2 dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.userpath>|<ggOceanMaps.datapath>/antarctic_bathy
+#> 3        dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.userpath>|<ggOceanMaps.datapath>/dd_bathy
+#> 4  dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.userpath>|<ggOceanMaps.datapath>/svalbard_bathy
+#> 5        dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.userpath>|<ggOceanMaps.datapath>/dd_bathy
 #>     crs                                      limits
 #> 1  3995                                       c(30)
 #> 2  3031                                      c(-35)

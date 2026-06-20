@@ -26,6 +26,11 @@ knitr::opts_chunk$set(collapse = TRUE,
 
 ```{r setup, eval = TRUE, include = FALSE}
 library(ggOceanMaps)
+
+datapath <- Sys.getenv("GGOCEANMAPS_DATAPATH")
+userpath <- Sys.getenv("GGOCEANMAPS_USERPATH")
+if (nzchar(datapath)) options(ggOceanMaps.datapath = datapath)
+if (nzchar(userpath)) options(ggOceanMaps.userpath = userpath)
 ```
 
 # Overview
@@ -39,7 +44,18 @@ uses.
 The available sets are listed by `shapefile_list()`:
 
 ```{r, eval = TRUE}
-shapefile_list("all")
+shapes <- shapefile_list("all")
+datapath <- path.expand(getOption("ggOceanMaps.datapath"))
+userpath <- path.expand(getOption("ggOceanMaps.userpath", ""))
+shapes[] <- lapply(shapes, function(x) {
+  if (!is.character(x)) return(x)
+  x <- gsub(datapath, "<ggOceanMaps.datapath>", x, fixed = TRUE)
+  if (nzchar(userpath)) {
+    x <- gsub(userpath, "<ggOceanMaps.userpath>", x, fixed = TRUE)
+  }
+  x
+})
+shapes
 ```
 
 Each row is a named shapefile set with a coordinate reference system (`crs`),

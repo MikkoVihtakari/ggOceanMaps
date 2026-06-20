@@ -28,8 +28,13 @@ Custom shapefiles for \code{\link{basemap}} should be defined as lists with (at 
 All linked spatial data objects must be in same projection. High-resolution pre-made data are still under development and may not be available. Pre-made shapefiles contain additional elements that are used in the \code{\link{basemap}} function, but not required for custom shapefile datasets.
 }
 \examples{
+old_options <- options(
+  ggOceanMaps.datapath = "path/to/ggOceanMapsLargeData",
+  ggOceanMaps.userpath = "path/to/your/bathymetry.nc"
+)
 shapefile_list("all")
 shapefile_list("Arctic") # partial matching
+options(old_options)
 }
 \seealso{
 Other basemap functions:

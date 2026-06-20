@@ -22,8 +22,8 @@ dist2land(
 
 - data:
 
-  Data frame or [sf](https://r-spatial.github.io/sf/reference/sf.html)
-  object containing geographic coordinates.
+  Data frame or [sf](https://rdrr.io/pkg/sf/man/sf.html) object
+  containing geographic coordinates.
 
 - lon, lat:
 
@@ -37,17 +37,17 @@ dist2land(
   Land shape to which distances should be calculated. Either a character
   argument referring to a name of pre-made shapefiles in
   [`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md),
-  a single [sf](https://r-spatial.github.io/sf/reference/sf.html) or
-  `sp` polygons object object or `NULL` to enable automatic definition
-  of the land shapes based on `data`. Set to `"DecimalDegree"` by
-  default which enables great circle distances using
-  [s2](https://r-spatial.github.io/sf/reference/s2.html) features
-  assuming a spherical Earth (as a contrast to earlier versions of the
-  function which used flat Earth).
+  a single [sf](https://rdrr.io/pkg/sf/man/sf.html) or `sp` polygons
+  object object or `NULL` to enable automatic definition of the land
+  shapes based on `data`. Set to `"DecimalDegree"` by default which
+  enables great circle distances using
+  [s2](https://rdrr.io/pkg/sf/man/s2.html) features assuming a spherical
+  Earth (as a contrast to earlier versions of the function which used
+  flat Earth).
 
 - proj.in:
 
-  [`coordinate reference system`](https://r-spatial.github.io/sf/reference/st_crs.html)
+  [`coordinate reference system`](https://rdrr.io/pkg/sf/man/st_crs.html)
   of `data`.
 
 - bind:
@@ -82,9 +82,9 @@ The distances are **kilometers** if `binary = FALSE`, otherwise logical
 ## Details
 
 The function calculates great circle spherical distances using the
-[`st_distance`](https://r-spatial.github.io/sf/reference/geos_measures.html)
-function by default. The function can be slow for large datasets. If you
-only want to use the function to remove (wrong) observations reported on
+[`st_distance`](https://rdrr.io/pkg/sf/man/geos_measures.html) function
+by default. The function can be slow for large datasets. If you only
+want to use the function to remove (wrong) observations reported on
 land, set the `binary` argument to `TRUE`. This speeds up the
 calculations by a factor of ten.
 

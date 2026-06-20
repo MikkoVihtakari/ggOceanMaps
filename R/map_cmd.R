@@ -20,11 +20,11 @@ map_cmd <- function(command, alternative = FALSE) {
     ',
     bathy_rb = '
     stars::geom_stars(data = X$shapefiles$bathy$raster, na.action = na.omit,
-      downsample = downsample, show.legend = bathy.legend, alpha = bathy.alpha) 
+      downsample = plot.downsample, show.legend = bathy.legend, alpha = bathy.alpha)
     ',
     bathy_rc = '
     stars::geom_stars(data = X$shapefiles$bathy$raster, na.action = na.omit,
-      downsample = downsample, show.legend = bathy.legend, alpha = bathy.alpha)
+      downsample = plot.downsample, show.legend = bathy.legend, alpha = bathy.alpha)
     ',
     bathy_rbb_scale = '
     ggplot2::scale_fill_manual(
@@ -192,4 +192,3 @@ map_cmd <- function(command, alternative = FALSE) {
 
   trimws(gsub("\n", " ", out))
 }
-

@@ -152,7 +152,7 @@ This example uses Oslo municipality's depth-area tile, a small dataset showing t
 
 [`wcs_bathymetry()`](bathymetry.html) fetches bathymetry on demand from a Web Coverage Service and returns a continuous `bathyRaster`, but it always discards land (it calls `raster_bathymetry(ras, depths = NULL)` internally). Since this section is about *making new shapefiles* rather than just plotting a raster, the example below vectorises the fetched bathymetry into depth-contour polygons — the same `cut()` + `vector_bathymetry()` pattern as the raster section above — and pairs it with the premade `"Europe"` land set, which is a better match for EMODnet's ~115 m resolution than the shipped `dd_land`:
 
-```{r}
+```{r, eval = FALSE}
 tromso <- c(18, 20, 69.4, 69.9) # area to display
 fetch <- c(17.5, 20.5, 69.3, 70) # slightly wider fetch box (see note below)
 bathy <- wcs_bathymetry(fetch, source = "emodnet")

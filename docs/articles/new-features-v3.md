@@ -5,50 +5,33 @@
 library(ggOceanMaps)
 ```
 
-## ggOceanMaps enters the AI age
+## Documentation for users and AI assistants
 
-This is a major update that brings ggOceanMaps to the AI age. From
-version 3 on, the package is developed with the help of AI coding
-assistants (Claude Code, Codex), which means the code is no longer
-necessarily written by me — but I do still review all of it. For me this
-has meant faster and, so far, more robust development. It also comes
-with an increased focus on documentation, so that AI agents can better
-help their users: making a map with ggOceanMaps should be a one-sentence
-request, whether you type it yourself or hand it to an assistant.
+Version 3 expands and reorganises the documentation for both users and
+AI assistants. The repository includes `AGENTS.md`, `CLAUDE.md`, and a
+`memory/` folder with package-specific guidance.
 
-The most visible part of this shift is a set of AI-focused files in the
-GitHub version of the package:
-[`AGENTS.md`](https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/AGENTS.md),
-`CLAUDE.md`, and the `memory/` folder. They give AI assistants concise,
-accurate instructions for *using* ggOceanMaps — the projection rules,
-the `shapefiles` contract, how
-[`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md)
-works, the common pitfalls — so they spend less time guessing and more
-time helping, and they help contributors’ own agents get their bearings
-when developing new features. The documentation site was reorganised
-around the same idea: a short [user
+These files describe the projection rules, the `shapefiles` contract,
+[`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md),
+common pitfalls, and the package development workflow. The documentation
+site now uses a short [user
 manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.md)
-that links out to focused, in-depth articles.
+that links to focused articles.
 
-So next time you ask your AI assistant for a ggOceanMaps map, point it
-at <https://github.com/MikkoVihtakari/ggOceanMaps/> and ask it to
-familiarise itself with the package before answering — you should get
-noticeably better results.
+When asking an AI assistant for help with ggOceanMaps, point it to
+<https://github.com/MikkoVihtakari/ggOceanMaps/> so it can read the
+current package guidance.
 
 Everything below is new or substantially improved in version 3.
 
 ## High-resolution maps of Norwegian fjords
 
-The headline feature of v3.0.0 is something I had wanted to add for a
-long time but never found the time for. Half an hour with Claude Opus
-4.8 solved it, and ggOceanMaps can finally make high-resolution maps of
-Norwegian fjords — a feature many of you have asked for. The new
+The new
 [`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md)
 function downloads [EMODnet](https://emodnet.ec.europa.eu/en/bathymetry)
-bathymetry (~115 m resolution) directly from their Web Coverage Service.
-There are no files to manage: pick the style through `bathy.style` and
-ggOceanMaps fetches, caches, and renders the right tiles for your map
-extent.
+bathymetry (~115 m resolution) directly from its Web Coverage Service.
+Select the source through `bathy.style`; ggOceanMaps fetches, caches,
+and renders the tiles for the map extent.
 
 Two sources are available:
 
@@ -156,16 +139,15 @@ set of focused articles:
 - **[Cookbook](https://mikkovihtakari.github.io/ggOceanMaps/articles/cookbook.md)**
   — short, copy-pasteable recipes.
 
-## Tested and more reliable
+## Testing and clipping fixes
 
-Version 3 ships a comprehensive automated test suite: smoke tests
-covering the historical regression corpus run everywhere, and `vdiffr`
-SVG snapshot tests catch “code runs but wrong map” regressions. This
-release also fixes several long-standing clipping problems. For example,
-projected maps with decimal-degree limits used to cut off land near the
-map edges — `basemap(c(-20, 30, 50, 70))` clipped off northern Norway.
-The clip boundary is now densified before reprojection, so the full
-extent is kept:
+Version 3 adds smoke tests based on the historical regression corpus and
+`vdiffr` SVG snapshot tests for visual changes. This release also fixes
+several clipping problems. For example, projected maps with
+decimal-degree limits used to cut off land near the map edges —
+`basemap(c(-20, 30, 50, 70))` clipped off northern Norway. The clip
+boundary is now densified before reprojection, so the full extent is
+kept:
 
 ``` r
 

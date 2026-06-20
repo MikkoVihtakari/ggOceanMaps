@@ -77,7 +77,7 @@
 
 
 <dl><dt id="arg-bathy">bathy<a class="anchor" aria-label="anchor" href="#arg-bathy"></a></dt>
-<dd><p>A <a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">stars</a> object or a string giving the path to a bathymetry NetCDF or grd file</p></dd>
+<dd><p>A <a href="https://rdrr.io/pkg/stars/man/read_stars.html" class="external-link">stars</a> object or a string giving the path to a bathymetry NetCDF or grd file</p></dd>
 
 
 <dt id="arg-depths">depths<a class="anchor" aria-label="anchor" href="#arg-depths"></a></dt>
@@ -85,19 +85,19 @@
 
 
 <dt id="arg-proj-out">proj.out<a class="anchor" aria-label="anchor" href="#arg-proj-out"></a></dt>
-<dd><p>A character string specifying the <a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">coordinate reference system</a> (CRS)  argument for the output. See <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></code> and <a href="https://proj.org/" class="external-link">proj.org</a>. If <code>NULL</code>, the projection is retrieved from <code>bathy</code> and the output will not be reprojected saving processing time (since <code>proj.out</code> and <code>proj.bathy</code> would match.</p></dd>
+<dd><p>A character string specifying the <a href="https://rdrr.io/pkg/sf/man/st_crs.html" class="external-link">coordinate reference system</a> (CRS)  argument for the output. See <code><a href="https://rdrr.io/pkg/sf/man/st_crs.html" class="external-link">st_crs</a></code> and <a href="https://proj.org/" class="external-link">proj.org</a>. If <code>NULL</code>, the projection is retrieved from <code>bathy</code> and the output will not be reprojected saving processing time (since <code>proj.out</code> and <code>proj.bathy</code> would match.</p></dd>
 
 
 <dt id="arg-proj-bathy">proj.bathy<a class="anchor" aria-label="anchor" href="#arg-proj-bathy"></a></dt>
-<dd><p>A character string specifying the <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">CRS</a></code> for the input (<code>bathy</code>). Only required if <code>bathy</code> lacks CRS information. If <code>NULL</code>, <code>"EPSG:4326"</code> is assumed.</p></dd>
+<dd><p>A character string specifying the <code><a href="https://rdrr.io/pkg/sf/man/st_crs.html" class="external-link">CRS</a></code> for the input (<code>bathy</code>). Only required if <code>bathy</code> lacks CRS information. If <code>NULL</code>, <code>"EPSG:4326"</code> is assumed.</p></dd>
 
 
 <dt id="arg-boundary">boundary<a class="anchor" aria-label="anchor" href="#arg-boundary"></a></dt>
-<dd><p>A <a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a> object, text string defining the file path to a spatial polygon, <a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">bounding box</a>, or a numeric vector of length 4 giving the boundaries for which <code>bathy</code> should be cut to. Should be given as <strong>decimal degrees</strong>. If unnamed numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. You can also use the sf bounding box format as named vector. Use <code>NULL</code> not to cut <code>bathy</code>.</p></dd>
+<dd><p>A <a href="https://rdrr.io/pkg/sf/man/st.html" class="external-link">st_polygon</a> object, text string defining the file path to a spatial polygon, <a href="https://rdrr.io/pkg/sf/man/st_bbox.html" class="external-link">bounding box</a>, or a numeric vector of length 4 giving the boundaries for which <code>bathy</code> should be cut to. Should be given as <strong>decimal degrees</strong>. If unnamed numeric vector, the first element defines the minimum longitude, the second element the maximum longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box. You can also use the sf bounding box format as named vector. Use <code>NULL</code> not to cut <code>bathy</code>.</p></dd>
 
 
 <dt id="arg-warp">warp<a class="anchor" aria-label="anchor" href="#arg-warp"></a></dt>
-<dd><p>Logical indicating whether the resulting grid should be resampled to a new CRS if <code>proj.out != proj.bathy</code> using the <code><a href="https://r-spatial.github.io/stars/reference/st_warp.html" class="external-link">st_warp</a></code> function. A time-consuming operation, but necessary when CRS changes in raster bathymetries. Not required if the next step is to vectorise the bathymetry.</p></dd>
+<dd><p>Logical indicating whether the resulting grid should be resampled to a new CRS if <code>proj.out != proj.bathy</code> using the <code><a href="https://rdrr.io/pkg/stars/man/st_warp.html" class="external-link">st_warp</a></code> function. A time-consuming operation, but necessary when CRS changes in raster bathymetries. Not required if the next step is to vectorise the bathymetry.</p></dd>
 
 
 <dt id="arg-estimate-land">estimate.land<a class="anchor" aria-label="anchor" href="#arg-estimate-land"></a></dt>
@@ -105,7 +105,7 @@
 
 
 <dt id="arg-downsample">downsample<a class="anchor" aria-label="anchor" href="#arg-downsample"></a></dt>
-<dd><p>An integer defining how many rows in <code>bathy</code> should be skipped to reduce the size (and resolution). 1 skips every second row, 2 every second and third. See <code><a href="https://r-spatial.github.io/stars/reference/st_downsample.html" class="external-link">st_downsample</a></code>. Set to <code>NULL</code> (default) to skip downsampling.</p></dd>
+<dd><p>An integer defining how many rows in <code>bathy</code> should be skipped to reduce the size (and resolution). 1 skips every second row, 2 every second and third. See <code><a href="https://rdrr.io/pkg/stars/man/st_downsample.html" class="external-link">st_downsample</a></code>. Set to <code>NULL</code> (default) to skip downsampling.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -114,11 +114,11 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with a <a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">stars</a> object the containing projected bathymetry defined by the <code>proj.out</code> argument and a data frame of depth intervals.</p>
+    <p>A list with a <a href="https://rdrr.io/pkg/stars/man/read_stars.html" class="external-link">stars</a> object the containing projected bathymetry defined by the <code>proj.out</code> argument and a data frame of depth intervals.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>You can use <a href="https://www.gebco.net/data-products/gridded-bathymetry-data" class="external-link">GEBCO</a>, <a href="https://www.gebco.net/data-products/gridded-bathymetry-data/arctic-ocean" class="external-link">IBCAO</a>, <a href="https://www.ncei.noaa.gov/products/etopo-global-relief-model" class="external-link">ETOPO</a> bathymetry grids downloaded from respective sources as the <code>bathy</code> argument. The bathymetry grids read from files must be in any format read by <code><a href="https://r-spatial.github.io/stars/reference/read_stars.html" class="external-link">read_stars</a></code>. Alternatively use the <code><a href="https://rdrr.io/pkg/marmap/man/getNOAA.bathy.html" class="external-link">marmap::getNOAA.bathy</a></code> function to download ETOPO1 bathymetry and convert it to a raster object using the <code><a href="https://rdrr.io/pkg/marmap/man/as.raster.html" class="external-link">marmap::as.raster</a></code> function.</p>
+    <p>You can use <a href="https://www.gebco.net/data-products/gridded-bathymetry-data" class="external-link">GEBCO</a>, <a href="https://www.gebco.net/data-products/gridded-bathymetry-data/arctic-ocean" class="external-link">IBCAO</a>, <a href="https://www.ncei.noaa.gov/products/etopo-global-relief-model" class="external-link">ETOPO</a> bathymetry grids downloaded from respective sources as the <code>bathy</code> argument. The bathymetry grids read from files must be in any format read by <code><a href="https://rdrr.io/pkg/stars/man/read_stars.html" class="external-link">read_stars</a></code>. Alternatively use the <code><a href="https://rdrr.io/pkg/marmap/man/getNOAA.bathy.html" class="external-link">marmap::getNOAA.bathy</a></code> function to download ETOPO1 bathymetry and convert it to a raster object using the <code><a href="https://rdrr.io/pkg/marmap/man/as.raster.html" class="external-link">marmap::as.raster</a></code> function.</p>
 <p>Note that the size of the output is heavily influenced by the number of depth contours (<code>depths</code>) as well as the resolution of <code>bathy</code> and choice of <code>downsample</code>. To make the <code><a href="vector_bathymetry.html">vector_bathymetry</a></code> function and consequent plotting faster, limiting the details of the bathymetry raster may be desirable.</p>
     </div>
     <div class="section level2">

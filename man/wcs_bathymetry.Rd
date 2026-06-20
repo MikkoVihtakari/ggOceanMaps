@@ -49,17 +49,14 @@ EMODnet, 30 for ETOPO). EMODnet reads 8-byte doubles internally so a
 4-degree tile already exceeds its ~98 MB read cap; ETOPO is much coarser
 so larger tiles are fine.}
 
-\item{downsample}{Integer. Number of grid cells to skip when reducing the
-raster after download. \code{0} (default) keeps the native ~115 m
-resolution; \code{1} keeps every second cell (~230 m); \code{n} keeps
-every \code{(n+1)}-th cell. Applied client-side via
-\code{\link[stars]{st_downsample}} -- the server still ships native data
-(no WCS-side resampling is honoured before the read cap), so the
-bandwidth saving is in the resulting object's in-memory size, not the
-download itself. Useful for wider maps where native resolution is
-overkill for screen rendering.}
+\item{downsample}{Non-negative integer. Number of grid cells to skip when
+requesting the raster. \code{0} (default) keeps the source resolution;
+\code{1} requests half the rows and columns; \code{n} requests every
+\code{(n+1)}-th cell. Downsampling is performed by the WCS server, reducing
+both transfer size and memory use.}
 
-\item{timeout}{Numeric. HTTP timeout in seconds.}
+\item{timeout}{Positive numeric. Minimum HTTP timeout in seconds. A larger
+existing global \code{timeout} option is respected.}
 
 \item{verbose}{Logical. Print download progress and informational messages.}
 }

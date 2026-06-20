@@ -13,8 +13,7 @@ rotate_crs(crs, meridians)
 - crs:
 
   The CRS to be rotated in
-  [`st_crs`](https://r-spatial.github.io/sf/reference/st_crs.html)
-  format
+  [`st_crs`](https://rdrr.io/pkg/sf/man/st_crs.html) format
 
 - meridians:
 
@@ -23,8 +22,7 @@ rotate_crs(crs, meridians)
 
 ## Value
 
-Rotated CRS in
-[`st_crs`](https://r-spatial.github.io/sf/reference/st_crs.html) format
+Rotated CRS in [`st_crs`](https://rdrr.io/pkg/sf/man/st_crs.html) format
 
 ## Author
 

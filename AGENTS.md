@@ -115,8 +115,9 @@ basemap(limits = c(-20, 30, 50, 70), bathy.style = "rub")
 | `cb` | contour | binned | blues | largedata download |
 | ...replace `b` with `g` for grays | | | | |
 
-The `wemb` / `wcs_emodnet_blues` and `wceb` / `wcs_etopo_blues` styles
-fetch bathymetry on demand from a Web Coverage Service. Pick by region:
+Use WCS styles only when the user explicitly asks for live or high-resolution bathymetry. Standard maps should use the shipped raster (`bathymetry = TRUE`) or ggOceanMapsLargeData styles such as `"rcb"`, `"pb"`, and `"cb"`. WCS requests use the network and can transfer large rasters.
+
+When the user explicitly requests WCS bathymetry, pick the source by region:
 
 ```r
 # High-resolution European waters → EMODnet
@@ -182,8 +183,8 @@ ggsave("arctic.png", p, width = 6, height = 6, dpi = 300)
 
 ## Where to find more
 
-- User manual: `vignette("ggOceanMaps")`
-- Cookbook of recipes: `vignette("cookbook")`
+- User manual: <https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html>
+- Cookbook of recipes: <https://mikkovihtakari.github.io/ggOceanMaps/articles/cookbook.html>
 - Function reference: <https://mikkovihtakari.github.io/ggOceanMaps/reference/>
 - Issues / bug reports: <https://github.com/MikkoVihtakari/ggOceanMaps/issues>
 

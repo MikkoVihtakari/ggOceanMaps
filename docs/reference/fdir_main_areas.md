@@ -10,10 +10,10 @@ fdir_main_areas
 
 ## Format
 
-[`sf object`](https://r-spatial.github.io/sf/reference/sf.html)
-containing major fishing zones defined by the Norwegian Directorate of
-Fisheries. Contains also Northwest Atlantic Fisheries Organization's
-divisions where Norwegian vessels tend to fish.
+[`sf object`](https://rdrr.io/pkg/sf/man/sf.html) containing major
+fishing zones defined by the Norwegian Directorate of Fisheries.
+Contains also Northwest Atlantic Fisheries Organization's divisions
+where Norwegian vessels tend to fish.
 
 ## Source
 

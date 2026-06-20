@@ -19,7 +19,7 @@
 #' @family create shapefiles
 #' @export
 
-# bathy = "/Users/a22357/Downloads/ETOPO_2022_v1_60s_N90W180_surface.nc"
+# bathy = "path/to/ETOPO_2022_v1_60s_N90W180_surface.nc"
 # depths = c(0, 50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = 4326; file.name = NULL; boundary = c(-180, 180, -90, 90); aggregation.factor = 6
 # proj.out = shapefile_list("Barents")$crs
 # bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(0, 50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = convert_crs("3996"); proj.bathy = convert_crs("3996"), file.name = NULL; boundary = c(-180.0083, 180.0083, -90, 90); aggregation.factor = 6

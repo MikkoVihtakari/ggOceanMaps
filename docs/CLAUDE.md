@@ -207,7 +207,7 @@ now contains working rendered examples for:
   `Barents-Sea-currents` repo
 - projected velocity fields with transformed start/end points
 - projected pie charts with a second fill scale via
-  [`ggnewscale::new_scale_fill()`](https://eliocamp.github.io/ggnewscale/reference/new_scale.html)
+  [`ggnewscale::new_scale_fill()`](https://rdrr.io/pkg/ggnewscale/man/new_scale.html)
 - manual bathymetry bin examples
 - a synthetic
   [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
@@ -250,7 +250,7 @@ layers at some map limits, the cropped geometry contained a degenerate
 custom land layer). Fixed by extracting the polygonal parts with
 `sf::st_collection_extract(..., "POLYGON")` before the cast, but only
 when a `GEOMETRYCOLLECTION` is actually present (checked via
-[`sf::st_geometry_type()`](https://r-spatial.github.io/sf/reference/st_geometry_type.html)),
+[`sf::st_geometry_type()`](https://rdrr.io/pkg/sf/man/st_geometry_type.html)),
 to avoid a benign-but-noisy “x is already of type POLYGON” warning on
 every normal
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)

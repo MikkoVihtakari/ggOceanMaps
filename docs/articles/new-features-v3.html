@@ -88,45 +88,28 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mikkovihtakari.github.io/ggOceanMaps/">ggOceanMaps</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="ggoceanmaps-enters-the-ai-age">ggOceanMaps enters the AI age<a class="anchor" aria-label="anchor" href="#ggoceanmaps-enters-the-ai-age"></a>
+<h2 id="documentation-for-users-and-ai-assistants">Documentation for users and AI assistants<a class="anchor" aria-label="anchor" href="#documentation-for-users-and-ai-assistants"></a>
 </h2>
-<p>This is a major update that brings ggOceanMaps to the AI age. From
-version 3 on, the package is developed with the help of AI coding
-assistants (Claude Code, Codex), which means the code is no longer
-necessarily written by me — but I do still review all of it. For me this
-has meant faster and, so far, more robust development. It also comes
-with an increased focus on documentation, so that AI agents can better
-help their users: making a map with ggOceanMaps should be a one-sentence
-request, whether you type it yourself or hand it to an assistant.</p>
-<p>The most visible part of this shift is a set of AI-focused files in
-the GitHub version of the package: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/AGENTS.md" class="external-link"><code>AGENTS.md</code></a>,
-<code>CLAUDE.md</code>, and the <code>memory/</code> folder. They give
-AI assistants concise, accurate instructions for <em>using</em>
-ggOceanMaps — the projection rules, the <code>shapefiles</code>
-contract, how <code><a href="../reference/transform_coord.html">transform_coord()</a></code> works, the common pitfalls
-— so they spend less time guessing and more time helping, and they help
-contributors’ own agents get their bearings when developing new
-features. The documentation site was reorganised around the same idea: a
-short <a href="ggOceanMaps.html">user manual</a> that links out to
-focused, in-depth articles.</p>
-<p>So next time you ask your AI assistant for a ggOceanMaps map, point
-it at <a href="https://github.com/MikkoVihtakari/ggOceanMaps/" class="external-link uri">https://github.com/MikkoVihtakari/ggOceanMaps/</a> and ask
-it to familiarise itself with the package before answering — you should
-get noticeably better results.</p>
+<p>Version 3 expands and reorganises the documentation for both users
+and AI assistants. The repository includes <code>AGENTS.md</code>,
+<code>CLAUDE.md</code>, and a <code>memory/</code> folder with
+package-specific guidance.</p>
+<p>These files describe the projection rules, the
+<code>shapefiles</code> contract, <code><a href="../reference/transform_coord.html">transform_coord()</a></code>, common
+pitfalls, and the package development workflow. The documentation site
+now uses a short <a href="ggOceanMaps.html">user manual</a> that links
+to focused articles.</p>
+<p>When asking an AI assistant for help with ggOceanMaps, point it to <a href="https://github.com/MikkoVihtakari/ggOceanMaps/" class="external-link uri">https://github.com/MikkoVihtakari/ggOceanMaps/</a> so it can
+read the current package guidance.</p>
 <p>Everything below is new or substantially improved in version 3.</p>
 </div>
 <div class="section level2">
 <h2 id="high-resolution-maps-of-norwegian-fjords">High-resolution maps of Norwegian fjords<a class="anchor" aria-label="anchor" href="#high-resolution-maps-of-norwegian-fjords"></a>
 </h2>
-<p>The headline feature of v3.0.0 is something I had wanted to add for a
-long time but never found the time for. Half an hour with Claude Opus
-4.8 solved it, and ggOceanMaps can finally make high-resolution maps of
-Norwegian fjords — a feature many of you have asked for. The new
-<code><a href="../reference/wcs_bathymetry.html">wcs_bathymetry()</a></code> function downloads <a href="https://emodnet.ec.europa.eu/en/bathymetry" class="external-link">EMODnet</a> bathymetry
-(~115 m resolution) directly from their Web Coverage Service. There are
-no files to manage: pick the style through <code>bathy.style</code> and
-ggOceanMaps fetches, caches, and renders the right tiles for your map
-extent.</p>
+<p>The new <code><a href="../reference/wcs_bathymetry.html">wcs_bathymetry()</a></code> function downloads <a href="https://emodnet.ec.europa.eu/en/bathymetry" class="external-link">EMODnet</a> bathymetry
+(~115 m resolution) directly from its Web Coverage Service. Select the
+source through <code>bathy.style</code>; ggOceanMaps fetches, caches,
+and renders the tiles for the map extent.</p>
 <p>Two sources are available:</p>
 <ul>
 <li>
@@ -223,15 +206,13 @@ copy-pasteable recipes.</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="tested-and-more-reliable">Tested and more reliable<a class="anchor" aria-label="anchor" href="#tested-and-more-reliable"></a>
+<h2 id="testing-and-clipping-fixes">Testing and clipping fixes<a class="anchor" aria-label="anchor" href="#testing-and-clipping-fixes"></a>
 </h2>
-<p>Version 3 ships a comprehensive automated test suite: smoke tests
-covering the historical regression corpus run everywhere, and
-<code>vdiffr</code> SVG snapshot tests catch “code runs but wrong map”
-regressions. This release also fixes several long-standing clipping
-problems. For example, projected maps with decimal-degree limits used to
-cut off land near the map edges —
-<code>basemap(c(-20, 30, 50, 70))</code> clipped off northern Norway.
+<p>Version 3 adds smoke tests based on the historical regression corpus
+and <code>vdiffr</code> SVG snapshot tests for visual changes. This
+release also fixes several clipping problems. For example, projected
+maps with decimal-degree limits used to cut off land near the map edges
+— <code>basemap(c(-20, 30, 50, 70))</code> clipped off northern Norway.
 The clip boundary is now densified before reprojection, so the full
 extent is kept:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">

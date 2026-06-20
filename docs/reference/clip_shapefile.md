@@ -21,9 +21,8 @@ clip_shapefile(
 - x:
 
   Original shapefile to be clipped as a an
-  [sf](https://r-spatial.github.io/sf/reference/sf.html) or `sp`
-  polygons object. Required. Must contain
-  [`CRS`](https://r-spatial.github.io/sf/reference/st_crs.html)
+  [sf](https://rdrr.io/pkg/sf/man/sf.html) or `sp` polygons object.
+  Required. Must contain [`CRS`](https://rdrr.io/pkg/sf/man/st_crs.html)
   information.
 
 - limits:
@@ -34,22 +33,21 @@ clip_shapefile(
   second element the maximum longitude, third element the minimum
   latitude and fourth element the maximum latitude of the bounding box.
   If a spatial object, it must contain
-  [`CRS`](https://r-spatial.github.io/sf/reference/st_crs.html)
-  information. See details.
+  [`CRS`](https://rdrr.io/pkg/sf/man/st_crs.html) information. See
+  details.
 
 - proj.limits:
 
-  The [`CRS`](https://r-spatial.github.io/sf/reference/st_crs.html)
-  projection attributes for `limits`. Hence format accepted by
-  [`st_crs`](https://r-spatial.github.io/sf/reference/st_crs.html) will
-  suffice but integers are the easiest. Defaults to decimal degrees.
+  The [`CRS`](https://rdrr.io/pkg/sf/man/st_crs.html) projection
+  attributes for `limits`. Hence format accepted by
+  [`st_crs`](https://rdrr.io/pkg/sf/man/st_crs.html) will suffice but
+  integers are the easiest. Defaults to decimal degrees.
 
 - simplify:
 
   Should the `x` geometry be simplified before clipping? Useful to make
   the function faster for large shape files. Uses
-  [`st_simplify`](https://r-spatial.github.io/sf/reference/geos_unary.html)
-  function.
+  [`st_simplify`](https://rdrr.io/pkg/sf/man/geos_unary.html) function.
 
 - tol:
 
@@ -75,13 +73,12 @@ the shapefile together with the clip boundary.
 ## Details
 
 The function uses the
-[`st_intersection`](https://r-spatial.github.io/sf/reference/geos_binary_ops.html)
+[`st_intersection`](https://rdrr.io/pkg/sf/man/geos_binary_ops.html)
 function to clip smaller polygons from larger ones. The clip area is
 constrained by either a numeric vector or a spatial object in the
 `limits` argument. Defining `limits` by a
-[`sf`](https://r-spatial.github.io/sf/reference/sf.html) object gives
-greater freedom for the clip area as the area does not have to be
-rectangular.
+[`sf`](https://rdrr.io/pkg/sf/man/sf.html) object gives greater freedom
+for the clip area as the area does not have to be rectangular.
 
 ## See also
 

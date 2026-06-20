@@ -616,6 +616,10 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       downsample = downsample,
       verbose = verbose
     )
+    # The WCS server has already applied the requested resolution. Preserve it
+    # during cropping and avoid a second reduction in stars::geom_stars().
+    attr(shapefiles$bathy, "wcs") <- TRUE
+    attr(shapefiles$bathy, "downsampled") <- TRUE
   }
   
   # 5. Return ####
@@ -783,11 +787,23 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
     
     if(inherits(x$shapefiles$bathy, "bathyRaster")) {
       # raster bathymetries
-      newgrid <- stars::st_as_stars(sf::st_bbox(x$clip_limits))
-      x$shapefiles$bathy$raster <- stars::st_warp(x$shapefiles$bathy$raster, newgrid)
-      
-      if(x$polarMap) {
-        x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[x$clip_limits]
+      if(isTRUE(attr(x$shapefiles$bathy, "wcs"))) {
+        if(sf::st_crs(x$shapefiles$bathy$raster) != sf::st_crs(x$clip_limits)) {
+          x$shapefiles$bathy$raster <- stars::st_warp(
+            x$shapefiles$bathy$raster,
+            crs = sf::st_crs(x$clip_limits)
+          )
+        }
+        x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[sf::st_bbox(x$clip_limits)]
+      } else {
+        # Keep the established rendering grid for shipped, ggOceanMapsLargeData,
+        # and user-created bathyRaster objects for backwards compatibility.
+        newgrid <- stars::st_as_stars(sf::st_bbox(x$clip_limits))
+        x$shapefiles$bathy$raster <- stars::st_warp(x$shapefiles$bathy$raster, newgrid)
+
+        if(x$polarMap) {
+          x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[x$clip_limits]
+        }
       }
       
       if(inherits(x$shapefiles$bathy$raster[[1]], "factor")) {
@@ -805,7 +821,7 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
       
       newgrid <- stars::st_as_stars(sf::st_bbox(x$clip_limits))
       x$shapefiles$bathy$raster <- stars::st_warp(x$shapefiles$bathy$raster, newgrid)
-      
+
       if(x$polarMap) {
         x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[x$clip_limits]
       }

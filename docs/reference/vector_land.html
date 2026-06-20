@@ -64,7 +64,7 @@
     <div class="ref-description section level2">
     <p>Extracts the land area from a <code>bathyRaster</code> object produced
   by <code><a href="raster_bathymetry.html">raster_bathymetry</a></code> and returns it as an
-  <a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">sf</a> polygon layer suitable for use in the
+  <a href="https://rdrr.io/pkg/sf/man/st.html" class="external-link">sf</a> polygon layer suitable for use in the
   <code>shapefiles</code> argument of <code><a href="basemap.html">basemap</a></code>. Warning: processing
   may take a long time if the bathymetry raster is large.</p>
     </div>
@@ -86,20 +86,20 @@ level <code>"land"</code> (when <code>estimate.land = TRUE</code>).</p></dd>
 
 
 <dt id="arg-drop-crumbs">drop.crumbs<a class="anchor" aria-label="anchor" href="#arg-drop-crumbs"></a></dt>
-<dd><p>Single numeric value specifying a threshold (area in km2) for disconnected polygons which should be removed. Set to <code>NULL</code> to bypass the removal. Uses the <a href="https://strimas.com/smoothr/reference/drop_crumbs.html" class="external-link">drop_crumbs</a> function.</p></dd>
+<dd><p>Single numeric value specifying a threshold (area in km2) for disconnected polygons which should be removed. Set to <code>NULL</code> to bypass the removal. Uses the <a href="https://rdrr.io/pkg/smoothr/man/drop_crumbs.html" class="external-link">drop_crumbs</a> function.</p></dd>
 
 
 <dt id="arg-remove-holes">remove.holes<a class="anchor" aria-label="anchor" href="#arg-remove-holes"></a></dt>
-<dd><p>Single numeric value specifying a threshold (area in km2) for holes which should be removed. Set to <code>NULL</code> to bypass the removal. Uses the <a href="https://strimas.com/smoothr/reference/fill_holes.html" class="external-link">fill_holes</a> function. Currently VERY slow.</p></dd>
+<dd><p>Single numeric value specifying a threshold (area in km2) for holes which should be removed. Set to <code>NULL</code> to bypass the removal. Uses the <a href="https://rdrr.io/pkg/smoothr/man/fill_holes.html" class="external-link">fill_holes</a> function. Currently VERY slow.</p></dd>
 
 
 <dt id="arg-smooth">smooth<a class="anchor" aria-label="anchor" href="#arg-smooth"></a></dt>
-<dd><p>Logical indicating whether the pixelated contours should be smoothed. Uses the <a href="https://strimas.com/smoothr/reference/smooth_ksmooth.html" class="external-link">smooth_ksmooth</a> function.</p></dd>
+<dd><p>Logical indicating whether the pixelated contours should be smoothed. Uses the <a href="https://rdrr.io/pkg/smoothr/man/smooth_ksmooth.html" class="external-link">smooth_ksmooth</a> function.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An <a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">sf</a> object containing the land polygons in
+    <p>An <a href="https://rdrr.io/pkg/sf/man/st.html" class="external-link">sf</a> object containing the land polygons in
   the same projection as <code>bathy$raster</code>.</p>
     </div>
     <div class="section level2">

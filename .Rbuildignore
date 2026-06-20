@@ -21,4 +21,4 @@
 ^memory$
 ^dev$
 ^\.positai$
-^tests/testthat/_snaps/basemap-snapshots$
+^tests$

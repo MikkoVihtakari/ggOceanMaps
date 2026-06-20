@@ -16,8 +16,13 @@
 #' @keywords shapefiles
 #' @author Mikko Vihtakari
 #' @examples
+#' old_options <- options(
+#'   ggOceanMaps.datapath = "path/to/ggOceanMapsLargeData",
+#'   ggOceanMaps.userpath = "path/to/your/bathymetry.nc"
+#' )
 #' shapefile_list("all")
 #' shapefile_list("Arctic") # partial matching
+#' options(old_options)
 #' @export
 
 shapefile_list <- function(name, get.data = FALSE) {
@@ -180,4 +185,3 @@ shapefile_list <- function(name, get.data = FALSE) {
   
   out
 }
-

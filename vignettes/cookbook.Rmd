@@ -38,6 +38,11 @@ instead.
 ```{r setup}
 library(ggOceanMaps)
 library(ggplot2)
+
+datapath <- Sys.getenv("GGOCEANMAPS_DATAPATH")
+userpath <- Sys.getenv("GGOCEANMAPS_USERPATH")
+if (nzchar(datapath)) options(ggOceanMaps.datapath = datapath)
+if (nzchar(userpath)) options(ggOceanMaps.userpath = userpath)
 ```
 
 # Choosing a region
@@ -232,17 +237,17 @@ Two WCS sources are wired into `basemap()` — pick by region:
 | `wcs_etopo_blues`   | `wceb` | ETOPO1 (NOAA NCEI) | Global | ~1.85 km |
 | `wcs_etopo_grays`   | `wceg` | ETOPO1 (NOAA NCEI) | Global | ~1.85 km |
 
-```{r}
+```{r, eval = FALSE}
 # North Sea — high resolution from EMODnet
 basemap(c(2, 3, 54, 55), bathy.style = "wemb")
 ```
 
-```{r}
+```{r, eval = FALSE}
 # Hawaii — global coverage from ETOPO
 basemap(c(-160, -154, 18, 23), bathy.style = "wceb")
 ```
 
-```{r, fig.width = 4, fig.height = 8}
+```{r, eval = FALSE, fig.width = 4, fig.height = 8}
 # Indonesia / Java Trench — also ETOPO (outside EMODnet)
 basemap(c(100, 130, -15, 10), bathy.style = "wceb")
 ```
@@ -252,7 +257,7 @@ custom shapefile workflow), call `wcs_bathymetry()` directly. As with the
 user-raster route above, a raw fetched raster is continuous, so pair it with
 an explicit `bathy.style = "rcb"` rather than `bathymetry = TRUE`:
 
-```{r}
+```{r, eval = FALSE}
 bathy <- wcs_bathymetry(c(2, 3, 54, 55), source = "emodnet")
 
 basemap(

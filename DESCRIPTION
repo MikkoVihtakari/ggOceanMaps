@@ -22,8 +22,7 @@ Description: Allows plotting data on bathymetric maps using 'ggplot2'. Plotting
   files. The package ships with low-resolution spatial data files and 
   higher resolution files for detailed maps are stored in the 
   'ggOceanMapsLargeData' repository on GitHub and downloaded automatically
-  when needed. The package ships instructions for AI assistants (see the
-  'AGENTS.md' file) to help them support users in making maps.
+  when needed.
 Depends: R (>= 3.5.0), ggplot2 (>= 3.4.0)
 Imports: sf, stars, methods, utils, smoothr, units, grDevices, stats, tools
 Suggests:

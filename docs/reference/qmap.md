@@ -1,8 +1,8 @@
 # Quick map
 
 `qmap` is a shortcut similar to ggplot2's
-[`qplot`](https://ggplot2.tidyverse.org/reference/qplot.html) designed
-to quickly plot data with a limited range of options.
+[`qplot`](https://rdrr.io/pkg/ggplot2/man/qplot.html) designed to
+quickly plot data with a limited range of options.
 
 ## Usage
 
@@ -70,11 +70,11 @@ qmap(
     longitude, the second element the end longitude (counter-clockwise),
     the third element the minimum latitude, and the fourth element the
     maximum latitude of the bounding box. Also accepts
-    [`sf::st_bbox`](https://r-spatial.github.io/sf/reference/st_bbox.html)
-    type named vectors with limits in any order. The coordinates can be
-    given as decimal degrees or coordinate units for shapefiles used by
-    a projected map. Produces a rectangular map. Latitude limits not
-    given in min-max order are automatically ordered to respect this
+    [`sf::st_bbox`](https://rdrr.io/pkg/sf/man/st_bbox.html) type named
+    vectors with limits in any order. The coordinates can be given as
+    decimal degrees or coordinate units for shapefiles used by a
+    projected map. Produces a rectangular map. Latitude limits not given
+    in min-max order are automatically ordered to respect this
     requirement.
 
   - **single integer** between 30 and 88 or -88 and -30 produces a polar
@@ -93,13 +93,12 @@ qmap(
 
 - crs:
 
-  [Coordinate reference
-  system](https://r-spatial.github.io/sf/reference/st_crs.html) (CRS)
-  for the map. If `NULL` (default), the CRS is selected automatically
-  based on `limits`, `data`, or `shapefiles`. Passed to
-  [`st_crs`](https://r-spatial.github.io/sf/reference/st_crs.html).
-  Typically integers giving the EPGS code are the easiest. Cannot be
-  used simultaneously with `rotate`.
+  [Coordinate reference system](https://rdrr.io/pkg/sf/man/st_crs.html)
+  (CRS) for the map. If `NULL` (default), the CRS is selected
+  automatically based on `limits`, `data`, or `shapefiles`. Passed to
+  [`st_crs`](https://rdrr.io/pkg/sf/man/st_crs.html). Typically integers
+  giving the EPGS code are the easiest. Cannot be used simultaneously
+  with `rotate`.
 
 - bathymetry:
 
@@ -123,7 +122,7 @@ qmap(
 - legend.position:
 
   The position for ggplot2 legend. See the argument with the same name
-  in [theme](https://ggplot2.tidyverse.org/reference/theme.html).
+  in [theme](https://rdrr.io/pkg/ggplot2/man/theme.html).
 
 - lon.interval, lat.interval:
 
@@ -142,12 +141,12 @@ qmap(
   Integer defining the downsampling rate for raster bathymetries. A
   value of 0 (default) does not downsample, 1 skips every second row, 2
   every second and third. See
-  [`geom_stars`](https://r-spatial.github.io/stars/reference/geom_stars.html)
+  [`geom_stars`](https://rdrr.io/pkg/stars/man/geom_stars.html)
 
 - bathy.alpha:
 
   Transparency parameter for the bathymetry fill color. See
-  [scale_alpha](https://ggplot2.tidyverse.org/reference/scale_alpha.html).
+  [scale_alpha](https://rdrr.io/pkg/ggplot2/man/scale_alpha.html).
 
 - land.col, gla.col, grid.col:
 
@@ -191,9 +190,8 @@ qmap(
 
 ## Value
 
-Returns a [ggplot](https://ggplot2.tidyverse.org/reference/ggplot.html)
-map, which can be assigned to an object and modified as any ggplot
-object.
+Returns a [ggplot](https://rdrr.io/pkg/ggplot2/man/ggplot.html) map,
+which can be assigned to an object and modified as any ggplot object.
 
 ## See also
 
