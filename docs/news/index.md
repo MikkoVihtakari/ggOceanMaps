@@ -3,13 +3,14 @@
 ## ggOceanMaps 3.0.0
 
 **Bringing ggOceanMaps to the AI age.** From this version on,
-ggOceanMaps focuses on helping AI agents better support their users, and
-is itself developed and tested with the help of AI (Claude Code, GitHub
-Copilot). The package now ships an `AGENTS.md` file with instructions
-for AI assistants, alongside a much expanded and reorganised set of
-articles and recipes. This is a major release with new on-demand
-bathymetry sources, build-your-own shapefile tools, a comprehensive
-automated test suite, and an overhauled documentation site.
+ggOceanMaps attempts to help AI agents better support their users, and
+is itself developed and tested with the help of AI (Claude Code, Codex),
+enabling a faster development cycle and more robust code. The package
+now ships an `AGENTS.md` file and memory folder with instructions for AI
+assistants, alongside a much expanded and reorganised set of articles
+and recipes. This is a major release with new on-demand bathymetry
+sources, build-your-own shapefile tools, a comprehensive automated test
+suite, and an overhauled documentation site.
 
 ### New features
 
@@ -189,7 +190,7 @@ CRAN release: 2023-07-04
   required rewriting of most functions, new bugs have almost certainly
   been introduced.
 - Bathymetry system redesigned (see
-  [this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.html))
+  [this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features-v2.html))
 - Decimal degree maps can now be plotted across the antimeridian.
 - Added spatial data to ggOceanMaps making the ggOceanMapsData package
   not needed any longer.

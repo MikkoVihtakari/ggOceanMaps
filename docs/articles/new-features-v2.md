@@ -38,8 +38,8 @@ ggOceanMaps:
 basemap(c(100, 160, -20, 30), bathymetry = TRUE)
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-2-1.png) Processing
-time: 1.4 sec
+![](new-features-v2_files/figure-html/unnamed-chunk-2-1.png) Processing
+time: 1.5 sec
 
 The **low-resolution default bathymetry is optimized for processing
 time** and **there are higher-resolution datasets available** but you’ll
@@ -57,8 +57,8 @@ webpage). Use and download this dataset by simply specifying the
 basemap(c(100, 160, -20, 30), bathy.style = "rcb")
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-3-1.png) Processing
-time: 8.4 sec
+![](new-features-v2_files/figure-html/unnamed-chunk-3-1.png) Processing
+time: 10.2 sec
 
 Then the best bit. If this resolution still is not enough, **you can use
 any bathymetry grid you want** as long as
@@ -80,8 +80,8 @@ Now we can make maps using 15 arc-second GEBCO data:
 basemap(c(100, 160, -20, 30), bathy.style = "rub")
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-4-1.png) Processing
-time: 16.8 sec
+![](new-features-v2_files/figure-html/unnamed-chunk-4-1.png) Processing
+time: 19.3 sec
 
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 now has `downsample` argument which can be used to reduce the resolution
@@ -93,8 +93,8 @@ lower the resolution, the smaller the file size):
 basemap(c(100, 160, -20, 30), bathy.style = "rub", downsample = 10)
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-5-1.png) Processing
-time: 19.6 sec
+![](new-features-v2_files/figure-html/unnamed-chunk-5-1.png) Processing
+time: 21.6 sec
 
 Note how the processing time does not change in this case, but it seems
 to be shorter for smaller maps.
@@ -119,7 +119,7 @@ bathy <- raster_bathymetry(stars::st_as_stars(marmap::as.raster(mar_bathy)),
 basemap(dt, shapefiles = list(land = dd_land, bathy = bathy), bathy.style = "rcb")
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-6-1.png)
+![](new-features-v2_files/figure-html/unnamed-chunk-6-1.png)
 
 Note that shapefiles providing better polygon bathymetry resolution in
 ggOceanMapsLargeData have been deprecated for now. Remaking all
@@ -148,7 +148,7 @@ dt <- data.frame(
 dt <- get_depth(dt)
 ```
 
-Processing time: 7.2 sec
+Processing time: 8.4 sec
 
 ``` r
 
@@ -158,7 +158,7 @@ qmap(dt, color = depth) +
 
 ![Depth of data frame coordinates extracted from the raster_continuous
 ETOPO 60 arc-second dataset. Grey (NA) indicates coordinates on
-land.](new-features_files/figure-html/unnamed-chunk-8-1.png)
+land.](new-features-v2_files/figure-html/unnamed-chunk-8-1.png)
 
 Depth of data frame coordinates extracted from the raster_continuous
 ETOPO 60 arc-second dataset. Grey (NA) indicates coordinates on land.
@@ -180,7 +180,7 @@ to flat-Earth on the fly while plotting maps:
 basemap(c(-20, 15, 50, 70), bathy.style = "rub")
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-9-1.png)
+![](new-features-v2_files/figure-html/unnamed-chunk-9-1.png)
 
 The map above is entirely produced from decimal degree data, which are
 transformed during plotting. Doing such transformation within a
@@ -195,7 +195,7 @@ We **can now also plot maps crossing the anti-meridian**. Use the
 basemap(c(110, -110, 10, 55), bathymetry = TRUE, rotate = TRUE)
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-10-1.png)
+![](new-features-v2_files/figure-html/unnamed-chunk-10-1.png)
 
 Round-Earth is not only a blessing and there are still some **unresolved
 issues**, such as lines from decimal degree shapes that could not be
@@ -207,7 +207,7 @@ glaciers:
 basemap(limits = -60, glaciers = TRUE)
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-11-1.png)
+![](new-features-v2_files/figure-html/unnamed-chunk-11-1.png)
 
 A simple fix for now is to use projected shapefiles from
 ggOceanMapsLargeData:
@@ -217,7 +217,7 @@ ggOceanMapsLargeData:
 basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic")
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-12-1.png)
+![](new-features-v2_files/figure-html/unnamed-chunk-12-1.png)
 
 If someone has an idea how to fix this dissolve issue, please contact
 the developer.
@@ -243,7 +243,7 @@ cowplot::plot_grid(
 
 ![Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b)
 3995, i.e. Arctic stereographic and c) 32633, i.e. UTM zone
-33N.](new-features_files/figure-html/unnamed-chunk-13-1.png)
+33N.](new-features-v2_files/figure-html/unnamed-chunk-13-1.png)
 
 Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b) 3995,
 i.e. Arctic stereographic and c) 32633, i.e. UTM zone 33N.
@@ -265,7 +265,7 @@ qmap(data.frame(lat = c(34, 38, 41, 32), lon = c(138, 137, 144, 129)),
      shape = I(0), size = I(4))
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-14-1.png)
+![](new-features-v2_files/figure-html/unnamed-chunk-14-1.png)
 
 ## dist2land goes round-Earth
 
@@ -286,7 +286,7 @@ dt <- data.frame(
 dt <- dist2land(dt, verbose = FALSE)
 ```
 
-Processing time: 0.8 sec
+Processing time: 0.9 sec
 
 ``` r
 
@@ -294,7 +294,7 @@ qmap(dt, color = ldist) +
   scale_color_viridis_c()
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-16-1.png)
+![](new-features-v2_files/figure-html/unnamed-chunk-16-1.png)
 
 The function is still somewhat slow for large datasets and there
 currently is no parallellization option. If you have large datasets,
@@ -316,4 +316,4 @@ cowplot::plot_grid(
 )
 ```
 
-![](new-features_files/figure-html/unnamed-chunk-17-1.png)
+![](new-features-v2_files/figure-html/unnamed-chunk-17-1.png)

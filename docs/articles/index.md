@@ -13,9 +13,9 @@
 - [ggOceanMaps User
   Manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.md):
 - [New features in ggOceanMaps version
-  3](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features-v3.md):
+  2](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features-v2.md):
 - [New features in ggOceanMaps version
-  2](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.md):
+  3](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features-v3.md):
 - [SI2022
   poster](https://mikkovihtakari.github.io/ggOceanMaps/articles/poster.md):
 - [Premade

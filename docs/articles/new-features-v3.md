@@ -147,7 +147,7 @@ and
 [`qmap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/qmap.md)
 calls keep working. If you used the older bathymetry styles, see the
 [version 2 release
-notes](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.md)
+notes](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features-v2.md)
 and the [Bathymetry
 article](https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.md)
 for the current `bathy.style` names.

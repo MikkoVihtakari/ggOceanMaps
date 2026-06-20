@@ -331,15 +331,23 @@ The bathymetry data are not the property of ggOceanMaps or the Institute
 of Marine Research. Cite the source of any bathymetry you publish:
 
 - **Shipped raster (`rbb`) and ggOceanMapsLargeData rasters / contours
-  (`rcb`, `pb`, `cb`)** derive from the ETOPO 2022 15 arc-second global
-  relief model (NOAA National Centers for Environmental Information,
-  <https://doi.org/10.25921/fd45-gt74>).
-- **ETOPO1 Web Coverage Service (`wceb`)** is Amante & Eakins 2009, NOAA
-  NGDC (<https://www.ncei.noaa.gov/products/etopo-global-relief-model>).
-- **EMODnet Web Coverage Service (`wemb`)** is distributed under CC-BY
-  (<https://emodnet.ec.europa.eu/en/bathymetry>).
-- **User raster (`rub`)** — cite whatever dataset you supplied (GEBCO,
-  ETOPO, IBCAO, …).
+  (`rcb`, `pb`, `cb`).** [ETOPO 2022 15 Arc-Second Global Relief
+  Model](https://www.ncei.noaa.gov/products/etopo-global-relief-model)
+  (NOAA National Centers for Environmental Information, DOI:
+  10.25921/fd45-gt74). Distributed under the [U.S. Government Work
+  license](https://www.usa.gov/government-works).
+- **Global Web Coverage Service bathymetry (`wceb` / `wceg`).** [ETOPO1
+  Global Relief
+  Model](https://www.ncei.noaa.gov/products/etopo-global-relief-model)
+  served live by NOAA NCEI (Amante & Eakins 2009, NOAA NGDC, DOI:
+  10.7289/V5C8276M). Distributed under the [U.S. Government Work
+  license](https://www.usa.gov/government-works).
+- **European Web Coverage Service bathymetry (`wemb` / `wemg`).**
+  [EMODnet Bathymetry](https://emodnet.ec.europa.eu/en/bathymetry).
+  Distributed under the [CC BY 4.0
+  license](https://creativecommons.org/licenses/by/4.0/).
+- **User raster (`rub` / `rug`).** Whatever dataset you supplied (GEBCO,
+  ETOPO, IBCAO, …); cite it under its own licence.
 
 The land and glacier polygons, and the regional pre-made shapefiles,
 have their own sources. See the [Citations and data
