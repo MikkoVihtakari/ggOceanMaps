@@ -7,62 +7,97 @@ library(ggOceanMaps)
 
 ## ggOceanMaps enters the AI age
 
-Version 3 marks a change. From now on, ggOceanMaps will be developed
-with the help of AI coding assistants (Claude Code, Codex), meaning the
-code will no longer necessarily be written by the developer (but it will
-still be reviewed by the developer). There’s an increased focus on
-writing documentation so that AI agents can better assist their users.
-Plotting maps with ggOceanMaps data should be a one-sentence request,
-whether you type it yourself or ask an assistant to do it for you.
+This is a major update that brings ggOceanMaps to the AI age. From
+version 3 on, the package is developed with the help of AI coding
+assistants (Claude Code, Codex), which means the code is no longer
+necessarily written by me — but I do still review all of it. For me this
+has meant faster and, so far, more robust development. It also comes
+with an increased focus on documentation, so that AI agents can better
+help their users: making a map with ggOceanMaps should be a one-sentence
+request, whether you type it yourself or hand it to an assistant.
 
-The most visible part of this shift is the new AI-focused files in the
-GitHub version for the package
+The most visible part of this shift is a set of AI-focused files in the
+GitHub version of the package:
 [`AGENTS.md`](https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/AGENTS.md),
-CLAUDE.md, and the memory folder. It gives AI assistants concise,
+`CLAUDE.md`, and the `memory/` folder. They give AI assistants concise,
 accurate instructions for *using* ggOceanMaps — the projection rules,
 the `shapefiles` contract, how
 [`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md)
-works, and the common pitfalls — so they spend less time guessing and
-more time helping. Further, these files should help the AI agents of
-contributors get their bearings and develop new features for
-ggOceanMaps. The documentation site was also reorganized to accommodate
-AI agents: a short [user
+works, the common pitfalls — so they spend less time guessing and more
+time helping, and they help contributors’ own agents get their bearings
+when developing new features. The documentation site was reorganised
+around the same idea: a short [user
 manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.md)
-that links to focused, in-depth articles.
+that links out to focused, in-depth articles.
+
+So next time you ask your AI assistant for a ggOceanMaps map, point it
+at <https://github.com/MikkoVihtakari/ggOceanMaps/> and ask it to
+familiarise itself with the package before answering — you should get
+noticeably better results.
 
 Everything below is new or substantially improved in version 3.
 
-## On-demand high-resolution bathymetry
+## High-resolution maps of Norwegian fjords
 
-The biggest functional addition is
-[`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md):
-high-resolution bathymetry downloaded on demand from Web Coverage
-Services, with no manual file handling. You select it through the
-`bathy.style` argument and ggOceanMaps fetches, caches, and renders the
-right tiles for your map extent.
+The headline feature of v3.0.0 is something I had wanted to add for a
+long time but never found the time for. Half an hour with Claude Opus
+4.8 solved it, and ggOceanMaps can finally make high-resolution maps of
+Norwegian fjords — a feature many of you have asked for. The new
+[`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md)
+function downloads [EMODnet](https://emodnet.ec.europa.eu/en/bathymetry)
+bathymetry (~115 m resolution) directly from their Web Coverage Service.
+There are no files to manage: pick the style through `bathy.style` and
+ggOceanMaps fetches, caches, and renders the right tiles for your map
+extent.
 
 Two sources are available:
 
-- **EMODnet** (~115 m, European waters) —
-  `bathy.style = "wcs_emodnet_blues"` (`"wemb"`) or
-  `"wcs_emodnet_grays"` (`"wemg"`).
-- **ETOPO1 from NOAA NCEI** (~1.85 km, global) —
-  `bathy.style = "wcs_etopo_blues"` (`"wceb"`) or `"wcs_etopo_grays"`
-  (`"wceg"`). Use this when EMODnet has no coverage.
+- **EMODnet** (~115 m, European waters) — `bathy.style = "wemb"` (blues)
+  or `"wemg"` (greys).
+- **ETOPO1 from NOAA NCEI** (~1.85 km, global) — `bathy.style = "wceb"`
+  or `"wceg"`. Use this when EMODnet has no coverage for your region.
+
+Coupled with the detailed EMODnet land shapes (`shapefiles = "Europe"`),
+this produces the highest-resolution maps ggOceanMaps has generated so
+far. Here is Kongsfjorden in Svalbard, drawn over the detailed Svalbard
+land shapes:
 
 ``` r
 
-# High-resolution EMODnet bathymetry around Tromsø, downloaded on the fly
-basemap(c(18.4, 19.3, 69.5, 69.9), bathy.style = "wemb")
+basemap(limits = c(10.9, 12.65, 78.83, 79.12), bathy.style = "wemb", shapefiles = "Svalbard")
 ```
 
+![Kongsfjorden, Svalbard, with ~115 m EMODnet bathymetry and the
+detailed Svalbard land
+shapes.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/kongsfjorden_wemb.png)
+
+Kongsfjorden, Svalbard, with ~115 m EMODnet bathymetry and the detailed
+Svalbard land shapes.
+
+And Porsangerfjorden on the Finnmark coast of mainland Norway, with the
+EMODnet `"Europe"` land shapes:
+
+``` r
+
+basemap(limits = c(23.9, 26.5, 69.9, 71.15), shapefiles = "Europe", bathy.style = "wemb")
+```
+
+![Porsangerfjorden, northern Norway, with ~115 m EMODnet bathymetry and
+the EMODnet “Europe” land
+shapes.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/porsangerfjorden_wemb.png)
+
+Porsangerfjorden, northern Norway, with ~115 m EMODnet bathymetry and
+the EMODnet “Europe” land shapes.
+
+The downloaded tiles are cached under
+`getOption("ggOceanMaps.datapath")`, so re-rendering the exact same map
+does not re-download anything. Do keep an eye on the size of that
+folder, though — high-resolution tiles can make it bloat up quickly.
 Bounding boxes outside a source’s coverage fail cleanly with a pointer
-to the right alternative, large boxes are tiled and mosaicked
-automatically, and the downloaded tiles are cached under
-`getOption("ggOceanMaps.datapath")` so the next map is instant. See the
-[Bathymetry
+to the right alternative, and large areas are tiled and mosaicked
+automatically. See the [Bathymetry
 article](https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.md)
-for the full list of sources and rendered examples.
+for the full list of sources and more examples.
 
 ## Build your own shapefiles
 
@@ -137,7 +172,7 @@ extent is kept:
 basemap(c(-20, 30, 50, 70), bathymetry = TRUE)
 ```
 
-![](new-features-v3_files/figure-html/unnamed-chunk-4-1.png)
+![](new-features-v3_files/figure-html/unnamed-chunk-5-1.png)
 
 The map above is built entirely from the low-resolution data shipped
 with the package, reprojected to Arctic stereographic on the fly — no

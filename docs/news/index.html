@@ -79,6 +79,8 @@
 <ul><li>Fixed land being clipped too early on projected (polar-stereographic) maps with decimal-degree limits, e.g. <code>basemap(c(-20, 30, 50, 70))</code> cut off northern Norway. The land clip boundary is now densified before back-projecting to WGS84.</li>
 <li>Fixed antimeridian / wide-span land clipping by routing the clip through the projected map CRS, fixing wrong land for <code>basemap(c(120, -120, 60, 80))</code> and a topology crash for rotated antimeridian data input.</li>
 <li>Fixed a crash (<code>st_cast()</code> on a degenerate <code>GEOMETRYCOLLECTION</code>) for some custom <code><a href="../reference/vector_land.html">vector_land()</a></code> layers at some map limits.</li>
+<li>Fixed a WCS <code>bathy.style</code> (<code>"wemb"</code> / <code>"wceb"</code>, etc.) failing with “st_transform applied to an object of class ‘logical’” when combined with an explicitly named premade shapefile set, e.g. <code>basemap(..., bathy.style = "wemb", shapefiles = "Svalbard")</code>. The on-demand bathymetry is now fetched in that case too.</li>
+<li>Fixed WCS bathymetry leaving white gaps around the edges of projected maps (e.g. on the Svalbard or Europe CRS). The coverage is now requested for the full projected, expand-factor-padded map area rather than the raw decimal-degree limits, so it fills the whole panel.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="testing-3-0-0">Testing<a class="anchor" aria-label="anchor" href="#testing-3-0-0"></a></h3>

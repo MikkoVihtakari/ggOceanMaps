@@ -81,6 +81,15 @@ suite, and an overhauled documentation site.
   some custom
   [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md)
   layers at some map limits.
+- Fixed a WCS `bathy.style` (`"wemb"` / `"wceb"`, etc.) failing with
+  “st_transform applied to an object of class ‘logical’” when combined
+  with an explicitly named premade shapefile set, e.g.
+  `basemap(..., bathy.style = "wemb", shapefiles = "Svalbard")`. The
+  on-demand bathymetry is now fetched in that case too.
+- Fixed WCS bathymetry leaving white gaps around the edges of projected
+  maps (e.g. on the Svalbard or Europe CRS). The coverage is now
+  requested for the full projected, expand-factor-padded map area rather
+  than the raw decimal-degree limits, so it fills the whole panel.
 
 ### Testing
 

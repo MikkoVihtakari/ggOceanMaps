@@ -90,55 +90,81 @@
 <div class="section level2">
 <h2 id="ggoceanmaps-enters-the-ai-age">ggOceanMaps enters the AI age<a class="anchor" aria-label="anchor" href="#ggoceanmaps-enters-the-ai-age"></a>
 </h2>
-<p>Version 3 marks a change. From now on, ggOceanMaps will be developed
-with the help of AI coding assistants (Claude Code, Codex), meaning the
-code will no longer necessarily be written by the developer (but it will
-still be reviewed by the developer). There’s an increased focus on
-writing documentation so that AI agents can better assist their users.
-Plotting maps with ggOceanMaps data should be a one-sentence request,
-whether you type it yourself or ask an assistant to do it for you.</p>
-<p>The most visible part of this shift is the new AI-focused files in
-the GitHub version for the package <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/AGENTS.md" class="external-link"><code>AGENTS.md</code></a>,
-CLAUDE.md, and the memory folder. It gives AI assistants concise,
-accurate instructions for <em>using</em> ggOceanMaps — the projection
-rules, the <code>shapefiles</code> contract, how
-<code><a href="../reference/transform_coord.html">transform_coord()</a></code> works, and the common pitfalls — so they
-spend less time guessing and more time helping. Further, these files
-should help the AI agents of contributors get their bearings and develop
-new features for ggOceanMaps. The documentation site was also
-reorganized to accommodate AI agents: a short <a href="ggOceanMaps.html">user manual</a> that links to focused, in-depth
-articles.</p>
+<p>This is a major update that brings ggOceanMaps to the AI age. From
+version 3 on, the package is developed with the help of AI coding
+assistants (Claude Code, Codex), which means the code is no longer
+necessarily written by me — but I do still review all of it. For me this
+has meant faster and, so far, more robust development. It also comes
+with an increased focus on documentation, so that AI agents can better
+help their users: making a map with ggOceanMaps should be a one-sentence
+request, whether you type it yourself or hand it to an assistant.</p>
+<p>The most visible part of this shift is a set of AI-focused files in
+the GitHub version of the package: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/AGENTS.md" class="external-link"><code>AGENTS.md</code></a>,
+<code>CLAUDE.md</code>, and the <code>memory/</code> folder. They give
+AI assistants concise, accurate instructions for <em>using</em>
+ggOceanMaps — the projection rules, the <code>shapefiles</code>
+contract, how <code><a href="../reference/transform_coord.html">transform_coord()</a></code> works, the common pitfalls
+— so they spend less time guessing and more time helping, and they help
+contributors’ own agents get their bearings when developing new
+features. The documentation site was reorganised around the same idea: a
+short <a href="ggOceanMaps.html">user manual</a> that links out to
+focused, in-depth articles.</p>
+<p>So next time you ask your AI assistant for a ggOceanMaps map, point
+it at <a href="https://github.com/MikkoVihtakari/ggOceanMaps/" class="external-link uri">https://github.com/MikkoVihtakari/ggOceanMaps/</a> and ask
+it to familiarise itself with the package before answering — you should
+get noticeably better results.</p>
 <p>Everything below is new or substantially improved in version 3.</p>
 </div>
 <div class="section level2">
-<h2 id="on-demand-high-resolution-bathymetry">On-demand high-resolution bathymetry<a class="anchor" aria-label="anchor" href="#on-demand-high-resolution-bathymetry"></a>
+<h2 id="high-resolution-maps-of-norwegian-fjords">High-resolution maps of Norwegian fjords<a class="anchor" aria-label="anchor" href="#high-resolution-maps-of-norwegian-fjords"></a>
 </h2>
-<p>The biggest functional addition is <code><a href="../reference/wcs_bathymetry.html">wcs_bathymetry()</a></code>:
-high-resolution bathymetry downloaded on demand from Web Coverage
-Services, with no manual file handling. You select it through the
-<code>bathy.style</code> argument and ggOceanMaps fetches, caches, and
-renders the right tiles for your map extent.</p>
+<p>The headline feature of v3.0.0 is something I had wanted to add for a
+long time but never found the time for. Half an hour with Claude Opus
+4.8 solved it, and ggOceanMaps can finally make high-resolution maps of
+Norwegian fjords — a feature many of you have asked for. The new
+<code><a href="../reference/wcs_bathymetry.html">wcs_bathymetry()</a></code> function downloads <a href="https://emodnet.ec.europa.eu/en/bathymetry" class="external-link">EMODnet</a> bathymetry
+(~115 m resolution) directly from their Web Coverage Service. There are
+no files to manage: pick the style through <code>bathy.style</code> and
+ggOceanMaps fetches, caches, and renders the right tiles for your map
+extent.</p>
 <p>Two sources are available:</p>
 <ul>
 <li>
 <strong>EMODnet</strong> (~115 m, European waters) —
-<code>bathy.style = "wcs_emodnet_blues"</code> (<code>"wemb"</code>) or
-<code>"wcs_emodnet_grays"</code> (<code>"wemg"</code>).</li>
+<code>bathy.style = "wemb"</code> (blues) or <code>"wemg"</code>
+(greys).</li>
 <li>
 <strong>ETOPO1 from NOAA NCEI</strong> (~1.85 km, global) —
-<code>bathy.style = "wcs_etopo_blues"</code> (<code>"wceb"</code>) or
-<code>"wcs_etopo_grays"</code> (<code>"wceg"</code>). Use this when
-EMODnet has no coverage.</li>
+<code>bathy.style = "wceb"</code> or <code>"wceg"</code>. Use this when
+EMODnet has no coverage for your region.</li>
 </ul>
+<p>Coupled with the detailed EMODnet land shapes
+(<code>shapefiles = "Europe"</code>), this produces the
+highest-resolution maps ggOceanMaps has generated so far. Here is
+Kongsfjorden in Svalbard, drawn over the detailed Svalbard land
+shapes:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># High-resolution EMODnet bathymetry around Tromsø, downloaded on the fly</span></span>
-<span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18.4</span>, <span class="fl">19.3</span>, <span class="fl">69.5</span>, <span class="fl">69.9</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"wemb"</span><span class="op">)</span></span></code></pre></div>
-<p>Bounding boxes outside a source’s coverage fail cleanly with a
-pointer to the right alternative, large boxes are tiled and mosaicked
-automatically, and the downloaded tiles are cached under
-<code>getOption("ggOceanMaps.datapath")</code> so the next map is
-instant. See the <a href="bathymetry.html">Bathymetry article</a> for
-the full list of sources and rendered examples.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10.9</span>, <span class="fl">12.65</span>, <span class="fl">78.83</span>, <span class="fl">79.12</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"wemb"</span>, shapefiles <span class="op">=</span> <span class="st">"Svalbard"</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/kongsfjorden_wemb.png" alt="Kongsfjorden, Svalbard, with ~115 m EMODnet bathymetry and the detailed Svalbard land shapes."><div class="figcaption">Kongsfjorden, Svalbard, with ~115 m EMODnet
+bathymetry and the detailed Svalbard land shapes.</div>
+</div>
+<p>And Porsangerfjorden on the Finnmark coast of mainland Norway, with
+the EMODnet <code>"Europe"</code> land shapes:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">23.9</span>, <span class="fl">26.5</span>, <span class="fl">69.9</span>, <span class="fl">71.15</span><span class="op">)</span>, shapefiles <span class="op">=</span> <span class="st">"Europe"</span>, bathy.style <span class="op">=</span> <span class="st">"wemb"</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/porsangerfjorden_wemb.png" alt="Porsangerfjorden, northern Norway, with ~115 m EMODnet bathymetry and the EMODnet “Europe” land shapes."><div class="figcaption">Porsangerfjorden, northern Norway, with ~115 m
+EMODnet bathymetry and the EMODnet “Europe” land shapes.</div>
+</div>
+<p>The downloaded tiles are cached under
+<code>getOption("ggOceanMaps.datapath")</code>, so re-rendering the
+exact same map does not re-download anything. Do keep an eye on the size
+of that folder, though — high-resolution tiles can make it bloat up
+quickly. Bounding boxes outside a source’s coverage fail cleanly with a
+pointer to the right alternative, and large areas are tiled and
+mosaicked automatically. See the <a href="bathymetry.html">Bathymetry
+article</a> for the full list of sources and more examples.</p>
 </div>
 <div class="section level2">
 <h2 id="build-your-own-shapefiles">Build your own shapefiles<a class="anchor" aria-label="anchor" href="#build-your-own-shapefiles"></a>
@@ -149,7 +175,7 @@ the full list of sources and rendered examples.</p>
 it: <code><a href="../reference/vector_bathymetry.html">vector_bathymetry()</a></code> for depth-contour polygons (as
 before) and the new <code><a href="../reference/vector_land.html">vector_land()</a></code> for a matching land
 polygon extracted from the same grid.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/raster_bathymetry.html">raster_bathymetry</a></span><span class="op">(</span></span>
 <span>  bathy <span class="op">=</span> <span class="st">"path/to/your/grid.nc"</span>,</span>
 <span>  depths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">500</span>, <span class="fl">1000</span><span class="op">)</span>,</span>
@@ -208,9 +234,9 @@ cut off land near the map edges —
 <code>basemap(c(-20, 30, 50, 70))</code> clipped off northern Norway.
 The clip boundary is now densified before reprojection, so the full
 extent is kept:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="new-features-v3_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="new-features-v3_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="576"></p>
 <p>The map above is built entirely from the low-resolution data shipped
 with the package, reprojected to Arctic stereographic on the fly — no
 downloads required.</p>
