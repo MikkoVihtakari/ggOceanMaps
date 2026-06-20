@@ -633,53 +633,76 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
 ## Crop shapefiles ####
 
 basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NULL) {
-  
-  # Pre-clip shapefiles in WGS84 when rotating across the anti-meridian
-  # to prevent polygon transformation artifacts. Without this, land polygons
-  # that cross the "new anti-meridian" (opposite side of lon_0) get distorted
-  # during st_transform, producing incorrect land shapes.
-  
-  if(x$rotate && !x$polarMap && sf::st_is_longlat(x$shapefiles$land)) {
-    dd_lims <- x$limits
-    if(length(dd_lims) == 4 && dd_lims["xmin"] > dd_lims["xmax"]) {
-      
+
+  # Warp a source raster to the map CRS onto a target grid that PRESERVES the
+  # source resolution. stars::st_as_stars(bbox) defaults to a coarse ~256-cell
+  # grid, which heavily downsampled the bathymetry (e.g. dd_rbathy is 7200x3600
+  # but a polar basemap(60) ended up 255x255). Cell counts are derived from the
+  # source cell size measured over the clip region and capped at the source's
+  # own dimensions, so the bathymetry keeps its native detail by default. Use
+  # the `downsample` argument of basemap() to reduce it at plot time.
+  warp_to_clip <- function(src, clip) {
+    d <- dim(src)
+    src_bb <- sf::st_bbox(src)
+    src_dx <- as.numeric(abs(src_bb["xmax"] - src_bb["xmin"]) / d["x"])
+    src_dy <- as.numeric(abs(src_bb["ymax"] - src_bb["ymin"]) / d["y"])
+    # Count source cells spanning the clip region (measured in the source CRS).
+    # Densify before transforming so curved extents are captured, not just the
+    # four corners (e.g. a polar clip whose bbox corners collapse in latitude).
+    clip_poly <- smoothr::densify(sf::st_as_sfc(sf::st_bbox(clip)), n = 100)
+    clip_src <- sf::st_bbox(sf::st_transform(clip_poly, sf::st_crs(src)))
+    n_src <- max(1,
+      (as.numeric(clip_src["xmax"] - clip_src["xmin"]) / src_dx) *
+      (as.numeric(clip_src["ymax"] - clip_src["ymin"]) / src_dy))
+    # Pick one square cell size in the map CRS that reproduces that cell count,
+    # so the warped raster keeps the source's detail without distorting the
+    # aspect ratio (independent nx/ny from lon/lat extents fails for polar maps).
+    tb <- sf::st_bbox(clip)
+    x_ext <- as.numeric(tb["xmax"] - tb["xmin"])
+    y_ext <- as.numeric(tb["ymax"] - tb["ymin"])
+    csize <- sqrt((x_ext * y_ext) / n_src)
+    cap <- 4000L   # upper bound per dimension so huge extents stay plottable
+    nx <- max(1L, min(cap, as.integer(ceiling(x_ext / csize))))
+    ny <- max(1L, min(cap, as.integer(ceiling(y_ext / csize))))
+    newgrid <- stars::st_as_stars(tb, nx = nx, ny = ny, values = NA_real_)
+    stars::st_warp(src, newgrid)
+  }
+
+  # Break land/glacier polygons at the rotated antimeridian before they are
+  # transformed to a lon_0-shifted geographic map CRS. A polygon that crosses
+  # the new antimeridian (the meridian opposite the central meridian, lon_0 +
+  # 180) is otherwise "unwrapped" into a giant horizontal span during
+  # transformation. Even an off-screen landmass such as Antarctica then becomes
+  # a degenerate >180-degree ring, and ggplot2 fails to draw the entire land
+  # layer (issue #44; affects e.g. basemap(c(100, -120, -12, -57), rotate =
+  # TRUE) and basemap(c(40, -70, -37, 40), rotate = TRUE)). Cutting a thin slit
+  # along the seam splits such polygons cleanly without visibly altering the map.
+
+  if(!x$polarMap && is.null(crs) && !is.na(sf::st_crs(x$crs)) && sf::st_is_longlat(x$crs)) {
+    lon_0 <- suppressWarnings(as.numeric(
+      sub(".*\\+lon_0=([-0-9.]+).*", "\\1", sf::st_crs(x$crs)$proj4string)))
+
+    if(length(lon_0) == 1 && !is.na(lon_0) && (lon_0 %% 360) != 0) {
+
       s2_prev <- sf::sf_use_s2()
       suppressMessages(sf::sf_use_s2(FALSE))
       on.exit(suppressMessages(sf::sf_use_s2(s2_prev)), add = TRUE)
-      
-      # Buffer of 30 degrees ensures enough land is kept beyond the map limits
-      # (which are further expanded by expand.factor) while still excluding
-      # polygons near the new anti-meridian that cause transformation artifacts
-      lon_buffer <- 30
-      pre_xmin <- max(-180, dd_lims["xmin"] - lon_buffer)
-      pre_xmax <- min(180, dd_lims["xmax"] + lon_buffer)
-      
-      # Only pre-clip if the buffered region still crosses the anti-meridian
-      if(pre_xmin > pre_xmax) {
-        box_east <- sf::st_as_sfc(sf::st_bbox(
-          c(xmin = pre_xmin, xmax = 180, ymin = -90, ymax = 90),
-          crs = sf::st_crs(4326)))
-        box_west <- sf::st_as_sfc(sf::st_bbox(
-          c(xmin = -180, xmax = pre_xmax, ymin = -90, ymax = 90),
-          crs = sf::st_crs(4326)))
-        wgs84_clip <- suppressMessages(sf::st_union(box_east, box_west))
-        
-        x$shapefiles$land <- suppressWarnings(suppressMessages(
-          sf::st_intersection(sf::st_make_valid(x$shapefiles$land), wgs84_clip)
-        ))
-        
-        if(!is.null(x$shapefiles$glacier)) {
-          x$shapefiles$glacier <- suppressWarnings(suppressMessages(
-            sf::st_intersection(sf::st_make_valid(x$shapefiles$glacier), wgs84_clip)
-          ))
-        }
-        
-        if(bathymetry && inherits(x$shapefiles$bathy, "sf") && sf::st_is_longlat(x$shapefiles$bathy)) {
-          x$shapefiles$bathy <- suppressWarnings(suppressMessages(
-            sf::st_intersection(sf::st_make_valid(x$shapefiles$bathy), wgs84_clip)
-          ))
-        }
+
+      seam <- ((lon_0 + 360) %% 360) - 180   # antimeridian = lon_0 + 180
+      eps <- 1e-5
+      slit <- sf::st_as_sfc(sf::st_bbox(
+        c(xmin = seam - eps, xmax = seam + eps, ymin = -90, ymax = 90),
+        crs = sf::st_crs(4326)))
+
+      cut_seam <- function(g) {
+        if(is.null(g) || !sf::st_is_longlat(g)) return(g)
+        suppressWarnings(suppressMessages(
+          sf::st_difference(sf::st_make_valid(g), slit)))
       }
+
+      x$shapefiles$land <- cut_seam(x$shapefiles$land)
+      if(!is.null(x$shapefiles$glacier)) x$shapefiles$glacier <- cut_seam(x$shapefiles$glacier)
+      if(bathymetry && inherits(x$shapefiles$bathy, "sf")) x$shapefiles$bathy <- cut_seam(x$shapefiles$bathy)
     }
   }
   
@@ -710,7 +733,11 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
         (!is.null(dd_lims) && (dd_lims[1] > dd_lims[2] ||          # explicit crossing
                                diff(dd_lims[1:2]) > 180))           # wide span
 
-      if(antimeridian_risk && !sf::st_is_longlat(x$clip_limits)) {
+      if(antimeridian_risk) {
+        # Clip in the map CRS (clip_limits is already in x$crs). For rotated
+        # decimal-degree maps the map CRS is a lon_0-shifted geographic CRS;
+        # the seam-crossing polygons were already split above, so transforming
+        # the land here no longer produces unwrapped >180-degree artifacts.
         landBoundary <- clip_shapefile(
           sf::st_transform(x$shapefiles$land, crs = x$crs),
           limits = x$clip_limits,
@@ -796,10 +823,9 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
         }
         x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[sf::st_bbox(x$clip_limits)]
       } else {
-        # Keep the established rendering grid for shipped, ggOceanMapsLargeData,
-        # and user-created bathyRaster objects for backwards compatibility.
-        newgrid <- stars::st_as_stars(sf::st_bbox(x$clip_limits))
-        x$shapefiles$bathy$raster <- stars::st_warp(x$shapefiles$bathy$raster, newgrid)
+        # Warp to the map CRS at the source's native resolution (see
+        # warp_to_clip); the old coarse default grid downsampled the raster.
+        x$shapefiles$bathy$raster <- warp_to_clip(x$shapefiles$bathy$raster, x$clip_limits)
 
         if(x$polarMap) {
           x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[x$clip_limits]
@@ -819,13 +845,12 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
         verbose = FALSE
       )
       
-      newgrid <- stars::st_as_stars(sf::st_bbox(x$clip_limits))
-      x$shapefiles$bathy$raster <- stars::st_warp(x$shapefiles$bathy$raster, newgrid)
+      x$shapefiles$bathy$raster <- warp_to_clip(x$shapefiles$bathy$raster, x$clip_limits)
 
       if(x$polarMap) {
         x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[x$clip_limits]
       }
-      
+
     } else {
       # vector bathymetries
       x$shapefiles$bathy <- clip_shapefile(

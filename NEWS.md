@@ -49,6 +49,17 @@ This major release adds on-demand bathymetry sources, build-your-own shapefile t
   a topology crash for rotated antimeridian data input.
 * Fixed a crash (`st_cast()` on a degenerate `GEOMETRYCOLLECTION`) for some
   custom `vector_land()` layers at some map limits.
+* Fixed rotated antimeridian maps drawing no land, e.g.
+  `basemap(c(100, -120, -12, -57), rotate = TRUE)` and
+  `basemap(c(40, -70, -37, 40), rotate = TRUE)`. A landmass crossing the rotated
+  antimeridian (even off-screen, such as Antarctica) was "unwrapped" into a
+  degenerate >180-degree polygon during projection, which made ggplot2 skip the
+  whole land layer. Such polygons are now split along the seam before
+  projection (issue #44).
+* Fixed the default bathymetry being heavily downsampled. The raster was warped
+  onto a coarse ~256-cell grid regardless of the source resolution, so e.g.
+  `basemap(60, bathymetry = TRUE)` lost most of its detail. The warp now keeps
+  the source resolution by default; use the `downsample` argument to reduce it.
 * Fixed a WCS `bathy.style` (`"wemb"` / `"wceb"`, etc.) failing with
   "st_transform applied to an object of class 'logical'" when combined with an
   explicitly named premade shapefile set, e.g.

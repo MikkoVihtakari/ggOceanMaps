@@ -152,6 +152,46 @@ preserving code fences, tables, and list items; then rebuild site.
 
 ## Progress log
 
+**2026-06-20 — Codex review landed + two follow-up basemap fixes**
+
+*Codex code review (commit `76a0d60`, applied by the maintainer):* hardened
+`wcs_bathymetry()` — server-side `downsample` (the WCS server reduces transfer;
+the returned bathy carries `attr(., "downsampled") = TRUE` so basemap does not
+downsample again), thorough input validation (limits/source/coverage/force/
+verbose/downsample/timeout/max_area_deg2/tile_size_deg/cache_dir), validated
+temp files + atomic cache writes, auto-replacement of invalid cached TIFFs
+(`.is_valid_tiff`), and multipart-MIME splitting on the full boundary. `basemap.R`
+gained `plot.downsample` (0 when already downsampled, else `downsample`), used by
+`map_cmd` `geom_stars`. Added `tests/testthat/test-basemap-crop.R`; expanded WCS
+tests. Roxygen examples use `options(old_options)` with placeholder paths.
+
+*Two bugs the maintainer then found, both fixed (in `basemap_data_crop`):*
+
+1. **Rotated antimeridian maps drew no land** (issue #44 regression): e.g.
+   `basemap(c(100,-120,-12,-57), rotate=TRUE)`, `c(40,-70,-37,40)`, `c(0,-120,
+   -12,-57)`. Rotated **DD** maps use a geographic CRS `+proj=longlat +lon_0=<mid>`
+   (NOT projected — `st_is_longlat` is TRUE). A landmass crossing the new
+   antimeridian (lon_0 ± 180) — even off-screen Antarctica — gets "unwrapped"
+   into a >180° ring on `st_transform`, and ggplot2 then skips the whole land
+   layer. Fix: before transforming, cut a thin slit (`st_difference` with a
+   ~2e-5°-wide bbox at the seam, s2 off) from land/glacier/(longlat sf bathy);
+   and route antimeridian-risk land clipping through the map CRS (broadened the
+   `if(antimeridian_risk ...)` branch to drop the `!st_is_longlat` gate). The
+   old WGS84 buffer pre-clip was replaced by this seam-cut.
+2. **Default bathymetry was downsampled to ~256 cells**: the warp target used
+   `stars::st_as_stars(st_bbox(clip_limits))`'s coarse default, so
+   `basemap(60, bathymetry=TRUE)` came out 255×255 vs the 7200×3600 source.
+   Fix: new local `warp_to_clip()` builds a target grid with **square** cells
+   sized to reproduce the source cell-count over the clip region (densify clip
+   before measuring extent in the source CRS; one cell size for both axes so
+   polar aspect isn't distorted; cap 4000/dim). Now ~1287×1287 for the Arctic.
+
+Snapshots updated: `bathy-rbb`, `bathy-rcb`, `antimeridian-low-lat-bathy-rotate`
+(higher-res / corrected land). `issue-44`, `antimeridian-160`, `data-antimeridian-
+rect` now MATCH their committed baselines again — confirms the fix restores the
+known-good behaviour. Regression tests added to `test-basemap-crop.R`. All on
+`v2.4.0-dev`.
+
 **2026-06-16 — basemap() land-clipping bug fixed (commit `b8b1eec`)**
 - Symptom: `basemap(c(-20, 30, 50, 70))` clipped off northern land (e.g. Norway
   above ~67.5°N) even though limits asked for 70°N.

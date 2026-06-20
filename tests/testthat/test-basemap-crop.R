@@ -43,3 +43,36 @@ test_that("bathyRaster cropping preserves source resolution", {
 
   expect_equal(dim(x$shapefiles$bathy$raster), c(x = 960L, y = 960L))
 })
+
+test_that("rotated antimeridian land has no unwrapped (seam-crossing) rings", {
+  # Regression: basemap(c(100, -120, -12, -57), rotate = TRUE) (and similar)
+  # produced land with a polygon ring "unwrapped" across the whole map after
+  # transformation to the lon_0-shifted geographic CRS, which made ggplot2 fail
+  # to draw the land at all (issue #44).
+  x <- basemap_data(
+    limits = c(100, -120, -12, -57),
+    rotate = TRUE,
+    bathymetry = FALSE,
+    expand.factor = 1
+  )
+  ln <- x$shapefiles$land
+  expect_false(any(sf::st_is_empty(ln)))
+  expect_true(all(sf::st_is_valid(ln)))
+
+  co <- sf::st_coordinates(ln)
+  grp <- interaction(as.data.frame(co[, -(1:2), drop = FALSE]), drop = TRUE)
+  spans <- tapply(co[, 1], grp, function(z) diff(range(z)))
+  expect_true(all(spans <= 180))
+})
+
+test_that("default bathyRaster keeps source resolution (not the coarse stars default)", {
+  # Regression: the warp target used stars::st_as_stars(bbox)'s ~255-cell
+  # default, heavily downsampling the shipped dd_rbathy (7200x3600).
+  x <- basemap_data(
+    limits = c(-20, 30, 50, 70),
+    bathymetry = TRUE,
+    bathy.type = "raster_binned",
+    expand.factor = 1
+  )
+  expect_gt(min(dim(x$shapefiles$bathy$raster)), 500)
+})
