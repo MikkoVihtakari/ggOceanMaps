@@ -53,6 +53,10 @@ attempts to help AI agents better support their users, and is itself developed a
   explicitly named premade shapefile set, e.g.
   `basemap(..., bathy.style = "wemb", shapefiles = "Svalbard")`. The on-demand
   bathymetry is now fetched in that case too.
+* Fixed WCS bathymetry leaving white gaps around the edges of projected maps
+  (e.g. on the Svalbard or Europe CRS). The coverage is now requested for the
+  full projected, expand-factor-padded map area rather than the raw
+  decimal-degree limits, so it fills the whole panel.
 
 ## Testing
 

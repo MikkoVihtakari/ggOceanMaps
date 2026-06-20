@@ -597,12 +597,21 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
     if(polarMap || !is.numeric(limits) || length(limits) < 4) {
       stop("WCS bathymetry styles (e.g. 'wcs_emodnet_blues') require a 4-element decimal-degree bounding box. Polar maps and projected-limit cases are not supported.")
     }
-    wcs_bbox <- stats::setNames(
-      as.numeric(limits[c("xmin", "xmax", "ymin", "ymax")]),
-      c("xmin", "xmax", "ymin", "ymax")
-    )
+    # Fetch WCS bathymetry covering the full (expanded, projected) map area, not
+    # just the raw decimal-degree `limits`. The map is clipped to clip_shape in
+    # the map CRS; fetching only `limits` leaves the projected map corners and
+    # the expand.factor margin outside the raster, which then render as white
+    # gaps around the edges (e.g. an EMODnet map on the Svalbard CRS).
+    wcs_clip <- sf::st_as_sfc(sf::st_bbox(clip_shape))
+    if(!sf::st_is_longlat(wcs_clip)) {
+      # Densify before back-projecting so the curved projected edges (not just
+      # the four corners) are bounded; otherwise edge bulge can still leave gaps.
+      wcs_clip <- smoothr::densify(wcs_clip, n = 100)
+    }
+    wcs_dd <- sf::st_bbox(sf::st_transform(wcs_clip, crs = 4326))
+    wcs_bbox <- as.numeric(wcs_dd[c("xmin", "xmax", "ymin", "ymax")])
     shapefiles$bathy <- wcs_bathymetry(
-      limits = unname(wcs_bbox),
+      limits = wcs_bbox,
       source = wcs_source,
       downsample = downsample,
       verbose = verbose
