@@ -32,6 +32,9 @@ suite, and an overhauled documentation site.
   Pairs with
   [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
   for build-your-own shapefile workflows.
+- Maps no longer print `x` / `y` axis titles by default (decimal-degree
+  maps used to show “Longitude” / “Latitude”). Add them back when you
+  want them with `+ labs(x = "Longitude", y = "Latitude")`.
 
 ### Documentation and AI support
 

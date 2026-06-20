@@ -463,15 +463,12 @@ basemap("BarentsSea", bathymetry = TRUE)
 basemap(limits = c(-180, -140, 50, 70), grid.col = NA, rotate = TRUE)
 
 
-# Rename axis labels
+# Add axis labels
 
-basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) + xlab("Lat")
+basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) + labs(y = "Latitude", x = "Longitude")
 
 
-# Remove axis labels
-
-basemap(limits = c(0, 60, 68, 80)) + labs(x = NULL, y = NULL)
-
+# Remove axis text
 
 basemap(limits = c(0, 60, 68, 80), rotate = TRUE) +
 theme(axis.title = element_blank(),

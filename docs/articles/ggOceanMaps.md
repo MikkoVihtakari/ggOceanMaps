@@ -557,12 +557,13 @@ basemap(limits = c(-20, 30, 55, 70), glaciers = TRUE,
 ![](ggOceanMaps_files/figure-html/unnamed-chunk-25-1.png)
 
 Graticules (the grid lines) can be removed by setting the `grid.col` to
-`NA`. Axis labels can be manipulated using standard ggplot code:
+`NA`. Axis titles are omitted by default; add them with standard ggplot
+code:
 
 ``` r
 
-basemap(limits = c(124, 148, 31, 50), grid.col = NA) + 
-  labs(x = NULL, y = "Only latitude for you, ...")
+basemap(limits = c(124, 148, 31, 50), grid.col = NA) +
+  labs(x = "Longitude", y = "Latitude")
 ```
 
 ![](ggOceanMaps_files/figure-html/unnamed-chunk-26-1.png)

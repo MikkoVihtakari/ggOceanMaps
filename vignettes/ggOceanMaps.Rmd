@@ -401,11 +401,11 @@ basemap(limits = c(-20, 30, 55, 70), glaciers = TRUE,
         grid.size = 0.05)
 ```
 
-Graticules (the grid lines) can be removed by setting the `grid.col` to `NA`. Axis labels can be manipulated using standard ggplot code:
+Graticules (the grid lines) can be removed by setting the `grid.col` to `NA`. Axis titles are omitted by default; add them with standard ggplot code:
 
 ```{r}
-basemap(limits = c(124, 148, 31, 50), grid.col = NA) + 
-  labs(x = NULL, y = "Only latitude for you, ...")
+basemap(limits = c(124, 148, 31, 50), grid.col = NA) +
+  labs(x = "Longitude", y = "Latitude")
 ```
 
 ## Modifying basemap objects

@@ -18,6 +18,9 @@ attempts to help AI agents better support their users, and is itself developed a
 * `vector_land()` extracts a land polygon from a `bathyRaster` produced by
   `raster_bathymetry()`. Pairs with `vector_bathymetry()` for build-your-own
   shapefile workflows.
+* Maps no longer print `x` / `y` axis titles by default (decimal-degree maps
+  used to show "Longitude" / "Latitude"). Add them back when you want them with
+  `+ labs(x = "Longitude", y = "Latitude")`.
 
 ## Documentation and AI support
 
