@@ -240,3 +240,20 @@ test_that("contour_blues needs largedata", {
     "gg"
   )
 })
+
+test_that("WCS bathy.style combines with a premade shapefile set", {
+  # Regression: bathy.style = "wemb" with shapefiles = "Svalbard" used to fail
+  # with "st_transform applied to an object of class 'logical'" because the WCS
+  # injection was skipped when a premade shapefile set was named.
+  skip_if_no_largedata()
+  skip_on_cran()
+  testthat::skip_if_offline()
+  expect_s3_class(
+    basemap(
+      limits = c(10.9, 12.65, 78.83, 79.12),
+      bathy.style = "wemb",
+      shapefiles = "Svalbard"
+    ),
+    "gg"
+  )
+})

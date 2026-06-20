@@ -48,6 +48,11 @@ attempts to help AI agents better support their users, and is itself developed a
   a topology crash for rotated antimeridian data input.
 * Fixed a crash (`st_cast()` on a degenerate `GEOMETRYCOLLECTION`) for some
   custom `vector_land()` layers at some map limits.
+* Fixed a WCS `bathy.style` (`"wemb"` / `"wceb"`, etc.) failing with
+  "st_transform applied to an object of class 'logical'" when combined with an
+  explicitly named premade shapefile set, e.g.
+  `basemap(..., bathy.style = "wemb", shapefiles = "Svalbard")`. The on-demand
+  bathymetry is now fetched in that case too.
 
 ## Testing
 

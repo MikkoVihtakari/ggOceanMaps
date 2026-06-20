@@ -142,7 +142,9 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
   
   shapefilesDefined <- FALSE
   polarMap <- FALSE
-  
+  needs_wcs_inject <- FALSE
+  wcs_source <- NULL
+
   # 1. Detect case ####
   
   case <- basemap_data_detect_case(limits = limits, data = data, shapefiles = shapefiles)
@@ -170,12 +172,21 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       if(!glaciers) shapefiles$glacier <- NULL
       if(!bathymetry) {
         shapefiles$bathy <- NULL
+      } else if(grepl("^wcs_", bathy.type)) {
+        # WCS bathymetry is fetched on demand below (section 4), not taken from
+        # the premade shapefile set. Without this, shapefiles$bathy[bathy.type]
+        # would index a non-existent element and return a logical NA, which then
+        # fails downstream with "st_transform applied to an object of class
+        # 'logical'" (e.g. basemap(..., bathy.style = "wemb", shapefiles = "Svalbard")).
+        wcs_source <- sub("^wcs_", "", bathy.type)
+        needs_wcs_inject <- TRUE
+        shapefiles$bathy <- NULL
       } else {
         shapefiles$bathy <- shapefiles$bathy[bathy.type]
       }
-      
+
       ## Load the shapefiles if download required
-      
+
       shapefiles <- load_map_data(shapefiles)
       
       if(any(sapply(shapefiles, function(k) 
@@ -557,9 +568,6 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
   }
   
   # 4. Define shapefiles ####
-
-  needs_wcs_inject <- FALSE
-  wcs_source <- NULL
 
   if(!shapefilesDefined) {
 
