@@ -98,12 +98,12 @@ Earth](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
 basemap("DecimalDegree", bathymetry = TRUE, glaciers = TRUE)
 ```
 
-![Global basemap in decimal degrees (EPSG:4326) with land, glaciers, and
-binned
+![Figure: Global basemap in decimal degrees (EPSG:4326) with land,
+glaciers, and binned
 bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png)
 
-Global basemap in decimal degrees (EPSG:4326) with land, glaciers, and
-binned bathymetry.
+**Figure:** Global basemap in decimal degrees (EPSG:4326) with land,
+glaciers, and binned bathymetry.
 
 ### Arctic Stereographic
 
@@ -116,11 +116,12 @@ ggOceanMapsLargeData on first use.
 basemap("ArcticStereographic", bathymetry = TRUE, glaciers = TRUE)
 ```
 
-![Arctic stereographic basemap (EPSG:3995) with land, glaciers, and
+![Figure: Arctic stereographic basemap (EPSG:3995) with land, glaciers,
+and
 bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/ArcticStereographic.png)
 
-Arctic stereographic basemap (EPSG:3995) with land, glaciers, and
-bathymetry.
+**Figure:** Arctic stereographic basemap (EPSG:3995) with land,
+glaciers, and bathymetry.
 
 ### Antarctic Stereographic
 
@@ -131,11 +132,12 @@ The southern equivalent (EPSG:3031).
 basemap("AntarcticStereographic", bathymetry = TRUE, glaciers = TRUE)
 ```
 
-![Antarctic stereographic basemap (EPSG:3031) with land, glaciers, and
+![Figure: Antarctic stereographic basemap (EPSG:3031) with land,
+glaciers, and
 bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/AntarcticStereographic.png)
 
-Antarctic stereographic basemap (EPSG:3031) with land, glaciers, and
-bathymetry.
+**Figure:** Antarctic stereographic basemap (EPSG:3031) with land,
+glaciers, and bathymetry.
 
 ## Detailed regional maps
 
@@ -154,49 +156,67 @@ via the `shapefiles` argument. See the [Customising
 shapefiles](https://mikkovihtakari.github.io/ggOceanMaps/articles/customising-shapefiles.md)
 article for the full workflow.
 
-### Svalbard
-
-A detailed Svalbard map (EPSG:32633), originally from the
-[PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package:
-
-``` r
-
-basemap("Svalbard", bathymetry = TRUE, glaciers = TRUE)
-```
-
-![The function asks to download the data the first time you use
-it.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png)
-
-The function asks to download the data the first time you use it.
-
-Zooming to Kongsfjorden:
-
-``` r
-
-basemap(limits = c(10.9, 12.65, 78.83, 79.12),
-        bathymetry = TRUE, shapefiles = "Svalbard",
-        legends = FALSE, glaciers = TRUE)
-```
-
-![High-resolution map of Kongsfjorden, Svalbard, with bathymetry and
-glaciers.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Kongsfjorden.png)
-
-High-resolution map of Kongsfjorden, Svalbard, with bathymetry and
-glaciers.
-
 ### Europe
 
 A detailed European coastline (EPSG:3035) based on the [EEA
 coastline](https://www.eea.europa.eu/en/datahub/datahubitem-view/af40333f-9e94-4926-a4f0-0a787f1d2b8f).
-Useful for coastal maps around the European seas.
+Useful for coastal maps around the European seas. Can be paired with
+[EMODnet
+bathymetry](https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.html#live-download-from-a-web-coverage-service-wcs)
+for ~115 m resolution bathymetric maps (see [New features in
+v3](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features-v3.html#high-resolution-maps-of-european-coast)
+for example).
 
 ``` r
 
-basemap(shapefiles = "Europe", limits = c(-15, 30, 40, 65), bathymetry = TRUE)
+basemap(shapefiles = "Europe")
 ```
+
+![Figure: Detailed European coastline (EPSG:3035) from the EEA coastline
+dataset.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Europe.png)
+
+**Figure:** Detailed European coastline (EPSG:3035) from the EEA
+coastline dataset.
 
 The Europe land polygons are downloaded from ggOceanMapsLargeData on
 first use.
+
+### Svalbard
+
+A detailed Svalbard map (EPSG:32633), originally from the
+[PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package.
+
+``` r
+
+basemap("Svalbard", glaciers = TRUE)
+```
+
+![Figure: The function asks to download the data the first time you use
+it.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png)
+
+**Figure:** The function asks to download the data the first time you
+use it.
+
+Zooming to Kongsfjorden. Svalbard and Europe maps can be paired with the
+EMODnet bathymetry:
+
+``` r
+
+basemap(
+  limits = c(10.9, 12.65, 78.83, 79.12),
+  bathy.style = "wemb",
+  shapefiles = "Svalbard",
+  legends = FALSE,
+  glaciers = TRUE
+)
+```
+
+![Figure: High-resolution map of Kongsfjorden, Svalbard, with bathymetry
+and
+glaciers.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Kongsfjorden.png)
+
+**Figure:** High-resolution map of Kongsfjorden, Svalbard, with
+bathymetry and glaciers.
 
 ## Citing the data
 

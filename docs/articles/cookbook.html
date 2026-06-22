@@ -77,7 +77,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">20 June, 2026</h4>
+            <h4 data-toc-skip class="date">22 June, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/cookbook.Rmd" class="external-link"><code>vignettes/cookbook.Rmd</code></a></small>
       <div class="d-none name"><code>cookbook.Rmd</code></div>
@@ -120,10 +120,10 @@ pre-rendered figure instead.</p>
 at this latitude”:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fl">60</span><span class="op">)</span> <span class="co"># Arctic</span></span></code></pre></div>
-<p><img src="cookbook_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="cookbook_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="480"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span><span class="op">)</span> <span class="co"># Antarctic</span></span></code></pre></div>
-<p><img src="cookbook_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="cookbook_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="480"></p>
 </div>
 <div class="section level3">
 <h3 id="how-do-i-plot-a-region-that-crosses-the-antimeridian">How do I plot a region that crosses the antimeridian?<a class="anchor" aria-label="anchor" href="#how-do-i-plot-a-region-that-crosses-the-antimeridian"></a>
@@ -183,7 +183,7 @@ first:</p>
 <span>    color <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>    size <span class="op">=</span> <span class="fl">3</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="cookbook_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="cookbook_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="480"></p>
 <p>Or let <code>ggspatial</code> handle the transform:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="fl">60</span><span class="op">)</span> <span class="op">+</span></span>
@@ -194,7 +194,7 @@ first:</p>
 <span>    color <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>    size <span class="op">=</span> <span class="fl">3</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="cookbook_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="cookbook_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="480"></p>
 </div>
 <div class="section level3">
 <h3 id="how-do-i-quickly-plot-a-data-frames-coordinates">How do I quickly plot a data frame’s coordinates?<a class="anchor" aria-label="anchor" href="#how-do-i-quickly-plot-a-data-frames-coordinates"></a>
@@ -262,8 +262,9 @@ file:</strong></p>
 <span><span class="co"># or the abbreviation:</span></span>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">16</span>, <span class="fl">67.3</span>, <span class="fl">68.6</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"rub"</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_rub.png" alt="User-supplied GEBCO raster (rub) off Lofoten, northern Norway."><div class="figcaption">User-supplied GEBCO raster (<code>rub</code>)
-off Lofoten, northern Norway.</div>
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_rub.png" alt="Figure: User-supplied GEBCO raster (rub) off Lofoten, northern Norway."><div class="figcaption">
+<strong>Figure:</strong> User-supplied GEBCO
+raster (<code>rub</code>) off Lofoten, northern Norway.</div>
 </div>
 <p><code><a href="../reference/basemap.html">basemap()</a></code> crops to the plot extent, sign-flips (negative
 depths → positive), and renders the raster automatically. Use
@@ -438,8 +439,9 @@ Amante &amp; Eakins 2009, NOAA NGDC (<a href="https://www.ncei.noaa.gov/products
 <span>  bathy.style <span class="op">=</span> <span class="st">"pb"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png" alt="Land and bathymetry vectorised from a GEBCO raster, North Sea."><div class="figcaption">Land and bathymetry vectorised from a GEBCO
-raster, North Sea.</div>
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png" alt="Figure: Land and bathymetry vectorised from a GEBCO raster, North Sea."><div class="figcaption">
+<strong>Figure:</strong> Land and bathymetry
+vectorised from a GEBCO raster, North Sea.</div>
 </div>
 <p>Use <code>depths = NULL</code> instead of a depth vector to keep the
 raster as a continuous grid (skips vectorization, faster rendering).
@@ -741,7 +743,7 @@ draw them:</p>
 <span>                label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sign.html" class="external-link">sign</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, <span class="st">"\u00B0E"</span><span class="op">)</span>,</span>
 <span>                               <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, <span class="st">"\u00B0W"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cookbook_files/figure-html/unnamed-chunk-33-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="cookbook_files/figure-html/unnamed-chunk-33-1.png" class="r-plt" alt="" width="528"></p>
 </div>
 </div>
 <div class="section level2">

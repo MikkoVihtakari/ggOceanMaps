@@ -59,11 +59,11 @@ basemap(limits = c(-20, 30, 50, 70))
 
 A single value in `limits` means "polar projection bounded at this latitude":
 
-```{r}
+```{r, fig.width = 5, fig.height = 5}
 basemap(60) # Arctic
 ```
 
-```{r}
+```{r, fig.width = 5, fig.height = 5}
 basemap(-60) # Antarctic
 ```
 
@@ -109,7 +109,7 @@ basemap(limits = c(-10, 30, 50, 70)) +
 
 Projected maps (polar, custom CRS) need the coordinates transformed first:
 
-```{r}
+```{r, fig.width = 5, fig.height = 5}
 dt <- data.frame(lon = c(0, 10, 20), lat = c(70, 75, 80))
 dt <- transform_coord(dt, bind = TRUE) # adds lon.proj, lat.proj
 basemap(60) +
@@ -123,7 +123,7 @@ basemap(60) +
 
 Or let `ggspatial` handle the transform:
 
-```{r}
+```{r, fig.width = 5, fig.height = 5}
 basemap(60) +
   ggspatial::geom_spatial_point(
     data = dt,
@@ -198,7 +198,7 @@ basemap(limits = c(11, 16, 67.3, 68.6), bathy.style = "raster_user_blues")
 basemap(limits = c(11, 16, 67.3, 68.6), bathy.style = "rub")
 ```
 
-![User-supplied GEBCO raster (`rub`) off Lofoten, northern Norway.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_rub.png)
+![**Figure:** User-supplied GEBCO raster (`rub`) off Lofoten, northern Norway.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_rub.png)
 
 `basemap()` crops to the plot extent, sign-flips (negative depths → positive),
 and renders the raster automatically. Use `"raster_user_greys"` / `"rug"` for
@@ -334,7 +334,7 @@ basemap(
 )
 ```
 
-![Land and bathymetry vectorised from a GEBCO raster, North Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png)
+![**Figure:** Land and bathymetry vectorised from a GEBCO raster, North Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png)
 
 Use `depths = NULL` instead of a depth vector to keep the raster as a
 continuous grid (skips vectorization, faster rendering). Pass the result
@@ -447,7 +447,7 @@ Ocean and uses a synthetic zonal (eastward) flow, which traces a clean
 circumpolar gyre around the pole; `bathy.style = "poly_greys"` keeps the
 background quiet so the arrows stand out:
 
-```{r}
+```{r, fig.width = 6, fig.height = 5}
 grd <- expand.grid(lon = seq(-180, 165, by = 15), lat = seq(81, 87, by = 3))
 grd <- dist2land(grd, binary = TRUE, dist.col = "ocean", verbose = FALSE)
 grd <- grd[grd$ocean, ]
@@ -584,7 +584,7 @@ so the `fill` aesthetic stays free for your data.
 Polar maps need manual labels. Pull the grid lines from the map's attributes,
 keep one meridian/parallel, project the label positions, and draw them:
 
-```{r}
+```{r, fig.width = 5.5, fig.height = 5}
 p <- basemap(-60, shapefiles = "Antarctic")
 
 # Latitude labels along the 180° meridian

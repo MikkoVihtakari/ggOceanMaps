@@ -39,7 +39,7 @@ basemap(c(100, 160, -20, 30), bathymetry = TRUE)
 ```
 
 ![](new-features-v2_files/figure-html/unnamed-chunk-2-1.png) Processing
-time: 2.5 sec
+time: 2.8 sec
 
 The **low-resolution default bathymetry is optimized for processing
 time** and **there are higher-resolution datasets available** but you’ll
@@ -58,7 +58,7 @@ basemap(c(100, 160, -20, 30), bathy.style = "rcb")
 ```
 
 ![](new-features-v2_files/figure-html/unnamed-chunk-3-1.png) Processing
-time: 23.1 sec
+time: 26.6 sec
 
 Then the best bit. If this resolution still is not enough, **you can use
 any bathymetry grid you want** as long as
@@ -144,7 +144,7 @@ dt <- data.frame(
 dt <- get_depth(dt)
 ```
 
-Processing time: 9.5 sec
+Processing time: 9.1 sec
 
 ``` r
 
@@ -152,12 +152,14 @@ qmap(dt, color = depth) +
   scale_color_viridis_c()
 ```
 
-![Depth of data frame coordinates extracted from the raster_continuous
-ETOPO 60 arc-second dataset. Grey (NA) indicates coordinates on
+![\*\*Figure:\*\* Depth of data frame coordinates extracted from the
+raster_continuous ETOPO 60 arc-second dataset. Grey (NA) indicates
+coordinates on
 land.](new-features-v2_files/figure-html/unnamed-chunk-8-1.png)
 
-Depth of data frame coordinates extracted from the raster_continuous
-ETOPO 60 arc-second dataset. Grey (NA) indicates coordinates on land.
+**Figure:** Depth of data frame coordinates extracted from the
+raster_continuous ETOPO 60 arc-second dataset. Grey (NA) indicates
+coordinates on land.
 
 ## The new world is round - sometimes
 

@@ -76,10 +76,10 @@ Maps can be limited (e.g. provide geographic location for a map) using three arg
 
 The simplest way of defining the geographic location is to use the `limits` argument with decimal degrees. The limits argument can be defined either as a numeric vector of length 1 or 4. Specifying the argument as a single integer between 30 and 88 or -88 and -30 plots a polar stereographic map for the Arctic or Antarctic, respectively.
 
-```{r}
+```{r, fig.width = 5, fig.height = 5}
 library(ggOceanMaps)
 library(ggspatial) # for data plotting
-basemap(limits = 60) # A synonym: basemap(60) 
+basemap(limits = 60) # A synonym: basemap(60)
 ```
 
 Rectangular maps are plotted by specifying the `limits` argument as a numeric vector of length 4 where the first element defines the start longitude, the second element the end longitude, the third element the minimum latitude and the fourth element the maximum latitude of the bounding box:
@@ -182,21 +182,21 @@ basemap(limits = c(120, -120, 60, 80)) +
 
 Exact control of map limits can be difficult using decimal degree limits in polar regions. The `limits` argument also allows specifying the limits in the underlying projected coordinate units. First, we will need to find out how these units look like:
 
-```{r}
+```{r, fig.width = 5, fig.height = 5}
 basemap(limits = 60, projection.grid = TRUE, grid.col = "red")
 ```
 
 The `projection.grid` argument plots a grid using the projected actual map coordinates instead of decimal degrees. The grid helps in defining the `limits` using projected coordinates giving better control over the map limits than decimal degree coordinates. The automatic shapefile definition algorithm does not work for projected coordinates. Therefore, if the limits are not given as decimal degrees (any longitude outside the range [-180, 180] or latitude [-90, 90]), the function asks to specify `shapefiles`. The `shapefiles` can be defined by partially matching the names of the pre-made shapefiles in `shapefile_list` (e.g. "Ar" would be enough for "ArcticStereographic"):
 
-```{r}
-basemap(limits = c(-2e6, 1e6, 0, 3e6), shapefiles = "Arctic") 
+```{r, fig.width = 5, fig.height = 5}
+basemap(limits = c(-2e6, 1e6, 0, 3e6), shapefiles = "Arctic")
 ```
 
 ### Data limits
 
 The limits of a map can also be defined by inputting a data frame to the `data` argument. The limits are automatically defined allowing the user to quickly find limits for a desired spatial dataset:
 
-```{r}
+```{r, fig.width = 5.5, fig.height = 5}
 dt <- expand.grid(lon = c(160, 180, -160), lat = c(60, 70, 80))
 
 basemap(data = dt) + # a synonym: basemap(dt)
@@ -205,7 +205,7 @@ basemap(data = dt) + # a synonym: basemap(dt)
 
 The function makes the map such that the outermost data points barely fit into the mapped region. The space between the map borders and data points can be adjusted using the `expand.factor` argument:
 
-```{r fig-expand-factor, fig.cap = "Figure above: The expand.factor argument can be used to expand (A) and reduce (B) map region in relation to data."}
+```{r fig-expand-factor, fig.cap = "**Figure:** The expand.factor argument can be used to expand (A) and reduce (B) map region in relation to data."}
 cowplot::plot_grid(
   basemap(dt, expand.factor = 1.1) +
     ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red") +
@@ -223,7 +223,7 @@ See the [Adding data to maps](#adding-data-to-maps) section for more information
 
 The ggOceanMaps package contains a set of [premade shapefiles]. Only the decimal degree land shapes are shipped with the package while others are downloaded as needed. See the [front page for instructions how to setup the automatic download folder](https://mikkovihtakari.github.io/ggOceanMaps/index.html#data-path) before you start downloading shape files. Any character supplied to the `x` argument in the `basemap()` function will automatically be understood as `shapefiles` argument. The maps are limited showing the entire land shape. Use the `limits` argument to further limit the shape file. 
 
-```{r}
+```{r, fig.width = 5, fig.height = 5}
 basemap("Arctic")
 ```
 
@@ -274,7 +274,7 @@ The *default `bathy.style` can be changed by setting the `ggOceanMaps.bathy.styl
 
 Since 2.0, glaciers require a download. It is a good idea to use the polar stereographic datasets for this purpose:
 
-```{r}
+```{r, fig.width = 6, fig.height = 5}
 basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic")
 ```
 
@@ -282,17 +282,17 @@ basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic")
 
 The `basemap(...)` function works almost similarly to the `ggplot(...)` function as a base for adding further layers to the plot. The difference between the `basemap()` and the `ggplot()` is that the `basemap()` plot already contains multiple ggplot layers. All layers except bathymetry have no other `aes` mapping than `x`, `y` and `group`. Bathymetry is mapped to `fill` or `color` color in addition. This means that when you add ggplot layers, you need to specify the `data` argument explicitly as shown below. Another difference is that basemaps are plotted using projected coordinates. The [ggspatial](https://CRAN.R-project.org/package=ggspatial) and ggplot's [`geom_sf`](https://ggplot2.tidyverse.org/reference/ggsf.html) functions convert the coordinates automatically to the projected coordinates:
 
-```{r}
+```{r, fig.width = 6, fig.height = 5}
 dt <- data.frame(lon = c(seq(-180, 0, 30), seq(30, 180, 30)), lat = -70)
 
-basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic") + 
+basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic") +
   ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
 ```
 
 The ggplot functions can also be used, but the coordinates need to be transformed to the basemap projection first using the `transform_coord` function:
 
-```{r}
-basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic") + 
+```{r, fig.width = 6, fig.height = 5}
+basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic") +
   geom_point(data = transform_coord(dt), aes(x = lon, y = lat), color = "red")
 ```
 
@@ -360,7 +360,7 @@ knitr::kable(shapefile_list("all")[c("name", "crs")])
 
 Since 2.0, it is possible to override the default CRS used by `basemap()` using the `crs` argument:
 
-```{r}
+```{r, fig.width = 5, fig.height = 6}
 basemap(limits = c(0, 15, 55, 65), crs = 32631)
 ```
 
@@ -403,7 +403,7 @@ basemap(limits = c(-20, 30, 55, 70), glaciers = TRUE,
 
 Graticules (the grid lines) can be removed by setting the `grid.col` to `NA`. Axis titles are omitted by default; add them with standard ggplot code:
 
-```{r}
+```{r, fig.width = 6, fig.height = 5}
 basemap(limits = c(124, 148, 31, 50), grid.col = NA) +
   labs(x = "Longitude", y = "Latitude")
 ```

@@ -63,7 +63,7 @@ land <- clip_shapefile(
 basemap(shapefiles = list(land = land, glacier = NULL, bathy = NULL))
 ```
 
-![Land layer clipped to the North Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_clip.png)
+![**Figure:** Land layer clipped to the North Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_clip.png)
 
 
 `limits` are interpreted with `proj.limits` (decimal degrees by default). For a projected input layer, pass the limits in that projection's units and set `proj.limits` to its CRS, or keep `limits` in degrees and let the function reproject the clip box. Use `return.boundary = TRUE` to get the clipping polygon back for inspection.
@@ -109,7 +109,7 @@ basemap(
 )
 ```
 
-![Land and bathymetry vectorised from a GEBCO raster, North Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png)
+![**Figure:** Land and bathymetry vectorised from a GEBCO raster, North Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png)
 
 
 **Normalise the CRS** (step 2c). GEBCO, ETOPO and IBCAO NetCDF grids are read with a non-standard *"unknown"* geographic CRS — an unnamed datum with latitude/longitude (rather than longitude/latitude) axis order. `basemap()` clips and renders the map in the land layer's CRS, and that axis-swapped CRS makes the rectangular clip box slant slightly, leaving a thin uncovered wedge along the southern map edge. Transforming `vb` and `vl` to plain `EPSG:4326` before plotting removes it. Do this on the vectorised layers, not via `proj.out` in `raster_bathymetry()`: reprojecting the raster there turns it into a curvilinear grid that `vector_bathymetry()` cannot polygonise.
@@ -143,7 +143,7 @@ basemap(
 )
 ```
 
-![Geonorge depth data for Oslo municipality.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_geonorge_oslofjorden.png)
+![**Figure:** Geonorge depth data for Oslo municipality.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_geonorge_oslofjorden.png)
 
 
 This example uses Oslo municipality's depth-area tile, a small dataset showing the harbour, Bygdøy, and the surrounding islands. By default `geonorge_bathymetry()` reads the `"dybdeareal"` layer; pass `layer =` if your file uses a different name, and `verbose = TRUE` to see the reading steps.
@@ -178,7 +178,7 @@ basemap(
 )
 ```
 
-![Bathymetry fetched live from EMODnet around Tromsø, vectorised and paired with the premade Europe land set.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_tromso_wcs.png)
+![**Figure:** Bathymetry fetched live from EMODnet around Tromsø, vectorised and paired with the premade Europe land set.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_tromso_wcs.png)
 
 
 **Fetch a little wider than you display.** The map is plotted in the `"Europe"` land set's CRS (`EPSG:3035`), but a WCS request is a decimal-degree (`EPSG:4326`) box. Its straight lat/lon edges slant once reprojected to 3035, so a fetch box exactly equal to the map `limits` leaves uncovered slivers in the projected map's corners. Requesting a slightly larger `fetch` box than the `tromso` area you display covers the whole panel. Clipping the land to `st_bbox(vb)` keeps it in the same projection as the bathymetry and the map, so the clipping happens in the plotted CRS rather than across a reprojection.

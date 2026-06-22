@@ -77,7 +77,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">20 June, 2026</h4>
+            <h4 data-toc-skip class="date">22 June, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/premade-maps.Rmd" class="external-link"><code>vignettes/premade-maps.Rmd</code></a></small>
       <div class="d-none name"><code>premade-maps.Rmd</code></div>
@@ -170,8 +170,10 @@ Earth</a> 1:10m land and minor-island polygons.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"DecimalDegree"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png" alt="Global basemap in decimal degrees (EPSG:4326) with land, glaciers, and binned bathymetry."><div class="figcaption">Global basemap in decimal degrees (EPSG:4326)
-with land, glaciers, and binned bathymetry.</div>
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png" alt="Figure: Global basemap in decimal degrees (EPSG:4326) with land, glaciers, and binned bathymetry."><div class="figcaption">
+<strong>Figure:</strong> Global basemap in
+decimal degrees (EPSG:4326) with land, glaciers, and binned
+bathymetry.</div>
 </div>
 </div>
 <div class="section level3">
@@ -183,8 +185,9 @@ ggOceanMapsLargeData on first use.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"ArcticStereographic"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/ArcticStereographic.png" alt="Arctic stereographic basemap (EPSG:3995) with land, glaciers, and bathymetry."><div class="figcaption">Arctic stereographic basemap (EPSG:3995) with
-land, glaciers, and bathymetry.</div>
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/ArcticStereographic.png" alt="Figure: Arctic stereographic basemap (EPSG:3995) with land, glaciers, and bathymetry."><div class="figcaption">
+<strong>Figure:</strong> Arctic stereographic
+basemap (EPSG:3995) with land, glaciers, and bathymetry.</div>
 </div>
 </div>
 <div class="section level3">
@@ -194,8 +197,9 @@ land, glaciers, and bathymetry.</div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"AntarcticStereographic"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/AntarcticStereographic.png" alt="Antarctic stereographic basemap (EPSG:3031) with land, glaciers, and bathymetry."><div class="figcaption">Antarctic stereographic basemap (EPSG:3031) with
-land, glaciers, and bathymetry.</div>
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/AntarcticStereographic.png" alt="Figure: Antarctic stereographic basemap (EPSG:3031) with land, glaciers, and bathymetry."><div class="figcaption">
+<strong>Figure:</strong> Antarctic stereographic
+basemap (EPSG:3031) with land, glaciers, and bathymetry.</div>
 </div>
 </div>
 </div>
@@ -214,35 +218,50 @@ land and bathymetry shapefiles and pass them to <code><a href="../reference/base
 via the <code>shapefiles</code> argument. See the <a href="customising-shapefiles.html">Customising shapefiles</a> article
 for the full workflow.</p>
 <div class="section level3">
-<h3 id="svalbard">Svalbard<a class="anchor" aria-label="anchor" href="#svalbard"></a>
-</h3>
-<p>A detailed Svalbard map (EPSG:32633), originally from the <a href="https://github.com/MikkoVihtakari/PlotSvalbard" class="external-link">PlotSvalbard</a>
-package:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"Svalbard"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png" alt="The function asks to download the data the first time you use it."><div class="figcaption">The function asks to download the data the first
-time you use it.</div>
-</div>
-<p>Zooming to Kongsfjorden:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10.9</span>, <span class="fl">12.65</span>, <span class="fl">78.83</span>, <span class="fl">79.12</span><span class="op">)</span>,</span>
-<span>        bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, shapefiles <span class="op">=</span> <span class="st">"Svalbard"</span>,</span>
-<span>        legends <span class="op">=</span> <span class="cn">FALSE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Kongsfjorden.png" alt="High-resolution map of Kongsfjorden, Svalbard, with bathymetry and glaciers."><div class="figcaption">High-resolution map of Kongsfjorden, Svalbard,
-with bathymetry and glaciers.</div>
-</div>
-</div>
-<div class="section level3">
 <h3 id="europe">Europe<a class="anchor" aria-label="anchor" href="#europe"></a>
 </h3>
 <p>A detailed European coastline (EPSG:3035) based on the <a href="https://www.eea.europa.eu/en/datahub/datahubitem-view/af40333f-9e94-4926-a4f0-0a787f1d2b8f" class="external-link">EEA
-coastline</a>. Useful for coastal maps around the European seas.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>shapefiles <span class="op">=</span> <span class="st">"Europe"</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">15</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">65</span><span class="op">)</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+coastline</a>. Useful for coastal maps around the European seas. Can be
+paired with <a href="bathymetry.html#live-download-from-a-web-coverage-service-wcs">EMODnet
+bathymetry</a> for ~115 m resolution bathymetric maps (see <a href="new-features-v3.html#high-resolution-maps-of-european-coast">New
+features in v3</a> for example).</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>shapefiles <span class="op">=</span> <span class="st">"Europe"</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Europe.png" alt="Figure: Detailed European coastline (EPSG:3035) from the EEA coastline dataset."><div class="figcaption">
+<strong>Figure:</strong> Detailed European
+coastline (EPSG:3035) from the EEA coastline dataset.</div>
+</div>
 <p>The Europe land polygons are downloaded from ggOceanMapsLargeData on
 first use.</p>
+</div>
+<div class="section level3">
+<h3 id="svalbard">Svalbard<a class="anchor" aria-label="anchor" href="#svalbard"></a>
+</h3>
+<p>A detailed Svalbard map (EPSG:32633), originally from the <a href="https://github.com/MikkoVihtakari/PlotSvalbard" class="external-link">PlotSvalbard</a>
+package.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"Svalbard"</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png" alt="Figure: The function asks to download the data the first time you use it."><div class="figcaption">
+<strong>Figure:</strong> The function asks to
+download the data the first time you use it.</div>
+</div>
+<p>Zooming to Kongsfjorden. Svalbard and Europe maps can be paired with
+the EMODnet bathymetry:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
+<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10.9</span>, <span class="fl">12.65</span>, <span class="fl">78.83</span>, <span class="fl">79.12</span><span class="op">)</span>,</span>
+<span>  bathy.style <span class="op">=</span> <span class="st">"wemb"</span>,</span>
+<span>  shapefiles <span class="op">=</span> <span class="st">"Svalbard"</span>,</span>
+<span>  legends <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  glaciers <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Kongsfjorden.png" alt="Figure: High-resolution map of Kongsfjorden, Svalbard, with bathymetry and glaciers."><div class="figcaption">
+<strong>Figure:</strong> High-resolution map of
+Kongsfjorden, Svalbard, with bathymetry and glaciers.</div>
+</div>
 <!--
 Archived premade maps (kept for reference; not currently available).
 

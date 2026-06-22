@@ -68,10 +68,10 @@ land <- clip_shapefile(
 basemap(shapefiles = list(land = land, glacier = NULL, bathy = NULL))
 ```
 
-![Land layer clipped to the North
+![Figure: Land layer clipped to the North
 Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_clip.png)
 
-Land layer clipped to the North Sea.
+**Figure:** Land layer clipped to the North Sea.
 
 `limits` are interpreted with `proj.limits` (decimal degrees by
 default). For a projected input layer, pass the limits in that
@@ -134,10 +134,11 @@ basemap(
 )
 ```
 
-![Land and bathymetry vectorised from a GEBCO raster, North
+![Figure: Land and bathymetry vectorised from a GEBCO raster, North
 Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png)
 
-Land and bathymetry vectorised from a GEBCO raster, North Sea.
+**Figure:** Land and bathymetry vectorised from a GEBCO raster, North
+Sea.
 
 **Normalise the CRS** (step 2c). GEBCO, ETOPO and IBCAO NetCDF grids are
 read with a non-standard *“unknown”* geographic CRS — an unnamed datum
@@ -208,10 +209,10 @@ basemap(
 )
 ```
 
-![Geonorge depth data for Oslo
+![Figure: Geonorge depth data for Oslo
 municipality.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_geonorge_oslofjorden.png)
 
-Geonorge depth data for Oslo municipality.
+**Figure:** Geonorge depth data for Oslo municipality.
 
 This example uses Oslo municipality’s depth-area tile, a small dataset
 showing the harbour, Bygdøy, and the surrounding islands. By default
@@ -260,12 +261,12 @@ basemap(
 )
 ```
 
-![Bathymetry fetched live from EMODnet around Tromsø, vectorised and
-paired with the premade Europe land
+![Figure: Bathymetry fetched live from EMODnet around Tromsø, vectorised
+and paired with the premade Europe land
 set.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_tromso_wcs.png)
 
-Bathymetry fetched live from EMODnet around Tromsø, vectorised and
-paired with the premade Europe land set.
+**Figure:** Bathymetry fetched live from EMODnet around Tromsø,
+vectorised and paired with the premade Europe land set.
 
 **Fetch a little wider than you display.** The map is plotted in the
 `"Europe"` land set’s CRS (`EPSG:3035`), but a WCS request is a

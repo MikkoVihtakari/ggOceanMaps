@@ -24,7 +24,7 @@ current package guidance.
 
 Everything below is new or substantially improved in version 3.
 
-## High-resolution maps of Norwegian fjords
+## High-resolution maps of European coast
 
 The new
 [`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md)
@@ -42,20 +42,22 @@ Two sources are available:
 
 Coupled with the detailed EMODnet land shapes (`shapefiles = "Europe"`),
 this produces the highest-resolution maps ggOceanMaps has generated so
-far. Here is Kongsfjorden in Svalbard, drawn over the detailed Svalbard
-land shapes:
+far. Being able to plot Norwegian fjords with this level of detail is a
+significant improvement and has been a popular feature request. With v3,
+it is possible. Here is Kongsfjorden in Svalbard, drawn over the
+detailed Svalbard land shapes:
 
 ``` r
 
 basemap(limits = c(10.9, 12.65, 78.83, 79.12), bathy.style = "wemb", shapefiles = "Svalbard")
 ```
 
-![Kongsfjorden, Svalbard, with ~115 m EMODnet bathymetry and the
+![Figure: Kongsfjorden, Svalbard, with ~115 m EMODnet bathymetry and the
 detailed Svalbard land
 shapes.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/kongsfjorden_wemb.png)
 
-Kongsfjorden, Svalbard, with ~115 m EMODnet bathymetry and the detailed
-Svalbard land shapes.
+**Figure:** Kongsfjorden, Svalbard, with ~115 m EMODnet bathymetry and
+the detailed Svalbard land shapes.
 
 And Porsangerfjorden on the Finnmark coast of mainland Norway, with the
 EMODnet `"Europe"` land shapes:
@@ -65,14 +67,15 @@ EMODnet `"Europe"` land shapes:
 basemap(limits = c(23.9, 26.5, 69.9, 71.15), shapefiles = "Europe", bathy.style = "wemb")
 ```
 
-![Porsangerfjorden, northern Norway, with ~115 m EMODnet bathymetry and
-the EMODnet “Europe” land
+![Figure: Porsangerfjorden, northern Norway, with ~115 m EMODnet
+bathymetry and the EMODnet “Europe” land
 shapes.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/porsangerfjorden_wemb.png)
 
-Porsangerfjorden, northern Norway, with ~115 m EMODnet bathymetry and
-the EMODnet “Europe” land shapes.
+**Figure:** Porsangerfjorden, northern Norway, with ~115 m EMODnet
+bathymetry and the EMODnet “Europe” land shapes.
 
-The downloaded tiles are cached under
+Note that the routine works everywhere in European waters, not just
+Norway. The downloaded tiles are cached under
 `getOption("ggOceanMaps.datapath")`, so re-rendering the exact same map
 does not re-download anything. Do keep an eye on the size of that
 folder, though — high-resolution tiles can make it bloat up quickly.
@@ -139,26 +142,11 @@ set of focused articles:
 - **[Cookbook](https://mikkovihtakari.github.io/ggOceanMaps/articles/cookbook.md)**
   — short, copy-pasteable recipes.
 
-## Testing and clipping fixes
+## Testing
 
 Version 3 adds smoke tests based on the historical regression corpus and
-`vdiffr` SVG snapshot tests for visual changes. This release also fixes
-several clipping problems. For example, projected maps with
-decimal-degree limits used to cut off land near the map edges —
-`basemap(c(-20, 30, 50, 70))` clipped off northern Norway. The clip
-boundary is now densified before reprojection, so the full extent is
-kept:
-
-``` r
-
-basemap(c(-20, 30, 50, 70), bathymetry = TRUE)
-```
-
-![](new-features-v3_files/figure-html/unnamed-chunk-5-1.png)
-
-The map above is built entirely from the low-resolution data shipped
-with the package, reprojected to Arctic stereographic on the fly — no
-downloads required.
+`vdiffr` SVG snapshot tests for visual changes. These tests will be
+expanded in future releases with issues getting solved over time.
 
 ## Upgrading from version 2
 

@@ -118,7 +118,7 @@ dt <- data.frame(
 dt <- get_depth(dt)
 ```
 
-```{r, fig.cap = "Depth of data frame coordinates extracted from the raster_continuous ETOPO 60 arc-second dataset. Grey (NA) indicates coordinates on land."}
+```{r, fig.cap = "**Figure:** Depth of data frame coordinates extracted from the raster_continuous ETOPO 60 arc-second dataset. Grey (NA) indicates coordinates on land."}
 qmap(dt, color = depth) +
   scale_color_viridis_c()
 ```
@@ -141,13 +141,13 @@ basemap(c(110, -110, 10, 55), bathymetry = TRUE, rotate = TRUE)
 
 Round-Earth is not only a blessing and there are still some **unresolved issues**, such as lines from decimal degree shapes that could not be dissolved in the new projection. Most of these issues are related to glaciers:
 
-```{r}
+```{r, fig.width = 6, fig.height = 5}
 basemap(limits = -60, glaciers = TRUE)
 ```
 
 A simple fix for now is to use projected shapefiles from ggOceanMapsLargeData:
 
-```{r}
+```{r, fig.width = 6, fig.height = 5}
 basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic")
 ```
 
@@ -157,7 +157,7 @@ If someone has an idea how to fix this dissolve issue, please contact the develo
 
 A limitation with pre-2.0 ggOceanMaps was that you could not change the coordinate reference system (CRS), but you'd have to change the CRS of your data instead. This was problematic in some cases when wanting to plot spatial model results that were computed using a certain CRS. Thanks to round-Earth model, sf and stars, now you can **change the CRS of maps produced by ggOceanMaps on the fly**:
 
-```{r, eval = have_gebco, fig.cap = "Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b) 3995, i.e. Arctic stereographic and c) 32633, i.e. UTM zone 33N."}
+```{r, eval = have_gebco, fig.cap = "**Figure:** Lofoten plotted using three CRS: a) 4326, i.e. decimal degrees, b) 3995, i.e. Arctic stereographic and c) 32633, i.e. UTM zone 33N."}
 cowplot::plot_grid(
   basemap(c(11,16,67.3,68.6), bathy.style = "rub", crs = 4326, legends = FALSE),
   basemap(c(11,16,67.3,68.6), bathy.style = "rub", legends = FALSE),

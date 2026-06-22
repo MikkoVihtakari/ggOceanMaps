@@ -29,6 +29,8 @@ save_fig(basemap("ArcticStereographic", bathymetry = TRUE, glaciers = TRUE),
          "ArcticStereographic.png", w = 7, h = 7)
 save_fig(basemap("AntarcticStereographic", bathymetry = TRUE, glaciers = TRUE),
          "AntarcticStereographic.png", w = 7, h = 7)
+save_fig(basemap(shapefiles = "Europe"),
+         "Europe.png", w = 6.5, h = 7)
 save_fig(basemap("Svalbard", bathymetry = TRUE, glaciers = TRUE),
          "Svalbard.png", w = 5, h = 8.2)
 save_fig(basemap(limits = c(10.9, 12.65, 78.83, 79.12), bathymetry = TRUE,

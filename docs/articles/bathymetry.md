@@ -109,10 +109,11 @@ basemap(c(11, 16, 67.3, 68.6), bathy.style = "rcb", downsample = 10)
 basemap(c(11, 16, 67.3, 68.6), bathy.style = "rcg") # greyscale
 ```
 
-![Continuous raster bathymetry (rcb) off Lofoten, northern
+![Figure: Continuous raster bathymetry (rcb) off Lofoten, northern
 Norway.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_rcb.png)
 
-Continuous raster bathymetry (`rcb`) off Lofoten, northern Norway.
+**Figure:** Continuous raster bathymetry (`rcb`) off Lofoten, northern
+Norway.
 
 ### Polygon contours (`pb`)
 
@@ -125,10 +126,11 @@ basemap(c(11, 16, 67.3, 68.6), bathy.style = "pb")
 basemap(c(11, 16, 67.3, 68.6), bathy.style = "pg") # greyscale
 ```
 
-![Polygon-contour bathymetry (pb) showing filled depth
+![Figure: Polygon-contour bathymetry (pb) showing filled depth
 bands.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_pb.png)
 
-Polygon-contour bathymetry (`pb`) showing filled depth bands.
+**Figure:** Polygon-contour bathymetry (`pb`) showing filled depth
+bands.
 
 ### Contour lines (`cb`)
 
@@ -141,10 +143,10 @@ basemap(c(11, 16, 67.3, 68.6), bathy.style = "cb")
 basemap(c(11, 16, 67.3, 68.6), bathy.style = "cg") # greyscale
 ```
 
-![Contour-line bathymetry (cb), lines
+![Figure: Contour-line bathymetry (cb), lines
 only.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_cb.png)
 
-Contour-line bathymetry (`cb`), lines only.
+**Figure:** Contour-line bathymetry (`cb`), lines only.
 
 ## 3. Live download from a Web Coverage Service (WCS)
 
@@ -165,10 +167,11 @@ same bounding box are immediate.
 basemap(c(-160, -154, 18, 23), bathy.style = "wceb")
 ```
 
-![Global ETOPO1 bathymetry (wceb) around the Hawaiian
+![Figure: Global ETOPO1 bathymetry (wceb) around the Hawaiian
 Islands.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_wceb.png)
 
-Global ETOPO1 bathymetry (`wceb`) around the Hawaiian Islands.
+**Figure:** Global ETOPO1 bathymetry (`wceb`) around the Hawaiian
+Islands.
 
 ``` r
 
@@ -176,10 +179,11 @@ Global ETOPO1 bathymetry (`wceb`) around the Hawaiian Islands.
 basemap(c(2, 3, 54, 55), bathy.style = "wemb")
 ```
 
-![High-resolution EMODnet bathymetry (wemb) in the North
+![Figure: High-resolution EMODnet bathymetry (wemb) in the North
 Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_wemb.png)
 
-High-resolution EMODnet bathymetry (`wemb`) in the North Sea.
+**Figure:** High-resolution EMODnet bathymetry (`wemb`) in the North
+Sea.
 
 If you request EMODnet for an area outside its European coverage, the
 error message points you to ETOPO:
@@ -246,10 +250,10 @@ basemap(c(11, 16, 67.3, 68.6), bathy.style = "rub", downsample = 10)
 basemap(c(11, 16, 67.3, 68.6), bathy.style = "rug") # greyscale
 ```
 
-![User-supplied GEBCO raster (rub) off
+![Figure: User-supplied GEBCO raster (rub) off
 Lofoten.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_rub.png)
 
-User-supplied GEBCO raster (`rub`) off Lofoten.
+**Figure:** User-supplied GEBCO raster (`rub`) off Lofoten.
 
 Any format that
 [`stars::read_stars()`](https://r-spatial.github.io/stars/reference/read_stars.html)

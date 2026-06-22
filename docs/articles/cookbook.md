@@ -231,10 +231,11 @@ basemap(limits = c(11, 16, 67.3, 68.6), bathy.style = "raster_user_blues")
 basemap(limits = c(11, 16, 67.3, 68.6), bathy.style = "rub")
 ```
 
-![User-supplied GEBCO raster (rub) off Lofoten, northern
+![Figure: User-supplied GEBCO raster (rub) off Lofoten, northern
 Norway.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/bathy_rub.png)
 
-User-supplied GEBCO raster (`rub`) off Lofoten, northern Norway.
+**Figure:** User-supplied GEBCO raster (`rub`) off Lofoten, northern
+Norway.
 
 [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 crops to the plot extent, sign-flips (negative depths → positive), and
@@ -383,10 +384,11 @@ basemap(
 )
 ```
 
-![Land and bathymetry vectorised from a GEBCO raster, North
+![Figure: Land and bathymetry vectorised from a GEBCO raster, North
 Sea.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/shapes_raster_vectorized.png)
 
-Land and bathymetry vectorised from a GEBCO raster, North Sea.
+**Figure:** Land and bathymetry vectorised from a GEBCO raster, North
+Sea.
 
 Use `depths = NULL` instead of a depth vector to keep the raster as a
 continuous grid (skips vectorization, faster rendering). Pass the result

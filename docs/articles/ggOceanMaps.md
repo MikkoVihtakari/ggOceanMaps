@@ -95,7 +95,7 @@ polar stereographic map for the Arctic or Antarctic, respectively.
 
 library(ggOceanMaps)
 library(ggspatial) # for data plotting
-basemap(limits = 60) # A synonym: basemap(60) 
+basemap(limits = 60) # A synonym: basemap(60)
 ```
 
 ![](ggOceanMaps_files/figure-html/unnamed-chunk-3-1.png)
@@ -181,7 +181,7 @@ matching the names of the pre-made shapefiles in `shapefile_list`
 
 ``` r
 
-basemap(limits = c(-2e6, 1e6, 0, 3e6), shapefiles = "Arctic") 
+basemap(limits = c(-2e6, 1e6, 0, 3e6), shapefiles = "Arctic")
 ```
 
 ![](ggOceanMaps_files/figure-html/unnamed-chunk-8-1.png)
@@ -219,11 +219,11 @@ cowplot::plot_grid(
 )
 ```
 
-![Figure above: The expand.factor argument can be used to expand (A) and
-reduce (B) map region in relation to
+![\*\*Figure:\*\* The expand.factor argument can be used to expand (A)
+and reduce (B) map region in relation to
 data.](ggOceanMaps_files/figure-html/fig-expand-factor-1.png)
 
-Figure above: The expand.factor argument can be used to expand (A) and
+**Figure:** The expand.factor argument can be used to expand (A) and
 reduce (B) map region in relation to data.
 
 See the [Adding data to maps](#adding-data-to-maps) section for more
@@ -349,7 +349,7 @@ convert the coordinates automatically to the projected coordinates:
 
 dt <- data.frame(lon = c(seq(-180, 0, 30), seq(30, 180, 30)), lat = -70)
 
-basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic") + 
+basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic") +
   ggspatial::geom_spatial_point(data = dt, aes(x = lon, y = lat), color = "red")
 ```
 
@@ -361,7 +361,7 @@ function:
 
 ``` r
 
-basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic") + 
+basemap(limits = -60, glaciers = TRUE, shapefiles = "Antarctic") +
   geom_point(data = transform_coord(dt), aes(x = lon, y = lat), color = "red")
 ```
 

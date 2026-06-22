@@ -86,6 +86,12 @@ users and contributors work with ggOceanMaps.
   resolution, so e.g. `basemap(60, bathymetry = TRUE)` lost most of its
   detail. The warp now keeps the source resolution by default; use the
   `downsample` argument to reduce it.
+- Fixed `basemap("DecimalDegree", bathymetry = TRUE)` (and the same
+  whole-world set with `glaciers = TRUE`) collapsing the bathymetry to a
+  single row at the equator. Clipping the global raster to an exact
+  -180..180 longitude box returned a degenerate boundary; whole-world
+  decimal-degree limits are now pulled just inside the antimeridian
+  before clipping.
 - Fixed a WCS `bathy.style` (`"wemb"` / `"wceb"`, etc.) failing with
   “st_transform applied to an object of class ‘logical’” when combined
   with an explicitly named premade shapefile set, e.g.
