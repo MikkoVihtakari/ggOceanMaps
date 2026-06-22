@@ -117,10 +117,10 @@ qmap(dt, rotate = TRUE)
 }
 }
 \seealso{
-Other basemap functions: 
-\code{\link{basemap}()},
-\code{\link{shapefile_list}()},
-\code{\link{transform_coord}()}
+Other basemap functions:
+\code{\link[=basemap]{basemap()}},
+\code{\link[=shapefile_list]{shapefile_list()}},
+\code{\link[=transform_coord]{transform_coord()}}
 }
 \author{
 Mikko Vihtakari

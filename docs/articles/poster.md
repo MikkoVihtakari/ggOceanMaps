@@ -14,7 +14,8 @@ to see practical **examples**.
 
 ## The poster
 
-[![](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/SI2022_poster.png)](https://github.com/MikkoVihtakari/ggOceanMapsLargeData/blob/master/docs/SI2022_poster.pdf)
+[![ggOceanMaps poster presented at Sharks International 2022, Valencia,
+Spain.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/SI2022_poster.png)](https://github.com/MikkoVihtakari/ggOceanMapsLargeData/blob/master/docs/SI2022_poster.pdf)
 
 Click the picture to download a pdf of the poster with embedded links.
 
@@ -51,6 +52,7 @@ The numbered references in the poster:
 Script to download data used in the poster:
 
 ``` r
+
 # GBIF data
 
 library(tidyverse)
@@ -110,6 +112,7 @@ serious applications than posters, make sure to find the correct DOI
 using `occ_download()` or the web portal.
 
 ``` r
+
 keys <- species %>% 
   name_backbone_checklist() %>% # match to backbone 
   filter(!matchType == "NONE") %>% # get matched names
@@ -126,6 +129,7 @@ occ_download(
 ## Figures
 
 ``` r
+
 ## Background map
 
 a1_h <- 841-1 # Poster height without margins (A1)

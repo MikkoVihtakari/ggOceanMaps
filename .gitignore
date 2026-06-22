@@ -47,3 +47,10 @@ README.html
 
 # Rstudio project
 *.Rproj
+
+# Claude Code: AI docs (CLAUDE.md, .claude/, memory/) are tracked and
+# kept out of the build via .Rbuildignore. Only transient tool state is ignored.
+.positai
+
+# Stray knitr figure output (vignettes embed pre-rendered figs by URL)
+figure/

@@ -1,6 +1,8 @@
 # Guess longitude and latitude columns in a data frame
 
-An internal function to make [`basemap`](basemap.md) code more readable
+An internal function to make
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+code more readable
 
 ## Usage
 
@@ -27,12 +29,14 @@ A named vector of colummn names.
 ## Details
 
 This is an internal function, which is automatically run by the
-[`basemap`](basemap.md) function.
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function.
 
 ## See also
 
-[`auto_limits`](auto_limits.md),
-[`transform_coord`](transform_coord.md), [`basemap`](basemap.md)
+[`auto_limits`](https://mikkovihtakari.github.io/ggOceanMaps/reference/auto_limits.md),
+[`transform_coord`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md),
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 
 ## Author
 

@@ -48,22 +48,25 @@
 #'
 #' \strong{Bathymetry}
 #'
-#' Bathymetry can be plotted by simply specifying \code{bathymetry = TRUE} or \code{bathy.style} (you won't need to specify both any longer). The former uses a low-resolution raster file shipped with ggOceanMaps. The package contains an option to plot higher resolution bathymetries than the default binned blue alternative (\code{bathy.style = "raster_binned_blues"}). These bathymetries can be accessed by specifying the \code{bathy.style} argument and require a download from \href{https://github.com/MikkoVihtakari/ggOceanMapsLargeData}{ggOceanMapsLargeData} or other online repositories. The \code{bathy.style} character argument consists of three parts separated by a \code{_}. The first part gives the type: raster, poly(gon), or contour. The two latter ones use vector data. The second part gives the resolution: binned, continuous or user. The continuous and user options cannot be used for vector data. The user option accepts any raster file that can be opened using \link[stars]{read_stars}. The path to the file has to be stored in \code{ggOceanMaps.userpath} \link[base:options]{option} (e.g. \code{options(ggOceanMaps.userpath = "PATH_TO_THE_FILE")}) (you can set this in .Rprofile to avoid having to type it every time). The last part defines the color: blues or grays. These options can be abbreviated by specifying the first letter of each part. Gray contour lines are an exception to the rule above and can be plotted using \code{bathy.style = "contour_gray"}. Future versions may contain a combination of raster and gray contours, but these have not been implemented yet. Currently implemented \code{bathy.style} alternatives are:
-#' \itemize{
-#' \item \code{NULL} (\strong{default}). Bathymetry style is searched from \code{getOption("ggOceanMaps.bathy.style")}. If not found, \code{"raster_binned_blues"} is used.
-#' \item \code{"raster_binned_blues"} or \code{"rbb"} plots binned raster bathymetry filled with different shades of blue. Does not require a download.
-#' \item \code{"raster_binned_grays"} or \code{"rbg"} the same than above but uses different shades of gray.
-#' \item \code{"raster_continuous_blues"} or \code{"rcb"} plots continuous raster bathymetry filled with different shades of blue. More detailed and visually more appealing than the binned bathymetry. Recommended. Requires a download.
-#' \item \code{"raster_continuous_grays"} or \code{"rcg"} the same than above but uses different shades of gray.
-#' \item \code{"raster_user_blues"} or \code{"rub"} plots continuous raster bathymetry filled with different shades of blue from \code{getOption("ggOceanMaps.user.path")}. Any file supported by \link[stars]{read_stars} should work. The file has to be placed into the location specified by the path. Experimental feature. Has been tested using \href{https://www.ncei.noaa.gov/products/etopo-global-relief-model}{ETOPO 60 arc-second} and \href{https://www.gebco.net/data-products/gridded-bathymetry-data}{GEBCO 15 arc-second} grids. Please report any bugs you find.
-#' \item \code{"raster_user_grays"} or \code{"rug"} the same than above but uses different shades of gray.
-#' \item \code{"poly_binned_blues"}, \code{"poly_blues"}, \code{"pbb"} or \code{"pb"} plots polygon bathymetry filled with different shades of blue. Default in the versions older than 2.0 of ggOceanMaps. Requires a download.
-#' \item \code{"poly_binned_grays"}, \code{"poly_grays"}, \code{"pbg"} or \code{"pg"} same than above but uses different shades of gray.
-#' \item \code{"contour_binned_blues"}, \code{"contour_blues"}, \code{"cbb"} or \code{"cb"} contour lines with different shades of blue. Requires a download.
-#' \item \code{"contour_gray"}, \code{"contour_gray"} or \code{"cg"} plots gray contour lines. Requires a download.
+#' Bathymetry can be plotted by simply specifying \code{bathymetry = TRUE} or \code{bathy.style}. The former uses the low-resolution raster shipped with ggOceanMaps; the latter selects one of the styles listed below. See the dedicated \href{https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.html}{bathymetry vignette} for a full walk-through with examples.
+#'
+#' The \code{bathy.style} string follows the pattern \emph{geometry_palette}, where \emph{geometry} encodes both the underlying data type (raster grid, polygon contours or contour lines) and where the data come from (shipped, downloaded, user-supplied or web service), and \emph{palette} is either \code{blues} or \code{grays}. All styles have a short abbreviation. Substitute \code{g} for \code{b} at the end of the abbreviation to switch from blues to grays (e.g. \code{rbb} → \code{rbg}).
+#'
+#' \tabular{llllll}{
+#'   \strong{Alias} \tab \strong{Abbr.} \tab \strong{Geometry} \tab \strong{Data source} \tab \strong{Needs} \tab \strong{Notes} \cr
+#'   \code{raster_binned_blues}     \tab \code{rbb}  \tab raster, binned     \tab shipped low-res                          \tab nothing                       \tab Default. Fast, works offline. \cr
+#'   \code{raster_continuous_blues} \tab \code{rcb}  \tab raster, continuous \tab ggOceanMapsLargeData                     \tab \code{ggOceanMaps.datapath}   \tab Higher detail. Recommended once cached. \cr
+#'   \code{raster_user_blues}       \tab \code{rub}  \tab raster, continuous \tab user-supplied raster                     \tab \code{ggOceanMaps.userpath}   \tab GEBCO, ETOPO, IBCAO NetCDF / GeoTIFF. \cr
+#'   \code{wcs_emodnet_blues}       \tab \code{wemb} \tab raster, continuous \tab EMODnet WCS (\emph{European waters})     \tab internet (tiles cached)       \tab ~115 m. DD limits only. See \code{\link{wcs_bathymetry}}. \cr
+#'   \code{wcs_etopo_blues}         \tab \code{wceb} \tab raster, continuous \tab NOAA NCEI ETOPO1 WCS (\emph{global})     \tab internet (tiles cached)       \tab ~1.85 km. DD limits only. See \code{\link{wcs_bathymetry}}. \cr
+#'   \code{poly_blues}              \tab \code{pb}   \tab polygon contours   \tab ggOceanMapsLargeData                     \tab \code{ggOceanMaps.datapath}   \tab Pre-2.0 default. Filled depth bands. \cr
+#'   \code{contour_blues}           \tab \code{cb}   \tab contour lines      \tab ggOceanMapsLargeData                     \tab \code{ggOceanMaps.datapath}   \tab Lines only, no fill. \cr
+#'   \code{contour_gray}            \tab \code{cg}   \tab contour lines      \tab ggOceanMapsLargeData                     \tab \code{ggOceanMaps.datapath}   \tab Gray-only variant (no \code{cb} → \code{cg} alias needed). \cr
 #' }
 #'
-#' The default can be changed by setting the \code{ggOceanMaps.bathy.style} option. \code{options(ggOceanMaps.bathy.style = "poly_blues")} would make the style similar to older pre-2.0 versions of ggOceanMaps.
+#' Add the suffix \code{_grays} (full alias) or change the last letter \code{b} → \code{g} (abbreviation) to get the greyscale variant of any style with a \code{_blues} version, e.g. \code{raster_binned_grays} (\code{rbg}), \code{wcs_emodnet_grays} (\code{wemg}), \code{poly_grays} (\code{pg}).
+#'
+#' If \code{bathy.style} is \code{NULL} (the default), it is read from \code{getOption("ggOceanMaps.bathy.style")} and falls back to \code{"raster_binned_blues"}. Override globally with \code{options(ggOceanMaps.bathy.style = "...")} in \code{.Rprofile} (e.g. \code{"poly_blues"} to mimic pre-2.0 ggOceanMaps).
 #'
 #' \strong{Pre-made shapefiles}
 #'
@@ -172,13 +175,11 @@
 #' # grid.col = NA removes grid lines, rotate = TRUE rotates northwards:
 #' basemap(limits = c(-180, -140, 50, 70), grid.col = NA, rotate = TRUE)
 #'
-#' # Rename axis labels
+#' # Add axis labels
 #'
-#' basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) + xlab("Lat")
+#' basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) + labs(y = "Latitude", x = "Longitude")
 #'
-#' # Remove axis labels
-#'
-#' basemap(limits = c(0, 60, 68, 80)) + labs(x = NULL, y = NULL)
+#' # Remove axis text
 #'
 #' basemap(limits = c(0, 60, 68, 80), rotate = TRUE) +
 #' theme(axis.title = element_blank(),
@@ -268,7 +269,7 @@ basemap <- function(
 
   bathy_cmd <- define_bathy_style(bathy.style)
   bathy.type <- gsub("_blues$|_grays$", "", names(bathy_cmd))
-  bathy.type <- ifelse(grepl("raster", bathy.type), bathy.type, "vector")
+  bathy.type <- ifelse(grepl("^raster|^wcs_", bathy.type), bathy.type, "vector")
   bathy_color <- utils::tail(unlist(strsplit(names(bathy_cmd), "_")), n = 1)
 
   if (bathymetry & !is.null(shapefiles) & inherits(shapefiles, "list")) {
@@ -367,6 +368,7 @@ basemap <- function(
   ## Bathymetry data
 
   if (bathymetry & !is.null(X$shapefiles$bathy)) {
+    plot.downsample <- if(isTRUE(attr(X$shapefiles$bathy, "downsampled"))) 0 else downsample
     bathy.legend <- ifelse(length(legends) == 1, legends, legends[1])
 
     if (bathy_cmd == "bathy_cg" & is.na(bathy.border.col)) {
@@ -384,7 +386,7 @@ basemap <- function(
         ),
         sep = " + "
       )
-    } else if (bathy.type %in% c("raster_user", "raster_continuous")) {
+    } else if (bathy.type %in% c("raster_user", "raster_continuous") || grepl("^wcs_", bathy.type)) {
       layers <- paste(
         map_cmd("base"),
         map_cmd(bathy_cmd),
@@ -466,12 +468,6 @@ basemap <- function(
   if (diff(X$map.limits[3:4]) > 1e6 && X$map.limits[3] == 0) {
     X$map.limits[3] <- 1
   }
-
-  ## Fix for ggplot2 3.4.0: size is deprecated for lines/polygons, use linewidth
-  # layers <- gsub("size\\s*=\\s*land\\.size", "linewidth = land.size", layers)
-  # layers <- gsub("size\\s*=\\s*gla\\.size", "linewidth = gla.size", layers)
-  # layers <- gsub("size\\s*=\\s*bathy\\.size", "linewidth = bathy.size", layers)
-  # layers <- gsub("size\\s*=\\s*grid\\.size", "linewidth = grid.size", layers)
 
   ## Final plotting
 

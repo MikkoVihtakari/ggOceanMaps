@@ -32,7 +32,8 @@ transform_coord(
   Either a name of the longitude and latitude columns in `x` or a
   numeric vector containing longitude and latitude coordinates. Use
   `NULL` to [guess the longitude and/or latitude
-  columns](guess_coordinate_columns.md) in `x`.
+  columns](https://mikkovihtakari.github.io/ggOceanMaps/reference/guess_coordinate_columns.md)
+  in `x`.
 
 - new.names:
 
@@ -59,9 +60,9 @@ transform_coord(
   Character. Either `NULL`,
   [`CRS`](https://r-spatial.github.io/sf/reference/st_crs.html) the
   coordinates should be transformed to or a name of shapefiles in
-  [`shapefile_list`](shapefile_list.md). If `NULL`, the output
-  projection will be automatically determined from data. This option
-  requires decimal degrees as input option.
+  [`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md).
+  If `NULL`, the output projection will be automatically determined from
+  data. This option requires decimal degrees as input option.
 
 - verbose:
 
@@ -94,8 +95,10 @@ from `x` by default.
 
 ## See also
 
-Other basemap functions: [`basemap()`](basemap.md), [`qmap()`](qmap.md),
-[`shapefile_list()`](shapefile_list.md)
+Other basemap functions:
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md),
+[`qmap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/qmap.md),
+[`shapefile_list()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md)
 
 ## Author
 

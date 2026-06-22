@@ -1,6 +1,8 @@
 # Test whether a limit argument is specified as decimal degrees.
 
-An internal function to make [`basemap`](basemap.md) code more readable
+An internal function to make
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+code more readable
 
 ## Usage
 
@@ -12,7 +14,8 @@ is_decimal_limit(limits)
 
 - limits:
 
-  A numeric vector of length 1 or 4. See [`basemap`](basemap.md)
+  A numeric vector of length 1 or 4. See
+  [`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 
 ## Value
 
@@ -21,11 +24,12 @@ A logical value
 ## Details
 
 This is an internal function, which is automatically run by the
-[`basemap`](basemap.md) function.
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function.
 
 ## See also
 
-[`basemap`](basemap.md)
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
 
 ## Author
 

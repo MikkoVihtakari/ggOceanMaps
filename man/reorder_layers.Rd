@@ -34,9 +34,9 @@ if(requireNamespace("ggspatial", quietly = TRUE)) {
  }
 }
 \seealso{
-Other customize shapefiles: 
-\code{\link{auto_limits}()},
-\code{\link{theme_map}()}
+Other customize shapefiles:
+\code{\link[=auto_limits]{auto_limits()}},
+\code{\link[=theme_map]{theme_map()}}
 }
 \author{
 Mikko Vihtakari

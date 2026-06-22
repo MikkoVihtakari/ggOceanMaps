@@ -10,7 +10,8 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Premade maps">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Premade maps">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -20,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggOceanMaps</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,19 +32,25 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../articles/ggOceanMaps.html">User manual</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
+<li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><h6 class="dropdown-header" data-toc-skip>News</h6></li>
-    <li><a class="dropdown-item" href="../articles/new-features.html">New features in version 2</a></li>
+<li><h6 class="dropdown-header" data-toc-skip>Instructions</h6></li>
+    <li><a class="dropdown-item" href="../articles/bathymetry.html">Bathymetry</a></li>
+    <li><a class="dropdown-item" href="../articles/adding-graphical-elements.html">Adding graphical elements</a></li>
+    <li><a class="dropdown-item" href="../articles/premade-shapefiles.html">Premade shapefiles</a></li>
+    <li><a class="dropdown-item" href="../articles/premade-maps.html">Premade maps</a></li>
+    <li><a class="dropdown-item" href="../articles/customising-shapefiles.html">Customising shapefiles</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Customising shapefiles</h6></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Premade maps</h6></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Premade shapefiles</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Examples</h6></li>
+    <li><a class="dropdown-item" href="../articles/cookbook.html">Cookbook</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>News</h6></li>
+    <li><a class="dropdown-item" href="../articles/new-features-v3.html">New features in version 3</a></li>
+    <li><a class="dropdown-item" href="../articles/new-features-v2.html">New features in version 2</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Presentations</h6></li>
     <li><a class="dropdown-item" href="../articles/poster.html">SI2022 poster</a></li>
-    <li><a class="external-link dropdown-item" href="https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html">AeN workshop slides</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -70,7 +77,7 @@
                         <h4 data-toc-skip class="author">Mikko Vihtakari
 (Institute of Marine Research)</h4>
             
-            <h4 data-toc-skip class="date">10 February, 2026</h4>
+            <h4 data-toc-skip class="date">22 June, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/vignettes/premade-maps.Rmd" class="external-link"><code>vignettes/premade-maps.Rmd</code></a></small>
       <div class="d-none name"><code>premade-maps.Rmd</code></div>
@@ -79,150 +86,213 @@
     
     
 <div class="section level2">
-<h2 id="general">General<a class="anchor" aria-label="anchor" href="#general"></a>
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>In addition to the <a href="#standard-maps">standard maps</a>, the
-ggOceanMaps package contains a possibility to plot premade detailed
-shapefiles within limited regions the package author has needed in his
-work. The detailed shapefiles are stored in the <a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData" class="external-link">ggOceanMapsLargeData</a>
-repository and downloaded as needed. Available shapefiles can be viewed
-using the <code><a href="../reference/shapefile_list.html">shapefile_list()</a></code> function.</p>
+<p>ggOceanMaps plots maps from <strong>pre-made shapefiles</strong>.
+Most of the time you do not need to think about them:
+<code><a href="../reference/basemap.html">basemap()</a></code> picks the right set automatically from the
+<code>limits</code> (or <code>data</code>) you give it. This article
+shows the maps that ship with — or are downloadable for — the package,
+and the projection each uses.</p>
+<p>The available sets are listed by <code><a href="../reference/shapefile_list.html">shapefile_list()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"all"</span><span class="op">)</span></span></code></pre></div>
-<p>Plotting shapefiles from the list is done as for any other shapes.
-Note that the projection of the shapefiles varies.</p>
+<code class="sourceCode R"><span><span class="va">shapes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shapefile_list.html">shapefile_list</a></span><span class="op">(</span><span class="st">"all"</span><span class="op">)</span></span>
+<span><span class="va">datapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/path.expand.html" class="external-link">path.expand</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ggOceanMaps.datapath"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">userpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/path.expand.html" class="external-link">path.expand</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ggOceanMaps.userpath"</span>, <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">shapes</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">shapes</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="va">datapath</span>, <span class="st">"&lt;ggOceanMaps.datapath&gt;"</span>, <span class="va">x</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="va">userpath</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="va">userpath</span>, <span class="st">"&lt;ggOceanMaps.userpath&gt;"</span>, <span class="va">x</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">x</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="va">shapes</span></span>
+<span><span class="co">#&gt;                     name                                  land</span></span>
+<span><span class="co">#&gt; 1    ArcticStereographic    &lt;ggOceanMaps.datapath&gt;/arctic_land</span></span>
+<span><span class="co">#&gt; 2 AntarcticStereographic &lt;ggOceanMaps.datapath&gt;/antarctic_land</span></span>
+<span><span class="co">#&gt; 3          DecimalDegree                               dd_land</span></span>
+<span><span class="co">#&gt; 4               Svalbard  &lt;ggOceanMaps.datapath&gt;/svalbard_land</span></span>
+<span><span class="co">#&gt; 5                 Europe    &lt;ggOceanMaps.datapath&gt;/europe_land</span></span>
+<span><span class="co">#&gt;                                    glacier</span></span>
+<span><span class="co">#&gt; 1    &lt;ggOceanMaps.datapath&gt;/arctic_glacier</span></span>
+<span><span class="co">#&gt; 2 &lt;ggOceanMaps.datapath&gt;/antarctic_glacier</span></span>
+<span><span class="co">#&gt; 3        &lt;ggOceanMaps.datapath&gt;/dd_glacier</span></span>
+<span><span class="co">#&gt; 4  &lt;ggOceanMaps.datapath&gt;/svalbard_glacier</span></span>
+<span><span class="co">#&gt; 5                                     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;                                                                                    bathy</span></span>
+<span><span class="co">#&gt; 1    dd_rbathy|&lt;ggOceanMaps.datapath&gt;/dd_rbathy_cont|&lt;ggOceanMaps.datapath&gt;/arctic_bathy</span></span>
+<span><span class="co">#&gt; 2 dd_rbathy|&lt;ggOceanMaps.datapath&gt;/dd_rbathy_cont|&lt;ggOceanMaps.datapath&gt;/antarctic_bathy</span></span>
+<span><span class="co">#&gt; 3        dd_rbathy|&lt;ggOceanMaps.datapath&gt;/dd_rbathy_cont|&lt;ggOceanMaps.datapath&gt;/dd_bathy</span></span>
+<span><span class="co">#&gt; 4  dd_rbathy|&lt;ggOceanMaps.datapath&gt;/dd_rbathy_cont|&lt;ggOceanMaps.datapath&gt;/svalbard_bathy</span></span>
+<span><span class="co">#&gt; 5        dd_rbathy|&lt;ggOceanMaps.datapath&gt;/dd_rbathy_cont|&lt;ggOceanMaps.datapath&gt;/dd_bathy</span></span>
+<span><span class="co">#&gt;     crs                                      limits</span></span>
+<span><span class="co">#&gt; 1  3995                                       c(30)</span></span>
+<span><span class="co">#&gt; 2  3031                                      c(-35)</span></span>
+<span><span class="co">#&gt; 3  4326                       c(-180, 180, -90, 90)</span></span>
+<span><span class="co">#&gt; 4 32633 c(402204.7, 845943.9, 8253526.1, 8978517.5)</span></span>
+<span><span class="co">#&gt; 5  3035        c(943609, 7601958, -375446, 6825119)</span></span>
+<span><span class="co">#&gt;                                                                      path</span></span>
+<span><span class="co">#&gt; 1 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span></span>
+<span><span class="co">#&gt; 2 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span></span>
+<span><span class="co">#&gt; 3 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span></span>
+<span><span class="co">#&gt; 4 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span></span>
+<span><span class="co">#&gt; 5 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/</span></span></code></pre></div>
+<p>Each row is a named shapefile set with a coordinate reference system
+(<code>crs</code>), a default extent (<code>limits</code>), and the
+names of its land / glacier / bathymetry objects. You can force a
+particular set with the first argument or the <code>shapefiles</code>
+argument (partial matching works, so <code>"Arctic"</code> resolves to
+<code>"ArcticStereographic"</code>):</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>shapefiles <span class="op">=</span> <span class="st">"BarentsSea"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>The detailed shapefiles can be <strong>large</strong>. Use the
-standard basemap data sources to find the limits for your map before you
-make detailed plots. Exporting to a file is advised over plotting into
-the plot window. Note that the detailed shapefile approach
-<strong>generally does not work for large areas</strong>. The solution
-is sub-optimal and a possibility of plotting raster from WMS is under
-work.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>shapefiles <span class="op">=</span> <span class="st">"Svalbard"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Low-resolution global data (<code>dd_land</code>,
+<code>dd_rbathy</code>) ship with the package. The higher-resolution
+regional sets live in the <a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData" class="external-link">ggOceanMapsLargeData</a>
+repository and are <strong>downloaded automatically on first
+use</strong> to <code>getOption("ggOceanMaps.datapath")</code>. Set that
+option to a permanent folder in your <code>.Rprofile</code> so the files
+are reused across sessions; otherwise they land in
+<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code> and are re-downloaded each session.</p>
 </div>
 <div class="section level2">
-<h2 id="standard-maps">Standard map<a class="anchor" aria-label="anchor" href="#standard-maps"></a>
+<h2 id="standard-maps-selected-automatically">Standard maps (selected automatically)<a class="anchor" aria-label="anchor" href="#standard-maps-selected-automatically"></a>
 </h2>
+<p>These three sets cover the whole globe and are chosen automatically
+from the latitude range of your <code>limits</code>: polar-stereographic
+projections near the poles, decimal degrees elsewhere. See the <a href="ggOceanMaps.html">user manual</a> for the exact selection
+rule.</p>
 <div class="section level3">
-<h3 id="the-default">The default<a class="anchor" aria-label="anchor" href="#the-default"></a>
+<h3 id="decimal-degree">Decimal degree<a class="anchor" aria-label="anchor" href="#decimal-degree"></a>
 </h3>
-<p>The default map coming with ggOceanMaps uses decimal degrees and <a href="https://www.naturalearthdata.com/downloads/10m-physical-vectors/" class="external-link">Natural
-Earth Data</a> 1:10m Physical Vectors with the Land and Minor Island
-datasets combined. The map is transformed to other polar stereographic
-projections based on limits used in the map.</p>
+<p>The default map uses decimal degrees (EPSG:4326) and <a href="https://www.naturalearthdata.com/downloads/10m-physical-vectors/" class="external-link">Natural
+Earth</a> 1:10m land and minor-island polygons.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"DecimalDegree"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png"></p>
+<div class="float">
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png" alt="Figure: Global basemap in decimal degrees (EPSG:4326) with land, glaciers, and binned bathymetry."><div class="figcaption">
+<strong>Figure:</strong> Global basemap in
+decimal degrees (EPSG:4326) with land, glaciers, and binned
+bathymetry.</div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="arctic-stereographic">Arctic Stereographic<a class="anchor" aria-label="anchor" href="#arctic-stereographic"></a>
 </h3>
-<p>Standard maps requiring the ggOceanMapsData package are selected
-automatically based on limits used in the map. You can also use the
-<code>shapefiles</code> argument or the <code>x</code> argument as a
-shortcut to specifically plot these maps (the shortcut requires
-ggOceanMaps &gt;=1.3.1). Since partial matching is used, you do not need
-write out the entire name. Only “Arctic” will do for the Arctic
-stereographic map, for instance.</p>
+<p>Used automatically when the map sits in the high north (EPSG:3995).
+Land and glacier polygons and vector bathymetry are downloaded from
+ggOceanMapsLargeData on first use.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"ArcticStereographic"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/ArcticStereographic.png"></p>
+<div class="float">
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/ArcticStereographic.png" alt="Figure: Arctic stereographic basemap (EPSG:3995) with land, glaciers, and bathymetry."><div class="figcaption">
+<strong>Figure:</strong> Arctic stereographic
+basemap (EPSG:3995) with land, glaciers, and bathymetry.</div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="antarctic-stereographic">Antarctic Stereographic<a class="anchor" aria-label="anchor" href="#antarctic-stereographic"></a>
 </h3>
+<p>The southern equivalent (EPSG:3031).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"AntarcticStereographic"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/AntarcticStereographic.png"></p>
+<div class="float">
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/AntarcticStereographic.png" alt="Figure: Antarctic stereographic basemap (EPSG:3031) with land, glaciers, and bathymetry."><div class="figcaption">
+<strong>Figure:</strong> Antarctic stereographic
+basemap (EPSG:3031) with land, glaciers, and bathymetry.</div>
 </div>
-<div class="section level3">
-<h3 id="decimal-degree">Decimal degree<a class="anchor" aria-label="anchor" href="#decimal-degree"></a>
-</h3>
-<p>The detailed shapefiles for time being are:</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="gebco-based-maps">GEBCO based maps<a class="anchor" aria-label="anchor" href="#gebco-based-maps"></a>
+<h2 id="detailed-regional-maps">Detailed regional maps<a class="anchor" aria-label="anchor" href="#detailed-regional-maps"></a>
 </h2>
+<p>Higher-resolution sets for regions the package author works in. They
+are downloaded from ggOceanMapsLargeData when first requested. The
+detailed shapefiles can be <strong>large</strong>: find your limits with
+the standard maps first, and export to a file rather than plotting into
+the screen device for big extents.</p>
+<p>Only a handful of regions have a dedicated high-resolution set. If
+your area of interest is not in the list above — or you need finer land
+or bathymetry than the standard maps provide — you can build your own
+land and bathymetry shapefiles and pass them to <code><a href="../reference/basemap.html">basemap()</a></code>
+via the <code>shapefiles</code> argument. See the <a href="customising-shapefiles.html">Customising shapefiles</a> article
+for the full workflow.</p>
 <div class="section level3">
-<h3 id="barents-sea">Barents Sea<a class="anchor" aria-label="anchor" href="#barents-sea"></a>
+<h3 id="europe">Europe<a class="anchor" aria-label="anchor" href="#europe"></a>
 </h3>
-<p>The Barents Sea and surroundings vectorized from <a href="https://www.gebco.net/data_and_products/gridded_bathymetry_data/" class="external-link">the
-GEBCO grid</a>. A subset of IBCAO and GEBCO datasets. Use this one for
-speed when you can. Replace by IBCAO when your ROI is exceeding the
-limits of this one.</p>
+<p>A detailed European coastline (EPSG:3035) based on the <a href="https://www.eea.europa.eu/en/datahub/datahubitem-view/af40333f-9e94-4926-a4f0-0a787f1d2b8f" class="external-link">EEA
+coastline</a>. Useful for coastal maps around the European seas. Can be
+paired with <a href="bathymetry.html#live-download-from-a-web-coverage-service-wcs">EMODnet
+bathymetry</a> for ~115 m resolution bathymetric maps (see <a href="new-features-v3.html#high-resolution-maps-of-european-coast">New
+features in v3</a> for example).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"BarentsSea"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/BarentsSea.png"></p>
-<div class="section level4">
-<h4 id="the-arctic-ibcao">The Arctic (IBCAO)<a class="anchor" aria-label="anchor" href="#the-arctic-ibcao"></a>
-</h4>
-<p><a href="https://www.gebco.net/about_us/committees_and_groups/scrum/ibcao/" class="external-link">The
-IBCAO grid (by GEBCO)</a> vectorized from the North Pole to
-approximately 60-65°N. A subset of the GEBCO dataset under. Definitely
-use this one over the GEBCO alternative whenever you can. It is about
-ten times faster.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"IBCAO"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/IBCAO.png"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>shapefiles <span class="op">=</span> <span class="st">"Europe"</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Europe.png" alt="Figure: Detailed European coastline (EPSG:3035) from the EEA coastline dataset."><div class="figcaption">
+<strong>Figure:</strong> Detailed European
+coastline (EPSG:3035) from the EEA coastline dataset.</div>
 </div>
-<div class="section level4">
-<h4 id="the-northern-hemisphere-gebco">The Northern hemisphere (GEBCO)<a class="anchor" aria-label="anchor" href="#the-northern-hemisphere-gebco"></a>
-</h4>
-<p>The entire GEBCO grid from the North Pole to 10°N vectorized and
-packed into a &gt;60 Mb R data file. When opened, the data take &gt;3
-Gb. This is a clumsy approach and plotting maps using this option can
-take a long time (up to 10 minutes on a test machine) and will make your
-computer to beg for mercy. Use this as the last resort and do not blame
-the package author that you were not warned ;)</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"GEBCO"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/GEBCO.png"></p>
+<p>The Europe land polygons are downloaded from ggOceanMapsLargeData on
+first use.</p>
 </div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="geonorge-based-maps">Geonorge based maps<a class="anchor" aria-label="anchor" href="#geonorge-based-maps"></a>
-</h2>
 <div class="section level3">
 <h3 id="svalbard">Svalbard<a class="anchor" aria-label="anchor" href="#svalbard"></a>
 </h3>
-<p>The Svalbard map from the <a href="https://github.com/MikkoVihtakari/PlotSvalbard" class="external-link">PlotSvalbard</a>
-package:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"Svalbard"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>A detailed Svalbard map (EPSG:32633), originally from the <a href="https://github.com/MikkoVihtakari/PlotSvalbard" class="external-link">PlotSvalbard</a>
+package. The function asks to download the data the first time you use
+it.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"Svalbard"</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png" alt="The PlotSvalbard maps can also be generated using ggOceanMaps with the ggOceanMapsLargeData extension. The function asks to download the data when you use it for the first time."><div class="figcaption">The PlotSvalbard maps can also be generated
-using ggOceanMaps with the ggOceanMapsLargeData extension. The function
-asks to download the data when you use it for the first time.</div>
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png" alt="Figure: Detailed Svalbard map matching from the now deprecated PlotSvalbard package."><div class="figcaption">
+<strong>Figure:</strong> Detailed Svalbard map
+matching from the now deprecated PlotSvalbard package.</div>
 </div>
-<p>Kongsfjorden from the <a href="https://github.com/MikkoVihtakari/PlotSvalbard" class="external-link">PlotSvalbard</a>
-package:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10.9</span>, <span class="fl">12.65</span>, <span class="fl">78.83</span>, <span class="fl">79.12</span><span class="op">)</span>, </span>
-<span>        bathymetry <span class="op">=</span> <span class="cn">TRUE</span>, shapefiles <span class="op">=</span> <span class="st">"Svalbard"</span>,</span>
-<span>        legends <span class="op">=</span> <span class="cn">FALSE</span>, glaciers <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Kongsfjorden.png"></p>
+<p>Zooming to Kongsfjorden. Svalbard and Europe maps can be paired with
+the EMODnet bathymetry:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
+<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10.9</span>, <span class="fl">12.65</span>, <span class="fl">78.83</span>, <span class="fl">79.12</span><span class="op">)</span>,</span>
+<span>  bathy.style <span class="op">=</span> <span class="st">"wemb"</span>,</span>
+<span>  shapefiles <span class="op">=</span> <span class="st">"Svalbard"</span>,</span>
+<span>  legends <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  glaciers <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Kongsfjorden.png" alt="Figure: High-resolution map of Kongsfjorden, Svalbard, with bathymetry and glaciers."><div class="figcaption">
+<strong>Figure:</strong> High-resolution map of
+Kongsfjorden, Svalbard, with bathymetry and glaciers.</div>
+</div>
+<!--
+Archived premade maps (kept for reference; not currently available).
+
+These sets were distributed with earlier versions and are commented out of
+`shapefile_list()`. They may return in a future release once their data are
+rebuilt with the current sf/stars pipeline. Pre-rendered images still exist in
+the ggOceanMapsLargeData/docs folder:
+
+- Barents Sea (GEBCO subset, EPSG:32636):
+  https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/BarentsSea.png
+- IBCAO (Arctic, EPSG:3995):
+  https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/IBCAO.png
+- GEBCO (Northern hemisphere, EPSG:3995):
+  https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/GEBCO.png
+- EMODnet (Northeast Atlantic, EPSG:3575):
+  https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/EMODnet.png
+
+For high-resolution bathymetry now, prefer on-demand WCS download
+(`bathy.style = "wemb"` / `"wceb"`) or build your own from a GEBCO/ETOPO grid.
+See the Bathymetry and Customising shapefiles articles.
+-->
 </div>
 </div>
 <div class="section level2">
-<h2 id="emodnet-based-maps">EMODnet based maps<a class="anchor" aria-label="anchor" href="#emodnet-based-maps"></a>
+<h2 id="citing-the-data">Citing the data<a class="anchor" aria-label="anchor" href="#citing-the-data"></a>
 </h2>
-<div class="section level4">
-<h4 id="northeast-atlantic">Northeast Atlantic<a class="anchor" aria-label="anchor" href="#northeast-atlantic"></a>
-</h4>
-<p>1/16 arc-minute map over Northeast Atlantic from <a href="https://www.emodnet-bathymetry.eu/" class="external-link">EMODnet</a>. Might be
-unfinished. If so and you’ll need it, nag the developer.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span><span class="st">"EMODnet"</span>, bathymetry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/EMODnet.png" alt="The EMODnet bathymetry is still unfinished. Here a map showing a part of the Norwegian coast around Ålesund for testing. Vectorization of land shapes from bathymetry has not been implemented yet."><div class="figcaption">The EMODnet bathymetry is still unfinished. Here
-a map showing a part of the Norwegian coast around Ålesund for testing.
-Vectorization of land shapes from bathymetry has not been implemented
-yet.</div>
-</div>
-</div>
+<p>The data used by the package are not the property of the Institute of
+Marine Research nor the package author. Please cite the data sources
+used in any map you generate. See the <a href="https://mikkovihtakari.github.io/ggOceanMaps/#citations-and-data-sources">data-source
+list</a> for the references.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

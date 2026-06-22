@@ -1,8 +1,9 @@
 # Simplify a bathymetry raster ready for vectorization
 
 Simplifies bathymetry raster ready for the
-[`vector_bathymetry`](vector_bathymetry.md) function. Warning:
-processing may take a long time if the bathymetry raster is large.
+[`vector_bathymetry`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
+function. Warning: processing may take a long time if the bathymetry
+raster is large.
 
 ## Usage
 
@@ -76,8 +77,9 @@ raster_bathymetry(
 - estimate.land:
 
   Logical indicating whether to include land to the output. Can be used
-  in the following [`vector_bathymetry`](vector_bathymetry.md) step to
-  estimate land polygons.
+  in the following
+  [`vector_bathymetry`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
+  step to estimate land polygons.
 
 - downsample:
 
@@ -120,9 +122,9 @@ function.
 Note that the size of the output is heavily influenced by the number of
 depth contours (`depths`) as well as the resolution of `bathy` and
 choice of `downsample`. To make the
-[`vector_bathymetry`](vector_bathymetry.md) function and consequent
-plotting faster, limiting the details of the bathymetry raster may be
-desirable.
+[`vector_bathymetry`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
+function and consequent plotting faster, limiting the details of the
+bathymetry raster may be desirable.
 
 ## References
 
@@ -136,9 +138,12 @@ Information.
 
 ## See also
 
-Other create shapefiles: [`clip_shapefile()`](clip_shapefile.md),
-[`geonorge_bathymetry()`](geonorge_bathymetry.md),
-[`vector_bathymetry()`](vector_bathymetry.md)
+Other create shapefiles:
+[`clip_shapefile()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/clip_shapefile.md),
+[`geonorge_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/geonorge_bathymetry.md),
+[`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md),
+[`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md),
+[`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md)
 
 ## Author
 

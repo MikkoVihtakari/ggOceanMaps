@@ -21,4 +21,5 @@ Returns a numeric vector of lenght `x` of ggplot font sizes
 
 ## See also
 
-Other size adjustors: [`LS()`](LS.md)
+Other size adjustors:
+[`LS()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/LS.md)

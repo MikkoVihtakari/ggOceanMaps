@@ -4,7 +4,7 @@ author: "Mikko Vihtakari (Institute of Marine Research)"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{poster}
+  %\VignetteIndexEntry{SI2022 poster}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -26,7 +26,7 @@ On this website, you can find a ggOceanMaps poster presented at the [Sharks Inte
 
 ## The poster
 
-<a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData/blob/master/docs/SI2022_poster.pdf"><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/SI2022_poster.png" width="800" height="1133"/></a>  
+<a href="https://github.com/MikkoVihtakari/ggOceanMapsLargeData/blob/master/docs/SI2022_poster.pdf"><img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/SI2022_poster.png" alt="ggOceanMaps poster presented at Sharks International 2022, Valencia, Spain." width="800" height="1133"/></a>  
 
 Click the picture to download a pdf of the poster with embedded links. 
 

@@ -18,7 +18,7 @@ dd_land
 Decimal degree land shapes
 }
 \seealso{
-Other mapfiles: 
+Other mapfiles:
 \code{\link{dd_rbathy}}
 }
 \concept{mapfiles}

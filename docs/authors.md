@@ -16,13 +16,13 @@ Source:
 [`DESCRIPTION`](https://github.com/MikkoVihtakari/ggOceanMaps/blob/HEAD/DESCRIPTION)
 
 Vihtakari M (2026). *ggOceanMaps: Plot Data on Oceanographic Maps using
-'ggplot2'*. R package version 2.3.0,
+'ggplot2'*. R package version 3.0.0,
 <https://mikkovihtakari.github.io/ggOceanMaps/>.
 
     @Manual{,
       title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
       author = {Mikko Vihtakari},
       year = {2026},
-      note = {R package version 2.3.0},
+      note = {R package version 3.0.0},
       url = {https://mikkovihtakari.github.io/ggOceanMaps/},
     }

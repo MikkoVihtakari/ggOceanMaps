@@ -23,4 +23,5 @@ Information.
 
 ## See also
 
-Other mapfiles: [`dd_land`](dd_land.md)
+Other mapfiles:
+[`dd_land`](https://mikkovihtakari.github.io/ggOceanMaps/reference/dd_land.md)

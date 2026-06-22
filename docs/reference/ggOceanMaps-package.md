@@ -6,9 +6,11 @@ oceanographic maps anywhere around the globe.
 ## Details
 
 The general map-making function for ggOceanMaps is
-[`basemap`](basemap.md). This function creates a "canvas" on which
-research data can be plotted. The [`basemap`](basemap.md) function is
-analogous to
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md).
+This function creates a "canvas" on which research data can be plotted.
+The
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function is analogous to
 [`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html) function
 from the ggplot2 package. Remember to use `data = <<NAMEOFDATASET>>` for
 additional geometries you plot on `basemaps`
@@ -28,8 +30,14 @@ Useful links:
 ## Author
 
 **Maintainer**: Mikko Vihtakari <mikko.vihtakari@hi.no>
-([ORCID](https://orcid.org/0000-0003-0371-4319)) (Institute of Marine
-Research)
+([ORCID](https://orcid.org/0000-0003-0371-4319)) (affiliation: Institute
+of Marine Research)
+
+Authors:
+
+- Mikko Vihtakari <mikko.vihtakari@hi.no>
+  ([ORCID](https://orcid.org/0000-0003-0371-4319)) (affiliation:
+  Institute of Marine Research)
 
 Other contributors:
 

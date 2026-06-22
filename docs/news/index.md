@@ -1,8 +1,151 @@
 # Changelog
 
-## ggOceanMaps 2.4 (development version on GitHub)
+## ggOceanMaps 3.0.0
+
+This major release adds on-demand bathymetry sources, build-your-own
+shapefile tools, automated tests, and a reorganised documentation site.
+The repository also includes instructions for AI assistants that help
+users and contributors work with ggOceanMaps.
+
+### New features
+
+- On-demand WCS bathymetry via the new
+  [`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md)
+  function with two sources:
+  - EMODnet — `bathy.style = "wcs_emodnet_blues"` (`"wemb"`) /
+    `"wcs_emodnet_grays"` (`"wemg"`). ~115 m European-waters bathymetry.
+  - ETOPO1 from NOAA NCEI — `bathy.style = "wcs_etopo_blues"` (`"wceb"`)
+    / `"wcs_etopo_grays"` (`"wceg"`). ~1.85 km global topo-bathy. Use
+    this when EMODnet has no coverage for your region. Bounding boxes
+    outside a source’s coverage error cleanly with a pointer to the
+    right alternative. Large boxes are tiled and mosaicked
+    automatically. Tiles cached under
+    `getOption("ggOceanMaps.datapath")`.
+- [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md)
+  extracts a land polygon from a `bathyRaster` produced by
+  [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md).
+  Pairs with
+  [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
+  for build-your-own shapefile workflows.
+- Maps no longer print `x` / `y` axis titles by default (decimal-degree
+  maps used to show “Longitude” / “Latitude”). Add them back when you
+  want them with `+ labs(x = "Longitude", y = "Latitude")`.
+
+### Documentation and AI support
+
+- New repository-level `AGENTS.md` with instructions for AI assistants
+  helping users *use* ggOceanMaps.
+- New website Cookbook of short, copy-pasteable recipes.
+- New website Bathymetry article covering all bathymetry sources.
+- New website Adding graphical elements article covering ocean-current
+  arrows (velocity quivers and schematic “Figure 1” arrows) and pie
+  charts on maps via `scatterpie::geom_scatterpie()`.
+- New website Customising shapefiles article covering
+  [`clip_shapefile()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/clip_shapefile.md),
+  the
+  [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
+  -\>
+  [`vector_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_bathymetry.md)
+  /
+  [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md)
+  pipeline, and
+  [`geonorge_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/geonorge_bathymetry.md).
+- The “Premade maps” and “Premade shapefiles” articles were rewritten to
+  the current `sf`/`stars` toolchain and the current
+  [`shapefile_list()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md)
+  contents.
+- The user manual was slimmed to concise explanations that link out to
+  the in-depth articles, and the documentation site (navbar, reference
+  index) was reorganised.
+
+### Bug fixes
+
+- Fixed land being clipped too early on projected (polar-stereographic)
+  maps with decimal-degree limits, e.g. `basemap(c(-20, 30, 50, 70))`
+  cut off northern Norway. The land clip boundary is now densified
+  before back-projecting to WGS84.
+- Fixed antimeridian / wide-span land clipping by routing the clip
+  through the projected map CRS, fixing wrong land for
+  `basemap(c(120, -120, 60, 80))` and a topology crash for rotated
+  antimeridian data input.
+- Fixed a crash (`st_cast()` on a degenerate `GEOMETRYCOLLECTION`) for
+  some custom
+  [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md)
+  layers at some map limits.
+- Fixed rotated antimeridian maps drawing no land, e.g.
+  `basemap(c(100, -120, -12, -57), rotate = TRUE)` and
+  `basemap(c(40, -70, -37, 40), rotate = TRUE)`. A landmass crossing the
+  rotated antimeridian (even off-screen, such as Antarctica) was
+  “unwrapped” into a degenerate \>180-degree polygon during projection,
+  which made ggplot2 skip the whole land layer. Such polygons are now
+  split along the seam before projection (issue
+  [\#44](https://github.com/MikkoVihtakari/ggOceanMaps/issues/44)).
+- Fixed the default bathymetry being heavily downsampled. The raster was
+  warped onto a coarse ~256-cell grid regardless of the source
+  resolution, so e.g. `basemap(60, bathymetry = TRUE)` lost most of its
+  detail. The warp now keeps the source resolution by default; use the
+  `downsample` argument to reduce it.
+- Fixed `basemap("DecimalDegree", bathymetry = TRUE)` (and the same
+  whole-world set with `glaciers = TRUE`) collapsing the bathymetry to a
+  single row at the equator. Clipping the global raster to an exact
+  -180..180 longitude box returned a degenerate boundary; whole-world
+  decimal-degree limits are now pulled just inside the antimeridian
+  before clipping.
+- Fixed a WCS `bathy.style` (`"wemb"` / `"wceb"`, etc.) failing with
+  “st_transform applied to an object of class ‘logical’” when combined
+  with an explicitly named premade shapefile set, e.g.
+  `basemap(..., bathy.style = "wemb", shapefiles = "Svalbard")`. The
+  on-demand bathymetry is now fetched in that case too.
+- Fixed WCS bathymetry leaving white gaps around the edges of projected
+  maps (e.g. on the Svalbard or Europe CRS). The coverage is now
+  requested for the full projected, expand-factor-padded map area rather
+  than the raw decimal-degree limits, so it fills the whole panel.
+- WCS `downsample` is now applied by the remote service, reducing
+  transfer size and memory use. Raster cropping preserves the downloaded
+  cell resolution and no longer applies a second implicit reduction
+  before plotting.
+- WCS downloads now use validated temporary files and atomic cache
+  updates. Invalid cache entries are replaced automatically, and
+  multipart responses are split using their complete MIME boundary
+  rather than a generic byte sequence that can occur inside a GeoTIFF.
+
+### Testing
+
+- A local testthat suite covers the historical regression corpus; vdiffr
+  SVG snapshot tests catch “code runs but wrong map” regressions. Tests
+  are run during development and excluded from the CRAN source package.
+- Unit tests for
+  [`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md),
+  [`auto_limits()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/auto_limits.md),
+  [`guess_coordinate_columns()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/guess_coordinate_columns.md),
+  [`LS()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/LS.md),
+  [`quiet()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/quiet.md),
+  [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md),
+  [`wcs_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md).
+
+### Internal
+
+- [`load_map_data()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/load_map_data.md)
+  no longer calls [`menu()`](https://rdrr.io/r/utils/menu.html) in
+  non-interactive sessions, so data downloads work during automated/CI
+  documentation builds.
+- Performance: `basemap_data_crop()` now clips in native CRS before
+  reprojecting, avoiding world-scale transforms for small map extents
+  ([\#55](https://github.com/MikkoVihtakari/ggOceanMaps/pull/55)).
+- Performance: grid-line generation in polar maps switched from
+  `lapply(unique())` to `split() + lapply()`
+  ([\#57](https://github.com/MikkoVihtakari/ggOceanMaps/pull/57)).
+- Removed ~131 lines of dead/commented code across `basemap.R`,
+  `basemap_data.R`, `raster_bathymetry.R`, `dist2land.R`
+  ([\#56](https://github.com/MikkoVihtakari/ggOceanMaps/pull/56),
+  [\#59](https://github.com/MikkoVihtakari/ggOceanMaps/pull/59),
+  [\#60](https://github.com/MikkoVihtakari/ggOceanMaps/pull/60),
+  [\#61](https://github.com/MikkoVihtakari/ggOceanMaps/pull/61),
+  [\#62](https://github.com/MikkoVihtakari/ggOceanMaps/pull/62)).
 
 ## ggOceanMaps 2.3.0
+
+CRAN release: 2026-02-10
 
 - Fixed anti-meridian crossing land clipping in rotated basemaps
   ([\#53](https://github.com/MikkoVihtakari/ggOceanMaps/pull/53))
@@ -48,8 +191,8 @@ CRAN release: 2024-01-15
 - [`expand.factor` should work now as
   designed](https://github.com/MikkoVihtakari/ggOceanMaps/issues/33)
 - Fixed an error in `dist2land(binary = TRUE)`
-- [`get_depth()`](../reference/get_depth.md) now uses `raster_user` and
-  returns depths as positive numeric.
+- [`get_depth()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/get_depth.md)
+  now uses `raster_user` and returns depths as positive numeric.
 - Fixed an issue where land boundaries did not get clipped correctly
   when using custom crs
 
@@ -74,14 +217,14 @@ CRAN release: 2023-07-04
   required rewriting of most functions, new bugs have almost certainly
   been introduced.
 - Bathymetry system redesigned (see
-  [this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features.html))
+  [this](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features-v2.html))
 - Decimal degree maps can now be plotted across the antimeridian.
 - Added spatial data to ggOceanMaps making the ggOceanMapsData package
   not needed any longer.
-- [`dist2land()`](../reference/dist2land.md) now uses great circle
-  distances on a spherical Earth ([s2](https://r-spatial.github.io/s2/))
-  by default and should be able to calculate distances to land anywhere
-  around the globe.
+- [`dist2land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/dist2land.md)
+  now uses great circle distances on a spherical Earth
+  ([s2](https://r-spatial.github.io/s2/)) by default and should be able
+  to calculate distances to land anywhere around the globe.
 - qmap points turned red. Addressed a long-standing issue with
   `shapefiles` and `shape` getting mixed.
 - Fixed a bug with shapefiles argument shortcut.
@@ -97,7 +240,7 @@ CRAN release: 2023-07-04
 CRAN release: 2022-09-26
 
 - Added shapefiles to the `x` argument shortcut in
-  [`basemap()`](../reference/basemap.md).
+  [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md).
 - Added limits to premade shapefiles to make visualization easier.
 - Removed many CRS warning from sp and rgdal
 - Added a way to control the plotting order of graticules
@@ -125,14 +268,17 @@ CRAN release: 2022-01-08
 - Improved premade_shapefiles and shapefile documentation.
 - Started rewriting the package from `sp`, `rgeos` and `rgdal` to `sf`.
 - Moved the `rgdal` package from Imports to Suggests.
-- Added [`geonorge_bathymetry()`](../reference/geonorge_bathymetry.md)
+- Added
+  [`geonorge_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/geonorge_bathymetry.md)
 - Added the possiblity to adjust `data` limits using the `expand.factor`
-  parameter in [`basemap()`](../reference/basemap.md) and
-  [`qmap()`](../reference/qmap.md)
+  parameter in
+  [`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+  and
+  [`qmap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/qmap.md)
 - Improved the user manual and website.
 - [Fixed an issue with other than decimal degree input
   rasters](https://github.com/MikkoVihtakari/ggOceanMaps/issues/2) in
-  [`raster_bathymetry()`](../reference/raster_bathymetry.md)
+  [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
 - [Fixed an issue with ggplot2
   (\>=3.3.4)](https://github.com/MikkoVihtakari/ggOceanMaps/issues/3)
 

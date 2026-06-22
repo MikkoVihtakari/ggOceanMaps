@@ -74,17 +74,19 @@ basemap(
   extracted from these coordinates and produce a rectangular map. Suited
   for situations where a certain dataset is plotted on a map. The
   function attempts to [guess the correct
-  columns](guess_coordinate_columns.md) and it is advised to use
-  intuitive column names for longitude (such as "lon", "long", or
-  "longitude") and latitude ("lat", "latitude") columns. Can be omitted
-  if `limits` or `shapefiles` are defined.
+  columns](https://mikkovihtakari.github.io/ggOceanMaps/reference/guess_coordinate_columns.md)
+  and it is advised to use intuitive column names for longitude (such as
+  "lon", "long", or "longitude") and latitude ("lat", "latitude")
+  columns. Can be omitted if `limits` or `shapefiles` are defined.
 
 - shapefiles:
 
-  Either a [list containing shapefile information](shapefile_list.md) or
-  a character argument referring to a name of pre-made shapefiles in
-  [`shapefile_list`](shapefile_list.md). This name is partially matched.
-  Can be omitted if `limits` or `data` is defined as decimal degrees.
+  Either a [list containing shapefile
+  information](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md)
+  or a character argument referring to a name of pre-made shapefiles in
+  [`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md).
+  This name is partially matched. Can be omitted if `limits` or `data`
+  is defined as decimal degrees.
 
 - crs:
 
@@ -158,7 +160,8 @@ basemap(
 
   Numeric value specifying the width of the border line land, glacier
   and bathymetry shapes as well as the grid lines, respectively. Use the
-  [`LS`](LS.md) function for a specific width in pt. See Details.
+  [`LS`](https://mikkovihtakari.github.io/ggOceanMaps/reference/LS.md)
+  function for a specific width in pt. See Details.
 
 - base_size:
 
@@ -217,10 +220,11 @@ represent lines encompassing the map area in cartesian space.
 If the `shapefiles` are not specified, the function uses either the
 `limits` or `data` arguments to decide which projection to use.
 Up-to-date conditions are defined in
-[`define_shapefiles`](define_shapefiles.md) and
-[`shapefile_list`](shapefile_list.md) functions. At the time of writing,
-the function uses three different projections (given as [EPSG
-codes](https://epsg.io/))
+[`define_shapefiles`](https://mikkovihtakari.github.io/ggOceanMaps/reference/define_shapefiles.md)
+and
+[`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md)
+functions. At the time of writing, the function uses three different
+projections (given as [EPSG codes](https://epsg.io/))
 
 - **3995** WGS 84 / Arctic Polar Stereographic. Called
   "ArcticStereographic". For max latitude (`limits[4]`) \>= 60 (if min
@@ -247,79 +251,42 @@ transform into another projection.
 **Bathymetry**
 
 Bathymetry can be plotted by simply specifying `bathymetry = TRUE` or
-`bathy.style` (you won't need to specify both any longer). The former
-uses a low-resolution raster file shipped with ggOceanMaps. The package
-contains an option to plot higher resolution bathymetries than the
-default binned blue alternative (`bathy.style = "raster_binned_blues"`).
-These bathymetries can be accessed by specifying the `bathy.style`
-argument and require a download from
-[ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)
-or other online repositories. The `bathy.style` character argument
-consists of three parts separated by a `_`. The first part gives the
-type: raster, poly(gon), or contour. The two latter ones use vector
-data. The second part gives the resolution: binned, continuous or user.
-The continuous and user options cannot be used for vector data. The user
-option accepts any raster file that can be opened using
-[read_stars](https://r-spatial.github.io/stars/reference/read_stars.html).
-The path to the file has to be stored in `ggOceanMaps.userpath`
-[option](https://rdrr.io/r/base/options.html) (e.g.
-`options(ggOceanMaps.userpath = "PATH_TO_THE_FILE")`) (you can set this
-in .Rprofile to avoid having to type it every time). The last part
-defines the color: blues or grays. These options can be abbreviated by
-specifying the first letter of each part. Gray contour lines are an
-exception to the rule above and can be plotted using
-`bathy.style = "contour_gray"`. Future versions may contain a
-combination of raster and gray contours, but these have not been
-implemented yet. Currently implemented `bathy.style` alternatives are:
+`bathy.style`. The former uses the low-resolution raster shipped with
+ggOceanMaps; the latter selects one of the styles listed below. See the
+dedicated [bathymetry
+vignette](https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.html)
+for a full walk-through with examples.
 
-- `NULL` (**default**). Bathymetry style is searched from
-  `getOption("ggOceanMaps.bathy.style")`. If not found,
-  `"raster_binned_blues"` is used.
+The `bathy.style` string follows the pattern *geometry_palette*, where
+*geometry* encodes both the underlying data type (raster grid, polygon
+contours or contour lines) and where the data come from (shipped,
+downloaded, user-supplied or web service), and *palette* is either
+`blues` or `grays`. All styles have a short abbreviation. Substitute `g`
+for `b` at the end of the abbreviation to switch from blues to grays
+(e.g. `rbb` → `rbg`).
 
-- `"raster_binned_blues"` or `"rbb"` plots binned raster bathymetry
-  filled with different shades of blue. Does not require a download.
+|  |  |  |  |  |  |
+|----|----|----|----|----|----|
+| **Alias** | **Abbr.** | **Geometry** | **Data source** | **Needs** | **Notes** |
+| `raster_binned_blues` | `rbb` | raster, binned | shipped low-res | nothing | Default. Fast, works offline. |
+| `raster_continuous_blues` | `rcb` | raster, continuous | ggOceanMapsLargeData | `ggOceanMaps.datapath` | Higher detail. Recommended once cached. |
+| `raster_user_blues` | `rub` | raster, continuous | user-supplied raster | `ggOceanMaps.userpath` | GEBCO, ETOPO, IBCAO NetCDF / GeoTIFF. |
+| `wcs_emodnet_blues` | `wemb` | raster, continuous | EMODnet WCS (*European waters*) | internet (tiles cached) | ~115 m. DD limits only. See [`wcs_bathymetry`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md). |
+| `wcs_etopo_blues` | `wceb` | raster, continuous | NOAA NCEI ETOPO1 WCS (*global*) | internet (tiles cached) | ~1.85 km. DD limits only. See [`wcs_bathymetry`](https://mikkovihtakari.github.io/ggOceanMaps/reference/wcs_bathymetry.md). |
+| `poly_blues` | `pb` | polygon contours | ggOceanMapsLargeData | `ggOceanMaps.datapath` | Pre-2.0 default. Filled depth bands. |
+| `contour_blues` | `cb` | contour lines | ggOceanMapsLargeData | `ggOceanMaps.datapath` | Lines only, no fill. |
+| `contour_gray` | `cg` | contour lines | ggOceanMapsLargeData | `ggOceanMaps.datapath` | Gray-only variant (no `cb` → `cg` alias needed). |
 
-- `"raster_binned_grays"` or `"rbg"` the same than above but uses
-  different shades of gray.
+Add the suffix `_grays` (full alias) or change the last letter `b` → `g`
+(abbreviation) to get the greyscale variant of any style with a `_blues`
+version, e.g. `raster_binned_grays` (`rbg`), `wcs_emodnet_grays`
+(`wemg`), `poly_grays` (`pg`).
 
-- `"raster_continuous_blues"` or `"rcb"` plots continuous raster
-  bathymetry filled with different shades of blue. More detailed and
-  visually more appealing than the binned bathymetry. Recommended.
-  Requires a download.
-
-- `"raster_continuous_grays"` or `"rcg"` the same than above but uses
-  different shades of gray.
-
-- `"raster_user_blues"` or `"rub"` plots continuous raster bathymetry
-  filled with different shades of blue from
-  `getOption("ggOceanMaps.user.path")`. Any file supported by
-  [read_stars](https://r-spatial.github.io/stars/reference/read_stars.html)
-  should work. The file has to be placed into the location specified by
-  the path. Experimental feature. Has been tested using [ETOPO 60
-  arc-second](https://www.ncei.noaa.gov/products/etopo-global-relief-model)
-  and [GEBCO 15
-  arc-second](https://www.gebco.net/data-products/gridded-bathymetry-data)
-  grids. Please report any bugs you find.
-
-- `"raster_user_grays"` or `"rug"` the same than above but uses
-  different shades of gray.
-
-- `"poly_binned_blues"`, `"poly_blues"`, `"pbb"` or `"pb"` plots polygon
-  bathymetry filled with different shades of blue. Default in the
-  versions older than 2.0 of ggOceanMaps. Requires a download.
-
-- `"poly_binned_grays"`, `"poly_grays"`, `"pbg"` or `"pg"` same than
-  above but uses different shades of gray.
-
-- `"contour_binned_blues"`, `"contour_blues"`, `"cbb"` or `"cb"` contour
-  lines with different shades of blue. Requires a download.
-
-- `"contour_gray"`, `"contour_gray"` or `"cg"` plots gray contour lines.
-  Requires a download.
-
-The default can be changed by setting the `ggOceanMaps.bathy.style`
-option. `options(ggOceanMaps.bathy.style = "poly_blues")` would make the
-style similar to older pre-2.0 versions of ggOceanMaps.
+If `bathy.style` is `NULL` (the default), it is read from
+`getOption("ggOceanMaps.bathy.style")` and falls back to
+`"raster_binned_blues"`. Override globally with
+`options(ggOceanMaps.bathy.style = "...")` in `.Rprofile` (e.g.
+`"poly_blues"` to mimic pre-2.0 ggOceanMaps).
 
 **Pre-made shapefiles**
 
@@ -327,8 +294,9 @@ If the limits are not defined as decimal degrees (any longitude outside
 the range \[-180, 180\] or latitude \[-90, 90\]), the function will ask
 to specify `shapefiles`. The `shapefiles` can be defined by partially
 matching the names of the pre-made shapefiles in
-[`shapefile_list`](shapefile_list.md) (e.g. "Ar" would be enough for
-"ArcticStereographic") or by specifying custom shapefiles.
+[`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md)
+(e.g. "Ar" would be enough for "ArcticStereographic") or by specifying
+custom shapefiles.
 
 **Custom shapefiles**
 
@@ -356,9 +324,11 @@ The line size aesthetics in
 [ggplot2](https://ggplot2.tidyverse.org/reference/ggplot2-package.html)
 generates approximately 2.13 wider lines measured in pt than the given
 values. If you want a specific line width in pt, use the internal
-function [`LS`](LS.md) to convert the desired line width to the ggplot2
-equivalent. A similar function is also available for font sizes
-([`FS`](FS.md)).
+function
+[`LS`](https://mikkovihtakari.github.io/ggOceanMaps/reference/LS.md) to
+convert the desired line width to the ggplot2 equivalent. A similar
+function is also available for font sizes
+([`FS`](https://mikkovihtakari.github.io/ggOceanMaps/reference/FS.md)).
 
 ## References
 
@@ -392,9 +362,10 @@ function have been acquired from the following sources:
 
 [`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)
 
-Other basemap functions: [`qmap()`](qmap.md),
-[`shapefile_list()`](shapefile_list.md),
-[`transform_coord()`](transform_coord.md)
+Other basemap functions:
+[`qmap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/qmap.md),
+[`shapefile_list()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md),
+[`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md)
 
 ## Author
 
@@ -492,15 +463,12 @@ basemap("BarentsSea", bathymetry = TRUE)
 basemap(limits = c(-180, -140, 50, 70), grid.col = NA, rotate = TRUE)
 
 
-# Rename axis labels
+# Add axis labels
 
-basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) + xlab("Lat")
+basemap(limits = c(-140, -105, 20, 40), bathymetry = TRUE) + labs(y = "Latitude", x = "Longitude")
 
 
-# Remove axis labels
-
-basemap(limits = c(0, 60, 68, 80)) + labs(x = NULL, y = NULL)
-
+# Remove axis text
 
 basemap(limits = c(0, 60, 68, 80), rotate = TRUE) +
 theme(axis.title = element_blank(),

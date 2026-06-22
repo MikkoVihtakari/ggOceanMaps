@@ -26,7 +26,7 @@ ggspatial::annotation_spatial(fdir_main_areas, fill = NA)
 }
 }
 \seealso{
-Other datasets: 
+Other datasets:
 \code{\link{fdir_sub_areas}},
 \code{\link{ices_areas}}
 }

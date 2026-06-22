@@ -14,7 +14,8 @@ dd_clip_boundary(limits, crs, expand.factor = NULL)
 - limits:
 
   Numeric vector of length 4 giving the map limits in decimal degrees.
-  See [basemap](basemap.md).
+  See
+  [basemap](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md).
 
 - crs:
 

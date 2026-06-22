@@ -39,10 +39,12 @@ Clips an area from a larger shapefile provided in sf or sp formats.
 The function uses the \code{\link[sf]{st_intersection}} function to clip smaller polygons from larger ones. The clip area is constrained by either a numeric vector or a spatial object in the \code{limits} argument. Defining \code{limits} by a \code{\link[sf:st_sf]{sf}} object gives greater freedom for the clip area as the area does not have to be rectangular.
 }
 \seealso{
-Other create shapefiles: 
-\code{\link{geonorge_bathymetry}()},
-\code{\link{raster_bathymetry}()},
-\code{\link{vector_bathymetry}()}
+Other create shapefiles:
+\code{\link[=geonorge_bathymetry]{geonorge_bathymetry()}},
+\code{\link[=raster_bathymetry]{raster_bathymetry()}},
+\code{\link[=vector_bathymetry]{vector_bathymetry()}},
+\code{\link[=vector_land]{vector_land()}},
+\code{\link[=wcs_bathymetry]{wcs_bathymetry()}}
 }
 \author{
 Mikko Vihtakari

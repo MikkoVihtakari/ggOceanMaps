@@ -56,10 +56,10 @@ x <- data.frame(lon = c(-150, 150), lat = c(20, 50))
 transform_coord(x, bind = TRUE) # no transformation required.
 }
 \seealso{
-Other basemap functions: 
-\code{\link{basemap}()},
-\code{\link{qmap}()},
-\code{\link{shapefile_list}()}
+Other basemap functions:
+\code{\link[=basemap]{basemap()}},
+\code{\link[=qmap]{qmap()}},
+\code{\link[=shapefile_list]{shapefile_list()}}
 }
 \author{
 Mikko Vihtakari

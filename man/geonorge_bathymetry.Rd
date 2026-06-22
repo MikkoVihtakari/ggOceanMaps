@@ -23,10 +23,12 @@ Opens and formats Geonorge bathymetry shapefiles ready for plotting in ggOceanMa
 You can download the bathymetry polygon shapefiles from \href{https://kartkatalog.geonorge.no/metadata/kartverket/dybdedata/2751aacf-5472-4850-a208-3532a51c529a}{Geonorge}. Download the file in \code{GLM} format.
 }
 \seealso{
-Other create shapefiles: 
-\code{\link{clip_shapefile}()},
-\code{\link{raster_bathymetry}()},
-\code{\link{vector_bathymetry}()}
+Other create shapefiles:
+\code{\link[=clip_shapefile]{clip_shapefile()}},
+\code{\link[=raster_bathymetry]{raster_bathymetry()}},
+\code{\link[=vector_bathymetry]{vector_bathymetry()}},
+\code{\link[=vector_land]{vector_land()}},
+\code{\link[=wcs_bathymetry]{wcs_bathymetry()}}
 }
 \author{
 Mikko Vihtakari

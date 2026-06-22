@@ -2,7 +2,7 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-2.3.0**
+3.0.0**
 
 <!-- badges: start -->
 
@@ -51,10 +51,6 @@ Installation of the CRAN version:
 install.packages("ggOceanMaps")
 ```
 
-Note that \>2.0 versions of ggOceanMaps do not require the
-ggOceanMapsData package any longer. Detailed map data are downloaded
-when needed from the [ggOceanMapsLargeData](#data-path) repository.
-
 ## Usage
 
 **ggOceanMaps** extends on
@@ -85,12 +81,12 @@ library(ggOceanMaps)
 
 dt <- data.frame(lon = c(-30, -30, 30, 30), lat = c(50, 80, 80, 50))
 
-basemap(data = dt, bathymetry = TRUE) + 
+basemap(data = dt, bathymetry = TRUE) +
   geom_polygon(data = transform_coord(dt), aes(x = lon, y = lat), 
                color = "red", fill = NA)
 ```
 
-![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->
+<img src="man/figures/README-unnamed-chunk-4-1.png" alt="Bathymetric basemap of the North Atlantic and Arctic with a red rectangle outlining a data box, illustrating basemap() with bathymetry and transform_coord()."  />
 
 See the [ggOceanMaps
 website](https://mikkovihtakari.github.io/ggOceanMaps/index.html),
@@ -98,10 +94,7 @@ website](https://mikkovihtakari.github.io/ggOceanMaps/index.html),
 reference](https://mikkovihtakari.github.io/ggOceanMaps/reference/index.html),
 and the [user
 manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.html)
-for how to use and modify the maps plotted by the package. You may also
-find [these slides about the
-package](https://aen-r-workshop.github.io/4-ggOceanMaps/ggOceanMaps_workshop.html#1)
-useful.
+for how to use and modify the maps plotted by the package.
 
 ## Data path
 
@@ -138,44 +131,49 @@ the package.
 The data used by the package are not the property of the Institute of
 Marine Research nor the author of the package. It is, therefore,
 important that you cite the data sources used in a map you generate with
-the package. The spatial data used by this package have been acquired
-from the following sources:
+the package. Each entry below lists **which map elements** it provides,
+the source, and the licence it is distributed under:
 
-- **ggOceanMapsData land polygons.** [Natural Earth
-  Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
-  1:10m Physical Vectors with the Land and Minor Island datasets
-  combined. Distributed under the [CC Public Domain
-  license](https://creativecommons.org/publicdomain/) ([terms of
-  use](https://www.naturalearthdata.com/about/terms-of-use/)).
-- **ggOceanMapsData glacier polygons.** [Natural Earth
-  Data](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
-  1:10m Physical Vectors with the Glaciated Areas and Antarctic Ice
-  Shelves datasets combined. Distributed under the [CC Public Domain
-  license](https://creativecommons.org/publicdomain/) ([terms of
-  use](https://www.naturalearthdata.com/about/terms-of-use/)).
-- **ggOceanMapsData bathymetry.** [NOAA National Centers for
-  Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global
-  Relief Model. NOAA National Centers for Environmental Information.
-  DOI:
-  10.25921/fd45-gt74](https://www.ncei.noaa.gov/products/etopo-global-relief-model).
-  Distributed under the [U.S. Government Work
+- **Land polygons** (shipped `dd_land`). [Natural
+  Earth](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
+  1:10m Land and Minor Islands datasets, combined. Distributed under the
+  [Natural Earth public domain
+  terms](https://www.naturalearthdata.com/about/terms-of-use/).
+- **Glacier polygons** (downloaded `dd_glacier`). [Natural
+  Earth](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
+  1:10m Glaciated Areas and Antarctic Ice Shelves datasets, combined.
+  Distributed under the [Natural Earth public domain
+  terms](https://www.naturalearthdata.com/about/terms-of-use/).
+- **Low-resolution bathymetry** (shipped `dd_rbathy`, and the `rcb` /
+  `pb` / `cb` styles downloaded from
+  [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)).
+  [ETOPO 2022 15 Arc-Second Global Relief
+  Model](https://www.ncei.noaa.gov/products/etopo-global-relief-model)
+  (NOAA National Centers for Environmental Information, DOI:
+  10.25921/fd45-gt74). Distributed under the [U.S. Government Work
   license](https://www.usa.gov/government-works).
-- **Detailed shapefiles of Svalbard and the Norwegian coast in
-  [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)**
-  are from [Geonorge.no](https://www.geonorge.no/). Distributed under
-  the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/).
-- **Detailed land polygons of Europe.** [European Environment
-  Agency](https://www.eea.europa.eu/en/datahub/datahubitem-view/af40333f-9e94-4926-a4f0-0a787f1d2b8f).
-  The coastline is a hybrid product obtained from satellite imagery from
-  two projects: EUHYDRO (Pan-European hydrographic and drainage
-  database) and GSHHG (A Global Self-consistent, Hierarchical,
-  High-resolution Geography Database), as well as some manual amendments
-  to meet requirements from EU Nature Directives, Water Framework
-  Directive and Marine Strategy Framework. Distributed under the [CC BY
-  4.0 license](https://creativecommons.org/licenses/by/4.0/) ([terms of
-  use](https://www.eea.europa.eu/en/legal-notice))
-  <!-- - **Detailed bathymetry of the Arctic (IBCAO), Northern Hemisphere (GEBCO) and the Barents Sea (BarentsSea) in [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)** are vectorized from the [General Bathymetric Chart of the Oceans](https://www.gebco.net/data_and_products/gridded_bathymetry_data/) 15-arcsecond 2023 grid. [Terms of use](https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/grid_terms_of_use.html) -->
-  <!-- - **Detailed bathymetry of the Northeast Atlantic (EMODned) in [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)** is vectorized from the [European Marine Observation and Data Network](https://www.emodnet-bathymetry.eu/data-products) 3.75-arcsecond grid. [Terms of use](https://www.emodnet-bathymetry.eu/home/terms-of-use) -->
+- **On-demand global bathymetry** (`bathy.style = "wceb"` / `"wceg"`).
+  [ETOPO1 Global Relief
+  Model](https://www.ncei.noaa.gov/products/etopo-global-relief-model)
+  served live by NOAA NCEI (Amante & Eakins 2009, NOAA NGDC, DOI:
+  10.7289/V5C8276M). Distributed under the [U.S. Government Work
+  license](https://www.usa.gov/government-works).
+- **On-demand high-resolution European bathymetry**
+  (`bathy.style = "wemb"` / `"wemg"`). [EMODnet
+  Bathymetry](https://emodnet.ec.europa.eu/en/bathymetry) served live
+  via its Web Coverage Service. Distributed under the [CC BY 4.0
+  license](https://creativecommons.org/licenses/by/4.0/).
+- **Detailed Svalbard and Norwegian coast shapefiles**
+  (`shapefiles = "Svalbard"`, downloaded from
+  [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)).
+  [Geonorge.no](https://www.geonorge.no/). Distributed under the [CC BY
+  4.0 license](https://creativecommons.org/licenses/by/4.0/).
+- **Detailed European land polygons** (`shapefiles = "Europe"`).
+  [European Environment Agency
+  coastline](https://www.eea.europa.eu/en/datahub/datahubitem-view/af40333f-9e94-4926-a4f0-0a787f1d2b8f)
+  (a hybrid of the EUHYDRO and GSHHG databases with manual amendments).
+  Distributed under the [CC BY 4.0
+  license](https://creativecommons.org/licenses/by/4.0/).
 
 Further, please cite the package whenever maps generated by the package
 are published. For up-to-date citation information, please use:
@@ -185,7 +183,7 @@ citation("ggOceanMaps")
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Vihtakari M (2026). _ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'_. R package version 2.3.0,
+#>   using 'ggplot2'_. R package version 3.0.0,
 #>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -194,17 +192,30 @@ citation("ggOceanMaps")
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2026},
-#>     note = {R package version 2.3.0},
+#>     note = {R package version 3.0.0},
 #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```
 
 ## Getting help
 
-If your problem does not involve bugs in ggOceanMaps, the quickest way
-of getting help can be posting your problem to [Stack
-Overflow](https://stackoverflow.com/search?q=ggoceanmaps).
-Alternatively, you are welcome to use the [issues
+ggOceanMaps is designed to be used with the help of AI assistants. Often
+the quickest way to get help is to **ask your AI agent** (Claude Code,
+Codex, Copilot, ChatGPT, Claude.ai, GitHub Copilot, Mistral, and the
+like): paste the link to the ggOceanMaps GitHub site,
+<https://github.com/MikkoVihtakari/ggOceanMaps/>, and ask the agent to
+familiarize itself with the site before answering your question. The
+website contains the full user manual, the in-depth articles, the
+cookbook, and the function reference, and the repository includes an
+[`AGENTS.md`](https://github.com/MikkoVihtakari/ggOceanMaps/blob/master/AGENTS.md)
+file written specifically to help agents use it correctly. Pointing the
+agent at these resources first leads to much better answers than asking
+from memory alone.
+
+If you would rather ask a human, or your problem involves a bug in
+ggOceanMaps, post your problem to [Stack
+Overflow](https://stackoverflow.com/search?q=ggoceanmaps) or open an
+issue in the [issues
 section](https://github.com/MikkoVihtakari/ggOceanMaps/issues) on
 GitHub. Please remember to include a reproducible example that
 illustrates your problem and to add links to potential cross-posts.

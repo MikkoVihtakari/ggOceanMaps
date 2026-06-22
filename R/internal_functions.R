@@ -259,25 +259,39 @@ define_bathy_style <- function(x) {
     out <- "contour_blues"
   } else if(tolower(x) %in% c("cg", "contour_grey", "contour_greys", "contour_grays")) {
     out <- "contour_gray"
+  } else if(tolower(x) %in% c("wemb", "wcs_emodnet_blue")) {
+    out <- "wcs_emodnet_blues"
+  } else if(tolower(x) %in% c("wemg", "wcs_emodnet_greys", "wcs_emodnet_grey", "wcs_emodnet_gray")) {
+    out <- "wcs_emodnet_grays"
+  } else if(tolower(x) %in% c("wceb", "wcs_etopo_blue")) {
+    out <- "wcs_etopo_blues"
+  } else if(tolower(x) %in% c("wceg", "wcs_etopo_greys", "wcs_etopo_grey", "wcs_etopo_gray")) {
+    out <- "wcs_etopo_grays"
   } else {
     out <- match.arg(
       x,
-      c("raster_binned_blues", "raster_binned_grays", "raster_continuous_blues", 
+      c("raster_binned_blues", "raster_binned_grays", "raster_continuous_blues",
         "raster_continuous_grays", "raster_user_blues", "raster_user_grays",
-        "poly_blues", "poly_grays", "contour_blues", "contour_gray")
+        "poly_blues", "poly_grays", "contour_blues", "contour_gray",
+        "wcs_emodnet_blues", "wcs_emodnet_grays",
+        "wcs_etopo_blues", "wcs_etopo_grays")
     )
   }
-  
-  alternatives <- 
-    c("raster_binned_blues" = "bathy_rb", 
-      "raster_binned_grays" = "bathy_rb", 
+
+  alternatives <-
+    c("raster_binned_blues" = "bathy_rb",
+      "raster_binned_grays" = "bathy_rb",
       "raster_continuous_blues" = "bathy_rc",
       "raster_continuous_grays" = "bathy_rc",
       "raster_user_blues" = "bathy_rc",
       "raster_user_grays" = "bathy_rc",
-      "poly_blues" = "bathy_pb", 
-      "poly_grays" = "bathy_pg", 
-      "contour_blues" = "bathy_cb", 
+      "wcs_emodnet_blues" = "bathy_rc",
+      "wcs_emodnet_grays" = "bathy_rc",
+      "wcs_etopo_blues" = "bathy_rc",
+      "wcs_etopo_grays" = "bathy_rc",
+      "poly_blues" = "bathy_pb",
+      "poly_grays" = "bathy_pg",
+      "contour_blues" = "bathy_cb",
       "contour_gray" = "bathy_cg")
   
   alternatives[names(alternatives) == out]

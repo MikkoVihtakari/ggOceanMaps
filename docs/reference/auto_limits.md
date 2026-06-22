@@ -1,6 +1,8 @@
 # Automatic limits for basemap
 
-Find limits for a [`basemap`](basemap.md) from a data frame.
+Find limits for a
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+from a data frame.
 
 ## Usage
 
@@ -27,7 +29,7 @@ auto_limits(
 
   Names of longitude and latitude columns in `data` as character or
   integer index. If `NULL`, the column names are
-  [guessed](guess_coordinate_columns.md).
+  [guessed](https://mikkovihtakari.github.io/ggOceanMaps/reference/guess_coordinate_columns.md).
 
 - proj.in:
 
@@ -36,7 +38,8 @@ auto_limits(
 
 - proj.out:
 
-  Resulting map projection. See [`transform_coord`](transform_coord.md).
+  Resulting map projection. See
+  [`transform_coord`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md).
 
 - expand.factor:
 
@@ -55,12 +58,14 @@ A list of limits and projections in `proj.in` and `proj.out` formats.
 ## Details
 
 This is an internal function, which is automatically run by the
-[`basemap`](basemap.md) function.
+[`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+function.
 
 ## See also
 
-Other customize shapefiles: [`reorder_layers()`](reorder_layers.md),
-[`theme_map()`](theme_map.md)
+Other customize shapefiles:
+[`reorder_layers()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/reorder_layers.md),
+[`theme_map()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/theme_map.md)
 
 ## Author
 
@@ -168,7 +173,7 @@ auto_limits(data = expand.grid(lon = c(-120, 180, 120),
 #>             LENGTHUNIT["metre",1]],
 #>     USAGE[
 #>         SCOPE["Polar research."],
-#>         AREA["Northern hemisphere - north of 60°N onshore and offshore, including Arctic."],
+#>         AREA["Northern hemisphere - north of 60N onshore and offshore, including Arctic."],
 #>         BBOX[60,-180,90,180]],
 #>     ID["EPSG",3995]]
 #> 

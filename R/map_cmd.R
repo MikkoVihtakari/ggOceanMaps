@@ -20,11 +20,11 @@ map_cmd <- function(command, alternative = FALSE) {
     ',
     bathy_rb = '
     stars::geom_stars(data = X$shapefiles$bathy$raster, na.action = na.omit,
-      downsample = downsample, show.legend = bathy.legend, alpha = bathy.alpha) 
+      downsample = plot.downsample, show.legend = bathy.legend, alpha = bathy.alpha)
     ',
     bathy_rc = '
-    stars::geom_stars(data = X$shapefiles$bathy$raster, downsample = downsample,
-      show.legend = bathy.legend, alpha = bathy.alpha)
+    stars::geom_stars(data = X$shapefiles$bathy$raster, na.action = na.omit,
+      downsample = plot.downsample, show.legend = bathy.legend, alpha = bathy.alpha)
     ',
     bathy_rbb_scale = '
     ggplot2::scale_fill_manual(
@@ -51,7 +51,7 @@ map_cmd <- function(command, alternative = FALSE) {
         limits = c(0,NA), 
         values = c(0,0.01,0.05,0.25,0.75,1),
         colors = colorRampPalette(c("#F7FBFF", "#DEEBF7", "#9ECAE1", "#4292C6", "#08306B"))(10),
-        na.value = "white"
+        na.value = NA
         )
     ',
     bathy_rcg_scale = '
@@ -61,7 +61,7 @@ map_cmd <- function(command, alternative = FALSE) {
         type = "seq",
         direction = 1,
         palette = "Greys",
-        na.value = "white"
+        na.value = NA
         )
       ',
     # bathy_rbb =
@@ -192,4 +192,3 @@ map_cmd <- function(command, alternative = FALSE) {
 
   trimws(gsub("\n", " ", out))
 }
-

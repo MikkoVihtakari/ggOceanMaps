@@ -13,7 +13,9 @@ reorder_layers(p)
 
 - p:
 
-  ggplot object from the [`basemap`](basemap.md) function.
+  ggplot object from the
+  [`basemap`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+  function.
 
 ## Value
 
@@ -26,8 +28,9 @@ bugs.
 
 ## See also
 
-Other customize shapefiles: [`auto_limits()`](auto_limits.md),
-[`theme_map()`](theme_map.md)
+Other customize shapefiles:
+[`auto_limits()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/auto_limits.md),
+[`theme_map()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/theme_map.md)
 
 ## Author
 

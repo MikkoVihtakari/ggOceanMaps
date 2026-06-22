@@ -1,10 +1,18 @@
-pandoc: 3.6.3
+pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
+  adding-graphical-elements: adding-graphical-elements.html
+  bathymetry: bathymetry.html
+  cookbook: cookbook.html
+  customising-shapefiles: customising-shapefiles.html
   ggOceanMaps: ggOceanMaps.html
-  new-features: new-features.html
+  new-features-v2: new-features-v2.html
+  new-features-v3: new-features-v3.html
   poster: poster.html
   premade-maps: premade-maps.html
   premade-shapefiles: premade-shapefiles.html
-last_built: 2026-02-10T15:02Z
+last_built: 2026-06-22T08:50Z
+urls:
+  reference: https://mikkovihtakari.github.io/ggOceanMaps/reference
+  article: https://mikkovihtakari.github.io/ggOceanMaps/articles

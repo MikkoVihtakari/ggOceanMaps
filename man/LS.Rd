@@ -16,8 +16,8 @@ Returns a numeric vector of lenght \code{x} of ggplot line sizes
 Converts line sizes measured as points (as given by most programs such as Adobe Illustrator etc.) to ggplot font sizes
 }
 \seealso{
-Other size adjustors: 
-\code{\link{FS}()}
+Other size adjustors:
+\code{\link[=FS]{FS()}}
 }
 \concept{size adjustors}
 \keyword{internal}

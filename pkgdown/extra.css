@@ -1,0 +1,19 @@
+/* Bootstrap 5.3's .dropdown-menu inherits --bs-dropdown-bg from --bs-body-bg,
+   which the navbar's data-bs-theme="dark" sets to a dark colour. But
+   --bs-dropdown-link-color/--bs-dropdown-header-color are hardcoded greys
+   that don't adapt to the dark theme, leaving dark-grey text on a dark
+   background in the navbar's "Articles" menu. Lighten them for readability. */
+.navbar[data-bs-theme="dark"] .dropdown-menu {
+  --bs-dropdown-link-color: #e9ecef;
+  --bs-dropdown-header-color: #adb5bd;
+}
+
+/* Set figure captions apart from body text: a little space above, a clear gap
+   below before the next paragraph, and a smaller muted style so it is easy to
+   see what is caption and what is not. */
+.figcaption {
+  margin-top: 0.4rem;
+  margin-bottom: 1.6rem;
+  font-size: 0.9em;
+  color: var(--bs-secondary-color, #6c757d);
+}

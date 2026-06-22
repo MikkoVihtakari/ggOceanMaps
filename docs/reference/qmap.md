@@ -53,7 +53,8 @@ qmap(
 
   Aesthetics passed into each layer. Longitude and latitude columns are
   automatically recognized using the
-  [`guess_coordinate_columns`](guess_coordinate_columns.md) function.
+  [`guess_coordinate_columns`](https://mikkovihtakari.github.io/ggOceanMaps/reference/guess_coordinate_columns.md)
+  function.
 
 - geom:
 
@@ -83,10 +84,12 @@ qmap(
 
 - shapefiles:
 
-  Either a [list containing shapefile information](shapefile_list.md) or
-  a character argument referring to a name of pre-made shapefiles in
-  [`shapefile_list`](shapefile_list.md). This name is partially matched.
-  Can be omitted if `limits` or `data` is defined as decimal degrees.
+  Either a [list containing shapefile
+  information](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md)
+  or a character argument referring to a name of pre-made shapefiles in
+  [`shapefile_list`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md).
+  This name is partially matched. Can be omitted if `limits` or `data`
+  is defined as decimal degrees.
 
 - crs:
 
@@ -160,7 +163,8 @@ qmap(
 
   Numeric value specifying the width of the border line land, glacier
   and bathymetry shapes as well as the grid lines, respectively. Use the
-  [`LS`](LS.md) function for a specific width in pt. See Details.
+  [`LS`](https://mikkovihtakari.github.io/ggOceanMaps/reference/LS.md)
+  function for a specific width in pt. See Details.
 
 - base_size:
 
@@ -193,9 +197,10 @@ object.
 
 ## See also
 
-Other basemap functions: [`basemap()`](basemap.md),
-[`shapefile_list()`](shapefile_list.md),
-[`transform_coord()`](transform_coord.md)
+Other basemap functions:
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md),
+[`shapefile_list()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md),
+[`transform_coord()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/transform_coord.md)
 
 ## Author
 

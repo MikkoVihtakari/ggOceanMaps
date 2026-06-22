@@ -19,7 +19,7 @@
 #' @family create shapefiles
 #' @export
 
-# bathy = "/Users/a22357/Downloads/ETOPO_2022_v1_60s_N90W180_surface.nc"
+# bathy = "path/to/ETOPO_2022_v1_60s_N90W180_surface.nc"
 # depths = c(0, 50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = 4326; file.name = NULL; boundary = c(-180, 180, -90, 90); aggregation.factor = 6
 # proj.out = shapefile_list("Barents")$crs
 # bathy = file.path(etopoPath, "ETOPO1_Ice_g_gmt4.grd"); depths = c(0, 50, 300, 500, 1000, 1500, 2000, 4000, 6000, 10000); proj.out = convert_crs("3996"); proj.bathy = convert_crs("3996"), file.name = NULL; boundary = c(-180.0083, 180.0083, -90, 90); aggregation.factor = 6
@@ -101,8 +101,6 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     ras <- stars::st_as_stars(bathy)
   } else {
     ras <- stars::read_stars(bathy, quiet = !verbose)
-    # ras <- terra::rast(bathy)
-    # ras <- raster::raster(bathy)
   }
   
   if(verbose) utils::setTxtProgressBar(pb, 2)
@@ -135,8 +133,6 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     
     if(inherits(boundary, c("sf", "sfc", "bbox"))) {
       ras <- ras[sf::st_bbox(boundary)]
-      # ras <- raster::crop(ras, raster::extent(boundary))
-      # ras <- terra::crop(ras, boundary)
     } else {
       stop("boundary must be an sf object at this stage")
     }
@@ -168,9 +164,6 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     
     ras <- sf::st_transform(ras, sf::st_crs(proj.out))
     
-    # ras <- sf::st_transform(ras, sf::st_crs(proj.out)) 
-    # ras <- raster::projectRaster(from = ras, crs = raster::crs(proj.out))
-    # ras <- terra::project(ras, sf::st_crs(proj.out)$input)
   } else {
     warp <- FALSE
   }
@@ -210,8 +203,6 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
       cut_df$interval[grepl("Inf-0", cut_df$interval)] <- "land"
     } else {
       cut_df$interval[grepl("Inf-0", cut_df$interval)] <- NA
-      # bathy$raster <- stars::st_as_stars(bathy$raster)
-      # levels(bathy$raster[[1]])[levels(bathy$raster[[1]]) == "land"] <- NA
     }
     
     r <- cut(ras, c(cut_df$from, Inf), labels = cut_df$interval)
@@ -226,14 +217,26 @@ raster_bathymetry <- function(bathy, depths, proj.out = NULL, proj.bathy = NULL,
     } else {
       r <- ras
     }
-    
-    # Remove land and turn depths to positive values
-    r[[1]][r[[1]] > 0] <- NA
-    r[[1]] <- -1*r[[1]]
-    
+
+    # Detect whether the input is raw (negative depths + positive land) or has
+    # already been processed by an earlier call (positive depths + NA land).
+    # Only invert sign when raw input is detected — otherwise the second pass
+    # would zero everything to NA and trigger a "no non-missing arguments to
+    # min/max" warning at the range() call further down.
+    vals_min <- suppressWarnings(min(r[[1]], na.rm = TRUE))
+    if(is.finite(vals_min) && vals_min < 0) {
+      # Raw bathymetry: remove land, turn depths to positive values.
+      r[[1]][r[[1]] > 0] <- NA
+      r[[1]] <- -1 * r[[1]]
+    }
+
     # Depth intervals
-    
-    cut_df <- range(r[[1]], na.rm = TRUE)
+
+    if(all(is.na(r[[1]]))) {
+      cut_df <- c(NA_real_, NA_real_)
+    } else {
+      cut_df <- range(r[[1]], na.rm = TRUE)
+    }
   }
   
   ## Warp to new grid

@@ -20,8 +20,8 @@ A ggplot2 theme layer.
 A ggplot2 theme for maps.
 }
 \seealso{
-Other customize shapefiles: 
-\code{\link{auto_limits}()},
-\code{\link{reorder_layers}()}
+Other customize shapefiles:
+\code{\link[=auto_limits]{auto_limits()}},
+\code{\link[=reorder_layers]{reorder_layers()}}
 }
 \concept{customize shapefiles}

@@ -43,8 +43,15 @@ basemap_data <- function(limits = NULL, data = NULL, shapefiles = NULL, crs = NU
   x <- basemap_define_grid_lines(x = x, lon.interval = lon.interval, lat.interval = lat.interval)
   
   # A temporary fix to make plotly::ggplotly work. Remove or move somewhere
-  
+
   if(!is.null(x$shapefiles$land)) {
+    # Cropping can leave degenerate GEOMETRYCOLLECTION slivers (e.g. a point or
+    # line from a boundary-edge intersection). st_cast() on those keeps only
+    # the first sub-geometry and crashes if that part is not a valid polygon,
+    # so extract the polygonal parts first when any are present.
+    if(any(sf::st_geometry_type(x$shapefiles$land) == "GEOMETRYCOLLECTION")) {
+      x$shapefiles$land <- sf::st_collection_extract(x$shapefiles$land, "POLYGON")
+    }
     x$shapefiles$land <- sf::st_cast(x$shapefiles$land, "MULTIPOLYGON")
   }
   
@@ -135,7 +142,9 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
   
   shapefilesDefined <- FALSE
   polarMap <- FALSE
-  
+  needs_wcs_inject <- FALSE
+  wcs_source <- NULL
+
   # 1. Detect case ####
   
   case <- basemap_data_detect_case(limits = limits, data = data, shapefiles = shapefiles)
@@ -163,12 +172,21 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       if(!glaciers) shapefiles$glacier <- NULL
       if(!bathymetry) {
         shapefiles$bathy <- NULL
+      } else if(grepl("^wcs_", bathy.type)) {
+        # WCS bathymetry is fetched on demand below (section 4), not taken from
+        # the premade shapefile set. Without this, shapefiles$bathy[bathy.type]
+        # would index a non-existent element and return a logical NA, which then
+        # fails downstream with "st_transform applied to an object of class
+        # 'logical'" (e.g. basemap(..., bathy.style = "wemb", shapefiles = "Svalbard")).
+        wcs_source <- sub("^wcs_", "", bathy.type)
+        needs_wcs_inject <- TRUE
+        shapefiles$bathy <- NULL
       } else {
         shapefiles$bathy <- shapefiles$bathy[bathy.type]
       }
-      
+
       ## Load the shapefiles if download required
-      
+
       shapefiles <- load_map_data(shapefiles)
       
       if(any(sapply(shapefiles, function(k) 
@@ -206,7 +224,6 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       
       if(all(sapply(customShapefiles, function(k) is.null(k)))) stop("One of following shapefiles elements 'land', 'glacier', and 'bathy' must be a an sf or stars object. See Details.")
     }
-    # if(any(sapply(shapefiles, function(k) !inherits(k, c("NULL", "sf", "SpatialPolygonsDataFrame", "SpatialPolygons"))))) stop("Shapefiles elements 'land', 'glacier', and 'bathy' must either be a SpatialPolygonsDataFrame, SpatialPolygons, or NULL. See Details.")
     
     shapefilesDefined <- TRUE
   }
@@ -226,11 +243,20 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       
       if(length(clip_shape) == 4) {
         limits <- stats::setNames(clip_shape, c("xmin", "xmax", "ymin", "ymax"))
-        
+
+        # Pull whole-world longitude limits just inside +/-180 (e.g. the
+        # "DecimalDegree" set, -180..180). An exact +/-180 clip box makes
+        # clip_shapefile() return a degenerate boundary, which collapses the
+        # bathymetry raster to a single row (basemap("DecimalDegree",
+        # bathymetry = TRUE)). The limits_dec case applies the same guard.
+        if(sf::st_is_longlat(crs) && isTRUE(diff(limits[1:2]) >= 360)) {
+          limits[1:2] <- c(-179.9, 179.9)
+        }
+
         #if(!sf::st_is_longlat(crs)){
         clip_shape <- sf::st_as_sfc(
           sf::st_bbox(limits, crs = crs)
-        ) 
+        )
         
         limits <- sf::st_bbox(
           sf::st_transform(
@@ -551,25 +577,58 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
   }
   
   # 4. Define shapefiles ####
-  
+
   if(!shapefilesDefined) {
-    
+
     if(exists("shapefile.name") & is.null(shapefiles)) shapefiles <- shapefile_list(shapefile.name)
-    
+
     if(!glaciers) shapefiles$glacier <- NULL
     if(!bathymetry) {
+      shapefiles$bathy <- NULL
+    } else if(grepl("^wcs_", bathy.type)) {
+      wcs_source <- sub("^wcs_", "", bathy.type)
+      needs_wcs_inject <- TRUE
       shapefiles$bathy <- NULL
     } else {
       if(bathy.type == "raster_user" && is.na(shapefiles$bathy[bathy.type])) {
         msg <- "Define path to the user defined bathymetry raster using options(ggOceanMaps.userpath = 'PATH_TO_THE_FILE'))"
         stop(paste(strwrap(msg), collapse= "\n"))
       }
-      
+
       shapefiles$bathy <- shapefiles$bathy[bathy.type]
     }
-    
+
     shapefiles <- load_map_data(shapefiles, downsample = downsample)
-    
+
+  }
+
+  if(needs_wcs_inject) {
+    if(polarMap || !is.numeric(limits) || length(limits) < 4) {
+      stop("WCS bathymetry styles (e.g. 'wcs_emodnet_blues') require a 4-element decimal-degree bounding box. Polar maps and projected-limit cases are not supported.")
+    }
+    # Fetch WCS bathymetry covering the full (expanded, projected) map area, not
+    # just the raw decimal-degree `limits`. The map is clipped to clip_shape in
+    # the map CRS; fetching only `limits` leaves the projected map corners and
+    # the expand.factor margin outside the raster, which then render as white
+    # gaps around the edges (e.g. an EMODnet map on the Svalbard CRS).
+    wcs_clip <- sf::st_as_sfc(sf::st_bbox(clip_shape))
+    if(!sf::st_is_longlat(wcs_clip)) {
+      # Densify before back-projecting so the curved projected edges (not just
+      # the four corners) are bounded; otherwise edge bulge can still leave gaps.
+      wcs_clip <- smoothr::densify(wcs_clip, n = 100)
+    }
+    wcs_dd <- sf::st_bbox(sf::st_transform(wcs_clip, crs = 4326))
+    wcs_bbox <- as.numeric(wcs_dd[c("xmin", "xmax", "ymin", "ymax")])
+    shapefiles$bathy <- wcs_bathymetry(
+      limits = wcs_bbox,
+      source = wcs_source,
+      downsample = downsample,
+      verbose = verbose
+    )
+    # The WCS server has already applied the requested resolution. Preserve it
+    # during cropping and avoid a second reduction in stars::geom_stars().
+    attr(shapefiles$bathy, "wcs") <- TRUE
+    attr(shapefiles$bathy, "downsampled") <- TRUE
   }
   
   # 5. Return ####
@@ -583,53 +642,76 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
 ## Crop shapefiles ####
 
 basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NULL) {
-  
-  # Pre-clip shapefiles in WGS84 when rotating across the anti-meridian
-  # to prevent polygon transformation artifacts. Without this, land polygons
-  # that cross the "new anti-meridian" (opposite side of lon_0) get distorted
-  # during st_transform, producing incorrect land shapes.
-  
-  if(x$rotate && !x$polarMap && sf::st_is_longlat(x$shapefiles$land)) {
-    dd_lims <- x$limits
-    if(length(dd_lims) == 4 && dd_lims["xmin"] > dd_lims["xmax"]) {
-      
+
+  # Warp a source raster to the map CRS onto a target grid that PRESERVES the
+  # source resolution. stars::st_as_stars(bbox) defaults to a coarse ~256-cell
+  # grid, which heavily downsampled the bathymetry (e.g. dd_rbathy is 7200x3600
+  # but a polar basemap(60) ended up 255x255). Cell counts are derived from the
+  # source cell size measured over the clip region and capped at the source's
+  # own dimensions, so the bathymetry keeps its native detail by default. Use
+  # the `downsample` argument of basemap() to reduce it at plot time.
+  warp_to_clip <- function(src, clip) {
+    d <- dim(src)
+    src_bb <- sf::st_bbox(src)
+    src_dx <- as.numeric(abs(src_bb["xmax"] - src_bb["xmin"]) / d["x"])
+    src_dy <- as.numeric(abs(src_bb["ymax"] - src_bb["ymin"]) / d["y"])
+    # Count source cells spanning the clip region (measured in the source CRS).
+    # Densify before transforming so curved extents are captured, not just the
+    # four corners (e.g. a polar clip whose bbox corners collapse in latitude).
+    clip_poly <- smoothr::densify(sf::st_as_sfc(sf::st_bbox(clip)), n = 100)
+    clip_src <- sf::st_bbox(sf::st_transform(clip_poly, sf::st_crs(src)))
+    n_src <- max(1,
+      (as.numeric(clip_src["xmax"] - clip_src["xmin"]) / src_dx) *
+      (as.numeric(clip_src["ymax"] - clip_src["ymin"]) / src_dy))
+    # Pick one square cell size in the map CRS that reproduces that cell count,
+    # so the warped raster keeps the source's detail without distorting the
+    # aspect ratio (independent nx/ny from lon/lat extents fails for polar maps).
+    tb <- sf::st_bbox(clip)
+    x_ext <- as.numeric(tb["xmax"] - tb["xmin"])
+    y_ext <- as.numeric(tb["ymax"] - tb["ymin"])
+    csize <- sqrt((x_ext * y_ext) / n_src)
+    cap <- 4000L   # upper bound per dimension so huge extents stay plottable
+    nx <- max(1L, min(cap, as.integer(ceiling(x_ext / csize))))
+    ny <- max(1L, min(cap, as.integer(ceiling(y_ext / csize))))
+    newgrid <- stars::st_as_stars(tb, nx = nx, ny = ny, values = NA_real_)
+    stars::st_warp(src, newgrid)
+  }
+
+  # Break land/glacier polygons at the rotated antimeridian before they are
+  # transformed to a lon_0-shifted geographic map CRS. A polygon that crosses
+  # the new antimeridian (the meridian opposite the central meridian, lon_0 +
+  # 180) is otherwise "unwrapped" into a giant horizontal span during
+  # transformation. Even an off-screen landmass such as Antarctica then becomes
+  # a degenerate >180-degree ring, and ggplot2 fails to draw the entire land
+  # layer (issue #44; affects e.g. basemap(c(100, -120, -12, -57), rotate =
+  # TRUE) and basemap(c(40, -70, -37, 40), rotate = TRUE)). Cutting a thin slit
+  # along the seam splits such polygons cleanly without visibly altering the map.
+
+  if(!x$polarMap && is.null(crs) && !is.na(sf::st_crs(x$crs)) && sf::st_is_longlat(x$crs)) {
+    lon_0 <- suppressWarnings(as.numeric(
+      sub(".*\\+lon_0=([-0-9.]+).*", "\\1", sf::st_crs(x$crs)$proj4string)))
+
+    if(length(lon_0) == 1 && !is.na(lon_0) && (lon_0 %% 360) != 0) {
+
       s2_prev <- sf::sf_use_s2()
       suppressMessages(sf::sf_use_s2(FALSE))
       on.exit(suppressMessages(sf::sf_use_s2(s2_prev)), add = TRUE)
-      
-      # Buffer of 30 degrees ensures enough land is kept beyond the map limits
-      # (which are further expanded by expand.factor) while still excluding
-      # polygons near the new anti-meridian that cause transformation artifacts
-      lon_buffer <- 30
-      pre_xmin <- max(-180, dd_lims["xmin"] - lon_buffer)
-      pre_xmax <- min(180, dd_lims["xmax"] + lon_buffer)
-      
-      # Only pre-clip if the buffered region still crosses the anti-meridian
-      if(pre_xmin > pre_xmax) {
-        box_east <- sf::st_as_sfc(sf::st_bbox(
-          c(xmin = pre_xmin, xmax = 180, ymin = -90, ymax = 90),
-          crs = sf::st_crs(4326)))
-        box_west <- sf::st_as_sfc(sf::st_bbox(
-          c(xmin = -180, xmax = pre_xmax, ymin = -90, ymax = 90),
-          crs = sf::st_crs(4326)))
-        wgs84_clip <- suppressMessages(sf::st_union(box_east, box_west))
-        
-        x$shapefiles$land <- suppressWarnings(suppressMessages(
-          sf::st_intersection(sf::st_make_valid(x$shapefiles$land), wgs84_clip)
-        ))
-        
-        if(!is.null(x$shapefiles$glacier)) {
-          x$shapefiles$glacier <- suppressWarnings(suppressMessages(
-            sf::st_intersection(sf::st_make_valid(x$shapefiles$glacier), wgs84_clip)
-          ))
-        }
-        
-        if(bathymetry && inherits(x$shapefiles$bathy, "sf") && sf::st_is_longlat(x$shapefiles$bathy)) {
-          x$shapefiles$bathy <- suppressWarnings(suppressMessages(
-            sf::st_intersection(sf::st_make_valid(x$shapefiles$bathy), wgs84_clip)
-          ))
-        }
+
+      seam <- ((lon_0 + 360) %% 360) - 180   # antimeridian = lon_0 + 180
+      eps <- 1e-5
+      slit <- sf::st_as_sfc(sf::st_bbox(
+        c(xmin = seam - eps, xmax = seam + eps, ymin = -90, ymax = 90),
+        crs = sf::st_crs(4326)))
+
+      cut_seam <- function(g) {
+        if(is.null(g) || !sf::st_is_longlat(g)) return(g)
+        suppressWarnings(suppressMessages(
+          sf::st_difference(sf::st_make_valid(g), slit)))
       }
+
+      x$shapefiles$land <- cut_seam(x$shapefiles$land)
+      if(!is.null(x$shapefiles$glacier)) x$shapefiles$glacier <- cut_seam(x$shapefiles$glacier)
+      if(bathymetry && inherits(x$shapefiles$bathy, "sf")) x$shapefiles$bathy <- cut_seam(x$shapefiles$bathy)
     }
   }
   
@@ -654,11 +736,70 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
       })
       
     } else {
+      dd_lims <- if(!is.null(x$limits) && is_decimal_limit(x$limits)) x$limits else NULL
+
+      # Clip in the map CRS only for rotated maps and maps that explicitly cross
+      # the antimeridian (xmin > xmax). A merely wide, non-crossing map must NOT
+      # take this path: for the whole-world DecimalDegree set (-180..180),
+      # clip_shapefile on an exact +/-180 box returns a degenerate boundary that
+      # collapses the bathymetry to a single row at the equator
+      # (basemap("DecimalDegree", bathymetry = TRUE)).
+      antimeridian_risk <- x$rotate ||
+        (!is.null(dd_lims) && dd_lims[1] > dd_lims[2])   # explicit crossing
+
+      if(antimeridian_risk) {
+        # Clip in the map CRS (clip_limits is already in x$crs). For rotated
+        # decimal-degree maps the map CRS is a lon_0-shifted geographic CRS;
+        # the seam-crossing polygons were already split above, so transforming
+        # the land here no longer produces unwrapped >180-degree artifacts.
+        landBoundary <- clip_shapefile(
+          sf::st_transform(x$shapefiles$land, crs = x$crs),
+          limits = x$clip_limits,
+          return.boundary = TRUE,
+          extra.validate = TRUE
+        )
+      } else {
+      # For non-antimeridian, non-rotated maps: densify the clip boundary
+      # before back-projecting to WGS84 so that the curved projected edges are
+      # properly represented. Without densification, the 5-point bbox polygon
+      # (4 corners + close) transforms to a severely distorted quadrilateral in
+      # WGS84, causing land near the map edges to be clipped off too early
+      # (e.g. northern Norway for basemap(c(-20, 30, 50, 70))).
+      #
+      # For antimeridian-crossing / wide-span / rotated maps we skip
+      # densification: those maps already handle land pre-clipping separately,
+      # and densifying near ±180° produces topology-invalid WGS84 polygons
+      # that cause GEOS TopologyExceptions in sf::st_intersection.
+
+      dd_lims <- if(!is.null(x$limits) && is_decimal_limit(x$limits)) x$limits else NULL
+
+      # Densification is only needed when the clip boundary is in a projected
+      # (non-latlon) CRS: back-projecting a 5-point bbox from e.g. EPSG:3995 to
+      # WGS84 gives a severely distorted quadrilateral (see comment above).
+      # For WGS84 clip limits, the bbox edges are already straight in WGS84 so
+      # no densification is needed. Also skip densification for maps that cross
+      # the antimeridian or use a rotated CRS: densifying near ±180° produces
+      # topology-invalid WGS84 polygons that cause GEOS errors.
+      need_densify <- !sf::st_is_longlat(x$clip_limits) && !antimeridian_risk
+
+      clip_in_land_crs <- if(need_densify) {
+        sf::st_transform(
+          smoothr::densify(x$clip_limits, n = 100),
+          crs = sf::st_crs(x$shapefiles$land)
+        )
+      } else {
+        sf::st_transform(x$clip_limits, crs = sf::st_crs(x$shapefiles$land))
+      }
+
       landBoundary <- clip_shapefile(
-        sf::st_transform(x$shapefiles$land, crs = x$crs),
-        limits = sf::st_transform(x$clip_limits, crs = x$crs),
+        x$shapefiles$land,
+        limits = clip_in_land_crs,
         return.boundary = TRUE
       )
+
+      landBoundary$shapefile <- sf::st_transform(landBoundary$shapefile, crs = x$crs)
+      landBoundary$boundary <- sf::st_transform(landBoundary$boundary, crs = x$crs)
+      }
     }
   }
   
@@ -687,11 +828,22 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
     
     if(inherits(x$shapefiles$bathy, "bathyRaster")) {
       # raster bathymetries
-      newgrid <- stars::st_as_stars(sf::st_bbox(x$clip_limits))
-      x$shapefiles$bathy$raster <- stars::st_warp(x$shapefiles$bathy$raster, newgrid)
-      
-      if(x$polarMap) {
-        x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[x$clip_limits]
+      if(isTRUE(attr(x$shapefiles$bathy, "wcs"))) {
+        if(sf::st_crs(x$shapefiles$bathy$raster) != sf::st_crs(x$clip_limits)) {
+          x$shapefiles$bathy$raster <- stars::st_warp(
+            x$shapefiles$bathy$raster,
+            crs = sf::st_crs(x$clip_limits)
+          )
+        }
+        x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[sf::st_bbox(x$clip_limits)]
+      } else {
+        # Warp to the map CRS at the source's native resolution (see
+        # warp_to_clip); the old coarse default grid downsampled the raster.
+        x$shapefiles$bathy$raster <- warp_to_clip(x$shapefiles$bathy$raster, x$clip_limits)
+
+        if(x$polarMap) {
+          x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[x$clip_limits]
+        }
       }
       
       if(inherits(x$shapefiles$bathy$raster[[1]], "factor")) {
@@ -707,13 +859,12 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
         verbose = FALSE
       )
       
-      newgrid <- stars::st_as_stars(sf::st_bbox(x$clip_limits))
-      x$shapefiles$bathy$raster <- stars::st_warp(x$shapefiles$bathy$raster, newgrid)
-      
+      x$shapefiles$bathy$raster <- warp_to_clip(x$shapefiles$bathy$raster, x$clip_limits)
+
       if(x$polarMap) {
         x$shapefiles$bathy$raster <- x$shapefiles$bathy$raster[x$clip_limits]
       }
-      
+
     } else {
       # vector bathymetries
       x$shapefiles$bathy <- clip_shapefile(
@@ -812,9 +963,9 @@ basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NUL
     
     LonGridLines <- 
       sf::st_sfc(sf::st_multilinestring(
-        x = lapply(unique(LonGridLines$id), function(i) {
-          sf::st_linestring(as.matrix(LonGridLines[LonGridLines$id == i, 2:3]))
-        })
+        x = unname(lapply(split(LonGridLines[2:3], LonGridLines$id), function(df) {
+          sf::st_linestring(as.matrix(df))
+        }))
       ), crs = 4326)
     
     LatLimitLine <- data.frame(lon = seq(-180, 180, 1), lat = x$decLimits)
@@ -828,9 +979,9 @@ basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NUL
                  lat = rep(LatGridLines, each = nrow(LatLimitLine)))
     
     LatGridLines <- sf::st_sfc(sf::st_multilinestring(
-      lapply(unique(LatGridLines$lat), function(k) {
-        sf::st_linestring(as.matrix(LatGridLines[LatGridLines$lat == k,]))
-      })
+      unname(lapply(split(LatGridLines, LatGridLines$lat), function(df) {
+        sf::st_linestring(as.matrix(df))
+      }))
     ), crs = 4326)
     
     LatLimitLine <- 
@@ -863,100 +1014,3 @@ basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NUL
        crs = x$crs, mapGrid = mapGrid)
   
 }
-
-## Cleaner version but does not produce grid line
-# basemap_define_grid_lines <- function(x, lon.interval = NULL, lat.interval = NULL) {
-#   
-#   ## Define intervals if not specified
-#   
-#   if(is.null(lat.interval)) {
-#     if(x$polarMap) {
-#       latDist <- 90 - abs(x$decLimits)
-#       
-#       lat.interval <-
-#         ifelse(latDist >= 30, 10,
-#                ifelse(latDist >= 15, 5,
-#                       ifelse(latDist >= 10, 4,
-#                              ifelse(latDist >= 6, 3,
-#                                     ifelse(latDist > 4, 2, 1)
-#                              ))))
-#     } else {
-#       lat.breaks <- ggplot2::waiver()
-#     }
-#   }
-#   
-#   if(is.null(lon.interval)) {
-#     if(x$polarMap) {
-#       lon.interval <- 45
-#     } else {
-#       lon.breaks <- ggplot2::waiver()
-#     }
-#   }
-#   
-#   ## Define the grid lines based on intervals
-#   
-#   if(x$polarMap) {
-#     
-#     poleLat <- ifelse(x$decLimits > 0, 90, -90)
-#     
-#     LonGridLines <- data.frame(
-#       id = rep(1:(360/lon.interval), each = 2),
-#       lon = rep(seq(-135, 180, lon.interval), each = 2), 
-#       lat = rep(c(poleLat, x$decLimits), 360/lon.interval))
-#     
-#     LonGridLines <- 
-#       sf::st_sfc(sf::st_multilinestring(
-#         x = lapply(unique(LonGridLines$id), function(i) {
-#           sf::st_linestring(as.matrix(LonGridLines[LonGridLines$id == i, 2:3]))
-#         })
-#       ), crs = 4326)
-#     
-#     LatLimitLine <- data.frame(lon = seq(-180, 180, 1), lat = x$decLimits)
-#     
-#     LatGridLines <- 
-#       sign(x$decLimits) * seq(from = round(abs(x$decLimits)) + lat.interval, 
-#                               to = abs(poleLat) - lat.interval, by = lat.interval)
-#     LatGridLines <- LatGridLines[LatGridLines != x$decLimits]
-#     LatGridLines <- 
-#       data.frame(lon = rep(seq(-180, 180, 1), length(LatGridLines)), 
-#                  lat = rep(LatGridLines, each = nrow(LatLimitLine)))
-#     
-#     LatGridLines <- sf::st_sfc(sf::st_multilinestring(
-#       lapply(unique(LatGridLines$lat), function(k) {
-#         sf::st_linestring(as.matrix(LatGridLines[LatGridLines$lat == k,]))
-#       })
-#     ), crs = 4326)
-#     
-#     LatLimitLine <- 
-#       sf::st_sfc(
-#         sf::st_linestring(
-#           as.matrix(LatLimitLine)
-#         ), crs = 4326)
-#     
-#     mapGrid <- list(lon.grid.lines = LonGridLines, lat.grid.lines = LatGridLines, lat.limit.line = LatLimitLine)
-#     
-#   } else {
-#     
-#     if(!is.null(lat.interval)) {
-#       limits <- sf::st_bbox(sf::st_transform(x$limit_shape, 4326))[c("xmin", "xmax", "ymin", "ymax")]
-#       minLat <- min(limits[3:4])  
-#       minLat <- ifelse(minLat < 0, -90, round_any(minLat, 10, floor))
-#       maxLat <- max(limits[3:4])
-#       maxLat <- ifelse(maxLat > 0, 90, round_any(maxLat, 10, ceiling))
-#       lat.breaks <- seq(minLat, maxLat, lat.interval)
-#     }
-#     
-#     if(!is.null(lon.interval)) {
-#       lon.breaks <- unique(c(seq(0, 180, lon.interval), seq(-180, 0, lon.interval)))
-#     }
-#     
-#     mapGrid <- list(lon.breaks = lon.breaks, lat.breaks = lat.breaks)
-#   }
-#   
-#   # Return ###
-#   
-#   list(shapefiles = x$shapefiles, polarMap = x$polarMap, decLimits = x$decLimits, 
-#        limit_shape = x$limit_shape, map_limits = x$map_limits, 
-#        crs = x$crs, mapGrid = mapGrid)
-#   
-# }
