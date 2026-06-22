@@ -40,16 +40,21 @@ Two sources are available:
 - **ETOPO1 from NOAA NCEI** (~1.85 km, global) — `bathy.style = "wceb"`
   or `"wceg"`. Use this when EMODnet has no coverage for your region.
 
-Coupled with the detailed EMODnet land shapes (`shapefiles = "Europe"`),
-this produces the highest-resolution maps ggOceanMaps has generated so
-far. Being able to plot Norwegian fjords with this level of detail is a
-significant improvement and has been a popular feature request. With v3,
-it is possible. Here is Kongsfjorden in Svalbard, drawn over the
-detailed Svalbard land shapes:
+Coupled with the detailed [EEA land
+shapes](https://mikkovihtakari.github.io/ggOceanMaps/articles/premade-maps.html#europe)
+(`shapefiles = "Europe"`), this produces the highest-resolution maps
+ggOceanMaps has generated so far. Being able to plot Norwegian fjords
+with this level of detail is a significant improvement and has been a
+popular feature request. With v3, it is possible. Here is Kongsfjorden
+in Svalbard, drawn over the detailed Svalbard land shapes:
 
 ``` r
 
-basemap(limits = c(10.9, 12.65, 78.83, 79.12), bathy.style = "wemb", shapefiles = "Svalbard")
+basemap(
+  limits = c(10.9, 12.65, 78.83, 79.12),
+  bathy.style = "wemb",
+  shapefiles = "Svalbard"
+)
 ```
 
 ![Figure: Kongsfjorden, Svalbard, with ~115 m EMODnet bathymetry and the
@@ -60,11 +65,15 @@ shapes.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/m
 the detailed Svalbard land shapes.
 
 And Porsangerfjorden on the Finnmark coast of mainland Norway, with the
-EMODnet `"Europe"` land shapes:
+EEA `"Europe"` land shapes:
 
 ``` r
 
-basemap(limits = c(23.9, 26.5, 69.9, 71.15), shapefiles = "Europe", bathy.style = "wemb")
+basemap(
+  limits = c(23.9, 26.5, 69.9, 71.15),
+  shapefiles = "Europe",
+  bathy.style = "wemb"
+)
 ```
 
 ![Figure: Porsangerfjorden, northern Norway, with ~115 m EMODnet
@@ -108,9 +117,9 @@ rb <- raster_bathymetry(
 basemap(
   limits = c(-5, 10, 50, 60),
   shapefiles = list(
-    land   = vector_land(rb),       # NEW in v3
+    land = vector_land(rb), # NEW in v3
     glacier = NULL,
-    bathy  = vector_bathymetry(rb)
+    bathy = vector_bathymetry(rb)
   ),
   bathymetry = TRUE
 )

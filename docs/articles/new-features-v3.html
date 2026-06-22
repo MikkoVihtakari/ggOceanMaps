@@ -121,15 +121,19 @@ and renders the tiles for the map extent.</p>
 <code>bathy.style = "wceb"</code> or <code>"wceg"</code>. Use this when
 EMODnet has no coverage for your region.</li>
 </ul>
-<p>Coupled with the detailed EMODnet land shapes
-(<code>shapefiles = "Europe"</code>), this produces the
+<p>Coupled with the detailed <a href="premade-maps.html#europe">EEA land
+shapes</a> (<code>shapefiles = "Europe"</code>), this produces the
 highest-resolution maps ggOceanMaps has generated so far. Being able to
 plot Norwegian fjords with this level of detail is a significant
 improvement and has been a popular feature request. With v3, it is
 possible. Here is Kongsfjorden in Svalbard, drawn over the detailed
 Svalbard land shapes:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10.9</span>, <span class="fl">12.65</span>, <span class="fl">78.83</span>, <span class="fl">79.12</span><span class="op">)</span>, bathy.style <span class="op">=</span> <span class="st">"wemb"</span>, shapefiles <span class="op">=</span> <span class="st">"Svalbard"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
+<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10.9</span>, <span class="fl">12.65</span>, <span class="fl">78.83</span>, <span class="fl">79.12</span><span class="op">)</span>,</span>
+<span>  bathy.style <span class="op">=</span> <span class="st">"wemb"</span>,</span>
+<span>  shapefiles <span class="op">=</span> <span class="st">"Svalbard"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/kongsfjorden_wemb.png" alt="Figure: Kongsfjorden, Svalbard, with ~115 m EMODnet bathymetry and the detailed Svalbard land shapes."><div class="figcaption">
 <strong>Figure:</strong> Kongsfjorden, Svalbard,
@@ -137,9 +141,13 @@ with ~115 m EMODnet bathymetry and the detailed Svalbard land
 shapes.</div>
 </div>
 <p>And Porsangerfjorden on the Finnmark coast of mainland Norway, with
-the EMODnet <code>"Europe"</code> land shapes:</p>
+the EEA <code>"Europe"</code> land shapes:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">23.9</span>, <span class="fl">26.5</span>, <span class="fl">69.9</span>, <span class="fl">71.15</span><span class="op">)</span>, shapefiles <span class="op">=</span> <span class="st">"Europe"</span>, bathy.style <span class="op">=</span> <span class="st">"wemb"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
+<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">23.9</span>, <span class="fl">26.5</span>, <span class="fl">69.9</span>, <span class="fl">71.15</span><span class="op">)</span>,</span>
+<span>  shapefiles <span class="op">=</span> <span class="st">"Europe"</span>,</span>
+<span>  bathy.style <span class="op">=</span> <span class="st">"wemb"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/porsangerfjorden_wemb.png" alt="Figure: Porsangerfjorden, northern Norway, with ~115 m EMODnet bathymetry and the EMODnet “Europe” land shapes."><div class="figcaption">
 <strong>Figure:</strong> Porsangerfjorden,
@@ -176,9 +184,9 @@ polygon extracted from the same grid.</p>
 <span><span class="fu"><a href="../reference/basemap.html">basemap</a></span><span class="op">(</span></span>
 <span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">50</span>, <span class="fl">60</span><span class="op">)</span>,</span>
 <span>  shapefiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    land   <span class="op">=</span> <span class="fu"><a href="../reference/vector_land.html">vector_land</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span>,       <span class="co"># NEW in v3</span></span>
+<span>    land <span class="op">=</span> <span class="fu"><a href="../reference/vector_land.html">vector_land</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span>, <span class="co"># NEW in v3</span></span>
 <span>    glacier <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    bathy  <span class="op">=</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span></span>
+<span>    bathy <span class="op">=</span> <span class="fu"><a href="../reference/vector_bathymetry.html">vector_bathymetry</a></span><span class="op">(</span><span class="va">rb</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  bathymetry <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>

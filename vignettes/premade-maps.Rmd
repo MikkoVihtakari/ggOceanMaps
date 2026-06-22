@@ -139,13 +139,13 @@ The Europe land polygons are downloaded from ggOceanMapsLargeData on first use.
 
 ## Svalbard
 
-A detailed Svalbard map (EPSG:32633), originally from the [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package. 
+A detailed Svalbard map (EPSG:32633), originally from the [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package.  The function asks to download the data the first time you use it.
 
 ```{r}
 basemap("Svalbard", glaciers = TRUE)
 ```
 
-![**Figure:** The function asks to download the data the first time you use it.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png)
+![**Figure:** Detailed Svalbard map matching from the now deprecated PlotSvalbard package.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png)
 
 Zooming to Kongsfjorden. Svalbard and Europe maps can be paired with the EMODnet bathymetry:
 
@@ -186,8 +186,4 @@ See the Bathymetry and Customising shapefiles articles.
 
 # Citing the data
 
-The data used by the package are not the property of the Institute of Marine
-Research nor the package author. Please cite the data sources used in any map
-you generate. See the
-[data-source list](https://mikkovihtakari.github.io/ggOceanMaps/#citations-and-data-sources)
-for the references.
+The data used by the package are not the property of the Institute of Marine Research nor the package author. Please cite the data sources used in any map you generate. See the [data-source list](https://mikkovihtakari.github.io/ggOceanMaps/#citations-and-data-sources) for the references.

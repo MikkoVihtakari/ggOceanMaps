@@ -185,17 +185,19 @@ first use.
 
 A detailed Svalbard map (EPSG:32633), originally from the
 [PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package.
+The function asks to download the data the first time you use it.
 
 ``` r
 
 basemap("Svalbard", glaciers = TRUE)
 ```
 
-![Figure: The function asks to download the data the first time you use
-it.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png)
+![Figure: Detailed Svalbard map matching from the now deprecated
+PlotSvalbard
+package.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png)
 
-**Figure:** The function asks to download the data the first time you
-use it.
+**Figure:** Detailed Svalbard map matching from the now deprecated
+PlotSvalbard package.
 
 Zooming to Kongsfjorden. Svalbard and Europe maps can be paired with the
 EMODnet bathymetry:
