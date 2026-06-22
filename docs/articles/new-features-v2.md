@@ -39,7 +39,7 @@ basemap(c(100, 160, -20, 30), bathymetry = TRUE)
 ```
 
 ![](new-features-v2_files/figure-html/unnamed-chunk-2-1.png) Processing
-time: 2.8 sec
+time: 3.7 sec
 
 The **low-resolution default bathymetry is optimized for processing
 time** and **there are higher-resolution datasets available** but you’ll
@@ -58,7 +58,7 @@ basemap(c(100, 160, -20, 30), bathy.style = "rcb")
 ```
 
 ![](new-features-v2_files/figure-html/unnamed-chunk-3-1.png) Processing
-time: 26.6 sec
+time: 30.8 sec
 
 Then the best bit. If this resolution still is not enough, **you can use
 any bathymetry grid you want** as long as
@@ -144,7 +144,7 @@ dt <- data.frame(
 dt <- get_depth(dt)
 ```
 
-Processing time: 9.1 sec
+Processing time: 10 sec
 
 ``` r
 
@@ -275,7 +275,7 @@ dt <- data.frame(
 dt <- dist2land(dt, verbose = FALSE)
 ```
 
-Processing time: 1 sec
+Processing time: 0.9 sec
 
 ``` r
 

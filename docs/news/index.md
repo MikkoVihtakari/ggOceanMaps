@@ -68,8 +68,9 @@ users and contributors work with ggOceanMaps.
   through the projected map CRS, fixing wrong land for
   `basemap(c(120, -120, 60, 80))` and a topology crash for rotated
   antimeridian data input.
-- Fixed a crash (`st_cast()` on a degenerate `GEOMETRYCOLLECTION`) for
-  some custom
+- Fixed a crash
+  ([`st_cast()`](https://r-spatial.github.io/sf/reference/st_cast.html)
+  on a degenerate `GEOMETRYCOLLECTION`) for some custom
   [`vector_land()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/vector_land.md)
   layers at some map limits.
 - Fixed rotated antimeridian maps drawing no land, e.g.

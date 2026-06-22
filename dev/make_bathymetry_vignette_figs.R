@@ -37,4 +37,21 @@ save_fig(basemap(nnorway, bathy.style = "rub"), "bathy_rub.png")
 save_fig(basemap(c(2, 3, 54, 55), bathy.style = "wemb"), "bathy_wemb.png")
 save_fig(basemap(c(-160, -154, 18, 23), bathy.style = "wceb"), "bathy_wceb.png")
 
+# Custom depth bins example (vignettes/adding-graphical-elements.Rmd) -----
+local({
+  rb <- raster_bathymetry(
+    getOption("ggOceanMaps.userpath"),
+    depths = c(50, 100, 250, 500, 1000, 2000),
+    boundary = c(11, 16, 67.3, 68.6),
+    verbose = FALSE
+  )
+  save_fig(
+    basemap(limits = c(11, 16, 67.3, 68.6),
+            shapefiles = list(land = dd_land, glacier = NULL, bathy = rb),
+            bathymetry = TRUE, grid.col = NA) +
+      scale_fill_brewer("Depth (m)", palette = "YlGnBu", na.value = "white"),
+    "custom_depth_bins.png", w = 6, h = 4.5
+  )
+})
+
 message("Done.")

@@ -378,6 +378,14 @@ basemap(
   scale_fill_brewer("Depth (m)", palette = "YlGnBu", na.value = "white")
 ```
 
+![Figure: Custom depth bins off Lofoten, binned with raster_bathymetry()
+and coloured with a ColorBrewer YlGnBu
+palette.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/custom_depth_bins.png)
+
+**Figure:** Custom depth bins off Lofoten, binned with
+[`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
+and coloured with a ColorBrewer YlGnBu palette.
+
 [`raster_bathymetry()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/raster_bathymetry.md)
 reports the intervals in `rb$depth.invervals`. The same binned raster
 can be turned into depth-contour polygons with
