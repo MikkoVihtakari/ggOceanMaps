@@ -43,11 +43,18 @@ local({
     getOption("ggOceanMaps.userpath"),
     depths = c(50, 100, 250, 500, 1000, 2000),
     boundary = c(11, 16, 67.3, 68.6),
+    estimate.land = TRUE,
     verbose = FALSE
   )
+  # Land from the same grid so it lines up with the bathymetry.
+  land <- sf::st_transform(vector_land(rb), 4326)
+  # Drop the land class so the raster shows depth bins only.
+  v <- rb$raster[[1]]
+  v[as.character(v) == "land"] <- NA
+  rb$raster[[1]] <- droplevels(v)
   save_fig(
     basemap(limits = c(11, 16, 67.3, 68.6),
-            shapefiles = list(land = dd_land, glacier = NULL, bathy = rb),
+            shapefiles = list(land = land, glacier = NULL, bathy = rb),
             bathymetry = TRUE, grid.col = NA) +
       scale_fill_brewer("Depth (m)", palette = "YlGnBu", na.value = "white"),
     "custom_depth_bins.png", w = 6, h = 4.5

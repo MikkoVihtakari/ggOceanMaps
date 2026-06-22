@@ -305,6 +305,7 @@ rb <- raster_bathymetry(
   gebco,
   depths = c(50, 100, 250, 500, 1000, 2000), # depth class boundaries
   boundary = c(11, 16, 67.3, 68.6), # crop to the map region
+  estimate.land = TRUE, # keep land cells so vector_land() can use them
   verbose = FALSE
 )
 
@@ -312,12 +313,21 @@ rb <- raster_bathymetry(
 levels(rb$raster[[1]])
 ```
 
-The binned raster carries the depth classes as a factor, so it behaves like any binned bathymetry: switch it on with `bathymetry = TRUE` and recolour it with a discrete fill scale. Here we use a sequential ColorBrewer palette as an example.
+The standard grey land comes from a coarser global coastline, which can sit slightly off a high-resolution grid like GEBCO. Pull the land from the *same* raster with `vector_land()` so the coastline matches the bathymetry exactly — `estimate.land = TRUE` above kept the land cells for this. Drop that `"land"` class from the raster itself so it is not drawn as a depth bin. The binned raster then behaves like any binned bathymetry: switch it on with `bathymetry = TRUE` and recolour it with a discrete fill scale (a sequential ColorBrewer palette here).
 
 ```{r raster-bathymetry-plot, fig.height = 4.5, eval = have_gebco}
+# Land from the same grid lines up with the bathymetry.
+land <- vector_land(rb)
+land <- sf::st_transform(land, 4326) # normalise GEBCO's "unknown" CRS
+
+# Drop the land class so the raster shows depth bins only.
+v <- rb$raster[[1]]
+v[as.character(v) == "land"] <- NA
+rb$raster[[1]] <- droplevels(v)
+
 basemap(
   limits = c(11, 16, 67.3, 68.6),
-  shapefiles = list(land = dd_land, glacier = NULL, bathy = rb),
+  shapefiles = list(land = land, glacier = NULL, bathy = rb),
   bathymetry = TRUE,
   grid.col = NA
 ) +
