@@ -243,11 +243,20 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       
       if(length(clip_shape) == 4) {
         limits <- stats::setNames(clip_shape, c("xmin", "xmax", "ymin", "ymax"))
-        
+
+        # Pull whole-world longitude limits just inside +/-180 (e.g. the
+        # "DecimalDegree" set, -180..180). An exact +/-180 clip box makes
+        # clip_shapefile() return a degenerate boundary, which collapses the
+        # bathymetry raster to a single row (basemap("DecimalDegree",
+        # bathymetry = TRUE)). The limits_dec case applies the same guard.
+        if(sf::st_is_longlat(crs) && isTRUE(diff(limits[1:2]) >= 360)) {
+          limits[1:2] <- c(-179.9, 179.9)
+        }
+
         #if(!sf::st_is_longlat(crs)){
         clip_shape <- sf::st_as_sfc(
           sf::st_bbox(limits, crs = crs)
-        ) 
+        )
         
         limits <- sf::st_bbox(
           sf::st_transform(
@@ -729,9 +738,14 @@ basemap_data_crop <- function(x, bathymetry = FALSE, glaciers = FALSE, crs = NUL
     } else {
       dd_lims <- if(!is.null(x$limits) && is_decimal_limit(x$limits)) x$limits else NULL
 
+      # Clip in the map CRS only for rotated maps and maps that explicitly cross
+      # the antimeridian (xmin > xmax). A merely wide, non-crossing map must NOT
+      # take this path: for the whole-world DecimalDegree set (-180..180),
+      # clip_shapefile on an exact +/-180 box returns a degenerate boundary that
+      # collapses the bathymetry to a single row at the equator
+      # (basemap("DecimalDegree", bathymetry = TRUE)).
       antimeridian_risk <- x$rotate ||
-        (!is.null(dd_lims) && (dd_lims[1] > dd_lims[2] ||          # explicit crossing
-                               diff(dd_lims[1:2]) > 180))           # wide span
+        (!is.null(dd_lims) && dd_lims[1] > dd_lims[2])   # explicit crossing
 
       if(antimeridian_risk) {
         # Clip in the map CRS (clip_limits is already in x$crs). For rotated

@@ -11,9 +11,12 @@ Status: **RELEASE RE-SCOPED TO 3.0.0 (2026-06-19).** "Bringing ggOceanMaps to
 the AI age." Version bumped to 3.0.0; R CMD check --as-cran clean (0 errors / 0
 warnings / 1 transient NOTE = bathymetry.html 404 that resolves on site deploy).
 All work on branch `v2.4.0-dev` (branch name unchanged; release is 3.0.0). PR
-#67 still draft. **Awaiting the maintainer's review + Codex code review; then
-THEY push/merge to master and submit the tarball to CRAN — do NOT merge or
-submit.**
+#67 still draft. Codex review + full pre-merge verification done (see 2026-06-22
+progress entry). **ONE OPEN ITEM before merge: the DecimalDegree bathymetry
+regression — fix is applied in `R/basemap_data.R` but NOT yet committed/verified
+(Bash was unavailable). See the 2026-06-22 progress entry for the TODO.** After
+that, the maintainer pushes/merges to master and submits the tarball to CRAN —
+do NOT merge or submit.
 
 3.0.0 work done this pass (all committed on v2.4.0-dev):
 - Version 3.0.0 in DESCRIPTION + AI-age sentence; NEWS.md reworked with 3.0.0
@@ -151,6 +154,49 @@ preserving code fences, tables, and list items; then rebuild site.
 - **TODO (docs)**: Add an example showing how to manually adjust bathymetry depth bins — e.g. overriding the default `depths` vector in `raster_bathymetry()` / the `bathy.style` discrete scale, or using `scale_fill_manual()` / `scale_fill_discrete()` on the resulting depth-bin factor. Probably fits best in `vignettes/bathymetry.Rmd` or the cookbook.
 
 ## Progress log
+
+**2026-06-22 — Pre-merge verification pass + DecimalDegree bathy regression**
+
+Full pre-merge verification at commit `e0338d3` (branch `v2.4.0-dev`), all green:
+- `devtools::test()` = 184 pass / 0 fail.
+- Regression corpus `ggOceanMaps development/tests/ggOceanMaps-function-tests.Rmd`
+  rendered fully against an installed dev build (default `error=FALSE` ⇒ no
+  chunk errored). Needs the configured datapath + network (rcb/wcs chunks).
+- `devtools::check()` = Status OK (0/0/0).
+- `R CMD check --as-cran` from the tarball (space-free `/tmp`, TinyTeX on PATH)
+  = 0 errors / 0 warnings / 2 NOTEs (both environmental: the bathymetry.html
+  404 that clears on site deploy, and an old local HTML Tidy).
+- Recompiled ALL ggOceanMapsLargeData/docs figures (new `dev/make_premade_map_figs.R`
+  for the premade maps + fjords; the two existing dev scripts for bathy/customising).
+  Restored archived BarentsSea/EMODnet/GEBCO/IBCAO pngs I had accidentally dropped.
+  LargeData pushed (`955c571`).
+- Rebuilt the full pkgdown site `lazy = FALSE`; guarded the `new-features-v2.Rmd`
+  `rub` chunks with `eval = have_gebco` (Codex had removed the old hardcoded
+  GEBCO path, breaking the build). Committed/pushed (`e0338d3`).
+
+**Figure-gen env vars** (set in the shell when running the dev/make_*.R scripts;
+files all present on this machine): `GGOCEANMAPS_DATAPATH=~/Documents/ggOceanMapsLargeData`,
+`GGOCEANMAPS_USERPATH=<local GEBCO_2025.nc under ~/Downloads>`,
+`GGOCEANMAPS_LARGEDATA_DOCS=<ggOceanMapsLargeData clone>/docs`,
+`GEONORGE_OSLO_GML=<Oslo Dybdedata .gml under ~/Downloads>`.
+
+**OPEN — DecimalDegree bathymetry regression (fix applied, NOT yet committed/verified).**
+`basemap("DecimalDegree", bathymetry = TRUE, glaciers = TRUE)` collapsed the
+bathymetry to a single equator row (legend lost most bins; land/glaciers fine).
+Cause: a regression from the rotate-antimeridian fix. The whole-world set's
+limits are `c(-180,180,-90,90)`, so `diff(lon)=360 > 180` set `antimeridian_risk`
+TRUE; the rotate fix had removed the `&& !st_is_longlat(clip_limits)` guard, so
+the world map took the "clip in map CRS" path, and `clip_shapefile()` on an
+EXACT ±180 box returns a degenerate boundary ⇒ the bathy warp collapses to one
+row (the known ±180 edge case). Fix made in `R/basemap_data.R` (the else branch
+of land clipping in `basemap_data_crop`): narrowed `antimeridian_risk` to
+`x$rotate || (dd_lims[1] > dd_lims[2])` only — dropped the `diff > 180` clause.
+Rotate/crossing stay covered; the world map returns to the plain path (its
+known-good pre-regression behaviour).
+**TODO when Bash is available:** verify DecimalDegree bathy renders full + rotate
+cases still render land; rerun testthat + snapshots (accept legit changes);
+regenerate `DecimalDegree.png` and re-push LargeData; rebuild the affected page;
+commit with a NEWS bug-fix entry; then it's ready for merge + CRAN.
 
 **2026-06-20 — Codex review landed + two follow-up basemap fixes**
 
