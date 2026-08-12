@@ -1,3 +1,10 @@
+# ggOceanMaps 3.0.1
+
+## Bug fixes
+
+* `qmap()` now accepts `sfc` geometry vectors directly, such as
+  `qmap(ices_areas$geometry)`.
+
 # ggOceanMaps 3.0.0
 
 This major release adds on-demand bathymetry sources, build-your-own shapefile tools, automated tests, and a reorganised documentation site. The repository also includes instructions for AI assistants that help users and contributors work with ggOceanMaps.

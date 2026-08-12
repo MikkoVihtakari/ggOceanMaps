@@ -1,6 +1,6 @@
 #' @title Quick map
 #' @description \code{qmap} is a shortcut similar to ggplot2's \code{\link[ggplot2]{qplot}} designed to quickly plot data with a limited range of options.
-#' @param data Data frame to use.
+#' @param data Data frame or sf/sfc object to use.
 #' @param x,y,... Aesthetics passed into each layer. Longitude and latitude columns are automatically recognized using the \code{\link{guess_coordinate_columns}} function.
 #' @param geom Character argument specifying geom(s) to draw. Defaults to "point". Other alternatives are "text" and "label". The "text" option can also be triggered by simply mapping a variable to \code{label} (see Examples).
 #' @inheritParams basemap
@@ -41,6 +41,12 @@ qmap <- function(
     grid.size = 0.1, base_size = 11, projection.grid = FALSE, expand.factor = 1.1, 
     verbose = FALSE
 ) {
+
+  ## Normalize spatial geometry vectors
+
+  if(inherits(data, "sfc")) {
+    data <- sf::st_as_sf(data)
+  }
   
   ## Coordinate columns
   

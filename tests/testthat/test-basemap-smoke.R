@@ -200,6 +200,10 @@ test_that("qmap with red dots builds", {
   )
 })
 
+test_that("qmap accepts sfc geometry vectors", {
+  expect_s3_class(qmap(ices_areas$geometry), "gg")
+})
+
 # Bathymetry styles (those that need ggOceanMapsLargeData skip-if-absent) -
 
 test_that("default raster_binned_blues bathymetry builds at fine extent", {

@@ -40,7 +40,7 @@ qmap(
 )
 }
 \arguments{
-\item{data}{Data frame to use.}
+\item{data}{Data frame or sf/sfc object to use.}
 
 \item{x, y, ...}{Aesthetics passed into each layer. Longitude and latitude columns are automatically recognized using the \code{\link{guess_coordinate_columns}} function.}
 
