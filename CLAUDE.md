@@ -66,7 +66,7 @@ CI runs R CMD CHECK on macOS, Windows, and Ubuntu (devel, release, oldrel-1) via
    - Loads/downloads spatial data via `load_map_data()`
    - Clips shapefiles to the map extent via `basemap_data_crop()`
    - Computes grid line geometries via `basemap_define_grid_lines()`
-3. **Assemble ggplot2 layers** — `map_cmd()` ([R/map_cmd.R](R/map_cmd.R)) returns ggplot2 command strings for each element (base, land, glaciers, bathymetry, grid definitions). These are concatenated with `+` and executed via `eval(parse(text = layers))`.
+3. **Assemble ggplot2 layers** — `map_cmd()` ([R/map_cmd.R](R/map_cmd.R)) returns ggplot2 command strings for each element (base, land, glaciers, bathymetry, grid definitions). These are concatenated with `+` and executed via `eval(parse(text = layers))`. Raster bathymetries go through `bathy_raster_layer()` / `GeomBathyRaster` ([R/bathy_raster_layer.R](R/bathy_raster_layer.R)) instead of `stars::geom_stars()`; see [memory/architecture.md](memory/architecture.md) for why.
 4. **Annotate output** — the returned ggplot object gets custom attributes (`bathymetry`, `glaciers`, `limits`, `polarmap`, `crs`, etc.) attached for downstream use.
 
 `qmap()` ([R/qmap.R](R/qmap.R)) is a thin wrapper over `basemap()` for quickly plotting a data frame's coordinates.

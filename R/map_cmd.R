@@ -19,11 +19,11 @@ map_cmd <- function(command, alternative = FALSE) {
       ggplot2::ggplot()
     ',
     bathy_rb = '
-    stars::geom_stars(data = X$shapefiles$bathy$raster, na.action = na.omit,
+    bathy_raster_layer(X$shapefiles$bathy$raster,
       downsample = plot.downsample, show.legend = bathy.legend, alpha = bathy.alpha)
     ',
     bathy_rc = '
-    stars::geom_stars(data = X$shapefiles$bathy$raster, na.action = na.omit,
+    bathy_raster_layer(X$shapefiles$bathy$raster,
       downsample = plot.downsample, show.legend = bathy.legend, alpha = bathy.alpha)
     ',
     bathy_rbb_scale = '

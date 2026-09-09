@@ -626,7 +626,7 @@ basemap_data_define_shapefiles <- function(limits = NULL, data = NULL, shapefile
       verbose = verbose
     )
     # The WCS server has already applied the requested resolution. Preserve it
-    # during cropping and avoid a second reduction in stars::geom_stars().
+    # during cropping and avoid a second reduction at plot time.
     attr(shapefiles$bathy, "wcs") <- TRUE
     attr(shapefiles$bathy, "downsampled") <- TRUE
   }

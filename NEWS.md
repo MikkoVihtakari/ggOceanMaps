@@ -1,3 +1,24 @@
+# ggOceanMaps 3.0.2
+
+## Bug fixes
+
+* Raster bathymetries no longer trigger the ggplot2 warning *"Raster pixels are
+  placed at uneven horizontal intervals and will be shifted"* when the raster
+  warped to the map projection contains entirely empty columns or rows
+  (e.g. `basemap(limits = c(-30, 30, 50, 80), bathymetry = TRUE)`,
+  [#69](https://github.com/MikkoVihtakari/ggOceanMaps/issues/69)). The maps
+  themselves were drawn correctly; only the warning was spurious.
+
+## Performance
+
+* Raster bathymetries are plotted through a leaner internal layer instead of
+  `stars::geom_stars()`. The plotted data no longer carries an index of every
+  empty cell, nor four corner coordinates per cell that were only used to find
+  the extent of the raster as a whole. For a million-cell bathymetry this
+  roughly halves the memory the plot holds (77 -> 43 MB for
+  `basemap(limits = c(-30, 30, 50, 80), bathymetry = TRUE)`) and makes drawing
+  about twice as fast. The maps are pixel-identical to those of 3.0.1.
+
 # ggOceanMaps 3.0.1
 
 ## Bug fixes

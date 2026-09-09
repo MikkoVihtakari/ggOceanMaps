@@ -14,7 +14,7 @@
 #' @param glaciers Logical indicating whether glaciers and ice sheets should be added to the map.
 #' @param rotate Logical indicating whether the projected maps should be rotated to point towards the pole relative to the mid-longitude limit.
 #' @param bathy.style Character (plots bathymetry; list of alternatives in Details) or \code{NULL} ("raster_binned_blues" if \code{bathymetry = TRUE}) defining the bathymetry style. Partially matched, can be abbreviated, and used to control bathymetry plotting together with \code{bathymetry}. See Details.
-#' @param downsample Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See \code{\link[stars]{geom_stars}}
+#' @param downsample Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See \code{\link[stars]{st_downsample}}
 #' @param legends Logical indicating whether the legend for bathymetry should be shown.
 #' @param legend.position The position for ggplot2 legend. See the argument with the same name in \link[ggplot2]{theme}.
 #' @param lon.interval,lat.interval Numeric value specifying the interval of longitude and latitude grids. \code{NULL} finds reasonable defaults depending on \code{limits}.

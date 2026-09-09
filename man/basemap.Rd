@@ -66,7 +66,7 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
 \item{bathy.style}{Character (plots bathymetry; list of alternatives in Details) or \code{NULL} ("raster_binned_blues" if \code{bathymetry = TRUE}) defining the bathymetry style. Partially matched, can be abbreviated, and used to control bathymetry plotting together with \code{bathymetry}. See Details.}
 
-\item{downsample}{Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See \code{\link[stars]{geom_stars}}}
+\item{downsample}{Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See \code{\link[stars]{st_downsample}}}
 
 \item{bathy.alpha}{Transparency parameter for the bathymetry fill color. See \link[ggplot2]{scale_alpha}.}
 

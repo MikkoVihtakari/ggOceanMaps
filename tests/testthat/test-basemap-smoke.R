@@ -261,3 +261,13 @@ test_that("WCS bathy.style combines with a premade shapefile set", {
     "gg"
   )
 })
+
+test_that("raster bathymetry renders without geom_raster interval warnings", {
+  # Regression (issue #69): warping the bathymetry raster to the map CRS can
+  # leave entirely empty columns or rows. Dropping those cells before plotting
+  # left gaps in the coordinate sequence, and geom_raster warned about "uneven
+  # horizontal intervals" even though the cells were drawn in the right place.
+  p <- basemap(limits = c(-30, 30, 50, 80), bathymetry = TRUE)
+  expect_no_warning(pb <- ggplot2::ggplot_build(p))
+  expect_no_warning(ggplot2::ggplot_gtable(pb))
+})

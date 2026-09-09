@@ -25,6 +25,12 @@ Pre-made sets: ArcticStereographic, AntarcticStereographic, DecimalDegree, Svalb
 
 Checks if `.rda` files exist in `ggOceanMaps.datapath`; if not, prompts user interactively to download. Built-in data (`dd_land`, `dd_rbathy`) is always available as named R objects.
 
+## Raster bathymetry layer (bathy_raster_layer.R)
+
+Raster bathymetries (`bathy_rb`/`bathy_rc` in `map_cmd()`) are drawn by the internal `bathy_raster_layer()` + `GeomBathyRaster` pair rather than `stars::geom_stars()`, for memory reasons: a `basemap()` bathymetry is routinely 1–2 million cells, and `geom_stars(na.action = na.omit)` both keeps a named index of every dropped cell in the `"na.action"` attribute and lets `GeomRaster` expand the data with `xmin`/`xmax`/`ymin`/`ymax` (four doubles per cell) that only the overall extent is read from. `bathy_raster_layer()` extracts just the non-empty cells straight from the stars array, and `GeomBathyRaster` transforms only the two corners of the raster. Non-regular grids fall back to `stars::geom_stars()`.
+
+`GeomBathyRaster` also skips `GeomRaster`'s "uneven horizontal intervals" warning: warped rasters routinely contain entirely empty columns, which leave a gap in the coordinate sequence once empty cells are dropped, but the cells are positioned by integer index and so are drawn correctly (issue #69). Do not take the cell size from the stars `delta` — it differs from the plotted coordinate spacing by a floating-point margin that shifts the outermost column by one when positions are truncated to integers.
+
 ## Key internal utilities
 
 - `rotate_crs()` / `dd_clip_boundary()` — antimeridian/rotation handling

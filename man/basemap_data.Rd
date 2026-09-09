@@ -36,7 +36,7 @@ Can be omitted if \code{data} or \code{shapefiles} are defined.}
 
 \item{bathymetry}{Logical indicating whether bathymetry should be added to the map. Functions together with \code{bathy.style}. See Details.}
 
-\item{downsample}{Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See \code{\link[stars]{geom_stars}}}
+\item{downsample}{Integer defining the downsampling rate for raster bathymetries. A value of 0 (default) does not downsample, 1 skips every second row, 2 every second and third. See \code{\link[stars]{st_downsample}}}
 
 \item{glaciers}{Logical indicating whether glaciers and ice sheets should be added to the map.}
 
