@@ -1,3 +1,14 @@
+# ggOceanMaps (development version)
+
+## Bug fixes
+
+* `get_depth()` failed with *"object 'tmp' not found"* when the `lon` and
+  `lat` arguments were given for a data frame. The coordinate columns are now
+  taken from the arguments; before, the function only worked when the columns
+  were guessed.
+* `get_depth()` returned `NA` for points with a depth of exactly 1 m when
+  `data` contained rows with missing coordinates.
+
 # ggOceanMaps 3.0.2
 
 ## Bug fixes
