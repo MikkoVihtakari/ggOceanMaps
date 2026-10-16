@@ -1,4 +1,4 @@
-# ggOceanMaps (development version)
+# ggOceanMaps 3.0.3
 
 ## Bug fixes
 
