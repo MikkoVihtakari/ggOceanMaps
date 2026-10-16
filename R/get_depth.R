@@ -117,7 +117,7 @@ get_depth <- function(data, bathy.style = "raster_continuous", lon = NULL, lat =
     
     ## Extract depths
     
-    x <- sf::st_as_sf(x, coords = tmp, crs = sf::st_crs(proj.in))
+    x <- sf::st_as_sf(x, coords = c(lon, lat), crs = sf::st_crs(proj.in))
     
     if(sf::st_crs(bathy) != sf::st_crs(x)) {
       x <- sf::st_transform(x, crs = sf::st_crs(bathy))
@@ -139,9 +139,9 @@ get_depth <- function(data, bathy.style = "raster_continuous", lon = NULL, lat =
     ## Recombine with NAs
     
     if(contains.nas) {
-      na.rows[!na.rows] <- out
-      na.rows[na.rows == 1] <- NA
-      out <- na.rows
+      tmp <- rep(NA_real_, length(na.rows))
+      tmp[!na.rows] <- out
+      out <- tmp
     }
     
     ## Return
