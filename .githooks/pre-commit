@@ -79,7 +79,7 @@ awk -v vk="$version_key" -v dk="$date_key" -v ver="$new_version" -v day="$today"
     if (line ~ "^" vk ":" && existing_date == 0) printf "%s: %s%s\n", dk, day, ending
   }
 ' "$metadata" > "$tmp"
-if ! cmp -s "$tmp" "$metadata"; then mv "$tmp" "$metadata"; fi
+if ! cmp -s "$tmp" "$metadata"; then cat "$tmp" > "$metadata"; fi
 git add -- "$metadata"
 # Preserve unstaged README changes. The marker is optional (R packages use DESCRIPTION).
 if [ -f README.md ] && git diff --quiet -- README.md; then
@@ -92,7 +92,7 @@ if [ -f README.md ] && git diff --quiet -- README.md; then
     }
   ' README.md > "$readme_tmp"
   if ! cmp -s "$readme_tmp" README.md; then
-    mv "$readme_tmp" README.md
+    cat "$readme_tmp" > README.md
     git add -- README.md
   fi
 fi
