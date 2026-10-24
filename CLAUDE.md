@@ -6,7 +6,7 @@ For AI assistants helping users *use* ggOceanMaps (not work on its source), see 
 
 ## Package overview
 
-ggOceanMaps is an R package (v3.0.0) for plotting oceanographic data on bathymetric maps using ggplot2. It ships with low-resolution spatial data and downloads high-resolution files on demand from [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData). Documentation: https://mikkovihtakari.github.io/ggOceanMaps/
+ggOceanMaps is an R package (version recorded in DESCRIPTION) for plotting oceanographic data on bathymetric maps using ggplot2. It ships with low-resolution spatial data and downloads high-resolution files on demand from [ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData). Documentation: https://mikkovihtakari.github.io/ggOceanMaps/
 
 ## Project memory
 
@@ -183,3 +183,7 @@ Useful focused verification command:
 ```r
 devtools::test(filter = "basemap-smoke")
 ```
+
+## Fiskwise commit versions
+
+Every ordinary authored commit increments patch by **0.0.1** and stamps the update date in DESCRIPTION `Version` and `Date`. These fields are the authoritative R-package version; do not add a separate VERSION file. Use the shared `.githooks/pre-commit`. Minor (`+0.1`) and major (`+1`) increments happen **only on an explicit user request**; never choose them autonomously. Only then set `FISKWISE_VERSION_BUMP=minor|major` for that one commit. Preserve custom hooks and do not stage unrelated metadata edits. Merge/rebase replay keeps its existing stamps. No automatic tags, releases or CRAN submission. See the [shared policy](https://github.com/DeepWaterIMR/fiskwise/blob/main/docs/VERSIONING.md).

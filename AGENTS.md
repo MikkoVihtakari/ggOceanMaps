@@ -200,3 +200,7 @@ The whole repository, `memory/` included, is public on GitHub. Never commit
 absolute local paths (e.g. `/Users/<name>/...`), machine-specific filenames, or
 contact details beyond the maintainer's public package metadata; use generic
 placeholders such as `~/...` or `path/to/your/file.nc`.
+
+## Fiskwise commit versions
+
+Every ordinary authored commit increments patch by **0.0.1** and stamps the update date in DESCRIPTION `Version` and `Date`. These fields are the authoritative R-package version; do not add a separate VERSION file. Use the shared `.githooks/pre-commit`. Minor (`+0.1`) and major (`+1`) increments happen **only on an explicit user request**; never choose them autonomously. Only then set `FISKWISE_VERSION_BUMP=minor|major` for that one commit. Preserve custom hooks and do not stage unrelated metadata edits. Merge/rebase replay keeps its existing stamps. No automatic tags, releases or CRAN submission. See the [shared policy](https://github.com/DeepWaterIMR/fiskwise/blob/main/docs/VERSIONING.md).

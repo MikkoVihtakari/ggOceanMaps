@@ -1,0 +1,98 @@
+#!/bin/sh
+# Fiskwise ecosystem version policy (canonical source: DeepWaterIMR/fiskwise).
+# See docs/VERSIONING.md and .githooks/fiskwise-version.LICENSE.
+# Ordinary commits increment patch once. Only a user-requested change may set
+# FISKWISE_VERSION_BUMP=minor or major. No R/Python runtime is required.
+set -eu
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+git_dir=$(git rev-parse --git-dir)
+if [ -e "$git_dir/MERGE_HEAD" ] || [ -e "$git_dir/rebase-merge" ] || [ -e "$git_dir/rebase-apply" ]; then
+  exit 0
+fi
+if [ -f DESCRIPTION ]; then
+  metadata=DESCRIPTION
+  version_key=Version
+  date_key=Date
+elif [ -f VERSION ]; then
+  metadata=VERSION
+  version_key=version
+  date_key=date
+else
+  echo 'Fiskwise: no VERSION or DESCRIPTION; initialize the package version first.' >&2
+  exit 1
+fi
+# DESCRIPTION can contain scientific/package changes. Never stage unrelated edits.
+if ! git diff --quiet -- "$metadata"; then
+  echo "Fiskwise: stage intended $metadata changes before committing; unstaged metadata was preserved." >&2
+  exit 1
+fi
+read_version() {
+  sed -n "s/^$version_key:[[:space:]]*//p" | sed 's/[[:space:]]*$//' | head -n 1
+}
+file_version=$(read_version < "$metadata")
+head_version=$(git show "HEAD:$metadata" 2>/dev/null | read_version || true)
+valid_version() {
+  printf '%s\n' "$1" | grep -Eq '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$'
+}
+if ! valid_version "$file_version"; then
+  echo "Fiskwise: $metadata needs a three-part x.y.z version; no files changed." >&2
+  exit 1
+fi
+bump=${FISKWISE_VERSION_BUMP:-patch}
+case "$bump" in patch|minor|major) ;; *) echo 'Fiskwise: FISKWISE_VERSION_BUMP must be patch, minor or major.' >&2; exit 1 ;; esac
+if [ -z "$head_version" ]; then
+  # The first versioned commit adopts the declared initial version.
+  new_version=$file_version
+else
+  if ! valid_version "$head_version"; then
+    echo 'Fiskwise: HEAD has a non-standard version; review migration before committing.' >&2
+    exit 1
+  fi
+  major=${head_version%%.*}
+  rest=${head_version#*.}
+  minor=${rest%%.*}
+  patch=${rest#*.}
+  case "$bump" in
+    patch) new_version="$major.$minor.$((patch + 1))" ;;
+    minor) new_version="$major.$((minor + 1)).0" ;;
+    major) new_version="$((major + 1)).0.0" ;;
+  esac
+  # Allow a pre-staged expected bump, but never silently accept another version.
+  if [ "$file_version" != "$head_version" ] && [ "$file_version" != "$new_version" ]; then
+    echo "Fiskwise: expected $new_version; minor/major changes require an explicit user request and FISKWISE_VERSION_BUMP=minor|major." >&2
+    exit 1
+  fi
+fi
+today=$(date +%Y-%m-%d)
+has_date=$(grep -c "^$date_key:" "$metadata" || true)
+tmp="$metadata.fiskwise-tmp.$$"
+readme_tmp="README.md.fiskwise-tmp.$$"
+trap 'rm -f "$tmp" "$readme_tmp"' EXIT HUP INT TERM
+# Preserve DCF fields, UTF-8, and the original LF/CRLF convention.
+awk -v vk="$version_key" -v dk="$date_key" -v ver="$new_version" -v day="$today" -v existing_date="$has_date" '
+  NR == 1 { ending = ($0 ~ /\r$/ ? "\r" : "") }
+  { line = $0; sub(/\r$/, "", line)
+    if (line ~ "^" vk ":") line = vk ": " ver
+    if (line ~ "^" dk ":") { line = dk ": " day; has_date = 1 }
+    printf "%s%s\n", line, ending
+    if (line ~ "^" vk ":" && existing_date == 0) printf "%s: %s%s\n", dk, day, ending
+  }
+' "$metadata" > "$tmp"
+if ! cmp -s "$tmp" "$metadata"; then mv "$tmp" "$metadata"; fi
+git add -- "$metadata"
+# Preserve unstaged README changes. The marker is optional (R packages use DESCRIPTION).
+if [ -f README.md ] && git diff --quiet -- README.md; then
+  awk -v ver="$new_version" -v day="$today" '
+    NR == 1 { ending = ($0 ~ /\r$/ ? "\r" : "") }
+    { line = $0; sub(/\r$/, "", line)
+      if (stamp) { line = "**Version " ver "** (" day ")"; stamp = 0 }
+      else if (line == "<!-- version -->") stamp = 1
+      printf "%s%s\n", line, ending
+    }
+  ' README.md > "$readme_tmp"
+  if ! cmp -s "$readme_tmp" README.md; then
+    mv "$readme_tmp" README.md
+    git add -- README.md
+  fi
+fi
