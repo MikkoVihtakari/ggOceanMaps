@@ -119,8 +119,7 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
     
   } else if(na == "remove") {
     
-    y <- y[eval(!is.na(y[[lon]]) | !is.na(y[[lat]])),]
-    y <- y[eval(!is.na(y[[lon]]) | !is.na(y[[lat]])),]
+    y <- y[eval(!is.na(y[[lon]]) & !is.na(y[[lat]])),]
     
     message("Removed rows that contained missing coordinates.")
   } else {
@@ -128,10 +127,17 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
       stop("lon or lat coordinates contain missing values. Adjust the na argument or take care of the NAs.")
     }
   }
+
+  if(na == "remove" && !is.null(x)) {
+    oldrownames <- oldrownames[y$id]
+    x <- x[y$id, , drop = FALSE]
+  }
   
   ## Output projection if not defined ---
   
-  if(is.null(proj.out)) {
+  if(is.null(proj.out) && nrow(y) == 0) {
+    proj.out <- proj.in
+  } else if(is.null(proj.out)) {
     # limits <- sf::st_bbox(sf::st_as_sf(y, coords = c(lon, lat), crs = proj.in))[c("xmin", "xmax", "ymin", "ymax")] # does not work for antimeridian
     # limits <- c(range(y[[lon]]), range(y[[lat]])) # can't do this because lon coordinates won't get ordered correctly
     # limits <- auto_limits(y)$ddLimits # note: can't do this because auto_limits uses transform_coord()
@@ -195,10 +201,14 @@ transform_coord <- function(x = NULL, lon = NULL, lat = NULL, new.names = "auto"
   
   ## ----
   
-  if(na == "ignore" & nrow(z) > 0) {
-    y <- rbind(y, z)
-    suppressWarnings(rownames(y) <- y$id)
-    y <- y[order(y$id), !colnames(y) %in% "id"]
+  if(na == "ignore") {
+    if(nrow(z) > 0) {
+      y <- rbind(y, z)
+      suppressWarnings(rownames(y) <- y$id)
+      y <- y[order(y$id), !colnames(y) %in% "id"]
+    } else {
+      y <- y[, !colnames(y) %in% "id"]
+    }
   } else {
     y <- y[, !colnames(y) %in% "id"]
   }
