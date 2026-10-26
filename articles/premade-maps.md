@@ -1,0 +1,229 @@
+# Premade maps
+
+## Overview
+
+ggOceanMaps plots maps from **pre-made shapefiles**. Most of the time
+you do not need to think about them:
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+picks the right set automatically from the `limits` (or `data`) you give
+it. This article shows the maps that ship with — or are downloadable for
+— the package, and the projection each uses.
+
+The available sets are listed by
+[`shapefile_list()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/shapefile_list.md):
+
+``` r
+
+shapes <- shapefile_list("all")
+datapath <- path.expand(getOption("ggOceanMaps.datapath"))
+userpath <- path.expand(getOption("ggOceanMaps.userpath", ""))
+shapes[] <- lapply(shapes, function(x) {
+  if (!is.character(x)) return(x)
+  x <- gsub(datapath, "<ggOceanMaps.datapath>", x, fixed = TRUE)
+  if (nzchar(userpath)) {
+    x <- gsub(userpath, "<ggOceanMaps.userpath>", x, fixed = TRUE)
+  }
+  x
+})
+shapes
+#>                     name                                  land
+#> 1    ArcticStereographic    <ggOceanMaps.datapath>/arctic_land
+#> 2 AntarcticStereographic <ggOceanMaps.datapath>/antarctic_land
+#> 3          DecimalDegree                               dd_land
+#> 4               Svalbard  <ggOceanMaps.datapath>/svalbard_land
+#> 5                 Europe    <ggOceanMaps.datapath>/europe_land
+#>                                    glacier
+#> 1    <ggOceanMaps.datapath>/arctic_glacier
+#> 2 <ggOceanMaps.datapath>/antarctic_glacier
+#> 3        <ggOceanMaps.datapath>/dd_glacier
+#> 4  <ggOceanMaps.datapath>/svalbard_glacier
+#> 5                                     <NA>
+#>                                                                                    bathy
+#> 1    dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.datapath>/arctic_bathy
+#> 2 dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.datapath>/antarctic_bathy
+#> 3        dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.datapath>/dd_bathy
+#> 4  dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.datapath>/svalbard_bathy
+#> 5        dd_rbathy|<ggOceanMaps.datapath>/dd_rbathy_cont|<ggOceanMaps.datapath>/dd_bathy
+#>     crs                                      limits
+#> 1  3995                                       c(30)
+#> 2  3031                                      c(-35)
+#> 3  4326                       c(-180, 180, -90, 90)
+#> 4 32633 c(402204.7, 845943.9, 8253526.1, 8978517.5)
+#> 5  3035        c(943609, 7601958, -375446, 6825119)
+#>                                                                      path
+#> 1 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/
+#> 2 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/
+#> 3 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/
+#> 4 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/
+#> 5 https://github.com/MikkoVihtakari/ggOceanMapsLargeData/raw/master/data/
+```
+
+Each row is a named shapefile set with a coordinate reference system
+(`crs`), a default extent (`limits`), and the names of its land /
+glacier / bathymetry objects. You can force a particular set with the
+first argument or the `shapefiles` argument (partial matching works, so
+`"Arctic"` resolves to `"ArcticStereographic"`):
+
+``` r
+
+basemap(shapefiles = "Svalbard", bathymetry = TRUE)
+```
+
+Low-resolution global data (`dd_land`, `dd_rbathy`) ship with the
+package. The higher-resolution regional sets live in the
+[ggOceanMapsLargeData](https://github.com/MikkoVihtakari/ggOceanMapsLargeData)
+repository and are **downloaded automatically on first use** to
+`getOption("ggOceanMaps.datapath")`. Set that option to a permanent
+folder in your `.Rprofile` so the files are reused across sessions;
+otherwise they land in
+[`tempdir()`](https://rdrr.io/r/base/tempfile.html) and are
+re-downloaded each session.
+
+## Standard maps (selected automatically)
+
+These three sets cover the whole globe and are chosen automatically from
+the latitude range of your `limits`: polar-stereographic projections
+near the poles, decimal degrees elsewhere. See the [user
+manual](https://mikkovihtakari.github.io/ggOceanMaps/articles/ggOceanMaps.md)
+for the exact selection rule.
+
+### Decimal degree
+
+The default map uses decimal degrees (EPSG:4326) and [Natural
+Earth](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
+1:10m land and minor-island polygons.
+
+``` r
+
+basemap("DecimalDegree", bathymetry = TRUE, glaciers = TRUE)
+```
+
+![Figure: Global basemap in decimal degrees (EPSG:4326) with land,
+glaciers, and binned
+bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/DecimalDegree.png)
+
+**Figure:** Global basemap in decimal degrees (EPSG:4326) with land,
+glaciers, and binned bathymetry.
+
+### Arctic Stereographic
+
+Used automatically when the map sits in the high north (EPSG:3995). Land
+and glacier polygons and vector bathymetry are downloaded from
+ggOceanMapsLargeData on first use.
+
+``` r
+
+basemap("ArcticStereographic", bathymetry = TRUE, glaciers = TRUE)
+```
+
+![Figure: Arctic stereographic basemap (EPSG:3995) with land, glaciers,
+and
+bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/ArcticStereographic.png)
+
+**Figure:** Arctic stereographic basemap (EPSG:3995) with land,
+glaciers, and bathymetry.
+
+### Antarctic Stereographic
+
+The southern equivalent (EPSG:3031).
+
+``` r
+
+basemap("AntarcticStereographic", bathymetry = TRUE, glaciers = TRUE)
+```
+
+![Figure: Antarctic stereographic basemap (EPSG:3031) with land,
+glaciers, and
+bathymetry.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/AntarcticStereographic.png)
+
+**Figure:** Antarctic stereographic basemap (EPSG:3031) with land,
+glaciers, and bathymetry.
+
+## Detailed regional maps
+
+Higher-resolution sets for regions the package author works in. They are
+downloaded from ggOceanMapsLargeData when first requested. The detailed
+shapefiles can be **large**: find your limits with the standard maps
+first, and export to a file rather than plotting into the screen device
+for big extents.
+
+Only a handful of regions have a dedicated high-resolution set. If your
+area of interest is not in the list above — or you need finer land or
+bathymetry than the standard maps provide — you can build your own land
+and bathymetry shapefiles and pass them to
+[`basemap()`](https://mikkovihtakari.github.io/ggOceanMaps/reference/basemap.md)
+via the `shapefiles` argument. See the [Customising
+shapefiles](https://mikkovihtakari.github.io/ggOceanMaps/articles/customising-shapefiles.md)
+article for the full workflow.
+
+### Europe
+
+A detailed European coastline (EPSG:3035) based on the [EEA
+coastline](https://www.eea.europa.eu/en/datahub/datahubitem-view/af40333f-9e94-4926-a4f0-0a787f1d2b8f).
+Useful for coastal maps around the European seas. Can be paired with
+[EMODnet
+bathymetry](https://mikkovihtakari.github.io/ggOceanMaps/articles/bathymetry.html#live-download-from-a-web-coverage-service-wcs)
+for ~115 m resolution bathymetric maps (see [New features in
+v3](https://mikkovihtakari.github.io/ggOceanMaps/articles/new-features-v3.html#high-resolution-maps-of-european-coast)
+for example).
+
+``` r
+
+basemap(shapefiles = "Europe")
+```
+
+![Figure: Detailed European coastline (EPSG:3035) from the EEA coastline
+dataset.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Europe.png)
+
+**Figure:** Detailed European coastline (EPSG:3035) from the EEA
+coastline dataset.
+
+The Europe land polygons are downloaded from ggOceanMapsLargeData on
+first use.
+
+### Svalbard
+
+A detailed Svalbard map (EPSG:32633), originally from the
+[PlotSvalbard](https://github.com/MikkoVihtakari/PlotSvalbard) package.
+The function asks to download the data the first time you use it.
+
+``` r
+
+basemap("Svalbard", glaciers = TRUE)
+```
+
+![Figure: Detailed Svalbard map matching from the now deprecated
+PlotSvalbard
+package.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Svalbard.png)
+
+**Figure:** Detailed Svalbard map matching from the now deprecated
+PlotSvalbard package.
+
+Zooming to Kongsfjorden. Svalbard and Europe maps can be paired with the
+EMODnet bathymetry:
+
+``` r
+
+basemap(
+  limits = c(10.9, 12.65, 78.83, 79.12),
+  bathy.style = "wemb",
+  shapefiles = "Svalbard",
+  legends = FALSE,
+  glaciers = TRUE
+)
+```
+
+![Figure: High-resolution map of Kongsfjorden, Svalbard, with bathymetry
+and
+glaciers.](https://raw.githubusercontent.com/MikkoVihtakari/ggOceanMapsLargeData/master/docs/Kongsfjorden.png)
+
+**Figure:** High-resolution map of Kongsfjorden, Svalbard, with
+bathymetry and glaciers.
+
+## Citing the data
+
+The data used by the package are not the property of the Institute of
+Marine Research nor the package author. Please cite the data sources
+used in any map you generate. See the [data-source
+list](https://mikkovihtakari.github.io/ggOceanMaps/#citations-and-data-sources)
+for the references.
