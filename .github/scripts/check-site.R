@@ -12,6 +12,10 @@ if (is.na(actual) || !identical(actual, version)) {
   stop("Website version ", actual, " differs from DESCRIPTION version ", version)
 }
 text <- xml2::xml_text(html)
+if (grepl("Setting data download folder to a temporary folder", text, fixed = TRUE) ||
+    grepl("(/var/folders/|/tmp/|/home/runner/)[^[:space:]]*Rtmp", text)) {
+  stop("Package startup diagnostics or temporary paths leaked into the homepage.")
+}
 claims <- regmatches(text, gregexpr("R package version [0-9]+\\.[0-9]+\\.[0-9]+", text))[[1]]
 if (length(claims) && any(sub("R package version ", "", claims, fixed = TRUE) != version)) {
   stop("The homepage contains a stale package-version statement or citation.")

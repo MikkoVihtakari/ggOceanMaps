@@ -1,3 +1,7 @@
+# ggOceanMaps 3.0.10
+
+* Hide README setup diagnostics and reject leaked startup messages or temporary paths before website publication.
+
 # ggOceanMaps 3.0.9
 
 * Pin the older-R Linux check to Ubuntu 24.04 to avoid the rolling ubuntu-latest image’s system-package download delays.
