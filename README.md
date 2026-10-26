@@ -1,18 +1,8 @@
 
-    ## ggOceanMaps: Setting data download folder to a temporary folder
-    ## /var/folders/9j/t7m30trx0s33zy79x20y3wyh0000gn/T//RtmpCsWKYJ. This
-    ## means that any downloaded map data need to be downloaded again when you
-    ## restart R. To avoid this problem, change the default path to a
-    ## permanent folder on your computer. Add following lines to your
-    ## .Rprofile file: {.ggOceanMapsenv <- new.env(); .ggOceanMapsenv$datapath
-    ## <- 'YourCustomPath'}. You can use usethis::edit_r_profile() to edit the
-    ## file. '~/ggOceanMapsLargeData' would make it in a writable folder on
-    ## most operating systems.
-
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-3.0.9**
+3.0.10**
 
 <!-- badges: start -->
 
@@ -193,7 +183,7 @@ utils::citation("ggOceanMaps", auto = as.list(read.dcf("DESCRIPTION")[1, ]))
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Vihtakari M (2026). _ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'_. R package version 3.0.9,
+#>   using 'ggplot2'_. R package version 3.0.10,
 #>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -202,7 +192,7 @@ utils::citation("ggOceanMaps", auto = as.list(read.dcf("DESCRIPTION")[1, ]))
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2026},
-#>     note = {R package version 3.0.9},
+#>     note = {R package version 3.0.10},
 #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```

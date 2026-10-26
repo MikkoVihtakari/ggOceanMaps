@@ -2,8 +2,8 @@
 output: github_document
 ---
 
-```{r, echo = FALSE}
-# Load the checkout so citation() uses the source DESCRIPTION, not an older install.
+```{r, include = FALSE}
+# Load the checkout for the examples; keep setup diagnostics out of the document.
 pkgload::load_all(".", quiet = TRUE)
 
 knitr::opts_chunk$set(
