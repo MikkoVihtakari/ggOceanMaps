@@ -20,3 +20,7 @@ Rendering ggOceanMaps vignettes/pkgdown articles from `Rscript` on this machine:
 - To check chunks execute without pandoc, use `knitr::knit()` instead of `rmarkdown::render()`.
 
 See [[large-data-figure-hosting]] for where pre-rendered figures live.
+
+## Website publication
+
+The pkgdown workflow refreshes README.md from README.Rmd, builds a Pages artifact, and validates the homepage version and citation against DESCRIPTION before upload. GitHub Pages uses GitHub Actions publishing; generated website files are not committed to master or gh-pages. PRs build and validate; only the default branch deploys.

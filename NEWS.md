@@ -1,3 +1,11 @@
+# ggOceanMaps 3.0.9
+
+* Pin the older-R Linux check to Ubuntu 24.04 to avoid the rolling ubuntu-latest image’s system-package download delays.
+
+# ggOceanMaps 3.0.8
+
+* Publish pkgdown directly through GitHub Pages artifacts, with source-version verification and no generated commits.
+
 # ggOceanMaps 3.0.3
 
 ## Bug fixes
