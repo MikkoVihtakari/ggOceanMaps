@@ -1,3 +1,7 @@
+# ggOceanMaps 3.0.8
+
+* Publish pkgdown directly through GitHub Pages artifacts, with source-version verification and no generated commits.
+
 # ggOceanMaps 3.0.3
 
 ## Bug fixes
