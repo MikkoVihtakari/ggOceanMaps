@@ -73,6 +73,27 @@ basemap(limits = c(-20, 30, 50, 70)) +
 For unprojected (decimal-degree) maps you can use `geom_point()` directly with
 `x = lon, y = lat`.
 
+### Plot ICES statistical areas
+
+Use the bundled `ices_areas` (an sf object in EPSG:3995). Do not download a
+separate ICES shapefile. Filter on `SubArea` so every division and subdivision
+of a subarea is kept (subarea 2 is split into 27.2.a.1, 27.2.a.2, 27.2.b.1 and
+27.2.b.2), let `basemap(data = …)` fit the map to the polygons instead of
+cropping them, and call `reorder_layers()` so land is drawn on top and hides
+the polygon outlines along the coast:
+
+```r
+areas <- ices_areas[ices_areas$SubArea %in% c("1", "2"), ]
+p <- basemap(data = areas, bathymetry = TRUE) +
+  ggplot2::geom_sf(data = areas, fill = NA, colour = "red")
+reorder_layers(p)
+```
+
+To label divisions rather than subdivisions, merge on a division code derived
+from `Area_Full` (for example `sub("^(27\\.[0-9]+\\.[a-z]).*$", "\\1", Area_Full)`)
+with `dplyr::group_by()` and `dplyr::summarise()`. `reorder_layers()` works for
+any polygon layer that should sit under land.
+
 ### Add bathymetry
 
 Built-in (no download):
@@ -178,7 +199,11 @@ ggsave("arctic.png", p, width = 6, height = 6, dpi = 300)
    spatial dataset (`"Arctic"`, `"Europe"`, …). `shape` is a ggplot2 aesthetic
    for marker shape. Easy to confuse.
 
-7. **First call may take a while.** If `bathymetry = TRUE` triggers a download,
+7. **Polygons drawn over land.** Layers added after `basemap()` are drawn
+   above land, so area polygons (ICES areas, regions, EEZs) show their
+   coastline edges on land. Pass the finished plot through `reorder_layers()`.
+
+8. **First call may take a while.** If `bathymetry = TRUE` triggers a download,
    the first basemap is slow. Subsequent calls reuse the cached data.
 
 ## Where to find more
