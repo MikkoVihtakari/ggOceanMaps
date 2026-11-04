@@ -89,10 +89,15 @@ p <- basemap(data = areas, bathymetry = TRUE) +
 reorder_layers(p)
 ```
 
-To label divisions rather than subdivisions, merge on a division code derived
-from `Area_Full` (for example `sub("^(27\\.[0-9]+\\.[a-z]).*$", "\\1", Area_Full)`)
-with `dplyr::group_by()` and `dplyr::summarise()`. `reorder_layers()` works for
-any polygon layer that should sit under land.
+Keep the subdivisions unless the user asks for divisions only. In subareas 1
+and 2, 27.1.a (the Loophole) and 27.2.a.1 and 27.2.b.1 (the Banana Hole) are
+international waters in the NEAFC Regulatory Area. 27.1.a is a division, but
+merging to divisions hides the Banana Hole, and these areas matter for
+fisheries management. Label the polygons with `Area_Full`.
+If divisions are needed, merge on a code derived from `Area_Full` (for example
+`sub("^(27\\.[0-9]+\\.[a-z]).*$", "\\1", Area_Full)`) with
+`dplyr::group_by()` and `dplyr::summarise()`. `reorder_layers()` works for any
+polygon layer that should sit under land.
 
 ### Add bathymetry
 
