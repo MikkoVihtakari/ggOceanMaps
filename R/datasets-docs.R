@@ -41,7 +41,7 @@
 #' @family datasets
 #' @name ices_areas
 #' @format \code{\link[sf:st_sf]{sf object}} containing ICES statistical areas (FAO Major Fishing Area 27) in EPSG:3995. The columns are \code{Major_FA}, \code{SubArea} and \code{Area_Full}.
-#' @details The polygons follow the ICES legal definitions and agree with the official ICES shapefile at sea. They reach over adjacent land (except Russia, where the land part is removed), because land is drawn on top of the areas in \code{\link{basemap}}. The areas should therefore not be used for land-area calculations. The script that builds the object is \code{dev/make_ices_areas.R} in the package source.
+#' @details The polygons follow the ICES legal definitions and agree with the official ICES shapefile at sea. They reach about 25 km over adjacent land, because land is drawn on top of the areas in \code{\link{basemap}}. The areas should therefore not be used for land-area calculations. The script that builds the object is \code{dev/make_ices_areas.R} in the package source.
 #' @source \href{https://gis.ices.dk/geonetwork/srv/api/records/c784a0a3-752f-4b50-b02f-f225f6c815eb}{ICES Statistical Areas}, International Council for the Exploration of the Sea
 #' @importFrom sf st_sf
 #' @examples

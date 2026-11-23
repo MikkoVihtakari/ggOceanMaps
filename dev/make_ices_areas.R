@@ -2,10 +2,11 @@
 #
 # Source: the `icesAreas` polygons of BioticExplorerServer (match the ICES legal definitions;
 # they reach over adjacent land, which is fine because ggOceanMaps draws land on top).
-# The only edit is removing the part that extends over Russian land, which would otherwise
-# be drawn as a large area of "sea" when land is not drawn on top.
+# The polygons are cut to a margin around the ICES sea, so they reach over land but not far
+# inland (BES polygons run far across Russia).
 #
-# Run: Rscript dev/make_ices_areas.R   (needs BioticExplorerServer, rnaturalearth, sf, dplyr)
+# Run: ICES_SHP=path/to/ICES_Areas_*.shp Rscript dev/make_ices_areas.R
+# (needs BioticExplorerServer, sf, dplyr)
 
 suppressMessages({library(sf); library(dplyr)})
 sf_use_s2(FALSE)
@@ -13,8 +14,7 @@ sf_use_s2(FALSE)
 out <- Sys.getenv("ICES_OUT", "data/ices_areas.rda")
 crs <- 3995
 seg <- 0.25      # max segment length (deg) before projecting, keeps parallels curved
-erode <- 10000   # m; Russian land is eroded by this to favor the land side
-tol <- 3000      # m; simplification of the cut line
+margin.dist <- 25000 # m; how far the polygons reach over land beyond the ICES sea
 
 # Insert vertices so that no segment exceeds `max` degrees (planar, lon/lat); keeps
 # parallels curved after projecting. Base R, because st_segmentize() needs lwgeom.
@@ -43,11 +43,12 @@ areas <- areas |> st_transform(crs) |> st_make_valid()
 # keep the area order of the source
 areas <- areas[match(unique(bes$Area_Full), areas$Area_Full), ]
 
-russia <- rnaturalearth::ne_countries(scale = 10, country = "Russia", returnclass = "sf") |>
-  st_geometry() |> st_make_valid() |> st_transform(crs) |> st_union() |>
-  st_buffer(-erode) |> st_simplify(dTolerance = tol) |> st_make_valid()
-
-st_geometry(areas) <- st_difference(st_geometry(areas), russia) |> st_make_valid()
+# Keep only a margin around the ICES sea: the polygons then reach over land but do not run far
+# inland (e.g. across Russia). `ICES_SHP` is the official ICES shapefile (used for the sea only).
+ices <- st_read(Sys.getenv("ICES_SHP"), quiet = TRUE) |> st_transform(crs) |> st_make_valid()
+margin <- ices |> st_geometry() |> st_union() |> st_simplify(dTolerance = 1000) |>
+  st_buffer(margin.dist) |> st_simplify(dTolerance = 5000) |> st_make_valid()
+st_geometry(areas) <- st_intersection(st_geometry(areas), margin) |> st_make_valid()
 areas <- areas |> filter(!st_is_empty(geometry))
 
 # Overlaps (over land, e.g. 27.3.b.23 / 27.3.a.21 on Zealand): the earlier area keeps the overlap
