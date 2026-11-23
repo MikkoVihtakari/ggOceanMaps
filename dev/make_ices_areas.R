@@ -50,6 +50,15 @@ russia <- rnaturalearth::ne_countries(scale = 10, country = "Russia", returnclas
 st_geometry(areas) <- st_difference(st_geometry(areas), russia) |> st_make_valid()
 areas <- areas |> filter(!st_is_empty(geometry))
 
+# Overlaps (over land, e.g. 27.3.b.23 / 27.3.a.21 on Zealand): the earlier area keeps the overlap
+g <- st_geometry(areas)
+nb <- st_intersects(g)
+for (i in seq_along(g)) {
+  prev <- setdiff(nb[[i]][nb[[i]] < i], i)
+  if (length(prev) > 0) g[i] <- st_difference(g[i], st_union(g[prev])) |> st_make_valid()
+}
+st_geometry(areas) <- g
+
 ices_areas <- areas |>
   mutate(across(c(Major_FA, SubArea, Area_Full), as.character)) |>
   as_tibble() |> st_as_sf()
