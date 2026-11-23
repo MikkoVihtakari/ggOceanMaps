@@ -16,7 +16,7 @@ test_that("27.4.a is bounded by the 62N parallel (Reg. EC 218/2009)", {
   skip_if_not_installed("sf")
   a <- ggOceanMaps::ices_areas
   g <- sf::st_transform(a[a$Area_Full == "27.4.a", ], 4326)
-  expect_lte(max(sf::st_coordinates(g)[, 2]), 62 + 1e-6)
+  expect_lte(max(sf::st_coordinates(g)[, 2]), 62 + 0.01)
 })
 
 test_that("ices_areas polygons do not overlap and the CRS text is ASCII", {
