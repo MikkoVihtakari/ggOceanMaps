@@ -54,6 +54,10 @@ ices_areas <- areas |>
   mutate(across(c(Major_FA, SubArea, Area_Full), as.character)) |>
   as_tibble() |> st_as_sf()
 
+# The EPSG:3995 WKT contains a degree sign (in the usage area text), which gives an R CMD
+# check warning for non-ASCII data. Replace it; the CRS itself is unchanged.
+st_crs(ices_areas) <- st_crs(gsub("\u00b0", " deg ", st_crs(crs)$wkt, fixed = TRUE))
+
 save(ices_areas, file = out, compress = "xz", version = 2)
 message("Saved ", out, ": ", round(file.size(out) / 1024), " kB, ",
         nrow(ices_areas), " areas")
