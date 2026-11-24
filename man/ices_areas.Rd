@@ -6,16 +6,19 @@
 \alias{ices_areas}
 \title{ICES Advisory Areas}
 \format{
-\code{\link[sf:st_sf]{sf object}} containing ICES Advisory Areas.
+\code{\link[sf:st_sf]{sf object}} containing ICES statistical areas (FAO Major Fishing Area 27) in EPSG:3995. The columns are \code{Major_FA}, \code{SubArea} and \code{Area_Full}.
 }
 \source{
-\href{https://www.ices.dk/}{International Council for the Exploration of the Sea}
+\href{https://gis.ices.dk/geonetwork/srv/api/records/c784a0a3-752f-4b50-b02f-f225f6c815eb}{ICES Statistical Areas}, International Council for the Exploration of the Sea
 }
 \usage{
 ices_areas
 }
 \description{
 ICES Advisory Areas
+}
+\details{
+The polygons follow the ICES legal definitions and agree with the official ICES shapefile at sea. They reach over adjacent land with simple, coarse edges (up to about 60 km from the sea), because land is drawn on top of the areas in \code{\link{basemap}}. The areas should therefore not be used for land-area calculations. The script that builds the object is \code{dev/make_ices_areas.R} in the package source.
 }
 \examples{
 if(requireNamespace("ggspatial")) {
