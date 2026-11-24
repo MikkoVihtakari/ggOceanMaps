@@ -1,4 +1,4 @@
-# ggOceanMaps 3.0.13
+# ggOceanMaps 3.0.19
 
 * `ices_areas` was rebuilt from the BioticExplorerServer `icesAreas` polygons, which follow the ICES legal definitions. The previous object had a misplaced vertex that moved the division 27.4.a / 27.2.a.2 boundary from 62°N to a diagonal line up to 62.96°N, and differed from the ICES polygons in several other places (for example around 27.5.b.1.b, 27.5.a.2, 27.14.a and 27.6.a). The polygons reach over adjacent land with simple, coarse edges (up to about 60 km, hidden by the land layer in `basemap()`) instead of far inland. The edges at sea are unchanged. The build script is `dev/make_ices_areas.R`.
 

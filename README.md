@@ -2,7 +2,7 @@
 # ggOceanMaps
 
 **Plot data on oceanographic maps using ggplot2. R package version
-3.0.10**
+3.0.19**
 
 <!-- badges: start -->
 
@@ -183,7 +183,7 @@ utils::citation("ggOceanMaps", auto = as.list(read.dcf("DESCRIPTION")[1, ]))
 #> To cite package 'ggOceanMaps' in publications use:
 #> 
 #>   Vihtakari M (2026). _ggOceanMaps: Plot Data on Oceanographic Maps
-#>   using 'ggplot2'_. R package version 3.0.10,
+#>   using 'ggplot2'_. R package version 3.0.19,
 #>   <https://mikkovihtakari.github.io/ggOceanMaps/>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -192,7 +192,7 @@ utils::citation("ggOceanMaps", auto = as.list(read.dcf("DESCRIPTION")[1, ]))
 #>     title = {ggOceanMaps: Plot Data on Oceanographic Maps using 'ggplot2'},
 #>     author = {Mikko Vihtakari},
 #>     year = {2026},
-#>     note = {R package version 3.0.10},
+#>     note = {R package version 3.0.19},
 #>     url = {https://mikkovihtakari.github.io/ggOceanMaps/},
 #>   }
 ```
