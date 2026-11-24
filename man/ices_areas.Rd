@@ -18,7 +18,7 @@ ices_areas
 ICES Advisory Areas
 }
 \details{
-The polygons follow the ICES legal definitions and agree with the official ICES shapefile at sea. They reach about 25 km over adjacent land, because land is drawn on top of the areas in \code{\link{basemap}}. The areas should therefore not be used for land-area calculations. The script that builds the object is \code{dev/make_ices_areas.R} in the package source.
+The polygons follow the ICES legal definitions and agree with the official ICES shapefile at sea. They reach over adjacent land with simple, coarse edges (up to about 60 km from the sea), because land is drawn on top of the areas in \code{\link{basemap}}. The areas should therefore not be used for land-area calculations. The script that builds the object is \code{dev/make_ices_areas.R} in the package source.
 }
 \examples{
 if(requireNamespace("ggspatial")) {

@@ -14,7 +14,8 @@ sf_use_s2(FALSE)
 out <- Sys.getenv("ICES_OUT", "data/ices_areas.rda")
 crs <- 3995
 seg <- 0.25      # max segment length (deg) before projecting, keeps parallels curved
-margin.dist <- 25000 # m; how far the polygons reach over land beyond the ICES sea
+margin.dist <- 60000 # m; buffer around the ICES sea that the polygons may cover
+tol.margin <- 20000  # m; simplification of that buffer (smaller than margin.dist, so sea stays covered)
 
 # Insert vertices so that no segment exceeds `max` degrees (planar, lon/lat); keeps
 # parallels curved after projecting. Base R, because st_segmentize() needs lwgeom.
@@ -43,11 +44,13 @@ areas <- areas |> st_transform(crs) |> st_make_valid()
 # keep the area order of the source
 areas <- areas[match(unique(bes$Area_Full), areas$Area_Full), ]
 
-# Keep only a margin around the ICES sea: the polygons then reach over land but do not run far
-# inland (e.g. across Russia). `ICES_SHP` is the official ICES shapefile (used for the sea only).
+# Keep only a coarse margin around the ICES sea: the polygons then reach over land with simple
+# edges (land is drawn on top, and simple edges are easy to clip to land) but not far inland. `ICES_SHP` is the official ICES shapefile (used for the sea only).
 ices <- st_read(Sys.getenv("ICES_SHP"), quiet = TRUE) |> st_transform(crs) |> st_make_valid()
+drop_holes <- function(g) st_sfc(lapply(st_cast(g, "POLYGON"), function(x) st_polygon(x[1])), crs = st_crs(g))
 margin <- ices |> st_geometry() |> st_union() |> st_simplify(dTolerance = 1000) |>
-  st_buffer(margin.dist) |> st_simplify(dTolerance = 5000) |> st_make_valid()
+  st_buffer(margin.dist, nQuadSegs = 2) |> st_simplify(dTolerance = tol.margin) |>
+  drop_holes() |> st_union() |> st_make_valid()
 st_geometry(areas) <- st_intersection(st_geometry(areas), margin) |> st_make_valid()
 areas <- areas |> filter(!st_is_empty(geometry))
 
@@ -66,7 +69,7 @@ ices_areas <- areas |>
 
 # The EPSG:3995 WKT contains a degree sign (in the usage area text), which gives an R CMD
 # check warning for non-ASCII data. Replace it; the CRS itself is unchanged.
-st_crs(ices_areas) <- st_crs(gsub("\u00b0", " deg ", st_crs(crs)$wkt, fixed = TRUE))
+st_crs(ices_areas) <- st_crs(gsub("[^\\x01-\\x7F]+", " deg ", st_crs(crs)$wkt, perl = TRUE, useBytes = TRUE))
 
 save(ices_areas, file = out, compress = "xz", version = 2)
 message("Saved ", out, ": ", round(file.size(out) / 1024), " kB, ",
